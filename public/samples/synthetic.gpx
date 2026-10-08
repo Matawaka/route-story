@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Route Story synthetic demo" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Учебный маршрут</name><desc>Синтетическая геометрия для демонстрации. Не запись реальной поездки.</desc></metadata>
+  <trk><trkseg>
+    <trkpt lat="43.60" lon="7.12"><ele>30</ele></trkpt>
+    <trkpt lat="43.65" lon="7.20"><ele>85</ele></trkpt>
+    <trkpt lat="43.68" lon="7.25"><ele>100</ele></trkpt>
+    <trkpt lat="43.70" lon="7.29"><ele>80</ele></trkpt>
+    <trkpt lat="43.75" lon="7.33"><ele>180</ele></trkpt>
+    <trkpt lat="43.77" lon="7.42"><ele>200</ele></trkpt>
+    <trkpt lat="43.78" lon="7.47"><ele>240</ele></trkpt>
+    <trkpt lat="43.82" lon="7.50"><ele>210</ele></trkpt>
+    <trkpt lat="43.84" lon="7.56"><ele>270</ele></trkpt>
+  </trkseg></trk>
+</gpx>

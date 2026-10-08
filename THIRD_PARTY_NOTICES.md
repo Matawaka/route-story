@@ -16,6 +16,8 @@ Bundled `public/maps/ne_110m_land.geojson` (138,160 bytes), unmodified 1:110m la
 
 ## Development tools
 
+Test-only XML DOM: @xmldom/xmldom 0.9.12, MIT. Production uses the browser's native DOMParser.
+
 Vite 8.3.4 and Vitest 5.0.3: MIT; TypeScript 7.0.2 and Playwright 1.64.0: Apache-2.0; Node type declarations: MIT. These are development/CI tools, not runtime downloads. FFmpeg static and ffprobe installer binaries are development-only independent validators; their upstream licenses/build metadata (including GPL terms) accompany their npm packages and binaries. They are never included in `dist` or browser bundles. FFmpeg: https://ffmpeg.org/legal.html; binaries/source provenance: https://github.com/eugeneware/ffmpeg-static and https://github.com/SavageCore/node-ffprobe-installer. Use FFMPEG_PATH/FFPROBE_PATH for independently installed tools.
 
 ## Route test data
