@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Превратите GPX-маршрут в короткое видео. Обработка в браузере.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Route Story · Matawaka</title>
+</head>
+<body>
+  <main>
+    <h1>Route Story</h1>
+    <p>Проверка локального экспорта · 4 секунды · H.264</p>
+    <canvas id="preview" width="640" height="360" aria-label="Анимация линии и движущейся точки"></canvas>
+    <button id="export">Экспорт MP4</button>
+    <p id="status" role="status" aria-live="polite">Проверяем поддержку кодека…</p>
+  </main>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

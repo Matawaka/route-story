@@ -1,0 +1,6 @@
+:root { font-family: system-ui, sans-serif; color: #182f2b; background: #f4f3ed; }
+body { margin: 0; padding: 40px; }
+main { max-width: 960px; margin: auto; }
+canvas { display: block; max-width: 100%; height: auto; border-radius: 16px; margin: 24px 0; }
+button { padding: 14px 24px; border: 0; border-radius: 8px; background: #234a3f; color: white; font: inherit; cursor: pointer; }
+button:disabled { opacity: .5; cursor: default; }
