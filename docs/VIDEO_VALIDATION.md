@@ -1,5 +1,29 @@
 # Browser MP4 proof
 
+## Sprint 2 — 2026-10-09
+
+Preserved Sprint 1's real four-second regression and added public 10/20/30-second exports from the same validated configuration/timeline as preview. Final local command: `$env:PLAYWRIGHT_CHANNEL='msedge'; $env:FULL_EXPORT_ACCEPTANCE='1'; npm.cmd run check`. Results: 67 unit tests, production build and 20 browser tests passed; one external-data test intentionally skipped; browser suite 31.4s. Full dependency audit: zero vulnerabilities; no dependency/version/license changes.
+
+Independent FFmpeg 6.1.1 + ffprobe verified H.264, correct dimensions, selected duration, 24fps, every decoded frame and changing frame hashes. The validator also checks every frame timestamp against i/24 and duration against 1/24 within 10 microseconds. All nine final synthetic artifacts passed this strengthened validator, including four 10-second style/aspect combinations, medium 20-second Standard (480 frames), both full 30-second Standard outputs and the 4-second proof (96 frames).
+
+Final 5000-point synthetic benchmark on Windows_NT 10.0.26200 x64, Microsoft Edge 154.0.4258.62, available AVC profile avc1.42001f:
+
+| Format/style | Dimensions | Duration | Decoded frames / FPS | Codec | File bytes | Export wall time |
+| --- | --- | --- | --- | --- | --- | --- |
+| 16:9 / Atlas | 1280×720 | 30.000s | 720 / 24 | H.264 | 2,948,136 | 1574.9ms |
+| 9:16 / Night | 720×1280 | 30.000s | 720 / 24 | H.264 | 2,894,908 | 1628.8ms |
+
+Export time includes capability probe, rendering, encoder submission and MP4 finalization; excludes download/independent decoding. Preview-ready wall time was 125.4/121.6ms including the automation round trip. Rendering 120 timestamped frames took 22.0/21.5ms of CPU Canvas submission, not measured GPU/display completion. Peak native encoder/GPU/browser memory was **not reliably measured**. These are observed local figures, not guarantees for other machines.
+
+Actual decoded frames at 1/15/29 seconds were visually inspected. Endpoints remain framed; titles, distance and elevation/point count are readable; captions distinguish intro/replay/outro. All four preview style/aspect combinations and mobile 390×844 layout were inspected. Preview/export pixels match at the same timestamp, repeated backward seeking is deterministic, segment gaps remain unbridged, cancellation/error recovery permit a subsequent real export, and Standard failure never silently switches quality. Production runtime attempts no cross-origin requests and retains no local/session storage, IndexedDB, Cache Storage or cookies.
+
+Reproduce full benchmarks with FULL_EXPORT_ACCEPTANCE=1; routine Windows/Edge CI runs the fast 4-second regression and bounded 20-second Standard test, skipping full 30-second runs and unresolved-license real data. Reports, MP4 and extracted PNGs are ignored under artifacts/; never upload unresolved external-route evidence.
+
+```powershell
+npm.cmd run validate:video -- artifacts/story-standard-30s-landscape.mp4 1280 720 30
+npm.cmd run validate:video -- artifacts/story-standard-30s-portrait.mp4 720 1280 30
+```
+
 ## First proof — 2026-10-08
 
 Before implementing the geographic editor, a Canvas animation with a plain background, animated line, moving point and two factual labels was exported in headless installed Microsoft Edge through WebCodecs + Mediabunny 1.61.3.

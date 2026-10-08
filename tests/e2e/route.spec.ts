@@ -35,6 +35,7 @@ test('production bundle stays on its own origin, supports mobile and retains no 
   const pending = page.waitForEvent('download'); await page.locator('#export').click(); await (await pending).saveAs('artifacts/production-portrait.mp4');
   expect(validateVideo('artifacts/production-portrait.mp4',360,640,10).decodedFrames).toBe(240);
   expect(await page.evaluate(() => ({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
+  expect(await page.evaluate(async()=>({databases:await indexedDB.databases(),caches:await caches.keys(),cookies:document.cookie}))).toEqual({databases:[],caches:[],cookies:''});
   await page.reload(); await expect(page.locator('#empty')).toBeVisible(); await expect(page.locator('#export')).toBeDisabled();
   expect(external).toEqual([]); expect(errors).toEqual([]);
 });

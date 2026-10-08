@@ -100,17 +100,36 @@ export class RouteRenderer {
       ctx.strokeStyle = colors.ink; ctx.lineWidth = 1.5; ctx.stroke();
       if (label) { ctx.font = `600 ${unit * 0.032}px system-ui`; ctx.textBaseline = 'middle'; ctx.fillStyle = colors.ink; const tw = ctx.measureText(label).width; ctx.fillText(label, Math.min(w - tw - 8, Math.max(8, x + unit / 38)), Math.max(h * .23, Math.min(h * .78, y - unit * .035))); }
     };
-    if (state.showStart) marker(this.route.segments[0][0], 'Старт');
-    if (state.showFinish) marker(this.route.segments.at(-1)!.at(-1)!, 'Финиш');
+    const start = this.route.segments[0][0], finish = this.route.segments.at(-1)!.at(-1)!;
+    const sameEndpoint = Math.abs(start.lat - finish.lat) < 1e-8 && Math.abs(this.projection.localLon(start.lon) - this.projection.localLon(finish.lon)) < 1e-8;
+    if (state.showStart) marker(start, sameEndpoint ? 'Старт / финиш' : 'Старт');
+    if (state.showFinish && !sameEndpoint) marker(finish, 'Финиш');
     ctx.save(); ctx.globalAlpha = state.markerOpacity; marker(state.point, '', true); ctx.restore();
     ctx.fillStyle = colors.water; ctx.fillRect(0, 0, w, h * 0.22); ctx.fillRect(0, h * 0.8, w, h * 0.2);
     ctx.textBaseline = 'top'; ctx.textAlign = 'left';
     ctx.fillStyle = colors.quiet; ctx.font = `600 ${unit * .027}px system-ui`; ctx.fillText('ROUTE STORY', pad, h * .045);
+    const storytelling = this.config.durationSeconds !== 4;
+    if (storytelling && state.phase === 'OUTRO') {
+      ctx.save(); ctx.globalAlpha = Math.min(1, state.outroProgress * 4); ctx.textAlign = 'right';
+      ctx.fillText('Matawaka', w - pad, h * .045); ctx.restore();
+    }
     ctx.fillStyle = colors.ink; ctx.font = `650 ${unit * .057}px system-ui`;
-    let title = state.title;
-    while (ctx.measureText(title).width > w - pad * 2 && title.length) title = title.slice(0, -1);
-    ctx.fillText(title === state.title ? title : title.slice(0, -1) + '…', pad, h * .092);
-    ctx.font = `650 ${unit * .052}px system-ui`; ctx.fillText(`${formatKm(state.travelledKm)} / ${formatKm(state.totalKm)} км`, pad, h * .83);
+    const titlePoints = Array.from(state.title), titleLength = titlePoints.length;
+    while (ctx.measureText(titlePoints.join('') + (titlePoints.length < titleLength ? '…' : '')).width > w - pad * 2 && titlePoints.length) titlePoints.pop();
+    ctx.fillText(titlePoints.join('') + (titlePoints.length < titleLength ? '…' : ''), pad, h * .092);
+    if (storytelling) {
+      ctx.save(); ctx.fillStyle = colors.quiet; ctx.font = `${unit * .03}px system-ui`;
+      if (state.phase === 'INTRO') {
+        ctx.globalAlpha = Math.min(1, state.introProgress * 4, (1 - state.introProgress) * 4);
+        ctx.fillText('Ваш путь по GPX', pad, h * .167);
+      } else if (state.phase === 'OUTRO') {
+        ctx.globalAlpha = Math.min(1, state.outroProgress * 4);
+        ctx.fillText('Финиш · весь маршрут', pad, h * .167);
+      } else ctx.fillText(`Повтор маршрута · сегмент ${state.segment + 1} из ${this.route.segments.length}`, pad, h * .167);
+      ctx.restore();
+    }
+    ctx.font = `650 ${unit * .052}px system-ui`;
+    ctx.fillText(storytelling && state.phase === 'OUTRO' ? `Всего ${formatKm(state.totalKm)} км` : `${formatKm(state.travelledKm)} / ${formatKm(state.totalKm)} км`, pad, h * .83);
     ctx.font = `${unit * .032}px system-ui`; ctx.fillStyle = colors.quiet; ctx.fillText(metricLabel(this.route), pad, h * .902);
     ctx.fillStyle = colors.line; ctx.fillRect(pad, h * .963, (w - 2 * pad) * state.timelineProgress, Math.max(2, unit * .005));
   }

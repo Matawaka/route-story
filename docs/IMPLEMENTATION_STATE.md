@@ -1,5 +1,23 @@
 # Implementation state
 
+## Current Sprint 2 handover — 2026-10-09
+
+Phase: Gates 2A/2B/2C passed locally; final push, stacked PR and remote CI pending. Branch: sprint-2-story-timeline, based on verified Sprint 1 head 7caf13db2f1f5b6b71b5474935b3a40896b29dcb. Last meaningful code checkpoint: 81a21150b5fe5bf0d9b43b399061f884db3521c3; current HEAD is always `git rev-parse HEAD`. PR #1 remains OPEN/unmerged; target the follow-on PR at sprint-1-gpx-mp4, never merge automatically. Calendar remains October 8–14 (day one through day seven); no organizer deadline has been specified.
+
+Completed: preserved safe GPX/geographic/segment/antimeridian behavior; typed shared timeline; public 10/20/30 seconds; validated title editor; intro/replay/outro; two styles/aspects; Compatibility/Standard; deterministic seeking and preview/export pixels; cancellation/error recovery; local-only production runtime and license distribution. Limits: 30s/720p/24fps, 720 frames, 32 MiB encoded payload (+1 MiB container allowance). Compatibility remains the default. Only Windows/Edge H.264 was independently verified; other devices are capability-probed. Coarse map omits streets/small islands. Peak native memory remains unmeasured. Unresolved-license external GPX stays outside Git/CI.
+
+Final command: `$env:PLAYWRIGHT_CHANNEL='msedge'; $env:FULL_EXPORT_ACCEPTANCE='1'; npm.cmd run check` — 67 unit tests, build and 20 browser tests passed, one unresolved-license external-data skip, 31.4s browser suite. Ignored log: artifacts/sprint2-final-check.log. `npm.cmd audit` and `npm.cmd audit --omit=dev` — 0 vulnerabilities. `npm.cmd ls --depth=0` confirmed exact versions. No dependency/version/license changes; Mediabunny MPL-2.0 and Travel Animation attribution remain distributed. `git diff --check` passed.
+
+Browser checks include title limits/inert HTML-looking text/safe filename; three visible scenes in all four style/aspect combinations; Standard failure with explicit Compatibility recovery; UI cancellation/renderer error and subsequent export; unchanged internal 4-second regression; 20-second Standard; both 30-second Standard outputs; and production runtime with no third-party requests or local/session storage, IndexedDB, Cache Storage or cookies. A prior run had two incorrect new-test expectations for the existing synthetic demo name/segment count; corrected to the actual fixture values without changing application behavior or weakening assertions. The focused three-test rerun passed, then the complete suite passed.
+
+Final measurements on Windows_NT 10.0.26200 x64 / Microsoft Edge 154.0.4258.62 / avc1.42001f, 5000 synthetic points: landscape 1280×720, 30.000s, 720 frames, 24fps, H.264, 2,948,136 bytes, export 1574.9ms; portrait 720×1280, same duration/frames/FPS/codec, 2,894,908 bytes, export 1628.8ms. Preview ready: 125.4/121.6ms including automation round trip; 120 timestamped draws: 22.0/21.5ms CPU Canvas submission, not GPU/display completion. Peak memory not reliably measured. No portable performance guarantee is inferred.
+
+Independent validator additionally verifies every decoded frame timestamp (i/24) and packet duration (1/24) within 10 microseconds. Executed Node module `validateVideo` against all nine synthetic final artifacts: 4-second proof; four 10-second style/aspect exports; production portrait; 20-second Standard; both 30-second Standard. All passed FFmpeg decoding and ffprobe codec/dimensions/duration/FPS/frame-count/timestamp checks. Public reproduction: `npm.cmd run validate:video -- artifacts/story-standard-30s-landscape.mp4 1280 720 30`, and portrait with 720 1280 30; regenerate files with the full check command above. Actual decoded frames at 1/15/29 seconds were extracted with ffmpeg-static `-ss T -i FILE -frames:v 1` and inspected visually: framed endpoints and readable titles/metrics in 720p, all four preview combinations and mobile 390×844 layout.
+
+CI retains 4-second regression and bounded 20-second Standard export; full 30-second/5000-point runs are local opt-in. AGENTS, README and DECISIONS reflect durable limits. No external/private route or derived artifact is staged. Immediate task: commit presentation milestone, push, create stacked PR and verify CI. Sprint 3 candidates: more browser/device encoders, native-memory/large-track benchmarks and geographic readability within local-map constraints.
+
+## Earlier checkpoint snapshot (historical)
+
 - Confirmed sprint start: **2026-10-08**, Asia/Yekaterinburg. Actual implementation began today after owner instruction to begin Sprint 1.
 - Phase: Sprint 2 Gates 2A/2B passed locally; minimal storytelling/title editor is next.
 - Branch: sprint-2-story-timeline, based on verified Sprint 1 head 7caf13db2f1f5b6b71b5474935b3a40896b29dcb.

@@ -9,6 +9,7 @@ const canvas = el<HTMLCanvasElement>('preview'), file = el<HTMLInputElement>('fi
 const button = el<HTMLButtonElement>('export'), cancel = el<HTMLButtonElement>('cancel');
 const play = el<HTMLButtonElement>('play'), scrub = el<HTMLInputElement>('scrub'), ratio = el<HTMLSelectElement>('ratio');
 const duration = el<HTMLSelectElement>('duration'), quality = el<HTMLSelectElement>('quality');
+const title = el<HTMLInputElement>('story-title');
 let story: Readonly<StoryConfig> = defaultStoryConfig();
 let route: Route | undefined, renderer: RouteRenderer | undefined, style: VisualStyle = 'atlas';
 let exporting = false, loading = false, animationId = 0, playing = false, loadId = 0, probeId = 0;
@@ -27,13 +28,17 @@ function draw() {
 async function configure(): Promise<void> {
   if (exporting) return;
   const currentProbe = ++probeId; button.disabled = true; if (!route) return;
-  story = validateStoryConfig({ ...story, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'] }, false);
+  try {
+    story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'] }, false);
+    title.removeAttribute('aria-invalid');
+  } catch (error) { title.setAttribute('aria-invalid', 'true'); stop(); message((error as Error).message, true); return; }
   const land = await landPromise; if (currentProbe !== probeId) return;
   stop(); renderer?.dispose(); const portrait = ratio.value === 'portrait';
   const settings = exportSettings(story); canvas.width = settings.width; canvas.height = settings.height;
   scrub.max = String(story.durationSeconds); scrub.value = String(Math.min(Number(scrub.value), story.durationSeconds));
   canvas.classList.toggle('portrait', portrait); el('preview-format').textContent = portrait ? '9:16' : '16:9';
   renderer = new RouteRenderer(route, land, canvas.width, canvas.height, style, story); draw();
+  canvas.setAttribute('aria-label', `История «${story.title}»: карта маршрута со стартом и финишем`);
   el('export-note').textContent = `${story.durationSeconds} секунд · ${canvas.width} × ${canvas.height} · 24 кадра/с · H.264`;
   try { await detectEncoder(canvas.width, canvas.height, settings.bitrate, settings.fps); if (currentProbe === probeId) { button.disabled = exporting || loading; message('Маршрут готов. Можно сохранить видео.'); } }
   catch (error) { if (currentProbe === probeId) message((error as Error).message + (story.qualityPreset === 'standard' ? ' Выберите «Совместимое · 360p».' : ''), true); }
@@ -43,7 +48,7 @@ async function importRoute(read: () => Promise<Route>, synthetic = false) {
   message('Читаем GPX на вашем устройстве…');
   try {
     const loaded = await read(); await landPromise; if (currentLoad !== loadId) return;
-    route = loaded; story = validateStoryConfig({ ...story, title: loaded.name }); loading = false; scrub.value = duration.value; canvas.hidden = false; el('empty').hidden = true; el('facts').hidden = false; play.disabled = scrub.disabled = false;
+    route = loaded; story = validateStoryConfig({ ...story, title: loaded.name }); title.value = story.title; title.disabled = false; loading = false; scrub.value = duration.value; canvas.hidden = false; el('empty').hidden = true; el('facts').hidden = false; play.disabled = scrub.disabled = false;
     el('distance').textContent = `${formatKm(route.distanceKm)} км`; el('segments').textContent = String(route.segments.length);
     el('metric-name').textContent = route.elevationGain !== undefined ? 'Набор высоты по GPX' : 'Точки маршрута';
     el('metric-value').textContent = route.elevationGain !== undefined ? `${Math.round(route.elevationGain).toLocaleString('ru-RU')} м` : route.pointCount.toLocaleString('ru-RU');
@@ -52,7 +57,7 @@ async function importRoute(read: () => Promise<Route>, synthetic = false) {
   } catch (error) {
     if (currentLoad !== loadId) return;
     route = undefined; renderer?.dispose(); renderer = undefined; canvas.hidden = true; el('empty').hidden = false; el('facts').hidden = true;
-    play.disabled = scrub.disabled = true; el('route-info').textContent = 'Файл не принят. Выберите другой GPX.'; message((error as Error).message, true);
+    play.disabled = scrub.disabled = title.disabled = true; el('route-info').textContent = 'Файл не принят. Выберите другой GPX.'; message((error as Error).message, true);
   } finally { if (currentLoad === loadId) loading = false; }
 }
 file.addEventListener('change', () => { const selected = file.files?.[0]; if (selected) void importRoute(() => readGpx(selected)); file.value = ''; });
@@ -65,6 +70,7 @@ document.querySelectorAll<HTMLButtonElement>('[data-style]').forEach(card => car
 ratio.addEventListener('change', () => void configure().catch(error => message(error.message, true)));
 duration.addEventListener('change', () => void configure().catch(error => message(error.message, true)));
 quality.addEventListener('change', () => void configure().catch(error => message(error.message, true)));
+title.addEventListener('input', () => void configure().catch(error => message(error.message, true)));
 scrub.addEventListener('input', () => { stop(); draw(); });
 play.addEventListener('click', () => {
   if (!renderer) return; if (playing) { stop(); return; }
@@ -77,7 +83,7 @@ cancel.addEventListener('click', () => controller?.abort());
 button.addEventListener('click', async () => {
   if (!renderer || exporting || loading) return;
   exporting = true; stop(); controller = new AbortController(); cancel.hidden = false;
-  const controls = [button, file, demo, ratio, duration, quality, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
+  const controls = [button, file, demo, ratio, duration, quality, title, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
   const active = renderer;
   try {
     performance.clearMarks('route-story-export-start'); performance.clearMarks('route-story-export-end'); performance.clearMeasures('route-story-export');

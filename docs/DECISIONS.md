@@ -10,6 +10,14 @@ StoryTimeline precomputes the RoutePath once and returns pure timestamp-based st
 
 Compatibility remains the safe default (360p, 24 fps, 1.5 Mbps). Standard is explicit (720p, 24 fps, 5 Mbps), capability-probed at the actual dimensions. No silent fallback. Export is bounded to 720 frames, 30 seconds, the two documented resolutions and 32 MiB encoded payload. Standard capability and performance must be measured before acceptance.
 
+## Sprint 2: minimal scenes and resource verification
+
+Retain a static map and reserved header/HUD areas. Intro/outro captions fade solely from timeline state; attribution appears only in the outro. No zoom, camera-follow, media or additional dependencies. Two factual values stay readable: geographic distance and complete-series elevation gain (otherwise recorded point count). Coincident start/finish use a shared label. Long canvas titles use a code-point-safe ellipsis; validated source text is unchanged. User title is passed only to Canvas text, DOM text/attributes and a sanitized download filename.
+
+Cache projected route strokes; append newly reached edges and rebuild the same ordered strokes after backward seeking. This avoids rescanning the full geographic dataset every frame and preserves deterministic pixels. Bound export configuration before any asynchronous operation, await encoder backpressure, retain cancellation/cleanup and refuse oversized payloads. No arbitrary resolutions/FPS/durations are exposed.
+
+Both 30s/720p formats independently decoded locally after P0 (81a21150b5fe5bf0d9b43b399061f884db3521c3). Final presentation changes require renewed acceptance. Benchmarks measure export wall time including capability probing/encode/finalize, excluding download and independent decoding. Render timing measures CPU Canvas submission only. Native encoder/GPU peak memory cannot be inferred from JS heap and remains unmeasured. Routine CI performs 4s regression + 20s Standard acceptance; two 30s/5000-point runs are explicit local opt-in.
+
 ## 2026-10-08: first checkpoint
 
 The GitHub destination was empty. Establish a minimal main bootstrap, then implement Sprint 1 on a short-lived branch and open a PR. No merge without owner approval.

@@ -1,4 +1,4 @@
-name: Sprint 1 acceptance
+name: Route Story acceptance
 on:
   pull_request:
   push:
@@ -18,8 +18,10 @@ jobs:
         with:
           node-version: '24.19.0'
           cache: npm
-      - run: npm ci
-      - run: npm run check
+      - run: npm.cmd ci
+      # Short 4s regression and bounded 20s Standard export run on every PR.
+      # Full 30s/720p benchmarks are opt-in locally: FULL_EXPORT_ACCEPTANCE=1.
+      - run: npm.cmd run check
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: success()
         with:
