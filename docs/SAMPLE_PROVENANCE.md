@@ -22,3 +22,5 @@ npm.cmd run test:e2e
 ```
 
 Routine CI omits REAL_GPX_PATH and uses only synthetic data. Remove the variable afterwards to run the routine suite: `Remove-Item Env:REAL_GPX_PATH`.
+
+Sprint 2 regression on 2026-10-09: `$env:PLAYWRIGHT_CHANNEL='msedge'; $env:REAL_GPX_PATH='K:\ROUTE STORY\.reference\hong-kong-trail.gpx'; npx.cmd playwright test tests/e2e/route.spec.ts --grep 'external public trail'` — 1 passed (5.3s suite). The same 4628 points, segment, endpoints and distance remained intact. Variable-duration export independently decoded as H.264, 640×360, 10.000 seconds, 240 frames/24fps, with every frame timestamp and duration verified. This does not resolve redistribution rights; GPX/video/screenshots/JSON remain only in ignored local storage and are never public CI artifacts.

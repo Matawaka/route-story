@@ -19,6 +19,8 @@ Actual decoded frames at 1/15/29 seconds were visually inspected. Endpoints rema
 
 Reproduce full benchmarks with FULL_EXPORT_ACCEPTANCE=1; routine Windows/Edge CI runs the fast 4-second regression and bounded 20-second Standard test, skipping full 30-second runs and unresolved-license real data. Reports, MP4 and extracted PNGs are ignored under artifacts/; never upload unresolved external-route evidence.
 
+Remote clean-install acceptance for code commit 406fe30af0b980d3ed5654252a91bb2d0d1cf467 also passed: https://github.com/Matawaka/route-story/actions/runs/37829802834. `npm.cmd ci` found zero vulnerabilities; `npm.cmd run check` passed 67 unit tests, build and 18 browser tests, with 3 intentional opt-in skips (external data + both full 30s runs), 30.7s browser suite. Only synthetic evidence was uploaded. A separate local opt-in real public-trail regression passed after this checkpoint: the preserved 4628-point route exported 640×360 H.264, 10.000s, 240 frames at 24fps and correct frame timestamps. Its unresolved-license data/evidence remains excluded from Git/CI.
+
 ```powershell
 npm.cmd run validate:video -- artifacts/story-standard-30s-landscape.mp4 1280 720 30
 npm.cmd run validate:video -- artifacts/story-standard-30s-portrait.mp4 720 1280 30
