@@ -9,10 +9,11 @@ for (const style of ['Атлас', 'Ночной']) for (const ratio of ['landsc
     await expect(page.locator('#distance')).toHaveText('215,68 км'); await expect(page.locator('#segments')).toHaveText('2');
     await expect(page.locator('#metric-value')).toHaveText('10 м');
     await page.getByRole('button', { name: style, exact: true }).click(); await page.getByLabel('Формат видео').selectOption(ratio);
+    await page.getByLabel('Длительность видео').selectOption('10');
     await expect(page.locator('#export')).toBeEnabled();
     const pending = page.waitForEvent('download'); await page.locator('#export').click(); const download = await pending;
     mkdirSync('artifacts', {recursive:true}); const path = `artifacts/route-${style === 'Атлас' ? 'atlas' : 'night'}-${ratio}.mp4`; await download.saveAs(path);
-    expect(validateVideo(path, ratio === 'portrait' ? 360 : 640, ratio === 'portrait' ? 640 : 360).decodedFrames).toBe(96);
+    expect(validateVideo(path, ratio === 'portrait' ? 360 : 640, ratio === 'portrait' ? 640 : 360,10).decodedFrames).toBe(240);
     await expect(page.locator('#status')).toContainText('MP4 создан');
   });
 }
@@ -23,6 +24,7 @@ test('production bundle stays on its own origin, supports mobile and retains no 
   await context.routeWebSocket(/.*/, ws => { if (!ws.url().startsWith('ws://127.0.0.1:4174')) external.push(ws.url()); ws.close(); });
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('http://127.0.0.1:4174/'); await page.getByRole('button', { name: /Открыть учебный/ }).click(); await expect(page.locator('#export')).toBeEnabled();
+  await page.getByLabel('Длительность видео').selectOption('10'); await expect(page.locator('#export')).toBeEnabled();
   const notice = await page.request.get('http://127.0.0.1:4174/THIRD_PARTY_NOTICES.md'); expect(notice.ok()).toBe(true); expect(await notice.text()).toContain('MPL-2.0');
   const license = await page.request.get('http://127.0.0.1:4174/licenses/MEDIABUNNY-MPL-2.0.txt'); expect(license.ok()).toBe(true); expect(await license.text()).toContain('Mozilla Public License');
   await expect(page.locator('#route-info')).toContainText('синтетический');
@@ -31,7 +33,7 @@ test('production bundle stays on its own origin, supports mobile and retains no 
   await expect(page.locator('#export')).toBeEnabled(); await page.screenshot({path:'artifacts/mobile-preview.png',fullPage:true});
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const pending = page.waitForEvent('download'); await page.locator('#export').click(); await (await pending).saveAs('artifacts/production-portrait.mp4');
-  expect(validateVideo('artifacts/production-portrait.mp4',360,640).decodedFrames).toBe(96);
+  expect(validateVideo('artifacts/production-portrait.mp4',360,640,10).decodedFrames).toBe(240);
   expect(await page.evaluate(() => ({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
   await page.reload(); await expect(page.locator('#empty')).toBeVisible(); await expect(page.locator('#export')).toBeDisabled();
   expect(external).toEqual([]); expect(errors).toEqual([]);
@@ -94,6 +96,7 @@ test('external public trail acceptance (opt-in, never bundled)', async ({page}) 
   const parsed=await page.evaluate(async xml=>{ const path='/src/gpx.ts'; const {parseGpx}=await import(path); const r=parseGpx(xml);return {name:r.name,pointCount:r.pointCount,distance:r.distanceKm,segments:r.segments.length,start:r.segments[0][0],finish:r.segments.at(-1).at(-1)};},xml);
   expect(parsed.pointCount).toBe(points.length); expect(parsed.start.lat).toBe(points[0].lat); expect(parsed.start.lon).toBe(points[0].lon); expect(parsed.finish.lat).toBe(points.at(-1)!.lat); expect(parsed.finish.lon).toBe(points.at(-1)!.lon); expect(Math.abs(parsed.distance-reference)).toBeLessThan(.001);
   mkdirSync('artifacts',{recursive:true}); await page.screenshot({path:'artifacts/real-route-preview.png',fullPage:true});
+  await page.getByLabel('Длительность видео').selectOption('10'); await expect(page.locator('#export')).toBeEnabled();
   const pending=page.waitForEvent('download'); await page.locator('#export').click(); await (await pending).saveAs('artifacts/real-route.mp4');
-  const video=validateVideo('artifacts/real-route.mp4',640,360); writeFileSync('artifacts/real-route-acceptance.json',JSON.stringify({route:parsed,independentDistanceKm:reference,video},null,2));
+  const video=validateVideo('artifacts/real-route.mp4',640,360,10); writeFileSync('artifacts/real-route-acceptance.json',JSON.stringify({route:parsed,independentDistanceKm:reference,video},null,2));
 });

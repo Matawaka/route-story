@@ -1,7 +1,7 @@
 # Implementation state
 
 - Confirmed sprint start: **2026-10-08**, Asia/Yekaterinburg. Actual implementation began today after owner instruction to begin Sprint 1.
-- Phase: Sprint 2 typed configuration/timeline foundation; Sprint 1 preserved and baseline passed.
+- Phase: Sprint 2 Gates 2A/2B passed locally; minimal storytelling/title editor is next.
 - Branch: sprint-2-story-timeline, based on verified Sprint 1 head 7caf13db2f1f5b6b71b5474935b3a40896b29dcb.
 - Last recorded meaningful code commit: 5b4b4a13a2cf7c5a210ec2513fe40a9709a9e1cd (final no-truncation correction and handoff, pushed to GitHub). This journal-only update records its completed remote checks. Current HEAD: use `git rev-parse HEAD`.
 - Completed: safe native GPX parsing; segments, duplicates, elevations/times/metadata; true geographic distance; shortest-arc antimeridian handling; cached local Canvas map; Russian UI; two styles; 16:9 and 9:16; deterministic preview/scrub/play/export; cancellation/failure cleanup; license distribution; public-trail external acceptance; pinned Windows/Edge CI workflow.
@@ -24,6 +24,14 @@ PR #1 is OPEN/unmerged and its exact head is 7caf13db2f1f5b6b71b5474935b3a40896b
 Added bounded, immutable StoryConfig and precomputed StoryTimeline (INTRO, ROUTE_REPLAY, OUTRO), 10/20/30-second validation, shared geographic position/distance state, segment-boundary marker fade, safe titles/filenames and bounded quality settings. Four-second Sprint 1 timing remains internal for regression. Stationary tracks retain their position and zero distance; disconnected isolated points may transition discretely, with no fictitious connecting path.
 
 Validation: baseline `PLAYWRIGHT_CHANNEL=msedge npm.cmd run check` — 37 unit tests, build, 10 browser tests passed; external-data test skipped intentionally. After the first significant change: `npm.cmd run test` — 67 passed; `npm.cmd run build` passed; `PLAYWRIGHT_CHANNEL=msedge npm.cmd run test:e2e` — 10 passed, external-data test skipped. Logs remain under ignored artifacts/. No dependencies changed. Immediate next task: integrate the timeline with variable-duration UI/renderer and immutable export snapshots, then independently validate 720p/30s before presentation effects.
+
+## Sprint 2 — configurable replay/export checkpoint
+
+Foundation commit: 86c34428a455452fc3e1c167a49ad6979780bed5 on sprint-2-story-timeline. Preview/export now consume the same immutable timeline/configuration; public duration is 10/20/30 seconds. Quality/aspect changes probe actual encoder dimensions, without silent fallback. Geographic projection and cumulative distances are precomputed; travelled strokes are cached and rebuilt deterministically after backward seeks. Export is bounded to 720 frames and 32 MiB encoded payload, with cancellation checks during encode/finalization.
+
+Exact checks: `npm.cmd run test` — 67 unit tests passed; `npm.cmd run build` — passed; `$env:PLAYWRIGHT_CHANNEL='msedge'; $env:FULL_EXPORT_ACCEPTANCE='1'; npm.cmd run test:e2e` — 16 passed, one external-data skip, 28.0 seconds. Includes preserved internal 4-second/96-frame regression, four public 10-second style/aspect combinations, medium 20-second Standard/480-frame output, snapshot mutation/preview equivalence, cancellation and subsequent export, and both 30-second Standard/720-frame outputs on 5000 synthetic points. FFmpeg 6.1.1 + ffprobe independently decoded every output and verified H.264, dimensions, 24 fps, duration and exact frame count. Log: artifacts/sprint2-export-p0.log (ignored).
+
+Measured on Windows_NT 10.0.26200 x64, Microsoft Edge 154.0.4258.62, capability-probed avc1.42001f: landscape 1280×720/30.000 s/720 frames/2,775,124 bytes, export 1582.0 ms; portrait 720×1280/30.000 s/720 frames/2,754,355 bytes, export 1775.7 ms. Preview ready on 5000 points: 129.1/121.2 ms (includes automation round trip). Drawing 120 frames: 18.4/19.3 ms, CPU submission time only, not display/GPU completion. Peak memory not reliably measured. Full reports remain ignored under artifacts/*.benchmark.json. These figures are this machine's measurements, not portable guarantees. Next: minimal deterministic intro/outro, validated title editor, final visual QA and focused stacked PR.
 
 ## 2026-10-08: PowerShell launch follow-up
 
