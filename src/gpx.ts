@@ -92,6 +92,7 @@ export function parseGpx(xml: string, fallbackName = 'Мой маршрут'): R
   if (!segments.length) throw new Error('В GPX нет точек трека или маршрута.');
   const metadata = children(root, 'metadata')[0] || root;
   const name = text(metadata, 'name') || trackName || fallbackName;
+  if (name.length > 200) throw new Error('Название маршрута слишком длинное (максимум 200 символов).');
   const creator = root.getAttribute('creator') || undefined;
   if (creator && creator.length > 200) throw new Error('Поле creator слишком длинное.');
   return { segments, name, description: text(metadata, 'desc', 2000), creator, ...routeMetrics(segments) };
@@ -103,5 +104,5 @@ export async function readGpx(file: File): Promise<Route> {
   let xml: string;
   try { xml = new TextDecoder('utf-8', { fatal: true }).decode(await file.arrayBuffer()); } catch { throw new Error('GPX должен быть корректным текстом UTF-8.'); }
   if (/^\s*<\?xml[^?]*encoding\s*=\s*["'](?!utf-8["'])/i.test(xml)) throw new Error('Поддерживается только кодировка UTF-8.');
-  return parseGpx(xml, file.name.replace(/\.gpx$/i, '').slice(0, 200) || 'Мой маршрут');
+  return parseGpx(xml, file.name.replace(/\.gpx$/i, '') || 'Мой маршрут');
 }

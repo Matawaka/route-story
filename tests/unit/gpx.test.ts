@@ -26,4 +26,5 @@ describe('GPX import', () => {
   it('rejects files over 10 MiB before reading', async () => { const f = new File([new Uint8Array(MAX_BYTES + 1)], 'big.gpx'); await expect(readGpx(f)).rejects.toThrow(/10 МиБ/); });
   it('rejects oversized text and deep trees', () => { expect(() => parseGpx(' '.repeat(MAX_BYTES + 1))).toThrow(/10 МиБ/); expect(() => parseGpx('<gpx>' + '<x>'.repeat(70) + '</x>'.repeat(70) + '</gpx>')).toThrow(/структуры/); });
   it('rejects invalid UTF-8 and reads file metadata safely', async () => { await expect(readGpx(new File([new Uint8Array([255])], 'x.gpx'))).rejects.toThrow(/UTF-8/); const r = await readGpx(new File([gpx('<trkpt lon="1" lat="2"/>')], 'route.gpx')); expect(r.name).toBe('route'); });
+  it('rejects oversized fallback names without silent truncation', async () => { await expect(readGpx(new File([gpx('<trkpt lon="1" lat="2"/>')], 'x'.repeat(201)+'.gpx'))).rejects.toThrow(/Название/); });
 });

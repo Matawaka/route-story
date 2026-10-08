@@ -14,7 +14,7 @@ Only the tested Edge/Windows encoder is verified here. Other browsers/devices ar
 
 ## Route renderer acceptance
 
-Clean `npm ci` succeeded with 0 audit vulnerabilities. `$env:PLAYWRIGHT_CHANNEL='msedge'; npm run check` passed 36 unit tests, TypeScript/Vite build and 10 browser tests; 1 opt-in external-data test intentionally skipped. With REAL_GPX_PATH set to the ignored public trail, all 11 browser tests passed.
+Clean `npm ci` succeeded with 0 audit vulnerabilities. Final `$env:PLAYWRIGHT_CHANNEL='msedge'; npm run check` passed 37 unit tests, TypeScript/Vite build and 10 browser tests; 1 opt-in external-data test intentionally skipped. With REAL_GPX_PATH set to the ignored public trail, all 11 browser tests passed. The first GitHub Windows/Edge CI run also passed: https://github.com/Matawaka/route-story/actions/runs/37811667151; current revision checks are linked from PR #1.
 
 Both Atlas and Night, each in 640×360 and 360×640, independently decoded as H.264, 4.000 seconds, 96 frames at 24 fps. The production bundle exported a decoded portrait video while all cross-origin HTTP/WebSocket requests were blocked; no such requests were attempted. Reload returned to the empty state and local/session storage were empty. Mobile viewport 390×844 had no horizontal overflow.
 
