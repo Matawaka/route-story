@@ -17,8 +17,8 @@ Reproduce as an external local test after obtaining the file from its pinned ups
 ```powershell
 $env:PLAYWRIGHT_CHANNEL = 'msedge'
 $env:REAL_GPX_PATH = 'K:\ROUTE STORY\.reference\hong-kong-trail.gpx'
-npm run build
-npm run test:e2e
+npm.cmd run build
+npm.cmd run test:e2e
 ```
 
 Routine CI omits REAL_GPX_PATH and uses only synthetic data. Remove the variable afterwards to run the routine suite: `Remove-Item Env:REAL_GPX_PATH`.

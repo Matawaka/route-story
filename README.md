@@ -5,12 +5,14 @@
 Sprint 1 начался **8 октября 2026 года** (Asia/Yekaterinburg), с фактическим началом реализации.
 
 ```powershell
-npm ci
-npm run build
-npm run preview
+npm.cmd ci
+npm.cmd run build
+npm.cmd run preview
 ```
 
-Откройте адрес localhost, напечатанный Vite (обычно http://127.0.0.1:4173). Для разработки: `npm run dev`. Требуется Node.js 22.12+; проверено на Node 24.19.0, Windows и Microsoft Edge. Экспорт требует HTTPS или localhost и доступного WebCodecs H.264-кодировщика. Приложение проверяет поддержку на устройстве и показывает причину недоступности. Работа Safari/Firefox не подтверждена.
+В Windows PowerShell используйте `npm.cmd` и `npx.cmd`: это запускает командные обёртки Node.js и не требует разрешать выполнение `npm.ps1` или менять ExecutionPolicy. В Linux/macOS используйте `npm` и `npx` без `.cmd`.
+
+Откройте адрес localhost, напечатанный Vite (обычно http://127.0.0.1:4173). Для разработки в PowerShell: `npm.cmd run dev`. Требуется Node.js 22.12+; проверено на Node 24.19.0, Windows и Microsoft Edge. Экспорт требует HTTPS или localhost и доступного WebCodecs H.264-кодировщика. Приложение проверяет поддержку на устройстве и показывает причину недоступности. Работа Safari/Firefox не подтверждена.
 
 GPX остаётся в памяти браузера: без отправки, сохранения пользовательских маршрутов и телеметрии. Доступны GPX 1.0/1.1 (UTF-8), треки и route points, несколько отдельных сегментов, высота и временные метки при наличии. Расстояние рассчитано по исходным координатам и не включает разрывы. Набор высоты показывается только при полной серии высот; иначе — число точек. Метки времени извлекаются, но не используются для выдуманных скоростей или длительности поездки.
 
@@ -22,15 +24,15 @@ GPX остаётся в памяти браузера: без отправки, 
 
 ```powershell
 $env:PLAYWRIGHT_CHANNEL = 'msedge'
-npm run check
+npm.cmd run check
 ```
 
-Или установите Chromium: `npx playwright install chromium`; без переменной PLAYWRIGHT_CHANNEL тесты используют его. Доступность H.264 зависит от ОС/кодировщика; Windows CI использует Edge. `npm run test:e2e` требует предварительного `npm run build`: тестируются dev-сервер и собранный production bundle. Playwright запускает и останавливает свои серверы автоматически.
+Или установите Chromium: `npx.cmd playwright install chromium`; без переменной PLAYWRIGHT_CHANNEL тесты используют его. Доступность H.264 зависит от ОС/кодировщика; Windows CI использует Edge. `npm.cmd run test:e2e` требует предварительного `npm.cmd run build`: тестируются dev-сервер и собранный production bundle. Playwright запускает и останавливает свои серверы автоматически.
 
 Независимые FFmpeg и ffprobe проверяют реальный MP4: H.264, размеры, длительность, 96 декодированных кадров и изменение изображения. Локальные MP4, JSON-отчёты и снимки находятся в игнорируемом `artifacts/`. Для отдельной проверки:
 
 ```powershell
-npm run validate:video -- artifacts/route-story-proof.mp4 640 360
+npm.cmd run validate:video -- artifacts/route-story-proof.mp4 640 360
 ```
 
 CI использует только синтетические данные. Учебный пример также синтетический. Реальный публичный Hong Kong Trail проверен отдельно и не включён в репозиторий из-за неразрешённых условий вышестоящих источников: [происхождение и результаты](docs/SAMPLE_PROVENANCE.md).
