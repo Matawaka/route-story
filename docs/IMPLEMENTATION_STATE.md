@@ -1,8 +1,8 @@
 # Implementation state
 
 - Confirmed sprint start: **2026-10-08**, Asia/Yekaterinburg. Actual implementation began today after owner instruction to begin Sprint 1.
-- Phase: Sprint 1 checkpoint delivered for owner review; no merge or deployment performed.
-- Branch: sprint-1-gpx-mp4.
+- Phase: Sprint 2 typed configuration/timeline foundation; Sprint 1 preserved and baseline passed.
+- Branch: sprint-2-story-timeline, based on verified Sprint 1 head 7caf13db2f1f5b6b71b5474935b3a40896b29dcb.
 - Last recorded meaningful code commit: 5b4b4a13a2cf7c5a210ec2513fe40a9709a9e1cd (final no-truncation correction and handoff, pushed to GitHub). This journal-only update records its completed remote checks. Current HEAD: use `git rev-parse HEAD`.
 - Completed: safe native GPX parsing; segments, duplicates, elevations/times/metadata; true geographic distance; shortest-arc antimeridian handling; cached local Canvas map; Russian UI; two styles; 16:9 and 9:16; deterministic preview/scrub/play/export; cancellation/failure cleanup; license distribution; public-trail external acceptance; pinned Windows/Edge CI workflow.
 - Tests: `npm ci` — clean install passed, audit 0 vulnerabilities; final `$env:PLAYWRIGHT_CHANNEL='msedge'; npm run check` — 37 unit tests passed, production build passed, 10 browser tests passed, 1 external-data test intentionally skipped. Earlier explicit `$env:REAL_GPX_PATH='K:\ROUTE STORY\.reference\hong-kong-trail.gpx'; npm run test:e2e` — all 11 browser tests passed, including real public-trail acceptance. Independent FFmpeg/ffprobe decoded 96 H.264 frames at 640×360 or 360×640, 4.000 seconds, 24 fps. Production offline test found no cross-origin requests and no retained route. Deterministic canvas and no-bridge pixels, unsupported encoder, cleanup/cancellation and mobile layout passed. Logs: ignored artifacts/clean-install.log, clean-check.log and final-check.log. `git diff --check` passed.
@@ -16,6 +16,14 @@
 - Immediate next phase recommendation: verify additional browser/device encoders and bounded longer exports, then improve geographic/elevation clarity. Keep real-sample redistribution unresolved until its upstream obligations are settled. Owner may revise scope after viewing the prototype.
 
 This file is a journal. Commit SHAs refer to the previous meaningful code commit to avoid a self-referential hash; `git rev-parse HEAD` is authoritative for the current checkout.
+
+## Sprint 2 — timeline foundation
+
+PR #1 is OPEN/unmerged and its exact head is 7caf13db2f1f5b6b71b5474935b3a40896b29dcb; remote main remains bootstrap 33b5cec. Sprint 2 therefore branches from the verified head and will use a stacked PR targeting sprint-1-gpx-mp4. Never merge either PR automatically. Development calendar: October 8 is day one, October 14 day seven; no organizer submission time has been specified.
+
+Added bounded, immutable StoryConfig and precomputed StoryTimeline (INTRO, ROUTE_REPLAY, OUTRO), 10/20/30-second validation, shared geographic position/distance state, segment-boundary marker fade, safe titles/filenames and bounded quality settings. Four-second Sprint 1 timing remains internal for regression. Stationary tracks retain their position and zero distance; disconnected isolated points may transition discretely, with no fictitious connecting path.
+
+Validation: baseline `PLAYWRIGHT_CHANNEL=msedge npm.cmd run check` — 37 unit tests, build, 10 browser tests passed; external-data test skipped intentionally. After the first significant change: `npm.cmd run test` — 67 passed; `npm.cmd run build` passed; `PLAYWRIGHT_CHANNEL=msedge npm.cmd run test:e2e` — 10 passed, external-data test skipped. Logs remain under ignored artifacts/. No dependencies changed. Immediate next task: integrate the timeline with variable-duration UI/renderer and immutable export snapshots, then independently validate 720p/30s before presentation effects.
 
 ## 2026-10-08: PowerShell launch follow-up
 
