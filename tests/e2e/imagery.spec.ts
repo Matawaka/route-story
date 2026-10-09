@@ -1,6 +1,18 @@
 import {test,expect} from '@playwright/test';
 import {validateVideo} from '../../scripts/validate-video.mjs';
 
+test('adaptive detail and terrain corridor remain ready, reversible and pixel-identical through export',async({page})=>{
+ await page.goto('/');const result=await page.evaluate(async()=>{
+  const [{TerrainRenderer},{loadTerrain},{loadImagery},{parseGpx},{defaultStoryConfig},{exportVideo},{getTerrainCameraStateAt,terrainCorridorDeficit}]=await Promise.all(['/src/terrain-renderer.ts','/src/terrain.ts','/src/imagery.ts','/src/gpx.ts','/src/story.ts','/src/exporter.ts','/src/terrain-camera.ts'].map(p=>import(p)));
+  const route=parseGpx(await(await fetch('/samples/terrain-sogne.gpx')).text()),terrain=await loadTerrain('standard'),config={...defaultStoryConfig(),durationSeconds:10,qualityPreset:'standard',cameraMode:'terrain',terrainSurface:'photo',terrainFlight:'corridor'},r=new TerrainRenderer(route,terrain,720,1280,config,await loadImagery()),canvas=document.createElement('canvas');
+  try{let minimum=Infinity;for(let frame=0;frame<=240;frame++){const pose=getTerrainCameraStateAt(frame/24,r.plan);minimum=Math.min(minimum,pose.clearance);}
+   const legs=[[r.plan.overview,r.plan.shots[0]],[r.plan.shots.at(-1),r.plan.overview],...r.plan.shots.slice(1).map((s:any,i:number)=>[r.plan.shots[i],s]).filter(([a,b]:any)=>a.segment===b.segment)];const proven=legs.every(([a,b]:any)=>terrainCorridorDeficit(terrain,a.position,b.position)<1e-6);
+   r.draw(canvas,5);const direct=canvas.toDataURL(),weights=[(r as any).detailWeight.value];r.draw(canvas,0);weights.push((r as any).detailWeight.value);r.draw(canvas,10);r.draw(canvas,5);const reversible=canvas.toDataURL()===direct;let equal=false;await exportVideo({config,draw:(c:HTMLCanvasElement,t:number)=>{r.draw(c,t);if(t===5)equal=c.toDataURL()===direct;}});
+   return{minimum,proven,reversible,equal,weights,textures:r.gpu.info.memory.textures,bitmapSizes:[r.imagery!.bitmap.width,r.imagery!.detailBitmap!.width]};
+  }finally{r.dispose();canvas.width=canvas.height=0;}
+ });expect(result.minimum).toBeGreaterThanOrEqual(349.999);expect(result).toMatchObject({proven:true,reversible:true,equal:true,textures:2,bitmapSizes:[750,1300]});expect(result.weights[0]).toBe(1);expect(result.weights[1]).toBeLessThan(result.weights[0]);
+});
+
 test('photo is on the true mesh with north-up UVs, unchanged heights/camera and identical seek/export frames',async({page})=>{
  await page.goto('/');const result=await page.evaluate(async()=>{
   const paths=['/src/terrain-renderer.ts','/src/terrain.ts','/src/imagery.ts','/src/gpx.ts','/src/story.ts','/src/terrain-camera.ts','/src/exporter.ts'];
@@ -13,14 +25,14 @@ test('photo is on the true mesh with north-up UVs, unchanged heights/camera and 
    return{different,reversible,sameHeights,sameCamera,equivalent,uv:[uv.getX(0),uv.getY(0),uv.getX(uv.count-1),uv.getY(uv.count-1)],hasMap:!!material.map,flipY:material.map.flipY,vertexColors:material.vertexColors,maxTextures:r.gpu.info.memory.textures};
   }finally{r.dispose();dem.dispose();canvas.width=canvas.height=0;}
  });
- expect(result).toMatchObject({different:true,reversible:true,sameHeights:true,sameCamera:true,equivalent:true,uv:[0,1,1,0],hasMap:true,flipY:false,vertexColors:false,maxTextures:1});
+ expect(result).toMatchObject({different:true,reversible:true,sameHeights:true,sameCamera:true,equivalent:true,uv:[0,1,1,0],hasMap:true,flipY:false,vertexColors:false,maxTextures:2});
 });
 
 test('photo readiness blocks export; corrupted/missing assets retain GPX and explicit DEM recovery',async({page})=>{
  await page.goto('/');await page.locator('#terrain-demo').click();await expect(page.locator('#export')).toBeEnabled();
- let release:()=>void=()=>{};const pending=new Promise<void>(resolve=>release=resolve);await page.route('**/imagery/sogne-sentinel-20m.jpg',async r=>{await pending;await r.continue();});
+ let release:()=>void=()=>{};const pending=new Promise<void>(resolve=>release=resolve);await page.route('**/imagery/sogne-sentinel-10m.jpg',async r=>{await pending;await r.continue();});
  await page.locator('#terrain-surface').selectOption('photo');await expect(page.locator('#export')).toBeDisabled();release();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#map-detail-note')).toContainText('Copernicus');
- await page.unroute('**/imagery/sogne-sentinel-20m.jpg');await page.route('**/imagery/sogne-sentinel-20m.jpg',r=>r.fulfill({body:'corrupt',contentType:'image/jpeg'}));
+ await page.unroute('**/imagery/sogne-sentinel-10m.jpg');await page.route('**/imagery/sogne-sentinel-10m.jpg',r=>r.fulfill({body:'corrupt',contentType:'image/jpeg'}));
  await page.locator('#terrain-surface').selectOption('dem');await expect(page.locator('#export')).toBeEnabled();await page.locator('#terrain-surface').selectOption('photo');await expect(page.locator('#status')).toContainText('Контрольная сумма');await expect(page.locator('#export')).toBeDisabled();await expect(page.locator('#route-info')).toContainText('721');await page.locator('#terrain-surface').selectOption('dem');await expect(page.locator('#export')).toBeEnabled();
  await page.locator('#camera-mode').selectOption('cinematic');await expect(page.locator('#export')).toBeEnabled();
 });
@@ -36,5 +48,5 @@ test('photo cancellation/retry makes a decodable10s MP4 with first-party-only lo
 
 test('obsolete image preparation is cancelled without stale state or loss of the2D route',async({page})=>{
  await page.goto('/');await page.locator('#terrain-demo').click();await expect(page.locator('#export')).toBeEnabled();let release:()=>void=()=>{};const pending=new Promise<void>(resolve=>release=resolve);
- await page.route('**/imagery/sogne-sentinel-20m.jpg',async r=>{await pending;try{await r.continue();}catch{/* abandoned request */}});await page.locator('#terrain-surface').selectOption('photo');await expect(page.locator('#export')).toBeDisabled();await page.locator('#camera-mode').selectOption('cinematic');await expect(page.locator('#export')).toBeEnabled();release();await page.locator('#scrub').fill('5');await expect(page.locator('#map-detail-note')).toContainText('Natural Earth');await expect(page.locator('#route-info')).toContainText('721');await expect(page.locator('#status')).not.toContainText('abort');
+ await page.route('**/imagery/sogne-sentinel-10m.jpg',async r=>{await pending;try{await r.continue();}catch{/* abandoned request */}});await page.locator('#terrain-surface').selectOption('photo');await expect(page.locator('#export')).toBeDisabled();await page.locator('#camera-mode').selectOption('cinematic');await expect(page.locator('#export')).toBeEnabled();release();await page.locator('#scrub').fill('5');await expect(page.locator('#map-detail-note')).toContainText('Natural Earth');await expect(page.locator('#route-info')).toContainText('721');await expect(page.locator('#status')).not.toContainText('abort');
 });

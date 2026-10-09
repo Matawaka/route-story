@@ -9,10 +9,11 @@ walk(root);
 const fixed=['index.html','LICENSE','THIRD_PARTY_NOTICES.md','licenses/MEDIABUNNY-MPL-2.0.txt','licenses/TRAVEL_ANIMATION.txt','licenses/THREE-MIT.txt','maps/ne_110m_land.geojson','maps/world-50m.json','maps/fjords-10m.json','samples/cinematic-fjords.gpx','samples/terrain-sogne.gpx','samples/synthetic.gpx','samples/synthetic-antimeridian.gpx','terrain/sogne.json','terrain/sogne-50m.i16','terrain/sogne-100m.i16'];
 if(imageryCandidate){
  assert.equal(process.env.BUILD_IMAGERY_PACK,'1','local photo candidate requires explicit opt-in');
- fixed.push('imagery/sogne-sentinel.json','imagery/sogne-sentinel-20m.jpg');
- const metadata=JSON.parse(readFileSync('public/imagery/sogne-sentinel.json','utf8')),image=readFileSync('public/imagery/sogne-sentinel-20m.jpg');
- assert.ok(metadata.width<=2048&&metadata.height<=2048&&metadata.width*metadata.height<=3000000&&image.length<=2*1024*1024);
- assert.equal(image.length,metadata.bytes);assert.equal(createHash('sha256').update(image).digest('hex'),metadata.sha256);
+ fixed.push('imagery/sogne-sentinel.json','imagery/sogne-sentinel-40m.jpg','imagery/sogne-sentinel-10m.jpg');
+ const metadata=JSON.parse(readFileSync('public/imagery/sogne-sentinel.json','utf8'));let pixels=0,bytes=0;
+ assert.equal(metadata.file,'sogne-sentinel-40m.jpg');assert.equal(metadata.detail.file,'sogne-sentinel-10m.jpg');assert.ok(!metadata.detail.detail);
+ for(const level of [metadata,metadata.detail]){const image=readFileSync('public/imagery/'+level.file);pixels+=level.width*level.height;bytes+=image.length;assert.ok(level.width<=2048&&level.height<=2048);assert.equal(image.length,level.bytes);assert.equal(createHash('sha256').update(image).digest('hex'),level.sha256);}
+ assert.ok(pixels<=3000000&&bytes<=2*1024*1024);
 }
 for(const name of fixed)assert.ok(files.includes(name),`Required public file ${name}`);
 for(const file of files)assert.ok(fixed.includes(file)||file==='release.json'||/^assets\/[a-zA-Z0-9_-]+\.(js|css)$/.test(file),`Unexpected file in public package: ${file}`);

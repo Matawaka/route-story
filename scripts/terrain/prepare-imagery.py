@@ -1,7 +1,7 @@
 """Developer-only fixed public Sentinel scene crop; no user route input.
 Use pinned scripts/terrain/requirements.txt. Raw crops remain ignored.
 """
-import hashlib, json, math, pathlib, time
+import hashlib, json, math, pathlib, time, argparse
 import numpy as np
 import rasterio
 from rasterio.windows import Window
@@ -9,13 +9,15 @@ from pyproj import Transformer
 from PIL import Image
 
 root=pathlib.Path('.reference/imagery'); output=pathlib.Path('public/imagery'); output.mkdir(exist_ok=True)
-begin=time.perf_counter(); spacing=20; width=1500; height=2000
+parser=argparse.ArgumentParser();parser.add_argument('--level',type=int,choices=[10,20,40],default=20);args=parser.parse_args()
+begin=time.perf_counter(); spacing=args.level
 expected={
  'LN-scl':'9b69d4d84910381c3eedc6a482f632ec0dee3a7d608945e6322389bf33e0f55d',
  'LN-visual':'b456872d34cf66a43244eeb4f5013bdd5d5afb19a5a4a9936cf085a9b20ff437',
  'LP-scl':'fe62334d502d5bb49f436566084b7a41f1ea3d52527de5c8dcbf80643fc6077a',
  'LP-visual':'e686e8928261007b629b9531d8659b3cc7d56cad76dd555dd6e14359ad5cd45f'}
-origin=[6.2,61.28]; bounds=[-15000,-20000,15000,20000]; radius=6371008.8
+origin=[6.2,61.28]; bounds=[-8000,-8000,5000,8000] if spacing==10 else [-15000,-20000,15000,20000]; radius=6371008.8
+width=(bounds[2]-bounds[0])//spacing; height=(bounds[3]-bounds[1])//spacing
 east=bounds[0]+(np.arange(width)+.5)*spacing; north=bounds[3]-(np.arange(height)+.5)*spacing
 xx,yy=np.meshgrid(east,north); lon=origin[0]+np.degrees(xx/(radius*math.cos(math.radians(origin[1])))); lat=origin[1]+np.degrees(yy/radius)
 sx,sy=Transformer.from_crs(4326,32632,always_xy=True).transform(lon,lat)
@@ -62,9 +64,10 @@ for tile in ['LN','LP']:
             source['assets'].append({'kind':kind,'url':metadata['assets'][kind]['href'],'cropBytes':local.stat().st_size,'cropSha256':hashlib.sha256(local.read_bytes()).hexdigest(),'cropBounds':list(src.bounds),'crs':'EPSG:32632','sourceSpacingMeters':abs(src.transform.a)})
     sources.append(source)
 assert covered.all(),f'{np.sum(~covered)} uncovered pixels; no invented fill'
-image=output/'sogne-sentinel-20m.jpg';Image.fromarray(rgb).save(image,quality=88,subsampling=0,optimize=True)
-assert hashlib.sha256(image.read_bytes()).hexdigest()=='521cddcd174a3d3a3208d9008293287040a1d866d7c755fadbfb5a8a794185ec'
+image=output/f'sogne-sentinel-{spacing}m.jpg';Image.fromarray(rgb).save(image,quality=88,subsampling=0,optimize=True)
+assert hashlib.sha256(image.read_bytes()).hexdigest()=={20:'521cddcd174a3d3a3208d9008293287040a1d866d7c755fadbfb5a8a794185ec',40:'ad88bb13cc1e5fb62e9b5575d5ec43176bd61ae22aae9d0f7fbd8e5a1388a441',10:'d74099be2da8bed8fbbbfafb7a5426ca21546adb7d300180869dfb23e5cea996'}[spacing]
 maskCount={str(int(c)):int(np.sum(classes==c)) for c in np.unique(classes)}
-report={'schema':1,'id':'sogne-sentinel-20250927','origin':origin,'bounds':bounds,'width':width,'height':height,'spacingMeters':spacing,'file':image.name,'bytes':image.stat().st_size,'sha256':hashlib.sha256(image.read_bytes()).hexdigest(),'attribution':'Contains modified Copernicus Sentinel data 2025','licenseUrl':'https://cds.climate.copernicus.eu/licences/ec-sentinel','acquiredDate':'2025-09-27','sourceResolutionMeters':10,'pixelOrientation':'north-up; row0 north; pixel centres; bounds are pixel edges','changes':['fixed regional crop','same local tangent coordinates as DEM','bilinear20m resampling of10m TCI','JPEG quality88 RGB compression'],'sources':sources,'coveragePixels':int(covered.sum()),'classificationCounts':maskCount,'cloudPercent':100*np.sum(np.isin(classes,[8,9,10]))/classes.size,'snowPercent':100*np.sum(classes==11)/classes.size,'cloudShadowPercent':100*np.sum(classes==3)/classes.size,'prepareMs':(time.perf_counter()-begin)*1000}
-(output/'sogne-sentinel.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf8')
+report={'schema':1,'id':'sogne-sentinel-20250927','origin':origin,'bounds':bounds,'width':width,'height':height,'spacingMeters':spacing,'file':image.name,'bytes':image.stat().st_size,'sha256':hashlib.sha256(image.read_bytes()).hexdigest(),'attribution':'Contains modified Copernicus Sentinel data 2025','licenseUrl':'https://cds.climate.copernicus.eu/licences/ec-sentinel','acquiredDate':'2025-09-27','sourceResolutionMeters':10,'pixelOrientation':'north-up; row0 north; pixel centres; bounds are pixel edges','changes':['fixed regional crop','same local tangent coordinates as DEM',f'bilinear{spacing}m resampling of10m TCI','JPEG quality88 RGB compression'],'sources':sources,'coveragePixels':int(covered.sum()),'classificationCounts':maskCount,'cloudPercent':100*np.sum(np.isin(classes,[8,9,10]))/classes.size,'snowPercent':100*np.sum(classes==11)/classes.size,'cloudShadowPercent':100*np.sum(classes==3)/classes.size,'prepareMs':(time.perf_counter()-begin)*1000}
+(output/f'sogne-sentinel-{spacing}m.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf8')
+if spacing==20:(output/'sogne-sentinel.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf8')
 print(json.dumps({k:report[k] for k in ['bytes','sha256','cloudPercent','snowPercent','cloudShadowPercent','prepareMs']}))

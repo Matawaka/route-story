@@ -1,5 +1,11 @@
 # Decisions
 
+## Sprint9 follow-up: approved detail and proved local corridor
+
+Owner approved actual photographic prototype and requested further detail. Use the SAME reviewed scene/crops for40m overview plus bounded10m patch (997049B/2830000pixels), both resident before export. Pure scale/frustum choice,450m feather, mipmaps, fixed regional coverage and explicit missing-resource error; original20m developer fixture retained. No new service/source/codec/DEM and no public budget increase. Add optional local corridor with unchanged350m clearance, exact crossed-cell bounds for all interpolated legs/intro/outro, final triangle LOS and conservative default. Tests independently preserve coordinates/segments/seeking/pixel equivalence.
+
+Protected accepted-main run37962492130 completed after owner approval; actual Pages URL/19manifest hashes/source8f4d0f6 and public20/30s3D MP4s verified separately. Owner reports successful Xiaomi14/Pad2/MacBookM2 tests and Chrome/Brave/Safari; missing versions/pairing are explicitly unmeasured, not fabricated. Candidate remains1.1.0-rc.1; PR8 final version and stable tag/release require review/final owner release approval. No photo deployment or contest repost.
+
 ## Sprint9: lawful photo proof before regional LOD expansion
 
 Use actual Copernicus Sentinel2C L2A20250927 scenes32VLN/32VLP, fixed Sogne regional windows, official open-data terms with required modified-data attribution. Norwegian ortho reuse rights are unresolved; no unauthorized image scraping. Source10m RGB is resampled20m into existing DEM local coordinates. Preserve heights and conservative camera exactly for comparison. One validated resident texture, readiness draw and deterministic mipmaps prove true3D photographic MP4 before designing complex tiles. Optional candidate pack is excluded from default≤5MiB production; no budget or v1.2 deployment approval. Major multi-resolution packs/local-clearance refinement wait for owner visual review of actual footage. Prior DEM/2D/Classic fallback remains available. Reproduction/source-window hashes and real output evidence are recorded separately from publishedv1.0.

@@ -1,5 +1,9 @@
 # Imagery feasibility — fixed public Sogne region
 
+## Approved adaptive derivatives — 2026-10-09
+
+Same reviewed source crops/date/rights, no new imagery download: coarse40m750×1000,339524B,SHA256`ad88bb13cc1e5fb62e9b5575d5ec43176bd61ae22aae9d0f7fbd8e5a1388a441`; fine10m1300×1600,657525B,SHA256`d74099be2da8bed8fbbbfafb7a5426ca21546adb7d300180869dfb23e5cea996`. Fine bounds in DEM local metres[-8000,-8000,5000,8000], common origin[6.2,61.28]. Total997049B/2830000pixels, all classified source coverage valid. Coarse cloud0.0257333%/snow0.4596%; fine cloud0.0151923%/snow0.0111058%; cloud-shadow class0% in both. Real dark terrain shadows remain. JPEG quality88/subsampling0/bilinear10m or40m resampling, same provenance/modified-data credit. Original20m derivative below is preserved as the historical controlled comparison, not current adaptive default. `prepare-adaptive-imagery.py` reproduces both and enforces exact output/source hashes. This is regional10m satellite detail, not buildings/street-scale/global coverage.
+
 Checked2026-10-09. No private GPX was sent to any service. Developer queries use the already public DEM origin6.2°E61.28°N/30×40km region. Runtime accepts only bounded first-party derived assets; no satellite service is called by the application.
 
 | Candidate | Geographic/detail feasibility | Rights and decision |

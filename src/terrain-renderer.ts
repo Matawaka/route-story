@@ -6,7 +6,7 @@ import { haversine,wrapDelta } from './geo';
 import { metricLabel,formatDistance } from './renderer';
 import type { Route } from './route';
 import type { StoryConfig } from './story';
-import {imageryUV,imageryCoversTerrain,type PreparedImagery} from './imagery';
+import {imageryUV,imageryCoversTerrain,imageryDetailWeight,type PreparedImagery} from './imagery';
 
 /** Bounded genuine DEM mesh; one WebGL surface, synchronously captured into the
  * existing Canvas/WebCodecs pipeline. Optional resident regional photo texture;
@@ -28,6 +28,10 @@ export class TerrainRenderer {
   private disposed=false;
   private readonly title:string;
   readonly preparedMs:number;
+  private readonly detailWeight={value:0};
+  private detailBox?:T.Box3;
+  private readonly frustum=new T.Frustum();
+  private readonly viewProjection=new T.Matrix4();
   constructor(route:Route,readonly terrain:TerrainDataset,readonly width:number,readonly height:number,config:StoryConfig,readonly imagery?:PreparedImagery){
     const begin=performance.now();this.timeline=new StoryTimeline(route,config);this.config=this.timeline.config;
     try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height);}catch(error){imagery?.dispose();throw error;}
@@ -43,7 +47,7 @@ export class TerrainRenderer {
     this.camera.setViewOffset(width,height,0,Math.min(width,height)*.04,width,height);
     try{
       if(this.config.terrainSurface==='photo'&&!imagery)throw Error('Снимок не подготовлен. Выберите поверхность DEM.');
-      if(imagery){this.disposables.push(imagery);if(!imageryCoversTerrain(imagery.manifest,terrain)||Math.max(imagery.bitmap.width,imagery.bitmap.height)>this.gpu.capabilities.maxTextureSize)throw Error('Снимок не покрывает DEM или превышает возможности GPU. Выберите поверхность DEM.');}
+      if(imagery){this.disposables.push(imagery);if(!imageryCoversTerrain(imagery.manifest,terrain)||Math.max(imagery.bitmap.width,imagery.bitmap.height,imagery.detailBitmap?.width??0,imagery.detailBitmap?.height??0)>this.gpu.capabilities.maxTextureSize||!!imagery.manifest.detail!==!!imagery.detailBitmap)throw Error('Снимок не покрывает DEM или превышает возможности GPU. Выберите поверхность DEM.');}
       const {level,manifest,heights}=terrain,count=level.width*level.height,positions=new Float32Array(count*3),colors=new Float32Array(count*3),indices=new Uint32Array((level.width-1)*(level.height-1)*6);let indexCount=0;
       const low=new T.Color(night?'#102f3b':'#4e735f'),mid=new T.Color(night?'#31546a':'#9b9e7d'),high=new T.Color(night?'#6c8795':'#dbd9c4'),water=new T.Color(night?'#092431':'#4c91a4');
       for(let y=0;y<level.height;y++)for(let x=0;x<level.width;x++){
@@ -55,15 +59,20 @@ export class TerrainRenderer {
         if(x<level.width-1&&y<level.height-1){const corners=[i,i+1,i+level.width,i+level.width+1];if(corners.every(j=>heights[j]!==manifest.noData)){indices.set([i,i+1,i+level.width,i+1,i+level.width+1,i+level.width],indexCount);indexCount+=6;}}
       }
       this.terrainGeometry=new T.BufferGeometry();this.terrainGeometry.setAttribute('position',new T.BufferAttribute(positions,3));this.terrainGeometry.setAttribute('color',new T.BufferAttribute(colors,3));this.terrainGeometry.setIndex(new T.BufferAttribute(indices.subarray(0,indexCount),1));this.terrainGeometry.computeVertexNormals();this.disposables.push(this.terrainGeometry);
-      let photo:T.Texture|undefined;
-      if(imagery){const uv=new Float32Array(count*2);for(let i=0;i<count;i++)uv.set(imageryUV(imagery.manifest,[positions[i*3],-positions[i*3+2]]),i*2);this.terrainGeometry.setAttribute('uv',new T.BufferAttribute(uv,2));photo=new T.Texture(imagery.bitmap);photo.flipY=false;photo.colorSpace=T.SRGBColorSpace;photo.minFilter=T.LinearMipmapLinearFilter;photo.magFilter=T.LinearFilter;photo.wrapS=photo.wrapT=T.ClampToEdgeWrapping;photo.generateMipmaps=true;photo.needsUpdate=true;this.disposables.push(photo);}
+      let photo:T.Texture|undefined,detail:T.Texture|undefined;
+      const texture=(bitmap:ImageBitmap)=>{const t=new T.Texture(bitmap);t.flipY=false;t.colorSpace=T.SRGBColorSpace;t.minFilter=T.LinearMipmapLinearFilter;t.magFilter=T.LinearFilter;t.wrapS=t.wrapT=T.ClampToEdgeWrapping;t.anisotropy=Math.min(4,this.gpu.capabilities.getMaxAnisotropy());t.generateMipmaps=true;t.needsUpdate=true;this.disposables.push(t);return t;};
+      if(imagery){const uv=new Float32Array(count*2);for(let i=0;i<count;i++)uv.set(imageryUV(imagery.manifest,[positions[i*3],-positions[i*3+2]]),i*2);this.terrainGeometry.setAttribute('uv',new T.BufferAttribute(uv,2));photo=texture(imagery.bitmap);
+        if(imagery.detailBitmap){detail=texture(imagery.detailBitmap);const b=imagery.manifest.detail!.bounds;this.detailBox=new T.Box3(new T.Vector3(b[0],terrain.min,-b[3]),new T.Vector3(b[2],terrain.max,-b[1]));}
+      }
       const terrainMaterial=new T.MeshLambertMaterial({vertexColors:!photo,map:photo??null,side:T.FrontSide});
       terrainMaterial.onBeforeCompile=shader=>{
         shader.uniforms.bounds={value:new T.Vector4(manifest.westMeters,manifest.southMeters,manifest.eastMeters,manifest.northMeters)};shader.uniforms.edgeColor={value:this.scene.background};
+        if(detail){shader.uniforms.detailMap={value:detail};shader.uniforms.detailBounds={value:new T.Vector4(...imagery!.manifest.detail!.bounds as [number,number,number,number])};shader.uniforms.detailWeight=this.detailWeight;}
         shader.vertexShader='varying vec3 demPosition;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ndemPosition=position;');
         shader.fragmentShader='varying vec3 demPosition;uniform vec4 bounds;uniform vec3 edgeColor;\n'+shader.fragmentShader
           .replace('#include <color_fragment>',photo?'#include <color_fragment>':`#include <color_fragment>\nfloat contour=abs(fract(demPosition.y/100.0+0.5)-0.5);float aa=max(fwidth(demPosition.y/100.0),0.006);float line=1.0-smoothstep(0.0,aa*1.1,contour);if(demPosition.y>15.0)diffuseColor.rgb=mix(diffuseColor.rgb,${night?'vec3(0.19,0.29,0.33)':'vec3(0.10,0.16,0.12)'},line*${night?'0.23':'0.17'});`)
           .replace('#include <opaque_fragment>','#include <opaque_fragment>\nfloat boundary=min(min(demPosition.x-bounds.x,bounds.z-demPosition.x),min(-demPosition.z-bounds.y,bounds.w+demPosition.z));gl_FragColor.rgb=mix(edgeColor,gl_FragColor.rgb,smoothstep(0.0,1800.0,boundary));');
+        if(detail){shader.fragmentShader='uniform sampler2D detailMap;uniform vec4 detailBounds;uniform float detailWeight;\n'+shader.fragmentShader.replace('#include <map_fragment>',`vec4 photograph=texture2D(map,vMapUv);vec2 geographic=vec2(demPosition.x,-demPosition.z);vec2 fineUv=vec2((geographic.x-detailBounds.x)/(detailBounds.z-detailBounds.x),(detailBounds.w-geographic.y)/(detailBounds.w-detailBounds.y));float edge=min(min(geographic.x-detailBounds.x,detailBounds.z-geographic.x),min(geographic.y-detailBounds.y,detailBounds.w-geographic.y));float blend=detailWeight*smoothstep(0.0,450.0,edge);if(blend>0.0)photograph=mix(photograph,texture2D(detailMap,fineUv),blend);diffuseColor*=photograph;`);}
       };
       this.disposables.push(terrainMaterial);this.scene.add(new T.Mesh(this.terrainGeometry,terrainMaterial));
       this.scene.add(new T.HemisphereLight(night?0x9bbdda:0xf8f4db,night?0x03151f:0x344337,night?.8:1));
@@ -105,6 +114,7 @@ export class TerrainRenderer {
     if(this.disposed||this.lost||this.gpu.getContext().isContextLost())throw Error('3D-контекст потерян. Переключите камеру на 2D или выберите 3D повторно.');
     const state=this.timeline.at(seconds),pose=getTerrainCameraStateAt(seconds,this.plan),night=this.config.visualStyle==='night';
     this.camera.position.set(pose.position[0],pose.position[2],-pose.position[1]);this.camera.up.set(0,1,0);this.camera.lookAt(pose.target[0],pose.target[2],-pose.target[1]);
+    if(this.imagery){this.camera.updateMatrixWorld();this.viewProjection.multiplyMatrices(this.camera.projectionMatrix,this.camera.matrixWorldInverse);this.frustum.setFromProjectionMatrix(this.viewProjection);this.detailWeight.value=imageryDetailWeight(this.imagery.manifest,Math.hypot(...pose.position.map((v,i)=>v-pose.target[i])),pose.fov,this.height,!!this.detailBox&&this.frustum.intersectsBox(this.detailBox));}
     const xy=this.terrain.world(state.point);this.marker.position.set(xy[0],this.terrain.meshElevation(xy)!+24,-xy[1]);this.routeMaterial.uniforms.progress.value=state.travelledKm;
     for(const mesh of [this.marker,this.start,this.finish])mesh.scale.setScalar(this.camera.position.distanceTo(mesh.position)*.009);
     this.marker.visible=state.markerOpacity>.1;this.finish.visible=state.phase==='OUTRO'||state.routeProgress>.9;
