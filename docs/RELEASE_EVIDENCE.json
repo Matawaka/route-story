@@ -12,6 +12,13 @@
       "failed": 0,
       "productionBuild": "passed"
     },
+    "documentationCheckpoint": {
+      "commit": "ba2b8cff933bcecec40f3b038d8f0d45b30f99a3",
+      "prUrl": "https://github.com/Matawaka/route-story/pull/5",
+      "ciUrl": "https://github.com/Matawaka/route-story/actions/runs/37900902826",
+      "conclusion": "success",
+      "scope": "documentation only; reviewed deployment SHA remains main"
+    },
     "freshLocalMainAcceptance": {
       "cleanInstall": "passed; zero audit vulnerabilities",
       "unitPassed": 92,
