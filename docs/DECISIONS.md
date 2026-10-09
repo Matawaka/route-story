@@ -10,7 +10,7 @@ Use the complete reviewed main SHA for deployment and the immutable `v1.0.0` tag
 
 Existing synthetic Atlas20s/Night30s files are present and independently revalidated; their hashes match Sprint 4. Preserve the original source-commit evidence, do not mislabel these as exports from the public site. Keep diagnostic/API responses and MP4s outside source Git. After public acceptance, finalize Release assets, download each independently and compare hashes. Encoder output may differ after a genuine public-site regeneration.
 
-The owner provided the contest announcement text: GPX is an accepted documented import format, and the minimum includes two styles, two factual information elements, both aspect ratios, actual replay/export and an independently runnable product. Map these requirements to observed evidence, emphasizing actual output. An original rules URL, submission channel/form and permission to submit have not been supplied; do not claim official compliance or submission.
+The owner provided the contest announcement text: GPX is an accepted documented import format, and the minimum includes two styles, two factual information elements, both aspect ratios, actual replay/export and an independently runnable product. Map these requirements to observed evidence, emphasizing actual output. Submission channel was clarified as a comment under the post in the private Telegram channel «Вайбкодинговая». The exact original post URL and agent submission permission/access have not been supplied; prepare copy-ready owner text and do not claim official compliance or submission.
 
 ## Sprint 4: reviewed static release, no new product features
 
