@@ -2,7 +2,7 @@
 
 Локальный GPS Route Story Engine от Matawaka. Загрузите GPX, отредактируйте название, выберите 10, 20 или 30 секунд, «Атлас» или «Ночной» и сохраните H.264 MP4 в формате 16:9 или 9:16. Русский интерфейс, Canvas 2D, без обязательного сервера и платных API.
 
-Разработка началась **8 октября 2026 года** (Asia/Yekaterinburg). 14 октября — календарный день семь; отдельный срок подачи организаторами не указан. Sprint 3 основан на принятом Sprint 2 (`f9f63b5`): [PR #1](https://github.com/Matawaka/route-story/pull/1) и [PR #2](https://github.com/Matawaka/route-story/pull/2) ещё открыты. Ветка sprint-3-compatibility-memory продолжает sprint-2-story-timeline; bootstrap main не используется как база.
+Разработка началась **8 октября 2026 года** (Asia/Yekaterinburg). 14 октября — календарный день семь; отдельный срок подачи организаторами не указан. Sprint 3 основан на принятом Sprint 2 (`f9f63b5`): [PR #1](https://github.com/Matawaka/route-story/pull/1) и [PR #2](https://github.com/Matawaka/route-story/pull/2) ещё открыты. [PR #3 — Sprint 3](https://github.com/Matawaka/route-story/pull/3), ветка sprint-3-compatibility-memory, направлен в sprint-2-story-timeline; bootstrap main не используется как база. Слияние и публичное развёртывание автоматически не выполняются.
 
 ```powershell
 npm.cmd ci

@@ -12,6 +12,8 @@ Final 50,000-point dense Standard export: 1280×720, 30.000s, 720 frames, 3,122,
 
 64 configuration / 384-frame visual acceptance and explicit segment-boundary states are recorded in VISUAL_VALIDATION.md. Direct/incremental/backward-seek drawing matches exactly across 5000 points; every segment gap remains unbridged. Native encoder/renderer failure, cancellation, invalid-file clearing and successful retry pass. Production privacy/CSP tests retain no cross-origin runtime requests, local/session storage, IndexedDB, caches or cookies. Only synthetic evidence enters GitHub artifacts.
 
+Remote clean-install acceptance also passed for head 36ac690c06a1c3a9e1bad595d45b3c291acb05c0: [Windows/Edge CI](https://github.com/Matawaka/route-story/actions/runs/37885439388), 88 unit tests, build, 22 browser tests / 3 deliberate opt-in skips, 33.7s browser suite; zero install audit vulnerabilities. Review [PR #3](https://github.com/Matawaka/route-story/pull/3) targets Sprint 2, with no automatic merge. Subsequent journal/README changes do not alter tested application code.
+
 ## Sprint 2 — 2026-10-09
 
 Preserved Sprint 1's real four-second regression and added public 10/20/30-second exports from the same validated configuration/timeline as preview. Final local command: `$env:PLAYWRIGHT_CHANNEL='msedge'; $env:FULL_EXPORT_ACCEPTANCE='1'; npm.cmd run check`. Results: 67 unit tests, production build and 20 browser tests passed; one external-data test intentionally skipped; browser suite 31.4s. Full dependency audit: zero vulnerabilities; no dependency/version/license changes.
