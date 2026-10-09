@@ -9,7 +9,7 @@
 - Проверенный main: `dd86c372b6d6c757d7327e22366b402f60ad9b4e`; [main CI](https://github.com/Matawaka/route-story/actions/runs/37889234952) SUCCESS. Его дерево совпадает со Sprint 3 `488db3b327b37379c3a225ecaaa3984210145012`.
 - Release branch: `release/route-story-v1`, от этого main. Стек предыдущих PR больше не блокирует выпуск.
 - Точный commit идентифицированной локальной release-приёмки: `67d1726662742af33066df8cffde331a4270f77b`, подтверждён в origin. Последующие изменения README/журнала/доказательств не изменяют production-приложение.
-- Release PR: [#4 — Prepare Route Story v1 release and gated HTTPS acceptance](https://github.com/Matawaka/route-story/pull/4), OPEN, base main. [Release CI](https://github.com/Matawaka/route-story/actions/runs/37894192261) для checkpoint `050b364a099820bcf84363f41c055602506e7b74` — SUCCESS: clean install, 92 unit / 23 browser pass, build pass, 3 intentional skips, 36.7s browser suite. Последующий handover-only commit не меняет проверенное приложение. Проверки final main после его разрешённого слияния: **PENDING**.
+- Release PR: [#4 — Prepare Route Story v1 release and gated HTTPS acceptance](https://github.com/Matawaka/route-story/pull/4), OPEN, base main. [Release CI](https://github.com/Matawaka/route-story/actions/runs/37894660189) для handover checkpoint `a9b78beea3358fd78f41d91a77bae967da1d5bfa` — SUCCESS: clean install, 92 unit / 23 browser pass, build pass, 3 intentional skips, 24.2s browser suite. Последующий journal-only commit не меняет проверенное приложение. Проверки final main после его разрешённого слияния: **PENDING**.
 - Публичный HTTPS URL и GitHub Release: **PENDING**. Предполагаемый адрес не выдаётся за существующий.
 
 ## Обязательные материалы
@@ -63,6 +63,8 @@ night-30s.mp4  80a12e42c94315a9269dbf67d0d121ba0a6e71a6537b155fb9b40371af8ea60a
 FFprobe подтвердил MP4/H.264, размеры, длительность в пределах одного кадра, 24 FPS и полное число кадров. Для каждого кадра проверены timestamp `i/24` и длительность `1/24` с допуском 10 микросекунд. FFmpeg декодировал каждый кадр без stderr при `-v error`; все изображения меняются, начало и финал различны. Кадры 0/1/10/19/19.958s (Atlas) и 0/1/15/29/29.958s (Night) извлечены из реальных MP4. Визуально проверены вступление, середина, финал и крайние кадры: читаемые названия/метрики, видимые старт/финиш, корректная короткая геометрия через 180°. Полные названия доступны в UI; для вертикального примера выбрано короткое название без ellipsis.
 
 Примеры и JSON-отчёты подготовлены локально для последующей публикации в GitHub Release. В source Git MP4 не добавлены. Синтетический QA JSON и screenshot можно просмотреть в release PR. Не распространять любые `.reference`/external GPX или видео из unresolved-license Hong Kong acceptance.
+
+Готов локальный `artifacts/release/route-story-v1-release-candidate.zip`, 3 326 598 bytes, SHA-256 `6ee20e5bb6e88d3e765032bc2dc8465f3d1c5cc31bcbee19870074247b8d7d5c`. Snapshot идентифицирует site/video source 67d17266… и review checkpoint a9b78bee…; содержит 18 файлов: разрешённый static site, лицензии/два GPX, два MP4 с независимыми отчётами, JSON evidence/hashes и release notes. Не содержит исходных приватных данных, FFmpeg binaries или node_modules. Публичное размещение архива также PENDING. Локальный owner preview http://127.0.0.1:4173/ проверен HTTP 200; это не public URL.
 
 ## Регрессии и security gate
 
