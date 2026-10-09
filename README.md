@@ -1,7 +1,44 @@
 # Route Story
 
-Локальный GPS Route Story Engine от Matawaka. Sprint 1 starts on **2026-10-08** (actual implementation start, Asia/Yekaterinburg).
+Локальный GPS Route Story Engine от Matawaka. Загрузите GPX, выберите «Атлас» или «Ночной» и сохраните 4-секундное видео H.264 MP4 в формате 16:9 или 9:16. Русский интерфейс, Canvas 2D, без обязательного сервера и платных API.
 
-The first checkpoint is a safely imported GPX route rendered on a bundled map and a real, independently decoded H.264 MP4. Implementation is in progress; see docs/IMPLEMENTATION_STATE.md.
+Sprint 1 начался **8 октября 2026 года** (Asia/Yekaterinburg), с фактическим началом реализации.
 
-Application code: MIT, Dmitrii Olegovich Kuznetsov. Third-party licenses and data provenance will be recorded in THIRD_PARTY_NOTICES.md.
+```powershell
+npm.cmd ci
+npm.cmd run build
+npm.cmd run preview
+```
+
+В Windows PowerShell используйте `npm.cmd` и `npx.cmd`: это запускает командные обёртки Node.js и не требует разрешать выполнение `npm.ps1` или менять ExecutionPolicy. В Linux/macOS используйте `npm` и `npx` без `.cmd`.
+
+Откройте адрес localhost, напечатанный Vite (обычно http://127.0.0.1:4173). Для разработки в PowerShell: `npm.cmd run dev`. Требуется Node.js 22.12+; проверено на Node 24.19.0, Windows и Microsoft Edge. Экспорт требует HTTPS или localhost и доступного WebCodecs H.264-кодировщика. Приложение проверяет поддержку на устройстве и показывает причину недоступности. Работа Safari/Firefox не подтверждена.
+
+GPX остаётся в памяти браузера: без отправки, сохранения пользовательских маршрутов и телеметрии. Доступны GPX 1.0/1.1 (UTF-8), треки и route points, несколько отдельных сегментов, высота и временные метки при наличии. Расстояние рассчитано по исходным координатам и не включает разрывы. Набор высоты показывается только при полной серии высот; иначе — число точек. Метки времени извлекаются, но не используются для выдуманных скоростей или длительности поездки.
+
+Лимиты: 10 МиБ, 50 000 точек, глубина XML 64, 300 000 элементов; никакой тихой обрезки. DTD/ENTITY, исполняемое содержимое, некорректный XML и координаты отклоняются. Высоты допустимы от −12 000 до 100 000 м. Название/creator до 200 символов, описание до 2 000; длинные поля отклоняются. На кадре длинное название визуально сокращается, исходные точки сохраняются.
+
+Карта — локальные упрощённые очертания Natural Earth 1:110m, с проекцией, подобранной по границам маршрута. Порядок координат: longitude, latitude. Переход через 180° обрабатывается по короткой дуге. Сегменты не соединяются выдуманными линиями. Карта не предназначена для навигации; мелкие острова и подробные улицы отсутствуют. Выходные размеры первого checkpoint: 640×360 и 360×640, 24 кадра/с, 4 секунды, без звука и водяного знака.
+
+Проверки на Windows с установленным Edge:
+
+```powershell
+$env:PLAYWRIGHT_CHANNEL = 'msedge'
+npm.cmd run check
+```
+
+Или установите Chromium: `npx.cmd playwright install chromium`; без переменной PLAYWRIGHT_CHANNEL тесты используют его. Доступность H.264 зависит от ОС/кодировщика; Windows CI использует Edge. `npm.cmd run test:e2e` требует предварительного `npm.cmd run build`: тестируются dev-сервер и собранный production bundle. Playwright запускает и останавливает свои серверы автоматически.
+
+Независимые FFmpeg и ffprobe проверяют реальный MP4: H.264, размеры, длительность, 96 декодированных кадров и изменение изображения. Локальные MP4, JSON-отчёты и снимки находятся в игнорируемом `artifacts/`. Для отдельной проверки:
+
+```powershell
+npm.cmd run validate:video -- artifacts/route-story-proof.mp4 640 360
+```
+
+CI использует только синтетические данные. Учебный пример также синтетический. Реальный публичный Hong Kong Trail проверен отдельно и не включён в репозиторий из-за неразрешённых условий вышестоящих источников: [происхождение и результаты](docs/SAMPLE_PROVENANCE.md).
+
+Статическое размещение: опубликуйте содержимое `dist/` на любом HTTPS-хостинге с поддержкой статических файлов. Пути относительные, дополнительных API не требуется. Новое публичное развёртывание не является частью этого checkpoint.
+
+Состояние: [IMPLEMENTATION_STATE](docs/IMPLEMENTATION_STATE.md). Решения: [DECISIONS](docs/DECISIONS.md). [Аудит исходного проекта](docs/UPSTREAM_AUDIT.md). [Проверка видео](docs/VIDEO_VALIDATION.md).
+
+Оригинальный код — MIT, Dmitrii Olegovich Kuznetsov (Matawaka). Сторонние лицензии и источники: [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md). Notices и полные лицензии автоматически включаются в сборку. Никакого Remotion в Sprint 1; возможная будущая интеграция не добавляет текущих задач.
