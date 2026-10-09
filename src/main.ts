@@ -6,6 +6,7 @@ import { defaultStoryConfig, exportSettings, formatVideoTime, validateStoryConfi
 import './style.css';
 import { loadGeography } from './geography';
 import { loadTerrain } from './terrain';
+import {loadImagery,type PreparedImagery} from './imagery';
 import type { TerrainRenderer } from './terrain-renderer';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const canvas = el<HTMLCanvasElement>('preview'), file = el<HTMLInputElement>('file'), demo = el<HTMLButtonElement>('demo');
@@ -15,12 +16,16 @@ const duration = el<HTMLSelectElement>('duration'), quality = el<HTMLSelectEleme
 const cameraMode=el<HTMLSelectElement>('camera-mode');
 const cinematicDemo=el<HTMLButtonElement>('cinematic-demo');
 const terrainDemo=el<HTMLButtonElement>('terrain-demo');
+const terrainSurface=el<HTMLSelectElement>('terrain-surface');
+declare const __IMAGERY_ENABLED__:boolean;
+if(!__IMAGERY_ENABLED__){terrainSurface.hidden=true;el('terrain-surface-label').hidden=true;}
 const title = el<HTMLInputElement>('story-title');
 let story: Readonly<StoryConfig> = defaultStoryConfig();
 if(matchMedia('(prefers-reduced-motion: reduce)').matches){story=validateStoryConfig({...story,cameraMode:'classic'});cameraMode.value='classic';}
 let route: Route | undefined, renderer: RouteRenderer | TerrainRenderer | undefined, style: VisualStyle = 'atlas';
 let exporting = false, loading = false, animationId = 0, playing = false, loadId = 0, probeId = 0;
 let controller: AbortController | undefined;
+let imageryController:AbortController|undefined;
 const landPromise: Promise<Land> = fetch(`${import.meta.env.BASE_URL}maps/ne_110m_land.geojson`).then(response => { if (!response.ok) throw new Error('Не удалось загрузить локальную карту.'); return response.json(); });
 landPromise.catch(error => message(error.message, true));
 function message(text: string, error = false) { el('status').textContent = text; el('status').classList.toggle('error', error); }
@@ -35,9 +40,10 @@ function draw() {
 }
 async function configure(): Promise<void> {
   if (exporting) return;
+  imageryController?.abort();imageryController=new AbortController();const imagerySignal=imageryController.signal;
   const currentProbe = ++probeId; button.disabled = true; if (!route) return;
   try {
-    story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'],cameraMode:cameraMode.value as StoryConfig['cameraMode'] }, false);
+    story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'],cameraMode:cameraMode.value as StoryConfig['cameraMode'],terrainSurface:terrainSurface.value as StoryConfig['terrainSurface'] }, false);
     title.removeAttribute('aria-invalid');
   } catch (error) { title.setAttribute('aria-invalid', 'true'); stop(); message((error as Error).message, true); return; }
   let config=story,terrain:Awaited<ReturnType<typeof loadTerrain>>|undefined,terrainNote='';
@@ -54,19 +60,22 @@ async function configure(): Promise<void> {
   scrub.max = String(story.durationSeconds); scrub.value = String(Math.min(Number(scrub.value), story.durationSeconds));
   canvas.classList.toggle('portrait', portrait); el('preview-format').textContent = portrait ? '9:16' : '16:9';
   if(terrain){const {TerrainRenderer}=await import('./terrain-renderer');if(currentProbe!==probeId)return;
-    try{renderer=new TerrainRenderer(route,terrain,canvas.width,canvas.height,config);}
-    catch(error){if(story.cameraMode!=='auto')throw error;terrain=undefined;terrainNote=`Авто: ${(error as Error).message} Используется 2D.`;config=validateStoryConfig({...config,cameraMode:'cinematic'});land={...landBase,geography:await loadGeography()};if(currentProbe!==probeId)return;renderer=new RouteRenderer(route,land,canvas.width,canvas.height,style,config);}
+    let imagery:PreparedImagery|undefined;
+    try{if(config.terrainSurface==='photo')imagery=await loadImagery(imagerySignal);if(currentProbe!==probeId){imagery?.dispose();return;}renderer=new TerrainRenderer(route,terrain,canvas.width,canvas.height,config,imagery);}
+    catch(error){imagery?.dispose();if(currentProbe!==probeId)return;if(story.cameraMode!=='auto')throw error;terrain=undefined;terrainNote=`Авто: ${(error as Error).message} Используется 2D.`;config=validateStoryConfig({...config,cameraMode:'cinematic'});land={...landBase,geography:await loadGeography()};if(currentProbe!==probeId)return;renderer=new RouteRenderer(route,land,canvas.width,canvas.height,style,config);}
   }
   else renderer = new RouteRenderer(route, land, canvas.width, canvas.height, style, config);
   draw();
   const region=land.geography?.region.extent,covered=region&&route.segments.every(s=>s.every(p=>p.lon>=region[0]&&p.lon<=region[2]&&p.lat>=region[1]&&p.lat<=region[3]));
   el('map-detail-note').textContent=terrain?`Рельеф: © Kartverket · CC BY 4.0 · DEM ${terrain.level.spacingMeters} м · без преувеличения высот. Локальный пакет Согне-фьорда; высоты GPX сохранены. Вертикальный датум источника не указан. Не для навигации.`:`${terrainNote} Карта: Natural Earth · ${covered?'фьорды, острова и подписи 1:10m':'обзорная география '+(config.cameraMode==='cinematic'?'1:50m':'1:110m')} · без улиц. Время видео не является длительностью поездки.`;
+  if(terrain&&config.terrainSurface==='photo')el('map-detail-note').textContent+=' Contains modified Copernicus Sentinel data 2025 · снимок 27.09.2025 · источник 10 м, текстура 20 м. Свет — художественный, не время поездки. Региональное покрытие; не уличная карта.';
   canvas.setAttribute('aria-label', `История «${story.title}»: карта маршрута со стартом и финишем`);
   el('export-note').textContent = `${story.durationSeconds} секунд · ${canvas.width} × ${canvas.height} · 24 кадра/с · H.264`;
   try { await detectEncoder(canvas.width, canvas.height, settings.bitrate, settings.fps); if (currentProbe === probeId) { button.disabled = exporting || loading; message('Маршрут готов. Можно сохранить видео.'); } }
   catch (error) { if (currentProbe === probeId) message((error as Error).message + (story.qualityPreset === 'standard' ? ' Выберите «Совместимое · 360p».' : ''), true); }
 }
 async function importRoute(read: () => Promise<Route>, synthetic = false) {
+  imageryController?.abort();
   if (exporting) return; const currentLoad = ++loadId; ++probeId; loading = true; button.disabled = true; stop();
   message('Читаем GPX на вашем устройстве…');
   try {
@@ -108,6 +117,7 @@ ratio.addEventListener('change', () => void configure().catch(error => message(e
 duration.addEventListener('change', () => void configure().catch(error => message(error.message, true)));
 quality.addEventListener('change', () => void configure().catch(error => message(error.message, true)));
 cameraMode.addEventListener('change',()=>void configure().catch(error=>message(error.message,true)));
+terrainSurface.addEventListener('change',()=>void configure().catch(error=>message(error.message,true)));
 title.addEventListener('input', () => void configure().catch(error => message(error.message, true)));
 scrub.addEventListener('input', () => { stop(); draw(); });
 play.addEventListener('click', () => {
@@ -121,7 +131,7 @@ cancel.addEventListener('click', () => controller?.abort());
 button.addEventListener('click', async () => {
   if (!renderer || exporting || loading) return;
   exporting = true; stop(); controller = new AbortController(); cancel.hidden = false;
-  const controls = [button, file, demo, cinematicDemo, terrainDemo, ratio, duration, quality, title, cameraMode, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
+  const controls = [button, file, demo, cinematicDemo, terrainDemo, ratio, duration, quality, title, cameraMode, terrainSurface, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
   const active = renderer;
   try {
     performance.clearMarks('route-story-export-start'); performance.clearMarks('route-story-export-end'); performance.clearMeasures('route-story-export');
@@ -132,4 +142,4 @@ button.addEventListener('click', async () => {
   } catch (error) { message((error as Error).name === 'AbortError' ? 'Экспорт отменён.' : `Не удалось создать MP4: ${(error as Error).message}`, (error as Error).name !== 'AbortError'); }
   finally { exporting = false; controller = undefined; cancel.hidden = true; controls.forEach(control => control.disabled = false); }
 });
-window.addEventListener('pagehide', () => { controller?.abort(); stop(); renderer?.dispose(); });
+window.addEventListener('pagehide', () => { ++probeId;++loadId;imageryController?.abort();controller?.abort(); stop(); renderer?.dispose(); });

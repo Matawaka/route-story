@@ -1,0 +1,29 @@
+/** Opt-in bounded prototype cycles; native process memory is separate from JS. */
+import {chromium} from '@playwright/test';
+import {spawn,execFileSync} from 'node:child_process';
+import {mkdirSync,writeFileSync,readFileSync,existsSync} from 'node:fs';
+import {resolve} from 'node:path';
+import assert from 'node:assert/strict';
+import os from 'node:os';
+import {withServer} from './server.mjs';
+const folder='artifacts/sprint9/memory';mkdirSync(folder,{recursive:true});if(os.platform()!=='win32')throw Error('Windows sampler required');
+await withServer(async url=>{for(const surface of ['dem','photo']){
+ const server=await chromium.launchServer({channel:'msedge',headless:true,host:'127.0.0.1'}),browser=await chromium.connect(server.wsEndpoint()),root=server.process().pid;
+ const file=resolve(`${folder}/${surface}-raw.jsonl`),stop=resolve(`${folder}/${surface}-stop`);if(existsSync(stop))throw Error('Remove only this ignored previous stop marker before rerunning');
+ const sampler=spawn('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',resolve('scripts/acceptance/sample-memory.ps1'),'-RootPid',String(root),'-OutputFile',file,'-StopFile',stop],{windowsHide:true,stdio:'pipe'});let samplerError='';sampler.stderr.on('data',b=>samplerError+=b);
+ const page=await browser.newPage(),cdp=await page.context().newCDPSession(page),stages=[];await cdp.send('Performance.enable');const heap=async()=>{const {metrics}=await cdp.send('Performance.getMetrics');return metrics.find(m=>m.name==='JSHeapUsedSize').value;};
+ const stage=async(label,action)=>{const start=Date.now(),beforeHeap=await heap();await action();stages.push({label,start,end:Date.now(),beforeHeap,afterHeap:await heap()});};let audit;
+ try{await page.goto(url);await page.evaluate(async()=>{const {TerrainRenderer}=await import('/src/terrain-renderer.ts'),draw=TerrainRenderer.prototype.draw,dispose=TerrainRenderer.prototype.dispose,seen=new WeakSet();window.photoAudit={refs:[],images:[],disposed:0,closed:true};TerrainRenderer.prototype.draw=function(...a){if(!seen.has(this)){seen.add(this);window.photoAudit.refs.push(new WeakRef(this));if(this.imagery)window.photoAudit.images.push(new WeakRef(this.imagery.bitmap));}return draw.apply(this,a);};TerrainRenderer.prototype.dispose=function(){dispose.call(this);window.photoAudit.disposed++;window.photoAudit.closed&&=this.gpu.domElement.width===0&&(!this.imagery||this.imagery.bitmap.width===0);};});
+  await stage('baseline',()=>page.waitForTimeout(1800));
+  for(let i=0;i<3;i++){
+   await stage(`cycle${i}-import`,async()=>{await page.locator('#terrain-surface').selectOption(surface);await page.locator('#terrain-demo').click();await page.waitForFunction(()=>!document.querySelector('#export').disabled);await page.locator('#duration').selectOption('10');await page.waitForFunction(()=>!document.querySelector('#export').disabled);});
+   await stage(`cycle${i}-export`,async()=>{for(const t of [1,8,2,5])await page.locator('#scrub').fill(String(t));const pending=page.waitForEvent('download');await page.locator('#export').click();await pending;});
+   await stage(`cycle${i}-cancel-retry`,async()=>{await page.locator('#export').click();await page.locator('#cancel').click();await page.waitForFunction(()=>document.querySelector('#status').textContent==='Экспорт отменён.');const pending=page.waitForEvent('download');await page.locator('#export').click();await pending;});
+   await page.getByLabel('Выбрать GPX-файл').setInputFiles({name:'invalid.gpx',mimeType:'application/xml',buffer:Buffer.from('<gpx>')});await page.locator('#empty').waitFor({state:'visible'});await stage(`cycle${i}-retained`,()=>page.waitForTimeout(1200));
+  }
+  await stage('test-only-gc',async()=>{await cdp.send('HeapProfiler.collectGarbage');await page.waitForTimeout(1200);});audit=await page.evaluate(()=>({disposed:window.photoAudit.disposed,closed:window.photoAudit.closed,retainedRenderers:window.photoAudit.refs.filter(r=>r.deref()).length,retainedImages:window.photoAudit.images.filter(r=>r.deref()).length,local:localStorage.length,session:sessionStorage.length}));assert.deepEqual({...audit,disposed:0},{disposed:0,closed:true,retainedRenderers:0,retainedImages:0,local:0,session:0});await stage('unload',async()=>{await page.goto('about:blank');await page.waitForTimeout(1200);});
+ }finally{writeFileSync(stop,'stop');await new Promise(resolve=>{const timer=setTimeout(()=>{sampler.kill();resolve();},3000);sampler.once('exit',()=>{clearTimeout(timer);resolve();});});await browser.close();await server.close();}
+ assert.equal(samplerError,'');const samples=readFileSync(file,'utf8').trim().split('\n').map(l=>JSON.parse(l));assert.ok(samples.length>10);const intervals=samples.slice(1).map((s,i)=>s.unixMs-samples[i].unixMs);
+ for(const stage of stages){const matches=samples.filter(s=>s.unixMs>=stage.start&&s.unixMs<=stage.end);stage.samples=matches.length;stage.privatePeak=matches.length?Math.max(...matches.map(s=>s.privateSumBytes)):null;stage.lastPrivate=matches.at(-1)?.privateSumBytes??null;}
+ const report={surface,sourceCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',windowsHide:true}).trim(),uncommitted:!!execFileSync('git',['status','--porcelain'],{encoding:'utf8',windowsHide:true}).trim(),os:`${os.type()} ${os.release()}`,pointCount:721,duration:10,width:720,height:1280,method:'Fresh isolated Edge process tree per surface; Windows private committed bytes, separate CDP JS heap; shared resident pages may be counted twice. No GPU VRAM or separate codec memory measurement. Test-only GC, never production.',privatePeak:Math.max(...samples.map(s=>s.privateSumBytes)),workingSetPeak:Math.max(...samples.map(s=>s.workingSetSumBytes)),intervalMs:{min:Math.min(...intervals),max:Math.max(...intervals)},audit,stages};writeFileSync(`${folder}/${surface}.json`,JSON.stringify(report,null,2));console.log(JSON.stringify(report));
+}});

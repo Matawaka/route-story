@@ -1,5 +1,11 @@
 # Decisions
 
+## Sprint9: lawful photo proof before regional LOD expansion
+
+Use actual Copernicus Sentinel2C L2A20250927 scenes32VLN/32VLP, fixed Sogne regional windows, official open-data terms with required modified-data attribution. Norwegian ortho reuse rights are unresolved; no unauthorized image scraping. Source10m RGB is resampled20m into existing DEM local coordinates. Preserve heights and conservative camera exactly for comparison. One validated resident texture, readiness draw and deterministic mipmaps prove true3D photographic MP4 before designing complex tiles. Optional candidate pack is excluded from default≤5MiB production; no budget or v1.2 deployment approval. Major multi-resolution packs/local-clearance refinement wait for owner visual review of actual footage. Prior DEM/2D/Classic fallback remains available. Reproduction/source-window hashes and real output evidence are recorded separately from publishedv1.0.
+
+Owner's follow-up explicitly authorizes deploying **already accepted merged main8f4d0f6** before Xiaomi14/Pad2/MacBookM2 physical tests. Reuse protected manual workflow/run37962492130, owner approves environment personally. This is candidate access for testing; final stablev1.1.0 tag/release approval remains pending. No inference that devices have passed; no v1.2 public changes or new deployment mechanism.
+
 ## Sprint 8: genuine bounded DEM mesh and safe timestamp camera
 
 Owner accepts Sprint7 visual cost and explicitly requests terrain3D. Static Canvas cannot represent a genuine height surface/depth camera; this is the concrete reason for the documented Three exception. Stack feature/terrain-aware-3d/PR#7 on accepted PR#6 a704f67. Stable main/tag/Pages5f39332/v1.0.0, public assets, manual workflow/protected environment and unrelated PR#5 remain unchanged. No merge/publication/contest repost.

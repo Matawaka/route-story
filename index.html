@@ -36,6 +36,8 @@
         <select id="ratio"><option value="landscape">16:9 · горизонтальное</option><option value="portrait">9:16 · вертикальное</option></select>
         <label class="field-label" for="camera-mode">Камера</label>
         <select id="camera-mode"><option value="cinematic">Кино · 2D</option><option value="auto">Авто · 3D при наличии DEM</option><option value="terrain">Рельеф · 3D</option><option value="classic">Классическая · без движения</option></select>
+        <label class="field-label" id="terrain-surface-label" for="terrain-surface">Поверхность 3D</label>
+        <select id="terrain-surface"><option value="dem">DEM · цвет по высоте</option><option value="photo">Спутник · Согне-фьорд 2025</option></select>
         <label class="field-label" for="duration">Длительность видео</label>
         <select id="duration"><option value="10">10 секунд</option><option value="20" selected>20 секунд</option><option value="30">30 секунд</option></select>
         <label class="field-label" for="quality">Качество видео</label>
@@ -61,7 +63,7 @@
       <p class="map-note" id="map-detail-note">Карта: Natural Earth · обзорная география, без улиц. Время видео не является длительностью поездки.</p>
     </section>
   </main>
-  <footer><span>Сделано в Matawaka</span><a href="./THIRD_PARTY_NOTICES.md">Лицензии и источники</a><span>Версия 1.1 · RC</span></footer>
+  <footer><span>Сделано в Matawaka</span><a href="./THIRD_PARTY_NOTICES.md">Лицензии и источники</a><span>Версия 1.2 · RC · фото-прототип</span></footer>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
