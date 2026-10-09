@@ -9,7 +9,7 @@ import {withServer} from './server.mjs';
 const folder='artifacts/sprint9/memory';mkdirSync(folder,{recursive:true});if(os.platform()!=='win32')throw Error('Windows sampler required');
 await withServer(async url=>{for(const surface of ['dem','photo']){
  const server=await chromium.launchServer({channel:'msedge',headless:true,host:'127.0.0.1'}),browser=await chromium.connect(server.wsEndpoint()),root=server.process().pid;
- const file=resolve(`${folder}/${surface}-raw.jsonl`),stop=resolve(`${folder}/${surface}-stop`);if(existsSync(stop))throw Error('Remove only this ignored previous stop marker before rerunning');
+ const file=resolve(`${folder}/${surface}-raw.jsonl`),stop=resolve(`${folder}/${surface}-stop-${root}`);if(existsSync(stop))throw Error('Remove only this ignored previous stop marker before rerunning');
  const sampler=spawn('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',resolve('scripts/acceptance/sample-memory.ps1'),'-RootPid',String(root),'-OutputFile',file,'-StopFile',stop],{windowsHide:true,stdio:'pipe'});let samplerError='';sampler.stderr.on('data',b=>samplerError+=b);
  const page=await browser.newPage(),cdp=await page.context().newCDPSession(page),stages=[];await cdp.send('Performance.enable');const heap=async()=>{const {metrics}=await cdp.send('Performance.getMetrics');return metrics.find(m=>m.name==='JSHeapUsedSize').value;};
  const stage=async(label,action)=>{const start=Date.now(),beforeHeap=await heap();await action();stages.push({label,start,end:Date.now(),beforeHeap,afterHeap:await heap()});};let audit;

@@ -7,9 +7,10 @@ import os from 'node:os';
 import assert from 'node:assert/strict';
 import ffmpeg from 'ffmpeg-static';
 import {withServer} from './server.mjs';
+import {withProductionServer} from './production.mjs';
 import {validateVideo} from '../validate-video.mjs';
-const folder='artifacts/sprint9/imagery';mkdirSync(folder,{recursive:true});
-await withServer(async url=>{
+const production=process.argv.includes('--production'),folder=production?'artifacts/sprint9/imagery-production':'artifacts/sprint9/imagery';mkdirSync(folder,{recursive:true});
+await (production?withProductionServer:withServer)(async url=>{
  const browser=await chromium.launch({channel:'msedge',headless:true}),page=await browser.newPage(),reports=[],external=[],errors=[];
  page.on('pageerror',e=>errors.push(e.message));
  await page.context().route('**/*',r=>new URL(r.request().url()).origin===new URL(url).origin?r.continue():(external.push(r.request().url()),r.abort()));
@@ -25,6 +26,6 @@ await withServer(async url=>{
   reports.push({id,surface,quality,aspect,style,validation,sha256:createHash('sha256').update(readFileSync(path)).digest('hex'),exportMs:await page.evaluate(()=>performance.getEntriesByName('route-story-export').at(-1).duration),frames});
  }
  const storage=await page.evaluate(async()=>({local:localStorage.length,session:sessionStorage.length,db:await indexedDB.databases()}));assert.deepEqual(storage,{local:0,session:0,db:[]});assert.deepEqual(external,[]);assert.deepEqual(errors,[]);
- const report={sourceCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',windowsHide:true}).trim(),uncommitted:!!execFileSync('git',['status','--porcelain'],{encoding:'utf8',windowsHide:true}).trim(),browser:`Edge ${browser.version()}`,os:`${os.type()} ${os.release()}`,scope:'local dev actual UI; not public HTTPS',imagery:JSON.parse(readFileSync('public/imagery/sogne-sentinel.json')),external,errors,storage,reports};writeFileSync(`${folder}/acceptance.json`,JSON.stringify(report,null,2));console.log(JSON.stringify(reports.map(({id,validation,exportMs})=>({id,bytes:validation.bytes,frames:validation.decodedFrames,exportMs})),null,2));
+ const report={sourceCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',windowsHide:true}).trim(),uncommitted:!!execFileSync('git',['status','--porcelain'],{encoding:'utf8',windowsHide:true}).trim(),browser:`Edge ${browser.version()}`,os:`${os.type()} ${os.release()}`,scope:production?'local production /route-story/ UI; not public HTTPS':'local dev actual UI; not public HTTPS',imagery:JSON.parse(readFileSync('public/imagery/sogne-sentinel.json')),external,errors,storage,reports};writeFileSync(`${folder}/acceptance.json`,JSON.stringify(report,null,2));console.log(JSON.stringify(reports.map(({id,validation,exportMs})=>({id,bytes:validation.bytes,frames:validation.decodedFrames,exportMs})),null,2));
  }catch(error){console.error(await page.locator('#status').textContent());await page.screenshot({path:`${folder}/failure.png`});throw error;}finally{await browser.close();}
 });
