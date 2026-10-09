@@ -10,7 +10,10 @@ A real local MapLibre6.13.0 feasibility MP4 and observed Pages HTTP206 range sup
 
 World-space Path2D and route chunks render at destination resolution through the camera; screen-space captions/metrics/branding stay upright. Atlas parchment/blue water/rust route and serif title differ from Night navy/amber trace/glow. Real place labels use collision filtering; no reverse geocoding or stop inference. Global fallback is explicitly labelled. Fixed CPU raster surface prevents Chromium GPU-to-CPU readback switching from changing antialiased pixels; exact reversible pixel tests, measured performance and memory determine the cost. Batching and culling preserve all route points. Do not silently trade resolution/duration for performance.
 
+Measured full-vector dense50k/30s export14.2s and853ms CPU frame bursts justify two bounded maximum-zoom route buffers. Final6.86s with unchanged coordinates, exact-seek pixels and explicit memory/disposal tests. Geography remains vector, no low-resolution map enlargement. This improves the dense-route bottleneck but retains material cost versus static v1.0 and some small/global-route regressions; all measurements/limits in PERFORMANCE.md. v1.1.0-rc.1 is local/review-only. Existing stable tag, public assets, protected Pages environment and publication workflow remain unchanged.
+
 ## Sprint 4: reviewed static release, no new product features
+
 
 On 2026-10-09 the owner had already merged PR #1/#2/#3 into main dd86c372b6d6c757d7327e22366b402f60ad9b4e. Its tree exactly matches verified Sprint 3 488db3b; preserve history and start release/route-story-v1 from that main. The release PR targets main without a stacked dependency. No agent merge or publication is authorized yet.
 

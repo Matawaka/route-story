@@ -1,0 +1,3205 @@
+{
+  "date": "2026-10-09",
+  "environment": {
+    "os": "Windows_NT 10.0.26200 x64",
+    "browser": "Edge 154.0.4258.62",
+    "node": "v24.19.0"
+  },
+  "method": "One warm-up + three steady runs in one isolated browser. Pure CPU timings; assets/module imports excluded. CDP JS heap is not native memory.",
+  "baselineCommit": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
+  "candidateApplicationCommit": "7443166d02dd3b78225725d69707c3d7a498a6c4",
+  "performance": {
+    "staticBaseline": [
+      {
+        "count": 100,
+        "kind": "segments",
+        "gpxBytes": 6508,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 1.4000000059604645,
+            "min": 1.3999999985098839,
+            "max": 1.5
+          },
+          "projectionDiagnosticMs": {
+            "median": 0.09999999403953552,
+            "min": 0.09999999403953552,
+            "max": 0.10000000149011612
+          },
+          "prepareMs": {
+            "median": 2,
+            "min": 1.6000000014901161,
+            "max": 2.9000000059604645
+          },
+          "firstFrameMs": {
+            "median": 0.4000000059604645,
+            "min": 0.3999999985098839,
+            "max": 0.5999999940395355
+          },
+          "previewInitializationMs": {
+            "median": 3.800000011920929,
+            "min": 3.399999998509884,
+            "max": 5
+          },
+          "exportMs": {
+            "median": 389.70000000298023,
+            "min": 388.29999999701977,
+            "max": 408.20000000298023
+          },
+          "bytes": {
+            "median": 289794,
+            "min": 289794,
+            "max": 289794
+          },
+          "frameMs": {
+            "median": 0.10000000149011612,
+            "min": 0,
+            "max": 0.20000000298023224
+          },
+          "seekMs": {
+            "median": 0.10000000149011612,
+            "min": 0,
+            "max": 0.20000000298023224
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-100-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "f15bc4fd025066aae36483ed1d7a54ca",
+          "lastFrameHash": "7759786ac61afc614c1a9aa4d5797408",
+          "bytes": 289794,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 100,
+        "kind": "segments",
+        "gpxBytes": 6508,
+        "quality": "standard",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 1.2999999970197678,
+            "min": 1.2000000029802322,
+            "max": 1.4000000059604645
+          },
+          "projectionDiagnosticMs": {
+            "median": 0.09999999403953552,
+            "min": 0,
+            "max": 0.09999999403953552
+          },
+          "prepareMs": {
+            "median": 1.3000000044703484,
+            "min": 1.1000000014901161,
+            "max": 1.3000000044703484
+          },
+          "firstFrameMs": {
+            "median": 0.3999999985098839,
+            "min": 0.3999999985098839,
+            "max": 0.5
+          },
+          "previewInitializationMs": {
+            "median": 2.9000000059604645,
+            "min": 2.7999999970197678,
+            "max": 3.200000010430813
+          },
+          "exportMs": {
+            "median": 686.2999999970198,
+            "min": 656.5,
+            "max": 688
+          },
+          "bytes": {
+            "median": 660796,
+            "min": 660796,
+            "max": 660796
+          },
+          "frameMs": {
+            "median": 0.10000000149011612,
+            "min": 0,
+            "max": 0.9000000059604645
+          },
+          "seekMs": {
+            "median": 0.10000000149011612,
+            "min": 0,
+            "max": 0.6999999955296516
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-100-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "5c04fe4a57fd93c4018aa45eb997407f",
+          "lastFrameHash": "8c3d62e1d5cf39e7c7c92d1cea4558f3",
+          "bytes": 660796,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 5000,
+        "kind": "antimeridian",
+        "gpxBytes": 320301,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 53.20000000298023,
+            "min": 50.399999998509884,
+            "max": 56.70000000298023
+          },
+          "projectionDiagnosticMs": {
+            "median": 0.5,
+            "min": 0.3999999985098839,
+            "max": 1.8999999985098839
+          },
+          "prepareMs": {
+            "median": 4.100000001490116,
+            "min": 3.3000000044703484,
+            "max": 4.299999997019768
+          },
+          "firstFrameMs": {
+            "median": 0.3999999985098839,
+            "min": 0.29999999701976776,
+            "max": 0.5
+          },
+          "previewInitializationMs": {
+            "median": 57.899999998509884,
+            "min": 54.20000000298023,
+            "max": 61.100000001490116
+          },
+          "exportMs": {
+            "median": 380,
+            "min": 379.20000000298023,
+            "max": 397.20000000298023
+          },
+          "bytes": {
+            "median": 343291,
+            "min": 343291,
+            "max": 343291
+          },
+          "frameMs": {
+            "median": 0.10000000149011612,
+            "min": 0,
+            "max": 0.7000000029802322
+          },
+          "seekMs": {
+            "median": 0.20000000298023224,
+            "min": 0,
+            "max": 0.3999999985098839
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-5000-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "3c7fa5f80b0cbf1f4774873f9ad72ff3",
+          "lastFrameHash": "33fdf3b4361d4bf01534e8c3acb9a807",
+          "bytes": 343291,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 5000,
+        "kind": "antimeridian",
+        "gpxBytes": 320301,
+        "quality": "standard",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 52.5,
+            "min": 50.899999998509884,
+            "max": 55.29999999701977
+          },
+          "projectionDiagnosticMs": {
+            "median": 0.7999999970197678,
+            "min": 0.6000000014901161,
+            "max": 0.8000000044703484
+          },
+          "prepareMs": {
+            "median": 6.100000001490116,
+            "min": 4.700000002980232,
+            "max": 6.699999995529652
+          },
+          "firstFrameMs": {
+            "median": 0.3999999985098839,
+            "min": 0.30000000447034836,
+            "max": 0.5
+          },
+          "previewInitializationMs": {
+            "median": 59,
+            "min": 56.100000001490116,
+            "max": 62.29999999701977
+          },
+          "exportMs": {
+            "median": 663.2999999970198,
+            "min": 649.5999999940395,
+            "max": 671.7999999970198
+          },
+          "bytes": {
+            "median": 781777,
+            "min": 781777,
+            "max": 781777
+          },
+          "frameMs": {
+            "median": 0.10000000149011612,
+            "min": 0,
+            "max": 1.2000000029802322
+          },
+          "seekMs": {
+            "median": 0.20000000298023224,
+            "min": 0,
+            "max": 0.3999999985098839
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-5000-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "f2cd9b9efaa76b98b5f9e68c7143e103",
+          "lastFrameHash": "2fe8206db4d89f6f27a24a84d68949d0",
+          "bytes": 781777,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 20000,
+        "kind": "long",
+        "gpxBytes": 1267225,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 206.90000000596046,
+            "min": 205.89999999850988,
+            "max": 218.90000000596046
+          },
+          "projectionDiagnosticMs": {
+            "median": 4.799999997019768,
+            "min": 2.600000001490116,
+            "max": 6.699999995529652
+          },
+          "prepareMs": {
+            "median": 14.600000001490116,
+            "min": 8.600000001490116,
+            "max": 21
+          },
+          "firstFrameMs": {
+            "median": 0.5,
+            "min": 0.5,
+            "max": 0.6000000014901161
+          },
+          "previewInitializationMs": {
+            "median": 221,
+            "min": 216.1000000089407,
+            "max": 240.40000000596046
+          },
+          "exportMs": {
+            "median": 384.3999999985099,
+            "min": 383.8999999985099,
+            "max": 387.70000000298023
+          },
+          "bytes": {
+            "median": 625809,
+            "min": 625809,
+            "max": 625809
+          },
+          "frameMs": {
+            "median": 0.10000000149011612,
+            "min": 0,
+            "max": 0.6000000014901161
+          },
+          "seekMs": {
+            "median": 0.5,
+            "min": 0,
+            "max": 1.2000000029802322
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-20000-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "4d7d0439e80d6e9b469a98f00433b80a",
+          "lastFrameHash": "f4633bfe4401b72954762ac48de7547d",
+          "bytes": 625809,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 20000,
+        "kind": "long",
+        "gpxBytes": 1267225,
+        "quality": "standard",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 209,
+            "min": 196.80000000447035,
+            "max": 220
+          },
+          "projectionDiagnosticMs": {
+            "median": 2.600000001490116,
+            "min": 2.399999998509884,
+            "max": 3.5
+          },
+          "prepareMs": {
+            "median": 18,
+            "min": 12.100000001490116,
+            "max": 18.799999997019768
+          },
+          "firstFrameMs": {
+            "median": 0.5,
+            "min": 0.3999999985098839,
+            "max": 0.5
+          },
+          "previewInitializationMs": {
+            "median": 221.5,
+            "min": 216.10000000149012,
+            "max": 238.5
+          },
+          "exportMs": {
+            "median": 657.1999999955297,
+            "min": 651.8000000044703,
+            "max": 657.3000000044703
+          },
+          "bytes": {
+            "median": 1313388,
+            "min": 1313388,
+            "max": 1313388
+          },
+          "frameMs": {
+            "median": 0.10000000149011612,
+            "min": 0,
+            "max": 5.5
+          },
+          "seekMs": {
+            "median": 0.3999999985098839,
+            "min": 0.09999999403953552,
+            "max": 1.4000000059604645
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-20000-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "4765097481b7d0846acdb8aa1b55975b",
+          "lastFrameHash": "34575775dd1a72f05f6dc9b451c3bff7",
+          "bytes": 1313388,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 50000,
+        "kind": "dense",
+        "gpxBytes": 3075653,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 527.0999999940395,
+            "min": 510.20000000298023,
+            "max": 571.0999999940395
+          },
+          "projectionDiagnosticMs": {
+            "median": 5.4000000059604645,
+            "min": 3.899999998509884,
+            "max": 6
+          },
+          "prepareMs": {
+            "median": 26.5,
+            "min": 22,
+            "max": 27.399999998509884
+          },
+          "firstFrameMs": {
+            "median": 0.3999999985098839,
+            "min": 0.29999999701976776,
+            "max": 0.5
+          },
+          "previewInitializationMs": {
+            "median": 554.8999999910593,
+            "min": 532.5,
+            "max": 598.0999999940395
+          },
+          "exportMs": {
+            "median": 397.79999999701977,
+            "min": 390.3999999985099,
+            "max": 400.8999999985099
+          },
+          "bytes": {
+            "median": 481261,
+            "min": 481261,
+            "max": 481261
+          },
+          "frameMs": {
+            "median": 0.10000000149011612,
+            "min": 0,
+            "max": 0.7000000029802322
+          },
+          "seekMs": {
+            "median": 0.8999999985098839,
+            "min": 0.09999999403953552,
+            "max": 2.8000000044703484
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-50000-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "00668000bc9e7e4743bc5ad139fc7be2",
+          "lastFrameHash": "0262425acd4a3ddcb87bd9528dad75e6",
+          "bytes": 481261,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 50000,
+        "kind": "dense",
+        "gpxBytes": 3075653,
+        "quality": "standard",
+        "duration": 30,
+        "summary": {
+          "parseMs": {
+            "median": 516.1999999955297,
+            "min": 499.5,
+            "max": 526.2999999970198
+          },
+          "projectionDiagnosticMs": {
+            "median": 4.899999998509884,
+            "min": 4.200000002980232,
+            "max": 6.700000002980232
+          },
+          "prepareMs": {
+            "median": 24.700000002980232,
+            "min": 20.799999997019768,
+            "max": 28.700000002980232
+          },
+          "firstFrameMs": {
+            "median": 0.4000000059604645,
+            "min": 0.3999999985098839,
+            "max": 0.5
+          },
+          "previewInitializationMs": {
+            "median": 541.2999999970198,
+            "min": 528.6000000089407,
+            "max": 547.5999999940395
+          },
+          "exportMs": {
+            "median": 1632.0999999940395,
+            "min": 1586.8000000044703,
+            "max": 1727.2000000029802
+          },
+          "bytes": {
+            "median": 3122941,
+            "min": 3122941,
+            "max": 3122941
+          },
+          "frameMs": {
+            "median": 0.10000000149011612,
+            "min": 0,
+            "max": 1.1999999955296516
+          },
+          "seekMs": {
+            "median": 1,
+            "min": 0.10000000149011612,
+            "max": 9.100000001490116
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-50000-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "e610cd54b185fe72b3fff54f41d55b22",
+          "lastFrameHash": "1db36bc680447f22065e275684c66972",
+          "bytes": 3122941,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      }
+    ],
+    "fullVectorIntermediate": [
+      {
+        "count": 100,
+        "kind": "segments",
+        "gpxBytes": 6508,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 1.4000000059604645,
+            "min": 1.2999999970197678,
+            "max": 1.5
+          },
+          "projectionDiagnosticMs": {
+            "median": 0,
+            "min": 0,
+            "max": 0.10000000894069672
+          },
+          "prepareMs": {
+            "median": 21.899999991059303,
+            "min": 18.599999994039536,
+            "max": 23.5
+          },
+          "firstFrameMs": {
+            "median": 0.800000011920929,
+            "min": 0.7000000029802322,
+            "max": 0.8999999910593033
+          },
+          "previewInitializationMs": {
+            "median": 24.100000008940697,
+            "min": 20.599999994039536,
+            "max": 25.899999991059303
+          },
+          "exportMs": {
+            "median": 454,
+            "min": 447.59999999403954,
+            "max": 484.70000000298023
+          },
+          "bytes": {
+            "median": 1398077,
+            "min": 1398077,
+            "max": 1398077
+          },
+          "frameMs": {
+            "median": 0.19999998807907104,
+            "min": 0,
+            "max": 1
+          },
+          "seekMs": {
+            "median": 0.19999998807907104,
+            "min": 0,
+            "max": 0.29999999701976776
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-100-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "b888994fe7dd139e18144f29fe8bea25",
+          "lastFrameHash": "19e71d79182042f3aeaf17a0ea46fe1c",
+          "bytes": 1398077,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 100,
+        "kind": "segments",
+        "gpxBytes": 6508,
+        "quality": "standard",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 1.3999999910593033,
+            "min": 1.2000000029802322,
+            "max": 1.6000000089406967
+          },
+          "projectionDiagnosticMs": {
+            "median": 0,
+            "min": 0,
+            "max": 0.10000000894069672
+          },
+          "prepareMs": {
+            "median": 21.099999994039536,
+            "min": 20,
+            "max": 21.700000002980232
+          },
+          "firstFrameMs": {
+            "median": 1.2999999970197678,
+            "min": 1.2000000029802322,
+            "max": 1.2999999970197678
+          },
+          "previewInitializationMs": {
+            "median": 23.900000005960464,
+            "min": 22.5,
+            "max": 24.399999991059303
+          },
+          "exportMs": {
+            "median": 1031.2000000029802,
+            "min": 1027.5,
+            "max": 1094.2999999970198
+          },
+          "bytes": {
+            "median": 4590629,
+            "min": 4590629,
+            "max": 4590629
+          },
+          "frameMs": {
+            "median": 0.20000000298023224,
+            "min": 0.09999999403953552,
+            "max": 0.30000001192092896
+          },
+          "seekMs": {
+            "median": 0.20000000298023224,
+            "min": 0,
+            "max": 0.29999999701976776
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-100-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "a79f1f2a9bfe674a13e15a85b138fd24",
+          "lastFrameHash": "0fb364cb31e51bfa06eae12a52d4481a",
+          "bytes": 4590629,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 5000,
+        "kind": "antimeridian",
+        "gpxBytes": 320301,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 53.400000005960464,
+            "min": 50.5,
+            "max": 55.30000001192093
+          },
+          "projectionDiagnosticMs": {
+            "median": 0.7999999970197678,
+            "min": 0.5,
+            "max": 2.2999999970197678
+          },
+          "prepareMs": {
+            "median": 22,
+            "min": 21.799999997019768,
+            "max": 22.200000002980232
+          },
+          "firstFrameMs": {
+            "median": 0.699999988079071,
+            "min": 0.5999999940395355,
+            "max": 0.7000000029802322
+          },
+          "previewInitializationMs": {
+            "median": 75.79999999701977,
+            "min": 73.20000000298023,
+            "max": 78.20000000298023
+          },
+          "exportMs": {
+            "median": 583.2999999970198,
+            "min": 570.1999999880791,
+            "max": 584.2000000029802
+          },
+          "bytes": {
+            "median": 1371373,
+            "min": 1371373,
+            "max": 1371373
+          },
+          "frameMs": {
+            "median": 0.10000000894069672,
+            "min": 0,
+            "max": 0.5
+          },
+          "seekMs": {
+            "median": 0.10000000894069672,
+            "min": 0.09999999403953552,
+            "max": 0.20000000298023224
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-5000-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "4a16c50eb08f30eafec9139af1ccf952",
+          "lastFrameHash": "caa9503c55631b04d1f296a14cd0384f",
+          "bytes": 1371373,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 5000,
+        "kind": "antimeridian",
+        "gpxBytes": 320301,
+        "quality": "standard",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 53,
+            "min": 48.3999999910593,
+            "max": 53.30000001192093
+          },
+          "projectionDiagnosticMs": {
+            "median": 0.5,
+            "min": 0.5,
+            "max": 0.5999999940395355
+          },
+          "prepareMs": {
+            "median": 24.299999997019768,
+            "min": 22,
+            "max": 25.299999997019768
+          },
+          "firstFrameMs": {
+            "median": 1.1000000089406967,
+            "min": 1.0999999940395355,
+            "max": 1.1000000089406967
+          },
+          "previewInitializationMs": {
+            "median": 76.1000000089407,
+            "min": 73.79999999701977,
+            "max": 79.70000000298023
+          },
+          "exportMs": {
+            "median": 1196.7000000029802,
+            "min": 1166.6000000089407,
+            "max": 1207.5999999940395
+          },
+          "bytes": {
+            "median": 4558994,
+            "min": 4558994,
+            "max": 4558994
+          },
+          "frameMs": {
+            "median": 0.19999998807907104,
+            "min": 0,
+            "max": 0.30000001192092896
+          },
+          "seekMs": {
+            "median": 0.19999998807907104,
+            "min": 0,
+            "max": 0.20000000298023224
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-5000-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "22852196d0720606339130202787f946",
+          "lastFrameHash": "6e48b41e3116e457a14bebe7121a6420",
+          "bytes": 4558994,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 20000,
+        "kind": "long",
+        "gpxBytes": 1267225,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 209.09999999403954,
+            "min": 200.09999999403954,
+            "max": 213.40000000596046
+          },
+          "projectionDiagnosticMs": {
+            "median": 2,
+            "min": 1.7999999970197678,
+            "max": 2.0999999940395355
+          },
+          "prepareMs": {
+            "median": 43.5,
+            "min": 41.6000000089407,
+            "max": 45.30000001192093
+          },
+          "firstFrameMs": {
+            "median": 4.699999988079071,
+            "min": 4.0999999940395355,
+            "max": 4.799999997019768
+          },
+          "previewInitializationMs": {
+            "median": 259.09999999403954,
+            "min": 246.5,
+            "max": 261
+          },
+          "exportMs": {
+            "median": 3519.3999999910593,
+            "min": 3499.6000000089407,
+            "max": 3530.5
+          },
+          "bytes": {
+            "median": 2060572,
+            "min": 2060572,
+            "max": 2060572
+          },
+          "frameMs": {
+            "median": 0.7000000029802322,
+            "min": 0.4000000059604645,
+            "max": 205.80000001192093
+          },
+          "seekMs": {
+            "median": 0.8999999910593033,
+            "min": 0.5,
+            "max": 135.5
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-20000-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "34b48a8d8ad7c00918e2e8a5c79a89cd",
+          "lastFrameHash": "d5163ff001a3058d6bd0b007a5592801",
+          "bytes": 2060572,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 20000,
+        "kind": "long",
+        "gpxBytes": 1267225,
+        "quality": "standard",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 209.3999999910593,
+            "min": 208.6000000089407,
+            "max": 209.40000000596046
+          },
+          "projectionDiagnosticMs": {
+            "median": 1.8999999910593033,
+            "min": 1.7999999970197678,
+            "max": 2
+          },
+          "prepareMs": {
+            "median": 43.70000000298023,
+            "min": 42.900000005960464,
+            "max": 44.1000000089407
+          },
+          "firstFrameMs": {
+            "median": 4.5,
+            "min": 4.299999997019768,
+            "max": 4.700000002980232
+          },
+          "previewInitializationMs": {
+            "median": 257.79999999701977,
+            "min": 256.00000001490116,
+            "max": 257.80000001192093
+          },
+          "exportMs": {
+            "median": 9019.5,
+            "min": 8998.79999999702,
+            "max": 9094.199999988079
+          },
+          "bytes": {
+            "median": 6830289,
+            "min": 6830289,
+            "max": 6830289
+          },
+          "frameMs": {
+            "median": 0.7000000029802322,
+            "min": 0.3999999910593033,
+            "max": 502.5
+          },
+          "seekMs": {
+            "median": 0.7999999970197678,
+            "min": 0.5,
+            "max": 330.1000000089407
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-20000-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "26a5a1fcb93b781016867b52b7c3b5e3",
+          "lastFrameHash": "c07275ef971c745355d49c1ae09bda01",
+          "bytes": 6830289,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 50000,
+        "kind": "dense",
+        "gpxBytes": 3075653,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 528.1999999880791,
+            "min": 525.5,
+            "max": 561
+          },
+          "projectionDiagnosticMs": {
+            "median": 4.200000002980232,
+            "min": 4,
+            "max": 4.300000011920929
+          },
+          "prepareMs": {
+            "median": 42.6000000089407,
+            "min": 40.599999994039536,
+            "max": 44.79999999701977
+          },
+          "firstFrameMs": {
+            "median": 1.4000000059604645,
+            "min": 1.2999999970197678,
+            "max": 1.7000000029802322
+          },
+          "previewInitializationMs": {
+            "median": 572.5,
+            "min": 567.5,
+            "max": 607.0999999940395
+          },
+          "exportMs": {
+            "median": 4213.600000008941,
+            "min": 4180.4000000059605,
+            "max": 4296.9000000059605
+          },
+          "bytes": {
+            "median": 2024661,
+            "min": 2024661,
+            "max": 2024661
+          },
+          "frameMs": {
+            "median": 0.29999999701976776,
+            "min": 0.19999998807907104,
+            "max": 620.7000000029802
+          },
+          "seekMs": {
+            "median": 0.29999999701976776,
+            "min": 0.09999999403953552,
+            "max": 0.5
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-50000-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "428274a8ed4c7c9f636a9139f11bcea7",
+          "lastFrameHash": "1bf3a53186b7b462cb68e0c696109bbc",
+          "bytes": 2024661,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 50000,
+        "kind": "dense",
+        "gpxBytes": 3075653,
+        "quality": "standard",
+        "duration": 30,
+        "summary": {
+          "parseMs": {
+            "median": 563,
+            "min": 555.6999999880791,
+            "max": 576.2000000029802
+          },
+          "projectionDiagnosticMs": {
+            "median": 6,
+            "min": 5.9000000059604645,
+            "max": 6.700000002980232
+          },
+          "prepareMs": {
+            "median": 82,
+            "min": 46.5,
+            "max": 84.29999999701977
+          },
+          "firstFrameMs": {
+            "median": 2.2999999970197678,
+            "min": 1.9000000059604645,
+            "max": 2.3999999910593033
+          },
+          "previewInitializationMs": {
+            "median": 647.3999999910593,
+            "min": 604.0999999940395,
+            "max": 662.7999999970198
+          },
+          "exportMs": {
+            "median": 14197.70000000298,
+            "min": 14106.5,
+            "max": 14310
+          },
+          "bytes": {
+            "median": 17560330,
+            "min": 17560330,
+            "max": 17560330
+          },
+          "frameMs": {
+            "median": 0.29999999701976776,
+            "min": 0.09999999403953552,
+            "max": 853.4000000059605
+          },
+          "seekMs": {
+            "median": 0.20000000298023224,
+            "min": 0.19999998807907104,
+            "max": 0.4000000059604645
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-50000-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "2d7b50af5d0b654d5a05c3966d595129",
+          "lastFrameHash": "5c1c726d17a21e5d511a8589e08df72d",
+          "bytes": 17560330,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      }
+    ],
+    "boundedRouteCache": [
+      {
+        "count": 100,
+        "kind": "segments",
+        "gpxBytes": 6508,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 1.4000000059604645,
+            "min": 1.4000000059604645,
+            "max": 1.5
+          },
+          "projectionDiagnosticMs": {
+            "median": 0.09999999403953552,
+            "min": 0.09999999403953552,
+            "max": 0.09999999403953552
+          },
+          "prepareMs": {
+            "median": 22.900000005960464,
+            "min": 19.900000005960464,
+            "max": 24.900000005960464
+          },
+          "firstFrameMs": {
+            "median": 2.3999999910593033,
+            "min": 2.2999999970197678,
+            "max": 2.7999999970197678
+          },
+          "previewInitializationMs": {
+            "median": 27.100000008940697,
+            "min": 23.600000008940697,
+            "max": 28.799999997019768
+          },
+          "exportMs": {
+            "median": 824.5999999940395,
+            "min": 824.2999999970198,
+            "max": 843.1000000089407
+          },
+          "bytes": {
+            "median": 1399047,
+            "min": 1399047,
+            "max": 1399047
+          },
+          "frameMs": {
+            "median": 0.20000000298023224,
+            "min": 0,
+            "max": 112.8999999910593
+          },
+          "seekMs": {
+            "median": 1.7999999970197678,
+            "min": 0.29999999701976776,
+            "max": 40.20000000298023
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-100-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "9aa37c413f9b7bb39486b6a6692120f0",
+          "lastFrameHash": "effc2c7deca06bcd5c0a220e745b7d60",
+          "bytes": 1399047,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 100,
+        "kind": "segments",
+        "gpxBytes": 6508,
+        "quality": "standard",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 1.5,
+            "min": 1.300000011920929,
+            "max": 1.9000000059604645
+          },
+          "projectionDiagnosticMs": {
+            "median": 0,
+            "min": 0,
+            "max": 0.5999999940395355
+          },
+          "prepareMs": {
+            "median": 25.299999997019768,
+            "min": 23,
+            "max": 26.799999997019768
+          },
+          "firstFrameMs": {
+            "median": 15,
+            "min": 14.200000002980232,
+            "max": 15.399999991059303
+          },
+          "previewInitializationMs": {
+            "median": 41.79999999701977,
+            "min": 39.70000000298023,
+            "max": 42.900000005960464
+          },
+          "exportMs": {
+            "median": 2482.5,
+            "min": 2478.7000000029802,
+            "max": 2523.3999999910593
+          },
+          "bytes": {
+            "median": 4563022,
+            "min": 4563022,
+            "max": 4563022
+          },
+          "frameMs": {
+            "median": 8.200000002980232,
+            "min": 7.700000002980232,
+            "max": 10.599999994039536
+          },
+          "seekMs": {
+            "median": 9.399999991059303,
+            "min": 7.799999997019768,
+            "max": 10.799999997019768
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-100-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "e16b721ab70cdedd3fc329d07c1acbdb",
+          "lastFrameHash": "a815598afd6cf067d2c2e401e9ef9a06",
+          "bytes": 4563022,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 5000,
+        "kind": "antimeridian",
+        "gpxBytes": 320301,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 52.5,
+            "min": 50.79999999701977,
+            "max": 53.3999999910593
+          },
+          "projectionDiagnosticMs": {
+            "median": 0.5,
+            "min": 0.4000000059604645,
+            "max": 0.6000000089406967
+          },
+          "prepareMs": {
+            "median": 24.899999991059303,
+            "min": 23.700000002980232,
+            "max": 28.900000005960464
+          },
+          "firstFrameMs": {
+            "median": 3.2000000029802322,
+            "min": 3.0999999940395355,
+            "max": 4
+          },
+          "previewInitializationMs": {
+            "median": 79.40000000596046,
+            "min": 78.7999999821186,
+            "max": 86.29999999701977
+          },
+          "exportMs": {
+            "median": 707.2000000029802,
+            "min": 680.7000000029802,
+            "max": 789.0999999940395
+          },
+          "bytes": {
+            "median": 1371259,
+            "min": 1371259,
+            "max": 1371259
+          },
+          "frameMs": {
+            "median": 0.3999999910593033,
+            "min": 0,
+            "max": 38.8999999910593
+          },
+          "seekMs": {
+            "median": 1.5999999940395355,
+            "min": 0.4000000059604645,
+            "max": 33.79999999701977
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-5000-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "ef98a44cc252c12aa46b56ba92caaf0b",
+          "lastFrameHash": "08c47d17f3934a78eb27199c2c2e3f55",
+          "bytes": 1371259,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 5000,
+        "kind": "antimeridian",
+        "gpxBytes": 320301,
+        "quality": "standard",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 53.79999999701977,
+            "min": 51.29999999701977,
+            "max": 54
+          },
+          "projectionDiagnosticMs": {
+            "median": 0.7999999970197678,
+            "min": 0.7999999970197678,
+            "max": 2.7999999970197678
+          },
+          "prepareMs": {
+            "median": 26.099999994039536,
+            "min": 25.400000005960464,
+            "max": 27.700000002980232
+          },
+          "firstFrameMs": {
+            "median": 15.5,
+            "min": 15.399999991059303,
+            "max": 19.200000002980232
+          },
+          "previewInitializationMs": {
+            "median": 94.70000000298023,
+            "min": 94.3999999910593,
+            "max": 99.29999999701977
+          },
+          "exportMs": {
+            "median": 2321.7999999970198,
+            "min": 2301,
+            "max": 2352.7000000029802
+          },
+          "bytes": {
+            "median": 4571877,
+            "min": 4571877,
+            "max": 4571877
+          },
+          "frameMs": {
+            "median": 7.700000002980232,
+            "min": 5.799999997019768,
+            "max": 10.099999994039536
+          },
+          "seekMs": {
+            "median": 9.099999994039536,
+            "min": 6.9000000059604645,
+            "max": 9.700000002980232
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-5000-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "2690f8b06fceb3d9e0d332d716b864e6",
+          "lastFrameHash": "0191eb4fb0436808be1bd64b99e1c833",
+          "bytes": 4571877,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 20000,
+        "kind": "long",
+        "gpxBytes": 1267225,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 209.79999999701977,
+            "min": 204.5,
+            "max": 210.1000000089407
+          },
+          "projectionDiagnosticMs": {
+            "median": 2.0999999940395355,
+            "min": 2,
+            "max": 2.4000000059604645
+          },
+          "prepareMs": {
+            "median": 44.1000000089407,
+            "min": 42.29999999701977,
+            "max": 45
+          },
+          "firstFrameMs": {
+            "median": 9.299999997019768,
+            "min": 9,
+            "max": 9.600000008940697
+          },
+          "previewInitializationMs": {
+            "median": 262.00000001490116,
+            "min": 258.79999999701977,
+            "max": 262.90000000596046
+          },
+          "exportMs": {
+            "median": 3275.4000000059605,
+            "min": 3266.2000000029802,
+            "max": 3282.4000000059605
+          },
+          "bytes": {
+            "median": 2060369,
+            "min": 2060369,
+            "max": 2060369
+          },
+          "frameMs": {
+            "median": 1.7999999970197678,
+            "min": 0.3999999910593033,
+            "max": 150.40000000596046
+          },
+          "seekMs": {
+            "median": 4.0999999940395355,
+            "min": 1.5,
+            "max": 131
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-20000-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "4e0bfc0eae732e05e180f42423779a06",
+          "lastFrameHash": "1c0a8807362a5fef31700776bdee69a4",
+          "bytes": 2060369,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 20000,
+        "kind": "long",
+        "gpxBytes": 1267225,
+        "quality": "standard",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 235.5,
+            "min": 234.70000000298023,
+            "max": 239.79999999701977
+          },
+          "projectionDiagnosticMs": {
+            "median": 1.8999999910593033,
+            "min": 1.7999999970197678,
+            "max": 1.8999999910593033
+          },
+          "prepareMs": {
+            "median": 48.70000000298023,
+            "min": 48,
+            "max": 51.70000000298023
+          },
+          "firstFrameMs": {
+            "median": 96.20000000298023,
+            "min": 94.70000000298023,
+            "max": 99.20000000298023
+          },
+          "previewInitializationMs": {
+            "median": 381.90000000596046,
+            "min": 381.90000000596046,
+            "max": 384.70000000298023
+          },
+          "exportMs": {
+            "median": 9640.40000000596,
+            "min": 9433.29999999702,
+            "max": 9670.90000000596
+          },
+          "bytes": {
+            "median": 6831221,
+            "min": 6831221,
+            "max": 6831221
+          },
+          "frameMs": {
+            "median": 31.099999994039536,
+            "min": 17.799999997019768,
+            "max": 87.70000000298023
+          },
+          "seekMs": {
+            "median": 32,
+            "min": 18.19999998807907,
+            "max": 88.79999999701977
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-20000-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "593574e7c00f5cee7da306eb652852e0",
+          "lastFrameHash": "53c63101488ec074d0144693c4939fc4",
+          "bytes": 6831221,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 50000,
+        "kind": "dense",
+        "gpxBytes": 3075653,
+        "quality": "compatibility",
+        "duration": 10,
+        "summary": {
+          "parseMs": {
+            "median": 546.3999999910593,
+            "min": 537.2999999970198,
+            "max": 561.6999999880791
+          },
+          "projectionDiagnosticMs": {
+            "median": 7.4000000059604645,
+            "min": 3.7000000029802322,
+            "max": 8.199999988079071
+          },
+          "prepareMs": {
+            "median": 41.80000001192093,
+            "min": 38.3999999910593,
+            "max": 47.5
+          },
+          "firstFrameMs": {
+            "median": 31,
+            "min": 30.400000005960464,
+            "max": 32
+          },
+          "previewInitializationMs": {
+            "median": 620.2000000029802,
+            "min": 606.0999999940395,
+            "max": 640.1999999880791
+          },
+          "exportMs": {
+            "median": 786.7000000029802,
+            "min": 742,
+            "max": 822.0999999940395
+          },
+          "bytes": {
+            "median": 2089531,
+            "min": 2089531,
+            "max": 2089531
+          },
+          "frameMs": {
+            "median": 1.699999988079071,
+            "min": 0,
+            "max": 39.099999994039536
+          },
+          "seekMs": {
+            "median": 11.5,
+            "min": 0.5,
+            "max": 57.69999998807907
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-50000-compatibility.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "ec2e66c53a9632154b2389eda9543c9a",
+          "lastFrameHash": "9380d7eff650a769ba086d5834d8023a",
+          "bytes": 2089531,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "count": 50000,
+        "kind": "dense",
+        "gpxBytes": 3075653,
+        "quality": "standard",
+        "duration": 30,
+        "summary": {
+          "parseMs": {
+            "median": 553.7000000029802,
+            "min": 537.9000000059605,
+            "max": 610.1000000089407
+          },
+          "projectionDiagnosticMs": {
+            "median": 4.699999988079071,
+            "min": 4.5,
+            "max": 7.899999991059303
+          },
+          "prepareMs": {
+            "median": 59.30000001192093,
+            "min": 40.6000000089407,
+            "max": 93.70000000298023
+          },
+          "firstFrameMs": {
+            "median": 49.79999999701977,
+            "min": 48.8999999910593,
+            "max": 51
+          },
+          "previewInitializationMs": {
+            "median": 697.2000000029802,
+            "min": 627.4000000059605,
+            "max": 720.4000000208616
+          },
+          "exportMs": {
+            "median": 6857.20000000298,
+            "min": 6682,
+            "max": 6944.0999999940395
+          },
+          "bytes": {
+            "median": 17604648,
+            "min": 17604648,
+            "max": 17604648
+          },
+          "frameMs": {
+            "median": 8.200000002980232,
+            "min": 7.5999999940395355,
+            "max": 9.200000002980232
+          },
+          "seekMs": {
+            "median": 16,
+            "min": 8.899999991059303,
+            "max": 26.200000002980232
+          }
+        },
+        "codec": "avc1.42001f",
+        "video": {
+          "file": "artifacts/sprint3/benchmark-50000-standard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "c3f1e3095299f737502c73453d005b9e",
+          "lastFrameHash": "7dd39515b5eff505aa354aaa45aa2070",
+          "bytes": 17604648,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      }
+    ]
+  },
+  "memory": {
+    "staticBaseline": {
+      "method": "Windows Get-Process WorkingSet64 / PrivateMemorySize64 for root and Win32_Process descendants of isolated Edge. Working set sum double-counts shared pages; private bytes are private committed virtual memory. Observed sampled peaks, not exact allocation peaks. CDP page JS heap is separate. GPU VRAM and dedicated encoder memory unmeasured.",
+      "intervalMs": {
+        "min": 176,
+        "max": 299
+      },
+      "peak": {
+        "privateBytes": 1022545920,
+        "workingSetSumBytes": 1203224576,
+        "processRoles": [
+          {
+            "role": "browser",
+            "privateBytes": 65474560,
+            "workingSetBytes": 177995776
+          },
+          {
+            "role": "crashpad-handler",
+            "privateBytes": 3358720,
+            "workingSetBytes": 19431424
+          },
+          {
+            "role": "gpu-process",
+            "privateBytes": 357281792,
+            "workingSetBytes": 236191744
+          },
+          {
+            "role": "utility",
+            "privateBytes": 19148800,
+            "workingSetBytes": 49152000
+          },
+          {
+            "role": "utility",
+            "privateBytes": 8052736,
+            "workingSetBytes": 20893696
+          },
+          {
+            "role": "renderer",
+            "privateBytes": 49438720,
+            "workingSetBytes": 94564352
+          },
+          {
+            "role": "renderer",
+            "privateBytes": 484622336,
+            "workingSetBytes": 530071552
+          },
+          {
+            "role": "utility",
+            "privateBytes": 7655424,
+            "workingSetBytes": 19423232
+          },
+          {
+            "role": "utility",
+            "privateBytes": 7602176,
+            "workingSetBytes": 19005440
+          },
+          {
+            "role": "renderer",
+            "privateBytes": 19910656,
+            "workingSetBytes": 36495360
+          }
+        ]
+      },
+      "observations": [
+        {
+          "label": "baseline-empty",
+          "sampleCount": 5,
+          "privatePeakBytes": 277565440,
+          "workingSetSumPeakBytes": 461328384,
+          "lastPrivateBytes": 276676608,
+          "lastWorkingSetBytes": 460550144,
+          "jsHeap": {
+            "JSHeapUsedSize": 6030708,
+            "JSHeapTotalSize": 7892992
+          }
+        },
+        {
+          "label": "cycle-0-import-50000",
+          "sampleCount": 7,
+          "privatePeakBytes": 555769856,
+          "workingSetSumPeakBytes": 705495040,
+          "lastPrivateBytes": 555769856,
+          "lastWorkingSetBytes": 705495040,
+          "jsHeap": {
+            "JSHeapUsedSize": 29946848,
+            "JSHeapTotalSize": 59297792
+          }
+        },
+        {
+          "label": "cycle-0-export-compatibility",
+          "sampleCount": 2,
+          "privatePeakBytes": 629039104,
+          "workingSetSumPeakBytes": 758013952,
+          "lastPrivateBytes": 629039104,
+          "lastWorkingSetBytes": 758013952,
+          "jsHeap": {
+            "JSHeapUsedSize": 58528064,
+            "JSHeapTotalSize": 93454336
+          }
+        },
+        {
+          "label": "cycle-0-export-standard",
+          "sampleCount": 7,
+          "privatePeakBytes": 791138304,
+          "workingSetSumPeakBytes": 938754048,
+          "lastPrivateBytes": 791138304,
+          "lastWorkingSetBytes": 938754048,
+          "jsHeap": {
+            "JSHeapUsedSize": 73941448,
+            "JSHeapTotalSize": 130994176
+          }
+        },
+        {
+          "label": "cycle-0-retained-after-cleanup",
+          "sampleCount": 14,
+          "privatePeakBytes": 790855680,
+          "workingSetSumPeakBytes": 953921536,
+          "lastPrivateBytes": 753606656,
+          "lastWorkingSetBytes": 934236160,
+          "jsHeap": {
+            "JSHeapUsedSize": 28999784,
+            "JSHeapTotalSize": 99758080
+          }
+        },
+        {
+          "label": "cycle-1-import-50000",
+          "sampleCount": 5,
+          "privatePeakBytes": 845443072,
+          "workingSetSumPeakBytes": 1024294912,
+          "lastPrivateBytes": 795668480,
+          "lastWorkingSetBytes": 979128320,
+          "jsHeap": {
+            "JSHeapUsedSize": 39881616,
+            "JSHeapTotalSize": 97316864
+          }
+        },
+        {
+          "label": "cycle-1-export-compatibility",
+          "sampleCount": 2,
+          "privatePeakBytes": 804519936,
+          "workingSetSumPeakBytes": 995180544,
+          "lastPrivateBytes": 804519936,
+          "lastWorkingSetBytes": 995180544,
+          "jsHeap": {
+            "JSHeapUsedSize": 50825932,
+            "JSHeapTotalSize": 117788672
+          }
+        },
+        {
+          "label": "cycle-1-export-standard",
+          "sampleCount": 7,
+          "privatePeakBytes": 824135680,
+          "workingSetSumPeakBytes": 1023762432,
+          "lastPrivateBytes": 815194112,
+          "lastWorkingSetBytes": 1014398976,
+          "jsHeap": {
+            "JSHeapUsedSize": 67315464,
+            "JSHeapTotalSize": 140156928
+          }
+        },
+        {
+          "label": "cycle-1-retained-after-cleanup",
+          "sampleCount": 15,
+          "privatePeakBytes": 793387008,
+          "workingSetSumPeakBytes": 994287616,
+          "lastPrivateBytes": 755736576,
+          "lastWorkingSetBytes": 962498560,
+          "jsHeap": {
+            "JSHeapUsedSize": 27607116,
+            "JSHeapTotalSize": 98447360
+          }
+        },
+        {
+          "label": "cycle-2-import-50000",
+          "sampleCount": 5,
+          "privatePeakBytes": 829038592,
+          "workingSetSumPeakBytes": 1042558976,
+          "lastPrivateBytes": 783335424,
+          "lastWorkingSetBytes": 1000648704,
+          "jsHeap": {
+            "JSHeapUsedSize": 36986980,
+            "JSHeapTotalSize": 95784960
+          }
+        },
+        {
+          "label": "cycle-2-export-compatibility",
+          "sampleCount": 2,
+          "privatePeakBytes": 819920896,
+          "workingSetSumPeakBytes": 1011671040,
+          "lastPrivateBytes": 819920896,
+          "lastWorkingSetBytes": 1011671040,
+          "jsHeap": {
+            "JSHeapUsedSize": 63714620,
+            "JSHeapTotalSize": 119382016
+          }
+        },
+        {
+          "label": "cycle-2-export-standard",
+          "sampleCount": 7,
+          "privatePeakBytes": 852369408,
+          "workingSetSumPeakBytes": 1053499392,
+          "lastPrivateBytes": 834981888,
+          "lastWorkingSetBytes": 1039069184,
+          "jsHeap": {
+            "JSHeapUsedSize": 78435320,
+            "JSHeapTotalSize": 132296704
+          }
+        },
+        {
+          "label": "cycle-2-retained-after-cleanup",
+          "sampleCount": 14,
+          "privatePeakBytes": 885645312,
+          "workingSetSumPeakBytes": 1090351104,
+          "lastPrivateBytes": 854425600,
+          "lastWorkingSetBytes": 1064415232,
+          "jsHeap": {
+            "JSHeapUsedSize": 67559640,
+            "JSHeapTotalSize": 136519680
+          }
+        },
+        {
+          "label": "cycle-3-import-50000",
+          "sampleCount": 5,
+          "privatePeakBytes": 904638464,
+          "workingSetSumPeakBytes": 1121812480,
+          "lastPrivateBytes": 904638464,
+          "lastWorkingSetBytes": 1121812480,
+          "jsHeap": {
+            "JSHeapUsedSize": 74343464,
+            "JSHeapTotalSize": 142106624
+          }
+        },
+        {
+          "label": "cycle-3-export-compatibility",
+          "sampleCount": 5,
+          "privatePeakBytes": 973328384,
+          "workingSetSumPeakBytes": 1168216064,
+          "lastPrivateBytes": 971390976,
+          "lastWorkingSetBytes": 1165946880,
+          "jsHeap": {
+            "JSHeapUsedSize": 73514632,
+            "JSHeapTotalSize": 158093312
+          }
+        },
+        {
+          "label": "cycle-3-export-standard",
+          "sampleCount": 19,
+          "privatePeakBytes": 1022545920,
+          "workingSetSumPeakBytes": 1203224576,
+          "lastPrivateBytes": 944746496,
+          "lastWorkingSetBytes": 1138962432,
+          "jsHeap": {
+            "JSHeapUsedSize": 90482288,
+            "JSHeapTotalSize": 169447424
+          }
+        },
+        {
+          "label": "cycle-3-retained-after-cleanup",
+          "sampleCount": 15,
+          "privatePeakBytes": 1006530560,
+          "workingSetSumPeakBytes": 1204002816,
+          "lastPrivateBytes": 592965632,
+          "lastWorkingSetBytes": 796270592,
+          "jsHeap": {
+            "JSHeapUsedSize": 13099528,
+            "JSHeapTotalSize": 15462400
+          }
+        },
+        {
+          "label": "test-only-gc",
+          "sampleCount": 5,
+          "privatePeakBytes": 582635520,
+          "workingSetSumPeakBytes": 787357696,
+          "lastPrivateBytes": 582635520,
+          "lastWorkingSetBytes": 787357696,
+          "jsHeap": {
+            "JSHeapUsedSize": 8813004,
+            "JSHeapTotalSize": 9224192
+          }
+        },
+        {
+          "label": "after-page-unload",
+          "sampleCount": 5,
+          "privatePeakBytes": 581361664,
+          "workingSetSumPeakBytes": 786108416,
+          "lastPrivateBytes": 574357504,
+          "lastWorkingSetBytes": 783028224,
+          "jsHeap": {
+            "JSHeapUsedSize": 9191292,
+            "JSHeapTotalSize": 9748480
+          }
+        }
+      ]
+    },
+    "boundedRouteCache": {
+      "method": "Windows Get-Process WorkingSet64 / PrivateMemorySize64 for root and Win32_Process descendants of isolated Edge. Working set sum double-counts shared pages; private bytes are private committed virtual memory. Observed sampled peaks, not exact allocation peaks. CDP page JS heap is separate. GPU VRAM and dedicated encoder memory unmeasured.",
+      "intervalMs": {
+        "min": 177,
+        "max": 263
+      },
+      "peak": {
+        "privateBytes": 989151232,
+        "workingSetSumBytes": 1186582528,
+        "processRoles": [
+          {
+            "role": "browser",
+            "privateBytes": 76193792,
+            "workingSetBytes": 190246912
+          },
+          {
+            "role": "crashpad-handler",
+            "privateBytes": 3022848,
+            "workingSetBytes": 13492224
+          },
+          {
+            "role": "gpu-process",
+            "privateBytes": 243343360,
+            "workingSetBytes": 158953472
+          },
+          {
+            "role": "utility",
+            "privateBytes": 21114880,
+            "workingSetBytes": 51318784
+          },
+          {
+            "role": "utility",
+            "privateBytes": 8282112,
+            "workingSetBytes": 21782528
+          },
+          {
+            "role": "renderer",
+            "privateBytes": 42237952,
+            "workingSetBytes": 88494080
+          },
+          {
+            "role": "renderer",
+            "privateBytes": 577998848,
+            "workingSetBytes": 629600256
+          },
+          {
+            "role": "renderer",
+            "privateBytes": 16957440,
+            "workingSetBytes": 32694272
+          }
+        ]
+      },
+      "observations": [
+        {
+          "label": "baseline-empty",
+          "sampleCount": 4,
+          "privatePeakBytes": 282042368,
+          "workingSetSumPeakBytes": 463613952,
+          "lastPrivateBytes": 281653248,
+          "lastWorkingSetBytes": 463228928,
+          "jsHeap": {
+            "JSHeapUsedSize": 6126188,
+            "JSHeapTotalSize": 8155136
+          }
+        },
+        {
+          "label": "cycle-0-import-50000",
+          "sampleCount": 8,
+          "privatePeakBytes": 594976768,
+          "workingSetSumPeakBytes": 756477952,
+          "lastPrivateBytes": 594976768,
+          "lastWorkingSetBytes": 756477952,
+          "jsHeap": {
+            "JSHeapUsedSize": 38074040,
+            "JSHeapTotalSize": 105717760
+          }
+        },
+        {
+          "label": "cycle-0-export-compatibility",
+          "sampleCount": 5,
+          "privatePeakBytes": 655773696,
+          "workingSetSumPeakBytes": 831438848,
+          "lastPrivateBytes": 655773696,
+          "lastWorkingSetBytes": 831438848,
+          "jsHeap": {
+            "JSHeapUsedSize": 79788228,
+            "JSHeapTotalSize": 147746816
+          }
+        },
+        {
+          "label": "cycle-0-export-standard",
+          "sampleCount": 36,
+          "privatePeakBytes": 863318016,
+          "workingSetSumPeakBytes": 1102262272,
+          "lastPrivateBytes": 832831488,
+          "lastWorkingSetBytes": 1077305344,
+          "jsHeap": {
+            "JSHeapUsedSize": 98999548,
+            "JSHeapTotalSize": 165588992
+          }
+        },
+        {
+          "label": "cycle-0-retained-after-cleanup",
+          "sampleCount": 14,
+          "privatePeakBytes": 725749760,
+          "workingSetSumPeakBytes": 970657792,
+          "lastPrivateBytes": 666320896,
+          "lastWorkingSetBytes": 929234944,
+          "jsHeap": {
+            "JSHeapUsedSize": 18404312,
+            "JSHeapTotalSize": 93319168
+          }
+        },
+        {
+          "label": "cycle-1-import-50000",
+          "sampleCount": 6,
+          "privatePeakBytes": 800759808,
+          "workingSetSumPeakBytes": 1056874496,
+          "lastPrivateBytes": 800759808,
+          "lastWorkingSetBytes": 1056874496,
+          "jsHeap": {
+            "JSHeapUsedSize": 26749428,
+            "JSHeapTotalSize": 99553280
+          }
+        },
+        {
+          "label": "cycle-1-export-compatibility",
+          "sampleCount": 5,
+          "privatePeakBytes": 811859968,
+          "workingSetSumPeakBytes": 1027629056,
+          "lastPrivateBytes": 809058304,
+          "lastWorkingSetBytes": 1024974848,
+          "jsHeap": {
+            "JSHeapUsedSize": 60807776,
+            "JSHeapTotalSize": 131850240
+          }
+        },
+        {
+          "label": "cycle-1-export-standard",
+          "sampleCount": 35,
+          "privatePeakBytes": 895848448,
+          "workingSetSumPeakBytes": 1130676224,
+          "lastPrivateBytes": 865013760,
+          "lastWorkingSetBytes": 1107308544,
+          "jsHeap": {
+            "JSHeapUsedSize": 50658104,
+            "JSHeapTotalSize": 114454528
+          }
+        },
+        {
+          "label": "cycle-1-retained-after-cleanup",
+          "sampleCount": 15,
+          "privatePeakBytes": 563167232,
+          "workingSetSumPeakBytes": 777093120,
+          "lastPrivateBytes": 503926784,
+          "lastWorkingSetBytes": 736518144,
+          "jsHeap": {
+            "JSHeapUsedSize": 24840788,
+            "JSHeapTotalSize": 37687296
+          }
+        },
+        {
+          "label": "cycle-2-import-50000",
+          "sampleCount": 6,
+          "privatePeakBytes": 726118400,
+          "workingSetSumPeakBytes": 960106496,
+          "lastPrivateBytes": 726118400,
+          "lastWorkingSetBytes": 960106496,
+          "jsHeap": {
+            "JSHeapUsedSize": 26944800,
+            "JSHeapTotalSize": 98504704
+          }
+        },
+        {
+          "label": "cycle-2-export-compatibility",
+          "sampleCount": 5,
+          "privatePeakBytes": 763006976,
+          "workingSetSumPeakBytes": 962826240,
+          "lastPrivateBytes": 759066624,
+          "lastWorkingSetBytes": 959004672,
+          "jsHeap": {
+            "JSHeapUsedSize": 72955220,
+            "JSHeapTotalSize": 131063808
+          }
+        },
+        {
+          "label": "cycle-2-export-standard",
+          "sampleCount": 36,
+          "privatePeakBytes": 894595072,
+          "workingSetSumPeakBytes": 1106800640,
+          "lastPrivateBytes": 872943616,
+          "lastWorkingSetBytes": 1095241728,
+          "jsHeap": {
+            "JSHeapUsedSize": 86303040,
+            "JSHeapTotalSize": 151207936
+          }
+        },
+        {
+          "label": "cycle-2-retained-after-cleanup",
+          "sampleCount": 15,
+          "privatePeakBytes": 731922432,
+          "workingSetSumPeakBytes": 952340480,
+          "lastPrivateBytes": 667570176,
+          "lastWorkingSetBytes": 908292096,
+          "jsHeap": {
+            "JSHeapUsedSize": 18822932,
+            "JSHeapTotalSize": 90435584
+          }
+        },
+        {
+          "label": "cycle-3-import-50000",
+          "sampleCount": 6,
+          "privatePeakBytes": 782770176,
+          "workingSetSumPeakBytes": 1022091264,
+          "lastPrivateBytes": 782770176,
+          "lastWorkingSetBytes": 1022091264,
+          "jsHeap": {
+            "JSHeapUsedSize": 37824116,
+            "JSHeapTotalSize": 105140224
+          }
+        },
+        {
+          "label": "cycle-3-export-compatibility",
+          "sampleCount": 8,
+          "privatePeakBytes": 829841408,
+          "workingSetSumPeakBytes": 1034170368,
+          "lastPrivateBytes": 814612480,
+          "lastWorkingSetBytes": 1017352192,
+          "jsHeap": {
+            "JSHeapUsedSize": 75161844,
+            "JSHeapTotalSize": 141631488
+          }
+        },
+        {
+          "label": "cycle-3-export-standard",
+          "sampleCount": 53,
+          "privatePeakBytes": 947367936,
+          "workingSetSumPeakBytes": 1156550656,
+          "lastPrivateBytes": 884744192,
+          "lastWorkingSetBytes": 1092009984,
+          "jsHeap": {
+            "JSHeapUsedSize": 87073416,
+            "JSHeapTotalSize": 163790848
+          }
+        },
+        {
+          "label": "cycle-3-retained-after-cleanup",
+          "sampleCount": 15,
+          "privatePeakBytes": 581951488,
+          "workingSetSumPeakBytes": 788283392,
+          "lastPrivateBytes": 531619840,
+          "lastWorkingSetBytes": 750059520,
+          "jsHeap": {
+            "JSHeapUsedSize": 25058048,
+            "JSHeapTotalSize": 40833024
+          }
+        },
+        {
+          "label": "test-only-gc",
+          "sampleCount": 5,
+          "privatePeakBytes": 490729472,
+          "workingSetSumPeakBytes": 709853184,
+          "lastPrivateBytes": 490684416,
+          "lastWorkingSetBytes": 709808128,
+          "jsHeap": {
+            "JSHeapUsedSize": 14224028,
+            "JSHeapTotalSize": 15515648
+          }
+        },
+        {
+          "label": "after-page-unload",
+          "sampleCount": 5,
+          "privatePeakBytes": 495890432,
+          "workingSetSumPeakBytes": 707268608,
+          "lastPrivateBytes": 495890432,
+          "lastWorkingSetBytes": 706920448,
+          "jsHeap": {
+            "JSHeapUsedSize": 14602264,
+            "JSHeapTotalSize": 15777792
+          }
+        }
+      ]
+    },
+    "resourceAudit": {
+      "disposed": 32,
+      "zeroSized": true,
+      "remaining": 0,
+      "trackedRoutes": 8,
+      "remainingRoutes": 0
+    }
+  },
+  "examples": {
+    "sourceCommit": "7443166d02dd3b78225725d69707c3d7a498a6c4",
+    "os": "Windows_NT 10.0.26200 x64",
+    "browser": "Microsoft Edge 154.0.4258.62",
+    "external": [],
+    "errors": [],
+    "reports": [
+      {
+        "style": "atlas",
+        "aspect": "landscape",
+        "duration": 20,
+        "video": {
+          "file": "artifacts/sprint7/cinematic/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "6c1c33e8cb5e1f1b7545f3116149f3c4",
+          "lastFrameHash": "ca8a6078c4029325e61b8751c53a1bac",
+          "bytes": 11837253,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "sha256": "1dfb4bfc4e68de8b51cf2819453ea9616b8e0f7b1e60aeeaa6c0e348a4d65afa",
+        "exportMs": 5598.70000000298
+      },
+      {
+        "style": "night",
+        "aspect": "portrait",
+        "duration": 30,
+        "video": {
+          "file": "artifacts/sprint7/cinematic/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "91bd8adf02edd93952b6ded6d64ee748",
+          "lastFrameHash": "19c842bc86df3ea8c68c85d118509a16",
+          "bytes": 17367156,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "sha256": "cb2604f3e086b0ca810885a82c5a9c941a04a6395cc9e131fd58fe39ef619e1c",
+        "exportMs": 18145.39999999106
+      }
+    ]
+  },
+  "controlledBaseline": {
+    "browser": "154.0.4258.62",
+    "reports": [
+      {
+        "rendererCommit": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
+        "route": "same synthetic 700-point cinematic-fjords.gpx",
+        "style": "atlas",
+        "aspect": "landscape",
+        "duration": 20,
+        "sha256": "04fbefa07f49a21460ceb85a38a71a34c49fae5299ffa40cf9fdb60aaa2bc7fa",
+        "video": {
+          "file": "artifacts/sprint7/comparison/v1-atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "2a348b36434098dc0c8fd034b1a4dac3",
+          "lastFrameHash": "18a9f61ef28846b717082de9138bc984",
+          "bytes": 1634155,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "rendererCommit": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
+        "route": "same synthetic 700-point cinematic-fjords.gpx",
+        "style": "night",
+        "aspect": "portrait",
+        "duration": 30,
+        "sha256": "a944e63f5a80b1a3503cb81c5c294bee77373b0d93c49d7f111cf00d267f7b90",
+        "video": {
+          "file": "artifacts/sprint7/comparison/v1-night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "c7208447a311b90befe5159427392800",
+          "lastFrameHash": "229ca425efc9c12e11f5f9de4543613b",
+          "bytes": 2557752,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      }
+    ]
+  },
+  "compatibility": [
+    {
+      "name": "edge-desktop",
+      "os": "Windows_NT 10.0.26200 x64",
+      "emulation": false,
+      "physicalMobile": false,
+      "configurations": [
+        {
+          "quality": "compatibility",
+          "aspect": "landscape",
+          "codec": "avc1.42001f",
+          "width": "640",
+          "height": "360",
+          "video": {
+            "file": "artifacts/sprint3/matrix-edge-desktop-compatibility-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "c76998db6c377911031185349395fa0e",
+            "lastFrameHash": "ba96e187dbfc942d5d6ad493d4f31ed9",
+            "bytes": 1407849,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 73
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "compatibility",
+          "aspect": "portrait",
+          "codec": "avc1.42001f",
+          "width": "360",
+          "height": "640",
+          "video": {
+            "file": "artifacts/sprint3/matrix-edge-desktop-compatibility-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 360,
+            "height": 640,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "c1f08eaa391711794e8e70b3904ad6ee",
+            "lastFrameHash": "9ea375a114de59d3087ff59cd8577a6a",
+            "bytes": 1332534,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 360,
+            "height": 640,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 125
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "standard",
+          "aspect": "landscape",
+          "codec": "avc1.42001f",
+          "width": "1280",
+          "height": "720",
+          "video": {
+            "file": "artifacts/sprint3/matrix-edge-desktop-standard-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "ae8d506f6241b2ab49f7a12340773c90",
+            "lastFrameHash": "bbc56fc441429216b0ee313ce898a11a",
+            "bytes": 4594264,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 66
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "standard",
+          "aspect": "portrait",
+          "codec": "avc1.42001f",
+          "width": "720",
+          "height": "1280",
+          "video": {
+            "file": "artifacts/sprint3/matrix-edge-desktop-standard-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "f22e96f8cd0093f8744bef7d0499a50d",
+            "lastFrameHash": "75149065c2e7c8e8f4e89bd369da58ab",
+            "bytes": 4198219,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 111
+          },
+          "status": "VERIFIED"
+        }
+      ],
+      "version": "154.0.4258.62",
+      "preview": "VERIFIED",
+      "webCodecs": true,
+      "privacy": "VERIFIED",
+      "status": "VERIFIED"
+    },
+    {
+      "name": "chrome-desktop",
+      "os": "Windows_NT 10.0.26200 x64",
+      "emulation": false,
+      "physicalMobile": false,
+      "configurations": [
+        {
+          "quality": "compatibility",
+          "aspect": "landscape",
+          "codec": "avc1.42001f",
+          "width": "640",
+          "height": "360",
+          "video": {
+            "file": "artifacts/sprint3/matrix-chrome-desktop-compatibility-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "c76998db6c377911031185349395fa0e",
+            "lastFrameHash": "ba96e187dbfc942d5d6ad493d4f31ed9",
+            "bytes": 1407849,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 73
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "compatibility",
+          "aspect": "portrait",
+          "codec": "avc1.42001f",
+          "width": "360",
+          "height": "640",
+          "video": {
+            "file": "artifacts/sprint3/matrix-chrome-desktop-compatibility-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 360,
+            "height": 640,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "c1f08eaa391711794e8e70b3904ad6ee",
+            "lastFrameHash": "9ea375a114de59d3087ff59cd8577a6a",
+            "bytes": 1332534,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 360,
+            "height": 640,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 125
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "standard",
+          "aspect": "landscape",
+          "codec": "avc1.42001f",
+          "width": "1280",
+          "height": "720",
+          "video": {
+            "file": "artifacts/sprint3/matrix-chrome-desktop-standard-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "ae8d506f6241b2ab49f7a12340773c90",
+            "lastFrameHash": "bbc56fc441429216b0ee313ce898a11a",
+            "bytes": 4594264,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 66
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "standard",
+          "aspect": "portrait",
+          "codec": "avc1.42001f",
+          "width": "720",
+          "height": "1280",
+          "video": {
+            "file": "artifacts/sprint3/matrix-chrome-desktop-standard-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "f22e96f8cd0093f8744bef7d0499a50d",
+            "lastFrameHash": "75149065c2e7c8e8f4e89bd369da58ab",
+            "bytes": 4198219,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 111
+          },
+          "status": "VERIFIED"
+        }
+      ],
+      "version": "154.0.8037.98",
+      "preview": "VERIFIED",
+      "webCodecs": true,
+      "privacy": "VERIFIED",
+      "status": "VERIFIED"
+    },
+    {
+      "name": "firefox-playwright",
+      "os": "Windows_NT 10.0.26200 x64",
+      "emulation": false,
+      "physicalMobile": false,
+      "configurations": [
+        {
+          "quality": "compatibility",
+          "aspect": "landscape",
+          "codec": "avc1.42001f",
+          "width": "640",
+          "height": "360",
+          "video": {
+            "file": "artifacts/sprint3/matrix-firefox-playwright-compatibility-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "fb475cf8c4704868fe6e4d9979134737",
+            "lastFrameHash": "6c35cd22f4f6932353adf71cbf994f1b",
+            "bytes": 641544,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 81
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "compatibility",
+          "aspect": "portrait",
+          "codec": "avc1.42001f",
+          "width": "360",
+          "height": "640",
+          "video": {
+            "file": "artifacts/sprint3/matrix-firefox-playwright-compatibility-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 360,
+            "height": 640,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "f88d6603659d2461e705d2154ee52871",
+            "lastFrameHash": "09ce0c12898002712bf08792198a0e59",
+            "bytes": 510342,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 360,
+            "height": 640,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 120
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "standard",
+          "aspect": "landscape",
+          "codec": "avc1.42001f",
+          "width": "1280",
+          "height": "720",
+          "video": {
+            "file": "artifacts/sprint3/matrix-firefox-playwright-standard-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "be8a6a21912ea52b2ad29827627891d8",
+            "lastFrameHash": "d786ca405393b227e0e68f08e3b3c984",
+            "bytes": 1787868,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 74
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "standard",
+          "aspect": "portrait",
+          "codec": "avc1.42001f",
+          "width": "720",
+          "height": "1280",
+          "video": {
+            "file": "artifacts/sprint3/matrix-firefox-playwright-standard-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "536459ec378db9ff38e934e8499236d6",
+            "lastFrameHash": "f3d351c2f91650047da173b8d833c936",
+            "bytes": 1453934,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 101
+          },
+          "status": "VERIFIED"
+        }
+      ],
+      "version": "157.0",
+      "preview": "VERIFIED",
+      "webCodecs": true,
+      "privacy": "VERIFIED",
+      "status": "VERIFIED"
+    },
+    {
+      "name": "webkit-playwright",
+      "os": "Windows_NT 10.0.26200 x64",
+      "emulation": false,
+      "physicalMobile": false,
+      "configurations": [
+        {
+          "quality": "compatibility",
+          "aspect": "landscape",
+          "reason": "Экспорт требует WebCodecs: откройте приложение в современном Chrome или Edge через HTTPS либо localhost.",
+          "width": "640",
+          "height": "360",
+          "status": "UNSUPPORTED"
+        },
+        {
+          "quality": "compatibility",
+          "aspect": "portrait",
+          "reason": "Экспорт требует WebCodecs: откройте приложение в современном Chrome или Edge через HTTPS либо localhost.",
+          "width": "360",
+          "height": "640",
+          "status": "UNSUPPORTED"
+        },
+        {
+          "quality": "standard",
+          "aspect": "landscape",
+          "reason": "Экспорт требует WebCodecs: откройте приложение в современном Chrome или Edge через HTTPS либо localhost.",
+          "width": "1280",
+          "height": "720",
+          "status": "UNSUPPORTED"
+        },
+        {
+          "quality": "standard",
+          "aspect": "portrait",
+          "reason": "Экспорт требует WebCodecs: откройте приложение в современном Chrome или Edge через HTTPS либо localhost.",
+          "width": "720",
+          "height": "1280",
+          "status": "UNSUPPORTED"
+        }
+      ],
+      "version": "27.2",
+      "preview": "VERIFIED",
+      "webCodecs": false,
+      "privacy": "VERIFIED",
+      "status": "UNSUPPORTED"
+    },
+    {
+      "name": "chromium-mobile-emulation",
+      "os": "Windows_NT 10.0.26200 x64",
+      "emulation": true,
+      "physicalMobile": false,
+      "configurations": [
+        {
+          "quality": "compatibility",
+          "aspect": "landscape",
+          "codec": "avc1.42001f",
+          "width": "640",
+          "height": "360",
+          "video": {
+            "file": "artifacts/sprint3/matrix-chromium-mobile-emulation-compatibility-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "95b8e056756576a9c86dcdaf442d1166",
+            "lastFrameHash": "1f148aae7eb6e458b9ab114678b9aaf3",
+            "bytes": 866554,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 77
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "compatibility",
+          "aspect": "portrait",
+          "codec": "avc1.42001f",
+          "width": "360",
+          "height": "640",
+          "video": {
+            "file": "artifacts/sprint3/matrix-chromium-mobile-emulation-compatibility-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 360,
+            "height": 640,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "b786bcda37ccca5815b9a1c48bcbd402",
+            "lastFrameHash": "f5f2b6d305e763f4ca434f4e85427f5f",
+            "bytes": 687480,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 360,
+            "height": 640,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 116
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "standard",
+          "aspect": "landscape",
+          "codec": "avc1.42001f",
+          "width": "1280",
+          "height": "720",
+          "video": {
+            "file": "artifacts/sprint3/matrix-chromium-mobile-emulation-standard-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "e40e141316c14b9ea6a1c0b770d00e07",
+            "lastFrameHash": "309aea2108642ab9c40ca2a50e1887c2",
+            "bytes": 2294930,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 72
+          },
+          "status": "VERIFIED"
+        },
+        {
+          "quality": "standard",
+          "aspect": "portrait",
+          "codec": "avc1.42001f",
+          "width": "720",
+          "height": "1280",
+          "video": {
+            "file": "artifacts/sprint3/matrix-chromium-mobile-emulation-standard-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "7cb6bc4d207072519123d2c21268fb12",
+            "lastFrameHash": "81f60783e5b26d6e6a87da50439aa1d4",
+            "bytes": 1816622,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "browserDecode": {
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedAtSeconds": 5,
+            "pixelVariation": 111
+          },
+          "status": "VERIFIED"
+        }
+      ],
+      "version": "156.0.8078.4",
+      "preview": "VERIFIED",
+      "webCodecs": true,
+      "privacy": "VERIFIED",
+      "status": "VERIFIED"
+    },
+    {
+      "name": "physical-Android-Chrome",
+      "status": "NOT TESTED",
+      "reason": "No connected physical device or legitimate remote device environment available."
+    },
+    {
+      "name": "physical-iOS-Safari",
+      "status": "NOT TESTED",
+      "reason": "No Apple hardware/device environment available; Playwright WebKit is not Safari."
+    }
+  ],
+  "nominalPaletteContrast": {
+    "method": "sRGB WCAG luminance ratios of declared solid colours; not a claim that every antialiased video pixel meets that ratio.",
+    "atlas": {
+      "routeToLand": 4.508186404333088,
+      "routeToWater": 3.2927302287725215,
+      "captionToPanel": 10.225000886348115
+    },
+    "night": {
+      "routeToLand": 9.284503844994681,
+      "routeToWater": 13.121568501908092,
+      "captionToPanel": 15.616808632099774
+    }
+  },
+  "limitations": [
+    "Single Windows machine; repeated performance and four memory cycles, not a universal benchmark.",
+    "Canvas timing is CPU submission, not displayed FPS/GPU completion.",
+    "Native values are sampled process sums; working sets can double-count shared pages.",
+    "GPU VRAM and dedicated codec memory unmeasured.",
+    "Physical mobile and Safari NOT TESTED.",
+    "Natural Earth is generalised and has no street/terrain data.",
+    "Owner visual approval pending; no audience-retention study."
+  ],
+  "visualGeometry": {
+    "configurations": 64,
+    "frames": 384,
+    "overflows": 0,
+    "endpointOverlaps": 0,
+    "method": "64 synthetic geometry/style/quality/aspect configurations; six timestamps each, including segment transition. Measured text bounding boxes, not physical-phone usability."
+  },
+  "productionSmoke": {
+    "status": "VERIFIED",
+    "scope": "local production subpath",
+    "sourceCommit": "7443166d02dd3b78225725d69707c3d7a498a6c4",
+    "version": "1.1.0-rc.1",
+    "publicHttps": false,
+    "packageBytes": 2979554,
+    "packageHashesVerified": 13,
+    "csp": {
+      "responseHeader": null,
+      "meta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    },
+    "privacy": {
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "databases": [],
+        "caches": [],
+        "cookies": ""
+      },
+      "unexpectedRequests": [],
+      "badResponses": [],
+      "pageErrors": [],
+      "firstPartyBrowserRequests": 18,
+      "routeLostOnReload": true
+    },
+    "cancelAndRecovery": "VERIFIED",
+    "unsupportedEncoder": "VERIFIED simulated unavailable API",
+    "outputs": [
+      {
+        "file": "artifacts/release/smoke-atlas-20s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 1280,
+        "height": 720,
+        "duration": 10,
+        "decodedFrames": 240,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 240,
+        "firstFrameHash": "963ce10d5109141d09df2cf40758dbf6",
+        "lastFrameHash": "c5445fc7dd43ea0c2ccba875e7aa0c82",
+        "bytes": 4570349,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+      },
+      {
+        "file": "artifacts/release/smoke-night-30s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 720,
+        "height": 1280,
+        "duration": 10,
+        "decodedFrames": 240,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 240,
+        "firstFrameHash": "b57349c275d5fd85ca068eb5bf41fe65",
+        "lastFrameHash": "5a37746709e7b017e8d097352bbddf11",
+        "bytes": 3257626,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+      }
+    ]
+  }
+}
