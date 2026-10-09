@@ -1,6 +1,6 @@
 # Release preparation and publication
 
-Status on 2026-10-09: owner merged all four sprint PRs and explicitly authorized Pages and GitHub Release v1.0.0. Reviewed main `5f39332b7358949d248da6b2f99ba445ee1b41e8` passes exact-main CI and local acceptance. Protected environment and Pages Actions source are verified. [Manual run 37901620765](https://github.com/Matawaka/route-story/actions/runs/37901620765) built successfully and deploy waits for human environment review. No public application URL is verified yet; Release publication requires successful actual HTTPS acceptance. October 14 is internal calendar day seven; no organizer submission hour has been established.
+Status on 2026-10-09: **[public application](https://matawaka.github.io/route-story/) and [Release v1.0.0](https://github.com/Matawaka/route-story/releases/tag/v1.0.0) VERIFIED**. Owner authorized publication and completed protected human environment approval. Existing [manual run 37901620765](https://github.com/Matawaka/route-story/actions/runs/37901620765) succeeded in build, deploy and HTTPS smoke. Exact deployed/tag SHA is `5f39332b7358949d248da6b2f99ba445ee1b41e8`. Full public Atlas 20s / Night 30s exports additionally passed; all eight published assets were anonymously downloaded and matched finalized hashes. No duplicate deployment or Release. October 14 is internal calendar day seven; no organizer submission hour has been established. Competition submission is NOT SUBMITTED.
 
 ## Verified merge checklist
 
@@ -22,7 +22,7 @@ Completed main gate and remaining publication checklist:
 1. VERIFIED: merged main is exactly the final Sprint 4 tree, with successful main-push CI and fresh local clean install, unit/build/browser/package/smoke acceptance.
 2. VERIFIED: short and bounded medium exports pass; both existing synthetic 20s/30s examples were independently decoded again and their hashes match historical evidence. Full 30s/5000-point acceptance remains valid for the identical code.
 3. VERIFIED: allowlisted production package, licenses/provenance and dependency audits; no new private route, runtime dependency or video in source Git.
-4. VERIFIED: explicit owner permission to enable Pages, dispatch publication and publish `v1.0.0` assets received separately in this chat. Manual workflow dispatched; required environment approval must still be performed by the owner in GitHub.
+4. VERIFIED: explicit owner permission received separately; owner human environment approval completed, existing workflow succeeded and v1.0.0 published after actual HTTPS acceptance.
 5. Immediately before authorized dispatch, recheck remote main, its exact successful push CI and environment rules. If main changes, review and validate the new SHA; do not silently deploy a different commit.
 
 ## Pages workflow
@@ -44,11 +44,11 @@ Actual environment settings read back on 2026-10-09:
 | Prevent self-review | false; solo owner may approve their own initiated deployment |
 | Deployment policy | Selected branches/tags, exactly one allowed branch: `main` (type branch) |
 | Pages source | VERIFIED `build_type:workflow`; HTTPS enforced, no custom domain |
-| Deployment run / Releases | Run 37901620765 build passed, deploy WAITING for human; Release absent |
+| Deployment run / Release | Run37901620765 build/deploy/https-acceptance SUCCESS; Release v1.0.0 published 2026-10-09T09:37:08Z |
 
 Do not approve the environment on the owner's behalf. [GitHub environment protection documentation](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments).
 
-After explicit publication permission:
+Reproduction for a future separately reviewed release (current run is complete; **do not dispatch it again**):
 
 1. Repository **Settings → Pages → Build and deployment → Source → GitHub Actions**. Do not set a custom domain. Equivalent API configuration may be used through the existing authorized connection; no PAT is needed.
 2. **Settings → Environments → github-pages**: confirm Matawaka is the required reviewer, **Prevent self-review** is unchecked and **Deployment branches and tags → Selected branches and tags** contains only branch main. These settings already exist; retain them.
@@ -85,13 +85,19 @@ Remove-Item Env:APP_URL, Env:EXPECTED_COMMIT
 
 Reports under ignored `artifacts/release/` distinguish local and public HTTPS, record actual response/meta CSP, browser/OS, codec/resolution/duration/frames/bytes, export wall time and privacy observations. This is no physical-mobile or native-memory certification. Existing memory methodology remains in PERFORMANCE.md.
 
+## Completed public acceptance and asset verification
+
+Actual deploy-pages output was consumed as APP_URL by the downstream HTTPS job; deployment status 6955784587 independently confirms `https://matawaka.github.io/route-story/`. Its release.json identifies 5f39332/version1.0.0; all 10files/392336bytes before manifest matched. Workflow smoke passed on Edge 153.0.4234.48/Windows runner; fresh smoke and full 20s/30s public UI acceptance passed on Edge 154.0.4258.62/Windows_NT 10.0.26200 x64. Cancellation/retry, native playback, unsupported API, empty storage, first-party requests and mobile viewport overflow checks passed. Public HTTP CSP header absent; restrictive meta CSP observed.
+
+Release assets were finalized from these new public exports, not copied from stale hashes. `node artifacts/sprint6/verify-published.mjs` anonymously downloaded all 8returned browser_download_url values, verified size/SHA-256 against local files and independently decoded both downloaded videos again. Actual Release/date/URLs/hashes and preserved historical results are in [COMPETITION_DELIVERY](COMPETITION_DELIVERY.md) and [RELEASE_EVIDENCE.json](RELEASE_EVIDENCE.json). No tag retargeting or new runtime dependency.
+
 ## Hosting and release assets
 
 The Vite base is relative; the production prefix test exercises `/route-story/` without rewriting root paths or weakening CSP. GitHub Pages cannot be assumed to provide application-controlled security response headers. The HTML CSP meta is restrictive but cannot impose `frame-ancestors`, a report-only policy or every HTTP-header protection. Report actual headers after deployment; do not claim nonexistent headers or isolation.
 
-Following approval and successful actual HTTPS acceptance, create GitHub Release `v1.0.0` tied to the complete reviewed main SHA. Do not move the tag after publication. Publish `atlas-20s.mp4`, `night-30s.mp4`, their independent `.validation.json` reports, `synthetic.gpx` and `synthetic-antimeridian.gpx`; include a local SHA256 manifest and optional verified candidate ZIP. Keep large outputs out of source Git. Do not create a draft/tag or upload assets before permission.
+Release `v1.0.0` is already published at the complete reviewed main SHA after authorized successful HTTPS acceptance; do not create it again or move its tag. It includes `atlas-20s.mp4`, `night-30s.mp4`, independent `.validation.json` reports, `synthetic.gpx`, `synthetic-antimeridian.gpx`, SHA256SUMS and a verified ZIP. Keep large outputs out of source Git. Any future separate release still requires reviewed source and owner permission.
 
-Prepared Sprint 4 files are present and revalidated; RELEASE_EVIDENCE.json retains their true generating source `67d17266…`. Public-site acceptance will generate new full examples through the real deployed UI. Revalidate/finalize the chosen files and record their new hashes if output differs. Do not require a cross-machine encoder to reproduce old video bytes. Publish only the minimal synthetic assets, never diagnostic/API responses, private routes, `.reference`, node_modules or unrelated files.
+Historical Sprint4 files remain preserved; RELEASE_EVIDENCE.json retains their true generating source `67d17266…`. Sprint6 public acceptance generated new full examples through the real deployed UI at `5f39332…`, with freshly computed hashes and independent validation. These finalized public outputs were published and downloaded again; no requirement to match old encoder bytes. Only minimal synthetic assets were published, never diagnostic/API responses, private routes, `.reference`, node_modules or unrelated files.
 
 Populate README/COMPETITION_DELIVERY only with returned, verified URLs. Download every published asset anonymously and compare SHA-256 with the finalized local file. A local prepared package is not proof of a public release or a completed competition submission. Submit to organizers only through a supplied channel with separate explicit owner permission; no submission has occurred.
 

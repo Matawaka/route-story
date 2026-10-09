@@ -2,7 +2,7 @@
 
 Локальный GPS Route Story Engine от Matawaka. Загрузите GPX, отредактируйте название, выберите 10, 20 или 30 секунд, «Атлас» или «Ночной» и сохраните H.264 MP4 в формате 16:9 или 9:16. Русский интерфейс, Canvas 2D, без обязательного сервера и платных API.
 
-**Публичное приложение: PENDING.** Владелец объединил все четыре sprint PR, включая [release PR #4](https://github.com/Matawaka/route-story/pull/4). Проверенный main — `5f39332b7358949d248da6b2f99ba445ee1b41e8`, [main-push CI](https://github.com/Matawaka/route-story/actions/runs/37896163991) прошёл. Версия пакета — 1.0.0; tag и GitHub Release `v1.0.0` пока не опубликованы. Владелец отдельно разрешил Pages/Release; Actions source включён, окружение защищено human review и разрешает только main. [Первый manual deployment](https://github.com/Matawaka/route-story/actions/runs/37901620765) ожидает подтверждения владельца в GitHub. Проверенного HTTPS URL пока нет. Точный статус и результаты: [COMPETITION_DELIVERY](docs/COMPETITION_DELIVERY.md).
+**[Открыть Route Story](https://matawaka.github.io/route-story/) · [GitHub Release v1.0.0](https://github.com/Matawaka/route-story/releases/tag/v1.0.0).** Выпуск опубликован 9 октября 2026 года на проверенном main `5f39332b7358949d248da6b2f99ba445ee1b41e8`; tag указывает на этот же commit. [Main-push CI](https://github.com/Matawaka/route-story/actions/runs/37896163991), [deployment и HTTPS smoke](https://github.com/Matawaka/route-story/actions/runs/37901620765) прошли. Дополнительно с публичного сайта созданы полные Atlas 20s / Night 30s, независимо декодированы; все восемь Release assets повторно скачаны без аккаунта и сверены по SHA-256. Результаты и ограничения: [COMPETITION_DELIVERY](docs/COMPETITION_DELIVERY.md).
 
 ![Проверенный production-предпросмотр синтетического маршрута](docs/images/route-story.png)
 
@@ -15,7 +15,7 @@
 ```powershell
 git clone https://github.com/Matawaka/route-story.git
 cd route-story
-git checkout 5f39332b7358949d248da6b2f99ba445ee1b41e8
+git checkout v1.0.0
 npm.cmd ci
 npm.cmd run build
 npm.cmd run preview
@@ -26,13 +26,13 @@ npm.cmd run preview
 ```sh
 git clone https://github.com/Matawaka/route-story.git
 cd route-story
-git checkout 5f39332b7358949d248da6b2f99ba445ee1b41e8
+git checkout v1.0.0
 npm ci
 npm run build
 npm run preview
 ```
 
-Команды фиксируют проверенный выпуск и создают detached checkout. Для текущей разработки используйте `git switch main`; tag `v1.0.0` можно будет использовать после его публикации и проверки. Команды Linux/macOS приведены для воспроизводимости сборки; MP4-кодировщик на этих ОС в текущей приёмке не проверен. Для запуска нужен актуальный браузер с Canvas 2D, File/Blob и XML DOM; для экспорта дополнительно WebCodecs H.264. Общий минимальный объём RAM для всех устройств не установлен.
+Команды фиксируют опубликованный и проверенный tag `v1.0.0` и создают detached checkout. Для текущей разработки используйте `git switch main`. Команды Linux/macOS приведены для воспроизводимости сборки; MP4-кодировщик на этих ОС в текущей приёмке не проверен. Для запуска нужен актуальный браузер с Canvas 2D, File/Blob и XML DOM; для экспорта дополнительно WebCodecs H.264. Общий минимальный объём RAM для всех устройств не установлен.
 
 Откройте адрес localhost, напечатанный Vite (обычно http://127.0.0.1:4173). Для разработки в PowerShell: `npm.cmd run dev`. Требуется Node.js 22.12+; проверено на Node 24.19.0. Экспорт требует HTTPS или localhost и доступного WebCodecs H.264-кодировщика. Приложение проверяет поддержку на выбранных размерах и показывает причину недоступности. На Windows проверены Edge 154, Chrome 154, Playwright Firefox 157 и Chromium 156 с мобильной эмуляцией, включая независимо декодированные MP4 в обоих качествах/форматах. В Playwright WebKit 27.2 на Windows работает предпросмотр, но отсутствует VideoEncoder и экспорт недоступен. Safari, физические Android/iOS и их потребление памяти не проверены. Краткое публичное заявление: [SUPPORTED_PLATFORMS](docs/SUPPORTED_PLATFORMS.md); точные версии, статусы и воспроизведение: [COMPATIBILITY](docs/COMPATIBILITY.md).
 
@@ -86,12 +86,12 @@ CI использует только синтетические данные. У
 
 ## Два примера и демонстрация
 
-Публичные видео-ссылки: **PENDING — ожидается разрешение на GitHub Release**. Большие MP4 не хранятся в source Git. Скрипт создаёт реальные файлы из [синтетического учебного GPX](public/samples/synthetic.gpx) и [синтетического перехода через 180°](public/samples/synthetic-antimeridian.gpx):
+Оба видео опубликованы в [Release v1.0.0](https://github.com/Matawaka/route-story/releases/tag/v1.0.0), получены через интерфейс реального HTTPS-сайта и независимо проверены после скачивания. Большие MP4 не хранятся в source Git. Данные явно синтетические: [учебный GPX](https://github.com/Matawaka/route-story/releases/download/v1.0.0/synthetic.gpx) и [переход через 180°](https://github.com/Matawaka/route-story/releases/download/v1.0.0/synthetic-antimeridian.gpx).
 
-| Пример | Параметры | Локальный результат |
+| Пример | Параметры | Проверенный публичный файл |
 | --- | --- | --- |
-| ATLAS — «Учебный маршрут · ATLAS» | 16:9, 1280×720, 20s, 24 FPS, 480 кадров | `artifacts/release/atlas-20s.mp4` |
-| NIGHT — «Через 180° · NIGHT» | 9:16, 720×1280, 30s, 24 FPS, 720 кадров | `artifacts/release/night-30s.mp4` |
+| ATLAS — «Учебный маршрут · ATLAS» | 16:9, 1280×720, 20s, 24 FPS, 480 кадров | [atlas-20s.mp4](https://github.com/Matawaka/route-story/releases/download/v1.0.0/atlas-20s.mp4) |
+| NIGHT — «Через 180° · NIGHT» | 9:16, 720×1280, 30s, 24 FPS, 720 кадров | [night-30s.mp4](https://github.com/Matawaka/route-story/releases/download/v1.0.0/night-30s.mp4) |
 
 ```powershell
 npm.cmd run build
@@ -108,7 +108,7 @@ npm.cmd run release:acceptance
 
 Подготовлены [соответствие переданным условиям конкурса](docs/COMPETITION_DELIVERY.md#соответствие-переданному-анонсу-вайбатона) и [текст заявки для копирования](docs/COMPETITION_SUBMISSION.md). По указанию владельца комплект подаётся комментарием к посту в закрытом Telegram-канале «Вайбкодинговая»; точная ссылка пока не предоставлена. Отправка заявки не выполнялась.
 
-Production CSP остаётся ограниченным локальными ресурсами. На статическом хостинге meta CSP не заменяет все HTTP security headers; фактические заголовки и HTTPS должны проверяться после публикации. Никакие отсутствующие header-защиты не заявляются.
+Production CSP остаётся ограниченным локальными ресурсами. На публичном сайте проверены HTTPS secure context и restrictive meta CSP; CSP response header не наблюдался. Meta не заменяет все HTTP security headers; отсутствующие header-защиты не заявляются.
 
 Sprint 3 измеряет большие синтетические треки до 50 000 точек и отдельные категории памяти Windows; уменьшение private bytes не означает такое же снижение физической RAM. Подробности и воспроизводимые локальные команды: [PERFORMANCE](docs/PERFORMANCE.md). Снимки обоих стилей, форматов, качеств и крайних геометрий: [VISUAL_VALIDATION](docs/VISUAL_VALIDATION.md). Полная матрица/профилирование — отдельная локальная приёмка; обычный CI сохраняет короткий и средний экспорт. Зависимости и пределы экспорта не увеличены.
 

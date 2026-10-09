@@ -1,5 +1,13 @@
 # Decisions
 
+## Sprint 6: complete the existing approved release
+
+Reconciled existing run 37901620765 as fully SUCCESS after owner human review; do not restart deployment. Consume the actual page_url via downstream APP_URL and deployment success evidence. Verify public HTTPS with the existing smoke/full scripts and immutable reviewed 5f39332 source, including real Atlas 20s / Night 30s UI downloads. Preserve local acceptance as historical, append public evidence separately.
+
+Owner's earlier explicit Pages/Release approval remains valid. v1.0.0 did not exist; publish it once at exact production5f39332 only after HTTPS passed. Finalize newly computed public-video hashes, minimal synthetic GPX/reports/checksums and a manifest-verified ZIP. Independently download every published asset anonymously, compare hashes, and decode downloaded MP4s. No renderer/exporter/workflow/dependency change, privilege expansion or duplicate dispatch.
+
+Continue the existing documentation PR #5, with verified links/date/results; no automatic merge or redeploy for docs. Provided contest announcement is mapped to actual evidence. Original private Telegram post URL/access and separate comment authorization remain unavailable; public search found no source, so official eligibility/full-rules verification is not claimed. Deliver concise Russian copy-ready text for the owner; NOT SUBMITTED.
+
 ## Sprint 5: exact merged release and separate publication approval
 
 Owner merged PR #4 on 2026-10-09. All four sprint PRs are merged into main `5f39332b7358949d248da6b2f99ba445ee1b41e8`; its tree exactly matches the final Sprint 4 head `3e4d6cb44b654c1b0a5616d20049a3a49e8916ff`. Successful push-to-main CI 37896163991 and a fresh local clean-install/check/package/smoke validate this exact main, rather than relying only on an earlier branch run. Preserve the existing application and sole manual Pages workflow. No new dependency, codec, feature or resource limit.
@@ -8,7 +16,7 @@ Sprint 5 authorizes preparatory environment configuration. Actual `github-pages`
 
 Use the complete reviewed main SHA for deployment and the immutable `v1.0.0` tag. Recheck remote main and its successful main-push CI immediately before authorized dispatch; if the SHA changes, reassess before publishing. Public acceptance must use the returned deploy-pages URL, including a separate full-duration export. Fill public links only after verification. Documentation changes use `codex/sprint-5-public-launch` and a focused PR; no automatic merge or redeployment for documentation.
 
-Existing synthetic Atlas20s/Night30s files are present and independently revalidated; their hashes match Sprint 4. Preserve the original source-commit evidence, do not mislabel these as exports from the public site. Keep diagnostic/API responses and MP4s outside source Git. After public acceptance, finalize Release assets, download each independently and compare hashes. Encoder output may differ after a genuine public-site regeneration.
+Existing synthetic Atlas 20s / Night 30s files are present and independently revalidated; their hashes match Sprint 4. Preserve the original source-commit evidence, do not mislabel these as exports from the public site. Keep diagnostic/API responses and MP4s outside source Git. After public acceptance, finalize Release assets, download each independently and compare hashes. Encoder output may differ after a genuine public-site regeneration.
 
 The owner provided the contest announcement text: GPX is an accepted documented import format, and the minimum includes two styles, two factual information elements, both aspect ratios, actual replay/export and an independently runnable product. Map these requirements to observed evidence, emphasizing actual output. Submission channel was clarified as a comment under the post in the private Telegram channel «Вайбкодинговая». The exact original post URL and agent submission permission/access have not been supplied; prepare copy-ready owner text and do not claim official compliance or submission.
 

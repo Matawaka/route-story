@@ -1,4 +1,358 @@
 {
+  "sprint6PublicRelease": {
+    "status": "VERIFIED",
+    "verifiedOn": "2026-10-09",
+    "releaseCommit": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
+    "applicationUrl": "https://matawaka.github.io/route-story/",
+    "releaseUrl": "https://github.com/Matawaka/route-story/releases/tag/v1.0.0",
+    "tag": "v1.0.0",
+    "publishedAt": "2026-10-09T09:37:08Z",
+    "deployment": {
+      "workflowUrl": "https://github.com/Matawaka/route-story/actions/runs/37901620765",
+      "deploymentId": 6955784587,
+      "headSha": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
+      "build": "success",
+      "deploy": "success",
+      "httpsAcceptance": "success",
+      "protectedHumanReviewCompleted": true,
+      "duplicateDispatch": false,
+      "humanReview": {
+        "state": "approved",
+        "reviewer": "Matawaka",
+        "environment": "github-pages"
+      }
+    },
+    "workflowSmoke": {
+      "status": "VERIFIED",
+      "scope": "public HTTPS",
+      "publicHttps": true,
+      "browser": {
+        "channel": "msedge",
+        "version": "153.0.4234.48"
+      },
+      "os": "Windows_NT 10.0.26100 x64",
+      "durationsSeconds": [
+        10,
+        10
+      ],
+      "packageHashesVerified": 10
+    },
+    "localPublicSmoke": {
+      "status": "VERIFIED",
+      "scope": "public HTTPS",
+      "publicHttps": true,
+      "browser": {
+        "channel": "msedge",
+        "version": "154.0.4258.62"
+      },
+      "os": "Windows_NT 10.0.26200 x64",
+      "durationsSeconds": [
+        10,
+        10
+      ]
+    },
+    "fullPublicAcceptance": {
+      "status": "VERIFIED",
+      "scope": "public HTTPS",
+      "publicHttps": true,
+      "os": "Windows_NT 10.0.26200 x64",
+      "physicalMobile": false,
+      "outputs": [
+        {
+          "name": "atlas-20s",
+          "source": "synthetic.gpx",
+          "sourceBytes": 897,
+          "sourceSha256": "a5aec675bbc85106fc1fa4e3dec45961f373ba2c4562a1216e1c1da43b259149",
+          "points": 9,
+          "title": "Учебный маршрут · ATLAS",
+          "style": "Атлас",
+          "aspect": "landscape",
+          "quality": "standard",
+          "phases": [
+            {
+              "phase": "INTRO",
+              "time": 1
+            },
+            {
+              "phase": "ROUTE_REPLAY",
+              "time": 10
+            },
+            {
+              "phase": "OUTRO",
+              "time": 19
+            }
+          ],
+          "exportMilliseconds": 1212.2999999970198,
+          "encoder": {
+            "codec": "avc1.42001f",
+            "width": 1280,
+            "height": 720,
+            "displayWidth": 1280,
+            "displayHeight": 720,
+            "bitrate": 5000000,
+            "bitrateMode": "variable",
+            "alpha": "discard",
+            "framerate": 24,
+            "avc": {
+              "format": "avc"
+            }
+          },
+          "video": {
+            "file": "atlas-20s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 20,
+            "decodedFrames": 480,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 480,
+            "firstFrameHash": "61b424c7c2cf24f458b791c7891f70fc",
+            "lastFrameHash": "601c1ce3f4ec77bb15f12a6a6870bbfb",
+            "bytes": 1553778,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers",
+            "sha256": "cc9eca7f4c39363997b2f51369f242f9ae9444eac94a1fc3c3b5395622d5c938"
+          },
+          "nativePlayback": {
+            "width": 1280,
+            "height": 720,
+            "duration": 20,
+            "pixelVariation": 81,
+            "playbackAdvancedSeconds": 0.1515740000000001
+          }
+        },
+        {
+          "name": "night-30s",
+          "source": "synthetic-antimeridian.gpx",
+          "sourceBytes": 5383,
+          "sourceSha256": "d9482d29de71796e50dacfc22fefe9b53ad02b0f9ce12312d0547eca7ebe50d8",
+          "points": 80,
+          "title": "Через 180° · NIGHT",
+          "style": "Ночной",
+          "aspect": "portrait",
+          "quality": "standard",
+          "phases": [
+            {
+              "phase": "INTRO",
+              "time": 1
+            },
+            {
+              "phase": "ROUTE_REPLAY",
+              "time": 15
+            },
+            {
+              "phase": "OUTRO",
+              "time": 29
+            }
+          ],
+          "exportMilliseconds": 1703.6000000014901,
+          "encoder": {
+            "codec": "avc1.42001f",
+            "width": 720,
+            "height": 1280,
+            "displayWidth": 720,
+            "displayHeight": 1280,
+            "bitrate": 5000000,
+            "bitrateMode": "variable",
+            "alpha": "discard",
+            "framerate": 24,
+            "avc": {
+              "format": "avc"
+            }
+          },
+          "video": {
+            "file": "night-30s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 30,
+            "decodedFrames": 720,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 720,
+            "firstFrameHash": "be4a32c680da5e6291bd4d655e59d9f9",
+            "lastFrameHash": "97dd75c47867c554fc77a0e9f997077f",
+            "bytes": 2282557,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers",
+            "sha256": "cb3d7553e859c2e4fe0ca469299a9eb126d9641d245ae9d8d2334195932b69fe"
+          },
+          "nativePlayback": {
+            "width": 720,
+            "height": 1280,
+            "duration": 30,
+            "pixelVariation": 62,
+            "playbackAdvancedSeconds": 0.15304300000000026
+          }
+        }
+      ],
+      "browser": {
+        "channel": "msedge",
+        "version": "154.0.4258.62"
+      },
+      "url": "https://matawaka.github.io/route-story/",
+      "secureContext": true,
+      "csp": {
+        "responseHeader": null,
+        "meta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+      },
+      "sourceCommit": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
+      "version": "1.0.0",
+      "packageBytes": 392336,
+      "packageHashesVerified": 10,
+      "cancelAndRecovery": "VERIFIED",
+      "unsupportedEncoder": "VERIFIED simulated unavailable API",
+      "privacy": {
+        "storage": {
+          "local": 0,
+          "session": 0,
+          "databases": [],
+          "caches": [],
+          "cookies": ""
+        },
+        "unexpectedRequests": [],
+        "badResponses": [],
+        "pageErrors": [],
+        "firstPartyBrowserRequests": 14,
+        "routeLostOnReload": true
+      }
+    },
+    "assets": [
+      {
+        "name": "atlas-20s.mp4",
+        "url": "https://github.com/Matawaka/route-story/releases/download/v1.0.0/atlas-20s.mp4",
+        "bytes": 1553778,
+        "sha256": "cc9eca7f4c39363997b2f51369f242f9ae9444eac94a1fc3c3b5395622d5c938",
+        "anonymousHttpStatus": 200,
+        "localHashMatches": true
+      },
+      {
+        "name": "atlas-20s.mp4.validation.json",
+        "url": "https://github.com/Matawaka/route-story/releases/download/v1.0.0/atlas-20s.mp4.validation.json",
+        "bytes": 1190,
+        "sha256": "5990f972f8411baf2d5b190c8ce083486007d6020415f5935702b221e9515fcc",
+        "anonymousHttpStatus": 200,
+        "localHashMatches": true
+      },
+      {
+        "name": "night-30s.mp4",
+        "url": "https://github.com/Matawaka/route-story/releases/download/v1.0.0/night-30s.mp4",
+        "bytes": 2282557,
+        "sha256": "cb3d7553e859c2e4fe0ca469299a9eb126d9641d245ae9d8d2334195932b69fe",
+        "anonymousHttpStatus": 200,
+        "localHashMatches": true
+      },
+      {
+        "name": "night-30s.mp4.validation.json",
+        "url": "https://github.com/Matawaka/route-story/releases/download/v1.0.0/night-30s.mp4.validation.json",
+        "bytes": 1191,
+        "sha256": "3fb396d1849e6a1693562e438633a755b6e0834e861710dab7a417b1eef6de38",
+        "anonymousHttpStatus": 200,
+        "localHashMatches": true
+      },
+      {
+        "name": "synthetic-antimeridian.gpx",
+        "url": "https://github.com/Matawaka/route-story/releases/download/v1.0.0/synthetic-antimeridian.gpx",
+        "bytes": 5383,
+        "sha256": "d9482d29de71796e50dacfc22fefe9b53ad02b0f9ce12312d0547eca7ebe50d8",
+        "anonymousHttpStatus": 200,
+        "localHashMatches": true
+      },
+      {
+        "name": "synthetic.gpx",
+        "url": "https://github.com/Matawaka/route-story/releases/download/v1.0.0/synthetic.gpx",
+        "bytes": 897,
+        "sha256": "a5aec675bbc85106fc1fa4e3dec45961f373ba2c4562a1216e1c1da43b259149",
+        "anonymousHttpStatus": 200,
+        "localHashMatches": true
+      },
+      {
+        "name": "route-story-v1.0.0.zip",
+        "url": "https://github.com/Matawaka/route-story/releases/download/v1.0.0/route-story-v1.0.0.zip",
+        "bytes": 3326982,
+        "sha256": "d50a3b54c022cae51068c6f86859dbf04d19d6faa758f8deb1d157d834fcdb8e",
+        "anonymousHttpStatus": 200,
+        "localHashMatches": true
+      },
+      {
+        "name": "SHA256SUMS.txt",
+        "url": "https://github.com/Matawaka/route-story/releases/download/v1.0.0/SHA256SUMS.txt",
+        "bytes": 614,
+        "sha256": "4f70e66517ed6a944e6bf11238cce370fb90cc4b62fb95b8a19ec959702508ae",
+        "anonymousHttpStatus": 200,
+        "localHashMatches": true
+      }
+    ],
+    "independentlyDecodedPublishedVideos": [
+      {
+        "name": "atlas-20s.mp4",
+        "codec": "h264",
+        "width": 1280,
+        "height": 720,
+        "duration": 20,
+        "frames": 480,
+        "fps": "24/1",
+        "frameTimestampsVerified": true
+      },
+      {
+        "name": "night-30s.mp4",
+        "codec": "h264",
+        "width": 720,
+        "height": 1280,
+        "duration": 30,
+        "frames": 720,
+        "fps": "24/1",
+        "frameTimestampsVerified": true
+      }
+    ],
+    "archive": {
+      "file": "route-story-v1.0.0.zip",
+      "bytes": 3326982,
+      "sha256": "d50a3b54c022cae51068c6f86859dbf04d19d6faa758f8deb1d157d834fcdb8e",
+      "entries": 19,
+      "sourceCommit": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
+      "entryHashesVerified": true
+    },
+    "reviewedFramesSeconds": {
+      "atlas": [
+        1,
+        10,
+        19
+      ],
+      "night": [
+        1,
+        15,
+        29
+      ]
+    },
+    "memory": {
+      "jsHeap": "NOT MEASURED in this acceptance",
+      "nativeProcess": "NOT MEASURED in this acceptance",
+      "gpu": "NOT MEASURED"
+    },
+    "physicalAndroid": "NOT TESTED",
+    "physicalIosSafari": "NOT TESTED",
+    "retailSafari": "NOT TESTED",
+    "documentationPr": "https://github.com/Matawaka/route-story/pull/5",
+    "competitionSubmission": "NOT SUBMITTED",
+    "rulesSource": "owner-provided announcement; original private Telegram post URL/access pending",
+    "regression": {
+      "command": "$env:PLAYWRIGHT_CHANNEL='msedge'; npm.cmd run check",
+      "checkoutHeadAtExecution": "b044efc36f30dcdca7c27dfca790602d373f4601",
+      "unitPassed": 92,
+      "browserPassed": 23,
+      "browserSkipped": 3,
+      "failed": 0,
+      "productionBuild": "passed",
+      "browserSuiteSeconds": 27.4,
+      "scope": "local unchanged application regression; public acceptance recorded separately"
+    }
+  },
   "sprint5Preparation": {
     "reviewedMainCommit": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
     "finalSprint4Head": "3e4d6cb44b654c1b0a5616d20049a3a49e8916ff",
@@ -30,7 +384,10 @@
       "packageBytes": 392837,
       "scope": "local production subpath",
       "publicHttps": false,
-      "smokeDurationsSeconds": [10, 10],
+      "smokeDurationsSeconds": [
+        10,
+        10
+      ],
       "nativePlaybackAndIndependentDecode": "passed"
     },
     "environmentReadBack": {

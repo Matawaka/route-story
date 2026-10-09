@@ -1,10 +1,10 @@
 # Воспроизводимая демонстрация Route Story
 
-Публичный HTTPS URL: **PENDING — публикация требует отдельного разрешения владельца**. Все sprint PR объединены. До публикации используйте проверенный commit `5f39332b7358949d248da6b2f99ba445ee1b41e8` и команды чистого запуска из [README](../README.md): `npm.cmd ci`, `npm.cmd run build`, `npm.cmd run preview`. Адрес выводит Vite. Локальное прохождение не заменяет проверку публичного приложения. После deployment фактический URL и публичные видео будут записаны в [COMPETITION_DELIVERY](COMPETITION_DELIVERY.md).
+Публичный HTTPS URL: **[matawaka.github.io/route-story](https://matawaka.github.io/route-story/)**, проверен анонимно. Выпуск [v1.0.0](https://github.com/Matawaka/route-story/releases/tag/v1.0.0) соответствует commit `5f39332b7358949d248da6b2f99ba445ee1b41e8`. Полные Atlas 20s / Night 30s созданы через этот сайт и проверены независимо. Для воспроизведения из исходников используйте чистый запуск tag v1.0.0 из [README](../README.md); локальный запуск не заменяет публичную приёмку. Доказательства: [COMPETITION_DELIVERY](COMPETITION_DELIVERY.md).
 
 Используйте только явно синтетические файлы: [synthetic.gpx](../public/samples/synthetic.gpx) (9 точек) и [synthetic-antimeridian.gpx](../public/samples/synthetic-antimeridian.gpx) (80 точек). Это настоящие GPX 1.1 с географическими координатами и высотой, но не реальные поездки/личная история. Сохраните Raw-файл с расширением `.gpx`; встроенная кнопка учебного примера загружает первый файл локально с сайта. Авторство синтетических данных — Route Story, MIT.
 
-1. Откройте фактически опубликованный HTTPS URL без входа в GitHub; до публикации используйте localhost.
+1. Откройте [публичное приложение](https://matawaka.github.io/route-story/) без входа в GitHub.
 2. Выберите GPX-файл `synthetic.gpx`. Убедитесь, что появились исходная геометрия, старт/финиш, расстояние и набор высоты по данным GPX.
 3. Выберите «Атлас».
 4. Задайте название `Учебный маршрут · ATLAS`.
