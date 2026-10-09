@@ -1,5 +1,9 @@
 # Decisions
 
+## Sprint9 accepted-main public/device results
+
+Personal owner approval completed protected run37962492130;actual Pages source8f4d0f6/1.1.0-rc.1 verified anonymously with19hashes,public2D smoke and full3D20/30sMP4 independently decoded. Preserve local/remote evidence separately,metaCSP versus absentheaderCSP correctly. Owner reports successful Xiaomi14/Pad2/MacBookM2/all checked video qualities/aspects,Chrome/Brave/Safari; missing versions/pairings/OS/GPU stay unknown. This satisfies requested owner-run device checks, not every browser/device combination or photo-v1.2 acceptance. Version promotion remains independentPR8; final merge/release authorization still required. No duplicate workflow/automatic environment approval/stabletag move.
+
 ## Sprint9: separate accepted release stabilization from imagery development
 
 Promote accepted merged main8f4d0f6 package/lock to1.1.0 in an independent stabilization PR. Main push CI must pass; required device results and final owner release approval remain explicit publication gates. Historical evidence and immutable v1.0 stay intact. Existing manual protected Pages workflow is unchanged. A configurable acceptance-output directory preserves prior video evidence when repeating current-version checks. Phototextured v1.2 work starts independently from merged main, never absorbs documentation PR5 or promises physical/mobile support without tests.

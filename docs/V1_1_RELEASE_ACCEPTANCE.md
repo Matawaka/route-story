@@ -1,5 +1,19 @@
 # v1.1.0 release readiness
 
+## Current public and device checkpoint — 2026-10-09
+
+The owner personally approved protected run [37962492130](https://github.com/Matawaka/route-story/actions/runs/37962492130). Build/deploy/HTTPS acceptance **SUCCESS**. Actual returned URL [https://matawaka.github.io/route-story/](https://matawaka.github.io/route-story/) anonymously verified; release.json1.1.0-rc.1/exact accepted main8f4d0f6,19manifest hashes,4774481B. This is accepted DEM-only code, no photo-v1.2 deployment. Stablev1.0 tag/release assets are immutable; the public app has advanced to the accepted3D candidate.
+
+Independent Windows10.0.26200/Edge154.0.4258.62 `APP_URL=... EXPECTED_COMMIT=8f4d0f6 EXPECTED_VERSION=1.1.0-rc.1 node scripts/acceptance/release.mjs --smoke` passed anonymous200/secure context/assets/hashes/licenses/metaCSP/no external requests/storage,controls/cancelretry/unsupported-encoder simulation/native playback and two real10sStandard MP4s. HTTP response CSP header was absent; restrictive HTML meta CSP observed. `APP_URL=... EXPECTED_COMMIT=8f4d0f6 node scripts/acceptance/terrain.mjs --production` also passed full real public3D Atlas20s1280×720/480frames/12812946B/export1238.7ms and Night30s720×1280/720frames/17894633B/export1755.8ms. Both H264/24fps/alltimestamps/everyframe FFmpeg6.1.1 decoded,minimum central-map luma spread129/155,no missing responses/external calls/storage. Actual public file SHA256 Atlas`dcb982a2ed6ad8b14c7fcfcbf7b89721679865c67ba7207b28f49d77136ab938`,Night`2be3efe61ff42e39de200cad76200d543bf8d16f6112f65e81d221db6b80a0c8`. One-off times are not benchmarks. A first full run hit navigation timeout; bounded DOM-readiness retry passed, not a hidden initial success.
+
+Owner explicitly reports **all requested checks and video qualities/aspects passed on Xiaomi14,XiaomiPad2,MacBookM2**, using Chrome,Brave,Safari. This is owner-run aggregate acceptance on the public candidate. OS/browser versions,individual device-browser pairing,GPU/thermal/memory measurements were not provided; do not fabricate them or extend this result to physicaliOS/other Safari/Android builds. No known owner-reported blocker. [Sanitized public/device evidence](V1_1_PUBLIC_ACCEPTANCE.json) preserves historical local results separately.
+
+Required device gate is satisfied by the owner's report. **Final stable publication still PENDING**: owner reviews/authorizes merging this version-only PR8, exact resulting main passesCI/package validation, final stable release approved. Existing human-reviewed workflow must be reused for that exact SHA; no second deployment system, auto merge, movedv1.0 tag or photo publication. The sections below are the historical pre-deployment checkpoint/checklist and local proof; completed public/device results above supersede their PENDING fields.
+
+Remote acceptance tooling now supports APP_URL/EXPECTED_COMMIT/output-folder overrides without source-module imports or mutation of production UI/export settings. `ACCEPTANCE_DIR` preserves prior local and public reports; in PowerShell use `$env:NAME='value'`.
+
+## Historical pre-deployment readiness and checklist
+
 Sprint7/8 were accepted and merged by the owner. Reviewed main is `8f4d0f665d3f6df7f9fdef0d356a33310d2800ab`; [main-push CI37958144808](https://github.com/Matawaka/route-story/actions/runs/37958144808) is SUCCESS. PR6 merge `ff6c76d7cad6454b42134bb9ea8cb554be7db277`, PR7 merge `8f4d0f6…`. The independent documentation PR5 remains open and is not included here.
 
 This stabilization promotes package/lockfile to1.1.0 without changing rendering. Published v1.0.0, its assets/tag and protected manual Pages workflow remain unchanged. Publication is **PENDING**: required owner-run device acceptance and final owner approval are outstanding. A passing desktop test is not physical-device verification.

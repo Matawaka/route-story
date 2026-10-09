@@ -1,5 +1,13 @@
 # Implementation state
 
+## Sprint9 v1.1 public/device readiness — 2026-10-09
+
+Independent stabilization branch codex/route-story-v1.1-stabilization, previousHEADb547cc0df76baa912b3fdc74bcb1e668287053ed,PR8OPEN;previousCI37964660160SUCCESS. No v1.2 implementation/PR5 changes absorbed. Main8f4d0f6 unchanged. Protected run37962492130 approved personally by owner:build/deploy/https-acceptanceSUCCESS;actualURL https://matawaka.github.io/route-story/ verified anonymously,release.json1.1.0-rc.1/source8f4d0f6,19hashes4774481B.
+
+Public smoke via release.mjs and full terrain.mjs actualHTTPS passed,raw artifacts/sprint9/public-v1.1[-terrain],sanitized V1_1_PUBLIC_ACCEPTANCE.json. Atlas20s720p480frames12812946B/1238.7ms,Night30s720p720frames17894633B/1755.8ms,H26424fps/FFmpegallframes/timestamps,no external/storage/overflow. First full navigation timed out; bounded DOM-readiness retry passed. HeaderCSP absent/metaCSP restrictive,reported accurately. Test-only remote acceptance/output-directory extension included here, no rendering/exporter/settings changes.
+
+Owner reports successful Xiaomi14/Pad2/MacBookM2 checklist/all export qualities/aspects; Chrome/Brave/Safari. Versions,OS,GPU and device-browser pairing NOT PROVIDED; no iPhone/iPad or photo-v1.2 inference. Required device gate accepted from actual owner report; final stable tag/publication and mergePR8 still require final owner authorization/new exact-mainCI. v1.0tag/assets immutable. Local final `PLAYWRIGHT_CHANNEL=msedge npm.cmd run check`:131unit/build/35browser pass,3intentional skips,59.0s browser suite; package allowlist/remote CI checked separately. Do not substitute branch CI for future mergedmainSHA.
+
 ## Sprint9 stabilization — 2026-10-09
 
 Owner reports Xiaomi14, XiaomiPad2, MacBookM2 and asks deployment first for external tests. Accepted main8f4d0f6 manual run37962492130 dispatched once with reverified exact successful main CI/Pages Actions/main-only environment/Matawaka reviewer; build SUCCESS/deploy WAITING owner. Supersedes pre-deployment device ordering; stablev1.1 tag/release still PENDING device results and final approval. PR8 not merged; source version main remains1.1.0-rc.1. This PR consistently promotes package/lock/footer to1.1.0. Independent v1.2 prototype107b409/f4bb3ae not included and not deployed; no duplicate workflow/run or environment bypass. Final footer build/browser/package recheck follows; current exact HEAD is read from Git.

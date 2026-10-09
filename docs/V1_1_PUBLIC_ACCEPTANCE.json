@@ -1,0 +1,268 @@
+{
+  "date": "2026-10-09",
+  "deployedSource": "8f4d0f665d3f6df7f9fdef0d356a33310d2800ab",
+  "deploymentRun": "https://github.com/Matawaka/route-story/actions/runs/37962492130",
+  "smoke": {
+    "status": "VERIFIED",
+    "scope": "public HTTPS",
+    "publicHttps": true,
+    "os": "Windows_NT 10.0.26200 x64",
+    "physicalMobile": false,
+    "outputs": [
+      {
+        "name": "atlas-20s",
+        "source": "synthetic.gpx",
+        "sourceBytes": 897,
+        "sourceSha256": "a5aec675bbc85106fc1fa4e3dec45961f373ba2c4562a1216e1c1da43b259149",
+        "points": 9,
+        "title": "Учебный маршрут · ATLAS",
+        "style": "Атлас",
+        "aspect": "landscape",
+        "quality": "standard",
+        "phases": [
+          {
+            "phase": "INTRO",
+            "time": 1
+          },
+          {
+            "phase": "ROUTE_REPLAY",
+            "time": 5
+          },
+          {
+            "phase": "OUTRO",
+            "time": 9
+          }
+        ],
+        "exportMilliseconds": 2855.6000000089407,
+        "encoder": {
+          "codec": "avc1.42001f",
+          "width": 1280,
+          "height": 720,
+          "displayWidth": 1280,
+          "displayHeight": 720,
+          "bitrate": 5000000,
+          "bitrateMode": "variable",
+          "alpha": "discard",
+          "framerate": 24,
+          "avc": {
+            "format": "avc"
+          }
+        },
+        "video": {
+          "file": "artifacts/sprint9/public-v1.1/smoke-atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "963ce10d5109141d09df2cf40758dbf6",
+          "lastFrameHash": "c5445fc7dd43ea0c2ccba875e7aa0c82",
+          "bytes": 4570349,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "nativePlayback": {
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "pixelVariation": 95,
+          "playbackAdvancedSeconds": 0.15688999999999975
+        }
+      },
+      {
+        "name": "night-30s",
+        "source": "synthetic-antimeridian.gpx",
+        "sourceBytes": 5383,
+        "sourceSha256": "d9482d29de71796e50dacfc22fefe9b53ad02b0f9ce12312d0547eca7ebe50d8",
+        "points": 80,
+        "title": "Через 180° · NIGHT",
+        "style": "Ночной",
+        "aspect": "portrait",
+        "quality": "standard",
+        "phases": [
+          {
+            "phase": "INTRO",
+            "time": 1
+          },
+          {
+            "phase": "ROUTE_REPLAY",
+            "time": 5
+          },
+          {
+            "phase": "OUTRO",
+            "time": 9
+          }
+        ],
+        "exportMilliseconds": 6489.100000008941,
+        "encoder": {
+          "codec": "avc1.42001f",
+          "width": 720,
+          "height": 1280,
+          "displayWidth": 720,
+          "displayHeight": 1280,
+          "bitrate": 5000000,
+          "bitrateMode": "variable",
+          "alpha": "discard",
+          "framerate": 24,
+          "avc": {
+            "format": "avc"
+          }
+        },
+        "video": {
+          "file": "artifacts/sprint9/public-v1.1/smoke-night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "b57349c275d5fd85ca068eb5bf41fe65",
+          "lastFrameHash": "5a37746709e7b017e8d097352bbddf11",
+          "bytes": 3257626,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "nativePlayback": {
+          "width": 720,
+          "height": 1280,
+          "duration": 10,
+          "pixelVariation": 101,
+          "playbackAdvancedSeconds": 0.15716199999999958
+        }
+      }
+    ],
+    "browser": {
+      "channel": "msedge",
+      "version": "154.0.4258.62"
+    },
+    "url": "https://matawaka.github.io/route-story/",
+    "secureContext": true,
+    "csp": {
+      "responseHeader": null,
+      "meta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    },
+    "sourceCommit": "8f4d0f665d3f6df7f9fdef0d356a33310d2800ab",
+    "version": "1.1.0-rc.1",
+    "packageBytes": 4774481,
+    "packageHashesVerified": 19,
+    "cancelAndRecovery": "VERIFIED",
+    "unsupportedEncoder": "VERIFIED simulated unavailable API",
+    "privacy": {
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "databases": [],
+        "caches": [],
+        "cookies": ""
+      },
+      "unexpectedRequests": [],
+      "badResponses": [],
+      "pageErrors": [],
+      "firstPartyBrowserRequests": 18,
+      "routeLostOnReload": true
+    }
+  },
+  "fullTerrain": {
+    "sourceCommit": "8f4d0f665d3f6df7f9fdef0d356a33310d2800ab",
+    "acceptanceToolCommit": "99d8d7ea65cbbe66b6561a98c6fbc77a8b013270",
+    "uncommitted": true,
+    "scope": "public HTTPS",
+    "url": "https://matawaka.github.io/route-story/",
+    "publicHttps": true,
+    "packageBytes": 4774481,
+    "manifestHashes": 19,
+    "os": "Windows_NT 10.0.26200 x64",
+    "browser": "Edge 154.0.4258.62",
+    "errors": [],
+    "external": [],
+    "badResponses": [],
+    "storage": {
+      "local": 0,
+      "session": 0,
+      "databases": []
+    },
+    "mobileViewportOverflow": false,
+    "reports": [
+      {
+        "style": "atlas",
+        "aspect": "landscape",
+        "duration": 20,
+        "video": {
+          "file": "artifacts/sprint9/public-v1.1-terrain/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "fbd4229a47f7263841aaa6a99f118eca",
+          "lastFrameHash": "c309dd35efaef890d8524051309f9b8e",
+          "bytes": 12812946,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "minimumMapLumaSpread": 129,
+        "sha256": "dcb982a2ed6ad8b14c7fcfcbf7b89721679865c67ba7207b28f49d77136ab938",
+        "exportMs": 1238.7000000029802
+      },
+      {
+        "style": "night",
+        "aspect": "portrait",
+        "duration": 30,
+        "video": {
+          "file": "artifacts/sprint9/public-v1.1-terrain/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "45f6af8333c40b33ec5d350a57ba2484",
+          "lastFrameHash": "24e564a7073988fbfc3807d80c7656aa",
+          "bytes": 17894633,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "minimumMapLumaSpread": 155,
+        "sha256": "2be3efe61ff42e39de200cad76200d543bf8d16f6112f65e81d221db6b80a0c8",
+        "exportMs": 1755.7999999970198
+      }
+    ]
+  },
+  "ownerDeviceAcceptance": {
+    "devices": [
+      "Xiaomi14",
+      "XiaomiPad2",
+      "MacBookM2"
+    ],
+    "reportedBrowsers": [
+      "Chrome",
+      "Brave",
+      "Safari"
+    ],
+    "result": "Owner reports all checklist checks/video qualities/aspects passed on all devices",
+    "osVersions": "NOT PROVIDED",
+    "browserVersions": "NOT PROVIDED",
+    "deviceBrowserPairing": "NOT PROVIDED",
+    "method": "Owner-run report, not agent-controlled measurement",
+    "v12PhotoCandidate": "NOT TESTED"
+  },
+  "finalStablePublication": "PENDING final owner approval and PR8 merge/new exact-main CI"
+}
