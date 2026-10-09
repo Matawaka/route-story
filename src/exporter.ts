@@ -2,6 +2,7 @@
 // Copyright (c) 2026 topmonroe9. MIT; see licenses/TRAVEL_ANIMATION.txt.
 import { BufferTarget, CanvasSource, Mp4OutputFormat, Output, Quality } from 'mediabunny';
 import { exportSettings, MAX_VIDEO_BYTES, regressionStoryConfig, validateStoryConfig, type StoryConfig } from './story';
+import { normalizeAvcDescription } from './avc';
 
 const BITRATE = 1_500_000;
 const CODECS = ['avc1.42001f', 'avc1.4d001f', 'avc1.64001f'];
@@ -39,7 +40,10 @@ export async function exportVideo(options: {
   const output = new Output({ format: new Mp4OutputFormat({ fastStart: 'in-memory' }), target });
   let encodedBytes = 0;
   const source = new CanvasSource(canvas, { codec: 'avc', fullCodecString: codec, quality: new Quality({ bitrate }), keyFrameInterval: 2,
-    onEncodedPacket: packet => { encodedBytes += packet.data.byteLength; if (encodedBytes > MAX_VIDEO_BYTES) throw new Error('Видео превысило лимит 32 МиБ. Выберите более короткое видео или совместимое качество.'); }
+    onEncodedPacket: (packet, metadata) => {
+      if (metadata?.decoderConfig?.description) metadata.decoderConfig.description = normalizeAvcDescription(metadata.decoderConfig.description);
+      encodedBytes += packet.data.byteLength; if (encodedBytes > MAX_VIDEO_BYTES) throw new Error('Видео превысило лимит 32 МиБ. Выберите более короткое видео или совместимое качество.');
+    }
   });
   output.addVideoTrack(source, { frameRate: fps });
   let complete = false;

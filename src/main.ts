@@ -1,6 +1,6 @@
 import { readGpx, parseGpx } from './gpx';
 import { detectEncoder, downloadVideo, exportVideo } from './exporter';
-import { RouteRenderer, formatKm, type Land, type VisualStyle } from './renderer';
+import { RouteRenderer, formatDistance, type Land, type VisualStyle } from './renderer';
 import type { Route } from './route';
 import { defaultStoryConfig, exportSettings, formatVideoTime, validateStoryConfig, videoFilename, type StoryConfig } from './story';
 import './style.css';
@@ -49,7 +49,7 @@ async function importRoute(read: () => Promise<Route>, synthetic = false) {
   try {
     const loaded = await read(); await landPromise; if (currentLoad !== loadId) return;
     route = loaded; story = validateStoryConfig({ ...story, title: loaded.name }); title.value = story.title; title.disabled = false; loading = false; scrub.value = duration.value; canvas.hidden = false; el('empty').hidden = true; el('facts').hidden = false; play.disabled = scrub.disabled = false;
-    el('distance').textContent = `${formatKm(route.distanceKm)} км`; el('segments').textContent = String(route.segments.length);
+    el('distance').textContent = formatDistance(route.distanceKm); el('segments').textContent = String(route.segments.length);
     el('metric-name').textContent = route.elevationGain !== undefined ? 'Набор высоты по GPX' : 'Точки маршрута';
     el('metric-value').textContent = route.elevationGain !== undefined ? `${Math.round(route.elevationGain).toLocaleString('ru-RU')} м` : route.pointCount.toLocaleString('ru-RU');
     el('route-info').textContent = `${route.name} · ${route.pointCount.toLocaleString('ru-RU')} точек${synthetic ? ' · синтетический пример' : ''}`;
@@ -57,6 +57,8 @@ async function importRoute(read: () => Promise<Route>, synthetic = false) {
   } catch (error) {
     if (currentLoad !== loadId) return;
     route = undefined; renderer?.dispose(); renderer = undefined; canvas.hidden = true; el('empty').hidden = false; el('facts').hidden = true;
+    // Release the visible canvas's last route image as well as the private render caches.
+    canvas.width = canvas.height = 0; delete canvas.dataset.phase; canvas.setAttribute('aria-label', 'Карта маршрута со стартом и финишем');
     play.disabled = scrub.disabled = title.disabled = true; el('route-info').textContent = 'Файл не принят. Выберите другой GPX.'; message((error as Error).message, true);
   } finally { if (currentLoad === loadId) loading = false; }
 }

@@ -47,8 +47,10 @@ export function fitProjection(segments: RoutePoint[][], width: number, height: n
   for (const p of points) { const x = localLon(p.lon); west = Math.min(west, x); east = Math.max(east, x); }
   const margin = Math.min(width, height) * 0.12;
   const top = height * 0.25, bottom = height * 0.76;
-  // Minimum span gives stationary / duplicate-point routes a finite, useful view.
-  const spanX = Math.max((east - west) * cos, 0.01), spanY = Math.max(north - south, 0.01);
+  // Bound extreme zoom, but do not hide metre-scale tracks in a kilometre-wide view.
+  // Stationary geometry keeps the previous finite overview; source points are unchanged.
+  const minimumSpan = east === west && north === south ? 0.01 : 0.0001;
+  const spanX = Math.max((east - west) * cos, minimumSpan), spanY = Math.max(north - south, minimumSpan);
   const scale = Math.min((width - margin * 2) / spanX, (bottom - top) / spanY);
   const project = (p: RoutePoint): [number, number] => [width / 2 + (localLon(p.lon) - (west + east) / 2) * cos * scale, (top + bottom) / 2 - (p.lat - middleLat) * scale];
   return { project, localLon, scale, cos, center, middleLat };
