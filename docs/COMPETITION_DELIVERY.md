@@ -9,7 +9,7 @@
 - Проверенный main: `dd86c372b6d6c757d7327e22366b402f60ad9b4e`; [main CI](https://github.com/Matawaka/route-story/actions/runs/37889234952) SUCCESS. Его дерево совпадает со Sprint 3 `488db3b327b37379c3a225ecaaa3984210145012`.
 - Release branch: `release/route-story-v1`, от этого main. Стек предыдущих PR больше не блокирует выпуск.
 - Точный commit идентифицированной локальной release-приёмки: `67d1726662742af33066df8cffde331a4270f77b`, подтверждён в origin. Последующие изменения README/журнала/доказательств не изменяют production-приложение.
-- Release PR: **PENDING — ссылка будет добавлена после создания**. Проверки final main после его разрешённого слияния: **PENDING**.
+- Release PR: [#4 — Prepare Route Story v1 release and gated HTTPS acceptance](https://github.com/Matawaka/route-story/pull/4), OPEN, base main. [Release CI](https://github.com/Matawaka/route-story/actions/runs/37894192261) для checkpoint `050b364a099820bcf84363f41c055602506e7b74` — SUCCESS: clean install, 92 unit / 23 browser pass, build pass, 3 intentional skips, 36.7s browser suite. Последующий handover-only commit не меняет проверенное приложение. Проверки final main после его разрешённого слияния: **PENDING**.
 - Публичный HTTPS URL и GitHub Release: **PENDING**. Предполагаемый адрес не выдаётся за существующий.
 
 ## Обязательные материалы

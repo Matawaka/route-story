@@ -2,7 +2,7 @@
 
 Локальный GPS Route Story Engine от Matawaka. Загрузите GPX, отредактируйте название, выберите 10, 20 или 30 секунд, «Атлас» или «Ночной» и сохраните H.264 MP4 в формате 16:9 или 9:16. Русский интерфейс, Canvas 2D, без обязательного сервера и платных API.
 
-**Публичное приложение: PENDING.** GitHub Pages ещё не опубликован; проверенного HTTPS URL пока нет. Готовится выпуск 1.0 в ветке `release/route-story-v1`. Sprint 1–3 уже объединены владельцем в main (`dd86c372b6d6c757d7327e22366b402f60ad9b4e`); release PR и публикация требуют отдельного разрешения. Точный статус, ссылки и результаты: [COMPETITION_DELIVERY](docs/COMPETITION_DELIVERY.md).
+**Публичное приложение: PENDING.** GitHub Pages ещё не опубликован; проверенного HTTPS URL пока нет. Готовится выпуск 1.0 в ветке `release/route-story-v1`, [release PR #4](https://github.com/Matawaka/route-story/pull/4). Sprint 1–3 уже объединены владельцем в main (`dd86c372b6d6c757d7327e22366b402f60ad9b4e`); release PR и публикация требуют отдельного разрешения. Точный статус, ссылки и результаты: [COMPETITION_DELIVERY](docs/COMPETITION_DELIVERY.md).
 
 ![Проверенный production-предпросмотр синтетического маршрута](docs/images/route-story.png)
 
