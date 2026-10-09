@@ -4,6 +4,8 @@ Sprint7/8 were accepted and merged by the owner. Reviewed main is `8f4d0f665d3f6
 
 This stabilization promotes package/lockfile to1.1.0 without changing rendering. Published v1.0.0, its assets/tag and protected manual Pages workflow remain unchanged. Publication is **PENDING**: required owner-run device acceptance and final owner approval are outstanding. A passing desktop test is not physical-device verification.
 
+Owner follow-up authorizes **candidate deployment before device checks** to enable external testing on reported Xiaomi14, XiaomiPad2 and MacBookM2. These are available-device statements, not acceptance results. Protected manual run [37962492130](https://github.com/Matawaka/route-story/actions/runs/37962492130) builds accepted main8f4d0f6 (still1.1.0-rc.1), build SUCCESS/deploy WAITING owner review as of this checkpoint. This permission does not merge PR8, deploy v1.2 or publish the final stable tag. After owner approval, inspect actual returned URL/source manifest and public HTTPS acceptance; never label a pending deployment successful.
+
 ## Owner-run checklist
 
 Use this candidate's local preview on an ordinary laptop. For a physical phone, use an owner-approved HTTPS candidate or a secure local test arrangement; plain LAN HTTP cannot test WebCodecs. Do not deploy to bypass this requirement. The existing public site remains v1.0 until an approved release.

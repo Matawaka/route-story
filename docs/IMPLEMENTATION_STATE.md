@@ -2,6 +2,8 @@
 
 ## Sprint9 stabilization — 2026-10-09
 
+Owner reports Xiaomi14, XiaomiPad2, MacBookM2 and asks deployment first for external tests. Accepted main8f4d0f6 manual run37962492130 dispatched once with reverified exact successful main CI/Pages Actions/main-only environment/Matawaka reviewer; build SUCCESS/deploy WAITING owner. Supersedes pre-deployment device ordering; stablev1.1 tag/release still PENDING device results and final approval. PR8 not merged; source version main remains1.1.0-rc.1. This PR consistently promotes package/lock/footer to1.1.0. Independent v1.2 prototype107b409/f4bb3ae not included and not deployed; no duplicate workflow/run or environment bypass. Final footer build/browser/package recheck follows; current exact HEAD is read from Git.
+
 Current-version local production at clean `a9d480eab25b54145b25ed6396a0f5a091b75224` PASS: Atlas20s1280×720480frames12812946B1198.1ms; Night30s720×1280720frames17894633B1771.0ms,H.26424fps independently decodedFFmpeg6.1.1.19manifest hashes/4775792B, no errors/network/storage/overflow. New hashes and commands in V1_1_RELEASE_ACCEPTANCE.md; historical Sprint8 evidence preserved. Record-only followup follows. Publication/device results still PENDING.
 
 Owner accepted/merged Sprint7/8. Actual remote main `8f4d0f665d3f6df7f9fdef0d356a33310d2800ab`; main-push CI [37958144808](https://github.com/Matawaka/route-story/actions/runs/37958144808) SUCCESS (windows-edge). PR6/7 MERGED preserving history. PR5 remains OPEN at e684719, independent and not absorbed. Local main fast-forwarded; new branch `codex/route-story-v1.1-stabilization` starts at that exact SHA. Rendering/public source tree equals the accepted Sprint8 head40aa937; no renderer changes in stabilization.
