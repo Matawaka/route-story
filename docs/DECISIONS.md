@@ -1,5 +1,19 @@
 # Decisions
 
+## Sprint 8: genuine bounded DEM mesh and safe timestamp camera
+
+Owner accepts Sprint7 visual cost and explicitly requests terrain3D. Static Canvas cannot represent a genuine height surface/depth camera; this is the concrete reason for the documented Three exception. Stack feature/terrain-aware-3d/PR#7 on accepted PR#6 a704f67. Stable main/tag/Pages5f39332/v1.0.0, public assets, manual workflow/protected environment and unrelated PR#5 remain unchanged. No merge/publication/contest repost.
+
+Read official Kartverket DTM10 annual2020 cell6800-3 metadata/free-product terms/CC BY4. Keep original110MB ignored; publish reviewed30×40km50m/100m derivative grids, source/asset hashes, attribution and processing changes. EPSG25833→local tangent metres; heights1:1. Supplied2020 metadata/raster do not identify vertical datum; record it as unspecified, do not assertNN2000 or overwrite GPX elevation. No navigation/survey/bridge-tunnel/bathymetry claims.
+
+Both real MapLibre raster-dem and Three4s3D MP4 proofs decode independently. Choose exact Three0.186.1/MIT for bounded mesh/camera/triangle LOS access and explicit disposal. One-tile MapLibre readiness/query is not a verified whole-route tile pipeline; unselected engine is not distributed. Preserve Mediabunny/H.264, sequential awaited optional draw barrier, allfps/duration/size/frame/payload limits. Static package remains<5MiB, so no limit revision.
+
+Pure terrain camera uses actual local relief, smoothed per-segment direction/look-ahead, perspective fit, globalmaxDEM+350m flight envelope and exact grid/triangle-ray occlusion checks. Final pose ignores playback history. Intro/outro gaze clamps above mesh+24m; real full-timeline audit found/fixed a ridge-target singularity missed by replay-only tests. Reject missing/out-of-bounds heights, non-finite/>80km flight and excessivegeometry; explicitly recover in2D with source/config retained. Auto uses route-local≥100m relief and explains fallback. Classic/reduced-motion retained.
+
+Depth-tested subdivided ribbon retains everyGPXedge/segment and geographic distance;≤200k extra1px centre-trace vertices improve overview without defeating occlusion. Destination-resolution normals/light/height contours and compact screen-space overlays; regional edge fade is presentation only. No textures, fabricated roads/places, historical weather, GPU fingerprint collection or remote assets.
+
+Profiled temporary index arrays/per-vertex colour objects justify typed-index/scalar-colour allocation only, not a framework rewrite. Final same-route RTX3090 measurements show fasterGPUexport but heavier preparation/native memory: private-commit peak1.145GB vs2D0.877GB. Separate heap/process sums/VRAM-unmeasured/cache retention; no universal memory-safety claim. Full videos/contact sheets/safety/evidence in TERRAIN_CAMERA_VALIDATION.md/TERRAIN_PERFORMANCE.md/TERRAIN_EVIDENCE.json. Await owner's full-video visual review before merge or deployment.
+
 ## Sprint 7: cinematic camera and bounded local cartography
 
 Owner replaces release freeze with v1.1 visual development. Stable main/tag5f39332 and published v1.0.0/Pages remain unchanged; PR #5 docs stay separate. New branch feature/cinematic-route-story-v1.1 / PR #6 targets main. No merge/publication/contest repost authorization. Owner reports the competition comment already submitted.

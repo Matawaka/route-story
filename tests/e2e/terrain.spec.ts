@@ -14,14 +14,16 @@ test('real terrain: both LODs/styles/aspects have deterministic ready frames and
     const mesh=r.scene.children.find((m:any)=>m.material?.type==='ShaderMaterial') as any;
     r.draw(canvas,0);let framed=true;for(const segment of route.segments)for(const p of segment){const xy=r.terrain.world(p),v=r.camera.position.clone().set(xy[0],r.terrain.meshElevation(xy)!+24,-xy[1]).project(r.camera),x=(v.x+1)*w/2,y=(1-v.y)*h/2;framed&&=x>w*.035&&x<w*.965&&y>Math.min(w,h)*.2&&y<h-Math.min(w,h)*.27;}
     const locations=route.segments.map((s:any[])=>s.map(p=>[p.lon,p.lat,p.elevation])),sourcesUnchanged=JSON.stringify(locations)===JSON.stringify(parseGpx(await(await fetch('/samples/terrain-sogne.gpx')).text()).segments.map((s:any[])=>s.map(p=>[p.lon,p.lat,p.elevation])));
-    results.push({same:direct===backward,highlighted,framed,depthTest:mesh.material.depthTest,level:r.terrain.level.spacingMeters,sourcesUnchanged});
+    const positions=r.terrainGeometry.getAttribute('position'),normals=r.terrainGeometry.getAttribute('normal'),indices=r.terrainGeometry.getIndex()!,a=indices.getX(0),b=indices.getX(1),d=indices.getX(2),upward=(positions.getZ(b)-positions.getZ(a))*(positions.getX(d)-positions.getX(a))-(positions.getX(b)-positions.getX(a))*(positions.getZ(d)-positions.getZ(a));
+    const geometryValid=positions.count===r.terrain.level.width*r.terrain.level.height&&Array.from(positions.array).every(Number.isFinite)&&Array.from(normals.array).every(Number.isFinite)&&Array.from(indices.array).every(i=>i<positions.count)&&upward>0;
+    results.push({same:direct===backward,highlighted,framed,depthTest:mesh.material.depthTest,level:r.terrain.level.spacingMeters,sourcesUnchanged,geometryValid});
    }finally{r.dispose();}
   }
   const config={...defaultStoryConfig(),cameraMode:'terrain',durationSeconds:4,introSeconds:0,outroSeconds:0},r=new TerrainRenderer(route,await loadTerrain('compatibility'),640,360,config),c=document.createElement('canvas');r.draw(c,1);const reference=c.toDataURL();let equivalent=false;
   try{await exportVideo({config,draw:(target:HTMLCanvasElement,t:number)=>{r.draw(target,t);if(t===1)equivalent=target.toDataURL()===reference;}});}finally{r.dispose();}
   return{results,equivalent};
  });
- expect(result.results).toHaveLength(8);for(const r of result.results){expect(r.same).toBe(true);expect(r.highlighted).toBeGreaterThan(80);expect(r.framed).toBe(true);expect(r.depthTest).toBe(true);expect(r.sourcesUnchanged).toBe(true);}expect(result.equivalent).toBe(true);expect(external).toEqual([]);
+ expect(result.results).toHaveLength(8);for(const r of result.results){expect(r.same).toBe(true);expect(r.highlighted).toBeGreaterThan(80);expect(r.framed).toBe(true);expect(r.depthTest).toBe(true);expect(r.sourcesUnchanged).toBe(true);expect(r.geometryValid).toBe(true);}expect(result.equivalent).toBe(true);expect(external).toEqual([]);
 });
 
 test('3D readiness failures and unsupported coverage preserve explicit 2D recovery',async({page})=>{
