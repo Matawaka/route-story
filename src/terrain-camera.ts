@@ -28,6 +28,8 @@ export function terrainRayBreakpoints(terrain:TerrainDataset,a:TerrainXY,b:Terra
 /** A global height envelope guarantees clearance along every interpolated trajectory,
  * including positions between keyframes. LOS uses the actual triangular DEM surface. */
 export function requiredVisibleAltitude(terrain:TerrainDataset,position:TerrainPosePoint,target:TerrainPosePoint):number{
+  const targetGround=terrain.meshElevation([target[0],target[1]]);
+  if(targetGround===undefined||target[2]<targetGround)throw Error('Точка обзора недоступна над DEM. Выберите 2D.');
   let altitude=position[2];
   for(const t of terrainRayBreakpoints(terrain,[target[0],target[1]],[position[0],position[1]])){
     if(t===0)continue;
@@ -71,7 +73,7 @@ export function createTerrainCameraPlan(timeline:StoryTimeline,terrain:TerrainDa
   }
   const unsmoothed=shots.map(s=>s.position);
   for(let i=0;i<shots.length;i++){let x=0,y=0,n=0;for(let j=Math.max(0,i-8);j<=Math.min(shots.length-1,i+8);j++)if(shots[j].segment===shots[i].segment){x+=unsmoothed[j][0];y+=unsmoothed[j][1];n++;}const position:TerrainPosePoint=[x/n,y/n,shots[i].position[2]];shots[i]={...shots[i],position:[position[0],position[1],requiredVisibleAltitude(terrain,position,shots[i].target)+80]};}
-  // A symmetric upper envelope removes local altitude oscillation, never lowers
+  // A local upper envelope suppresses altitude oscillation, never lowers
   // a safety requirement, and never averages across disconnected segments.
   for(let i=0;i<shots.length;i++){let h=shots[i].position[2];for(let j=Math.max(0,i-8);j<=Math.min(shots.length-1,i+8);j++)if(shots[j].segment===shots[i].segment)h=Math.max(h,shots[j].position[2]-Math.abs(i-j)*40);shots[i]={...shots[i],position:[shots[i].position[0],shots[i].position[1],h]};}
   return {terrain,timeline,shots,overview,minimumAltitude,aspect};
@@ -84,7 +86,14 @@ export function getTerrainCameraStateAt(seconds:number,plan:TerrainCameraPlan):T
   let position=shot.position,look=target;
   if(state.phase==='INTRO'){const t=ease(state.introProgress);position=pointMix(plan.overview.position,plan.shots[0].position,t);look=pointMix(plan.overview.target,plan.shots[0].target,t);}
   else if(state.phase==='OUTRO'){const t=ease(state.outroProgress);position=pointMix(plan.shots.at(-1)!.position,plan.overview.position,t);look=pointMix(plan.shots.at(-1)!.target,plan.overview.target,t);}
+  // A straight interpolation between two above-ground targets can enter a
+  // ridge. Keep the gaze above the exact mesh before solving LOS; otherwise
+  // the near-target division would demand an arbitrarily high flight.
+  const ground=plan.terrain.meshElevation([look[0],look[1]]);
+  if(ground===undefined)throw Error('Переход камеры выходит за DEM. Выберите 2D.');
+  look=[look[0],look[1],Math.max(look[2],ground+24)];
   const lifted=requiredVisibleAltitude(plan.terrain,position,look),height=Math.max(plan.minimumAltitude,lifted);
+  if(!Number.isFinite(height)||height>80000)throw Error('Безопасный 3D-ракурс недоступен. Выберите 2D.');
   position=[position[0],position[1],height];
   const dx=look[0]-position[0],dy=look[1]-position[1],distance=Math.hypot(dx,dy);
   return {position,target:look,bearing:Math.atan2(dx,dy)*180/Math.PI,pitch:Math.atan2(position[2]-look[2],distance)*180/Math.PI,roll:0,fov:46,near:5,far:100000,phase:state.phase,segment:state.segment,clearance:position[2]-plan.terrain.ceiling([position[0],position[1]])!,visibilityLift:height-shot.position[2]};

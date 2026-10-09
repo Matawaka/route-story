@@ -54,6 +54,14 @@ test('a real shader compilation failure rejects export and releases its temporar
  });expect(result.error).toContain('3D-шейдер');expect(result.target).toEqual([0,0]);expect(result.surface).toEqual([0,0]);expect(result.children).toBe(0);
 });
 
+test('3D ribbon and minimum-pixel trace keep disconnected segments separate; stationary routes render safely',async({page})=>{
+ await page.goto('/');const result=await page.evaluate(async()=>{
+  const paths=['/src/terrain-renderer.ts','/src/terrain.ts','/src/gpx.ts','/src/story.ts'];const [{TerrainRenderer},{loadTerrain},{parseGpx},{defaultStoryConfig}]=await Promise.all(paths.map(p=>import(p))),terrain=await loadTerrain('compatibility'),point=(x:number,y:number)=>{const p=terrain.geographic([x,y]);return `<trkpt lat="${p.lat}" lon="${p.lon}"><ele>77</ele></trkpt>`;},routes=[parseGpx(`<gpx><trk><trkseg>${point(-4000,0)+point(-2500,0)}</trkseg><trkseg>${point(2500,0)+point(4000,0)}</trkseg></trk></gpx>`),parseGpx(`<gpx><trk><trkseg>${point(0,0).repeat(3)}</trkseg></trk></gpx>`)],result=[];
+  for(const route of routes){const r=new TerrainRenderer(route,terrain,640,360,{...defaultStoryConfig(),cameraMode:'terrain'}),c=document.createElement('canvas');try{for(const t of [0,2,10,18,20])r.draw(c,t);let bridge=false;const trace=r.scene.children.find((m:any)=>m.type==='LineSegments') as any,positions=trace.geometry.getAttribute('position');for(let i=0;i<positions.count;i+=2){const a=positions.getX(i),b=positions.getX(i+1);if(a*b<0)bridge=true;}result.push({bridge,elevationsUnchanged:route.segments.flat().every(p=>p.elevation===77),ready:c.width===640&&c.height===360});}finally{r.dispose();}}
+  return result;
+ });for(const r of result){expect(r.bridge).toBe(false);expect(r.elevationsUnchanged).toBe(true);expect(r.ready).toBe(true);}
+});
+
 test('real 3D context loss, successful disposal, cancellation and retry',async({page},testInfo)=>{
  await page.goto('/');await page.locator('#terrain-demo').click();await expect(page.locator('#export')).toBeEnabled();
  const loss=await page.evaluate(async()=>{

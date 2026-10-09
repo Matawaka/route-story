@@ -5,7 +5,7 @@ import {execFileSync} from 'node:child_process';
 import os from 'node:os';
 import {withServer} from './server.mjs';
 import {validateVideo} from '../validate-video.mjs';
-const folder=process.argv.includes('--after')?'artifacts/sprint8/performance-after':'artifacts/sprint8/performance';mkdirSync(folder,{recursive:true});
+const folder=process.argv.includes('--final')?'artifacts/sprint8/performance-final':process.argv.includes('--after')?'artifacts/sprint8/performance-after':'artifacts/sprint8/performance';mkdirSync(folder,{recursive:true});
 const spread=v=>{const s=[...v].sort((a,b)=>a-b);return {median:s[Math.floor(s.length/2)],min:s[0],max:s.at(-1)};};
 const xml=readFileSync('public/samples/terrain-sogne.gpx','utf8'),reports=[];
 await withServer(async url=>{
@@ -28,5 +28,5 @@ await withServer(async url=>{
    await page.evaluate(()=>delete window.terrainBenchmarkBlob);
   }
   const steady=runs.slice(1),summary=Object.fromEntries(['parseMs','loadMs','prepareMs','firstFrameMs','exportMs','bytes'].map(k=>[k,spread(steady.map(r=>r[k]))]));summary.frames=spread(steady.flatMap(r=>r.frames));summary.seek=spread(steady.flatMap(r=>r.seek));reports.push({mode,quality,aspect,duration,runs,summary});console.log({mode,quality,aspect,duration,summary});
- }}finally{writeFileSync(`${folder}/comparison.json`,JSON.stringify({sourceCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',windowsHide:true}).trim(),uncommitted:true,os:`${os.type()} ${os.release()} ${os.arch()}`,browser:browser.version(),method:'One warm-up then3 steady repeats, same721-point synthetic route; frame timing includes destination Canvas draw/copy but is not a GPU timer. Native/GPU memory measured separately or unmeasured.',gpxBytes:Buffer.byteLength(xml),reports},null,2));await browser.close();}
+ }}finally{writeFileSync(`${folder}/comparison.json`,JSON.stringify({sourceCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',windowsHide:true}).trim(),uncommitted:!!execFileSync('git', ['status','--porcelain'], {encoding:'utf8',windowsHide:true}).trim(),os:`${os.type()} ${os.release()} ${os.arch()}`,browser:browser.version(),method:'One warm-up then3 steady repeats, same721-point synthetic route; frame timing includes destination Canvas draw/copy but is not a GPU timer. Native/GPU memory measured separately or unmeasured.',gpxBytes:Buffer.byteLength(xml),reports},null,2));await browser.close();}
 });

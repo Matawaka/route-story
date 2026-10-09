@@ -3,7 +3,7 @@ import {chromium} from '@playwright/test';
 import {mkdirSync,writeFileSync,statSync} from 'node:fs';
 import {withServer} from './server.mjs';
 import {validateVideo} from '../validate-video.mjs';
-mkdirSync('artifacts/sprint8/spike',{recursive:true});
+const folder=process.argv.includes('--expanded')?'artifacts/sprint8/spike-expanded':'artifacts/sprint8/spike';mkdirSync(folder,{recursive:true});
 await withServer(async url=>{
  const browser=await chromium.launch({channel:'msedge',headless:true}),page=await browser.newPage();
  const external=[];await page.context().route('**/*',r=>new URL(r.request().url()).origin===new URL(url).origin?r.continue():(external.push(r.request().url()),r.abort()));
@@ -46,7 +46,7 @@ await withServer(async url=>{
    }finally{dispose();canvas.width=canvas.height=0;}
   },engine);
   const pending=page.waitForEvent('download');await page.evaluate(()=>{const u=URL.createObjectURL(window.terrainSpikeBlob),a=document.createElement('a');a.href=u;a.download='terrain.mp4';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
-  const path=`artifacts/sprint8/spike/${engine}-4s.mp4`;await(await pending).saveAs(path);result.video=validateVideo(path,640,360,4);result.browser=browser.version();result.external=external;
-  writeFileSync(`artifacts/sprint8/spike/${engine}.json`,JSON.stringify(result,null,2));console.log(result);
+  const path=`${folder}/${engine}-4s.mp4`;await(await pending).saveAs(path);result.video=validateVideo(path,640,360,4);result.browser=browser.version();result.external=external;
+  writeFileSync(`${folder}/${engine}.json`,JSON.stringify(result,null,2));console.log(result);
  }}finally{await browser.close();}
 });

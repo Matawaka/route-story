@@ -1,5 +1,11 @@
 # Implementation state
 
+## Sprint 8 transition regression checkpoint — 2026-10-09
+
+Verified/pushed follow-up `dce48c4e9b24efb805a6636bb8264999d0057e9f`. Full `PLAYWRIGHT_CHANNEL=msedge FULL_EXPORT_ACCEPTANCE=1 npm.cmd run check`:130unit pass/build pass/36browser pass,1 intentional unresolved-license external-GPX skip (1.6m); includes existing30s Standard5000-point landscape/portrait. Audit full/production:0 vulnerabilities. Actual production-subpath candidate19files/4770475B passed local manifest/CSP/privacy, Atlas20/Night30 decoded480/720frames. These earlier video files are superseded after a subsequently discovered transition defect; stable release was never affected.
+
+Independent dense actual-DEM camera audit correctly failed: interpolated INTRO/OUTRO gaze could enter a ridge, causing near-target LOS division to produce heights up to3.48million metres and nearly empty transitional frames. Replay-only synthetic tests had missed this. Fix: clamp interpolated gaze above exact mesh+24m before solving LOS, explicitly reject below-ground targets and non-finite/>80km flight; extend independent dense-ray tests through intro/outro. `npm.cmd run test`:130pass; actual-pack audit now481/481/721 timestamps all finite/reversible, overview equals ending, minimum camera clearance>1018m and independent ray clearance>4.4m. Final example videos and performance are regenerated after this fix. Added depth-tested1px centre trace (≤200k vertices) for overview readability; same route segments/progress shader, no through-mountain overlay. No publication.
+
 ## Sprint 8 resumed checkpoint 8C/8D — 2026-10-09
 
 Branch `feature/terrain-aware-3d`, verified pushed code HEAD `3037f30cdeb8f0e0efc0349cf3fa76fb780cd1a7`, draft stacked PR [#7](https://github.com/Matawaka/route-story/pull/7) targets accepted Sprint 7 branch. Exact-head CI [37937191945](https://github.com/Matawaka/route-story/actions/runs/37937191945) SUCCESS. Stable main/tag v1.0.0 and independent documentation PR #5 remain unchanged. The older “PR not yet created” text below is historical. No merge, release or deployment.

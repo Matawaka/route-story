@@ -51,7 +51,7 @@ with rasterio.open(a.source) as source:
         encoded=np.where(np.isfinite(values),np.rint(values),-32768).astype('<i2')
         name=f'sogne-{spacing}m.i16'; data=encoded.tobytes(); (a.output/name).write_bytes(data)
         lods.append(dict(file=name,spacingMeters=spacing,width=width,height=height,bytes=len(data),sha256=hashlib.sha256(data).hexdigest(),noDataCount=int(np.isnan(values).sum())))
-    # Diagnostic MapLibre raster-dem: one genuine z9 tile, no runtime remote tiles.
+    # Diagnostic MapLibre raster-dem: one genuine z10 tile, no runtime remote tiles.
     z=10; tx=int((origin[0]+180)/360*2**z); ty=int((1-math.asinh(math.tan(math.radians(origin[1])))/math.pi)/2*2**z)
     col,row=np.meshgrid(np.arange(512)+.5,np.arange(512)+.5)
     lon=(tx+col/512)/2**z*360-180
