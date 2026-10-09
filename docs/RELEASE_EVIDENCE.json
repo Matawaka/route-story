@@ -1,6 +1,19 @@
 {
   "sprint6PublicRelease": {
     "status": "VERIFIED",
+    "documentationCheckpoint": {
+      "commit": "cd5ab89bce009344268a5d3f0599f1ac50668f96",
+      "prUrl": "https://github.com/Matawaka/route-story/pull/5",
+      "ciUrl": "https://github.com/Matawaka/route-story/actions/runs/37914462753",
+      "conclusion": "success",
+      "unitPassed": 92,
+      "browserPassed": 23,
+      "browserSkipped": 3,
+      "failed": 0,
+      "productionBuild": "passed",
+      "browserSuiteSeconds": 36.2,
+      "scope": "documentation only; production/tag unchanged"
+    },
     "verifiedOn": "2026-10-09",
     "releaseCommit": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
     "applicationUrl": "https://matawaka.github.io/route-story/",
