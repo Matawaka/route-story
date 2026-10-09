@@ -1,6 +1,7 @@
 import type { Route, RoutePoint } from './route';
 import { fitProjection } from './geo';
 import { StoryTimeline } from './timeline';
+import { CinematicRenderer } from './cinematic';
 import { regressionStoryConfig, type StoryConfig, type VisualStyle } from './story';
 export type { VisualStyle } from './story';
 export type Land = { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[] };
@@ -18,22 +19,27 @@ export class RouteRenderer {
   private readonly base: HTMLCanvasElement;
   readonly timeline: StoryTimeline;
   readonly config: Readonly<StoryConfig>;
-  private readonly projection: ReturnType<typeof fitProjection>;
-  private readonly projected: [number, number][][];
+  private readonly projection!: ReturnType<typeof fitProjection>;
+  private readonly projected!: [number, number][][];
+  private readonly cinematic?: CinematicRenderer;
   private readonly highlight: HTMLCanvasElement;
   private readonly edges: { a: [number, number]; b: [number, number] }[] = [];
   private readonly prefixes: number[][] = [];
-  private readonly displayTitle: string;
-  private readonly metric: string;
-  private readonly distanceFont: number;
-  private readonly metricFont: number;
-  private readonly endpointLabels: { text: string; x: number; y: number; width: number }[];
+  private readonly displayTitle!: string;
+  private readonly metric!: string;
+  private readonly distanceFont!: number;
+  private readonly metricFont!: number;
+  private readonly endpointLabels!: { text: string; x: number; y: number; width: number }[];
   private paintedEdges = 0;
   constructor(readonly route: Route, readonly land: Land, readonly width: number, readonly height: number, readonly style: VisualStyle, config?: StoryConfig) {
     this.base = document.createElement('canvas'); this.base.width = width; this.base.height = height;
     this.highlight = document.createElement('canvas'); this.highlight.width = width; this.highlight.height = height;
     this.timeline = new StoryTimeline(route, config ?? { ...regressionStoryConfig(route.name), visualStyle: style, aspectRatio: height > width ? 'portrait' : 'landscape' });
     this.config = this.timeline.config;
+    if(this.config.cameraMode==='cinematic') {
+      this.base.width=this.base.height=this.highlight.width=this.highlight.height=0;
+      this.cinematic=new CinematicRenderer(this.timeline,land,width,height);return;
+    }
     this.projection = fitProjection(route.segments, width, height);
     this.projected = route.segments.map(points => points.map(this.projection.project));
     this.projected.forEach((points, segment) => {
@@ -127,6 +133,7 @@ export class RouteRenderer {
     ctx.stroke();
   }
   draw(canvas: HTMLCanvasElement, seconds: number): void {
+    if(this.cinematic){this.cinematic.draw(canvas,seconds);return;}
     const ctx = canvas.getContext('2d'); if (!ctx) throw new Error('Canvas 2D недоступен.');
     const { width: w, height: h } = this; const unit = Math.min(w, h), colors = palette[this.style];
     const state = this.timeline.at(seconds), p = state.routeProgress, pad = unit * 0.08;
@@ -192,5 +199,5 @@ export class RouteRenderer {
     ctx.font = `${this.metricFont}px system-ui`; ctx.fillStyle = colors.quiet; ctx.fillText(this.metric, pad, h * .902);
     ctx.fillStyle = colors.line; ctx.fillRect(pad, h * .963, (w - 2 * pad) * state.timelineProgress, Math.max(2, unit * .005));
   }
-  dispose(): void { this.base.width = this.base.height = this.highlight.width = this.highlight.height = 0; }
+  dispose(): void { this.cinematic?.dispose();this.base.width = this.base.height = this.highlight.width = this.highlight.height = 0; }
 }

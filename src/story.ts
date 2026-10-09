@@ -1,6 +1,7 @@
 export type VisualStyle = 'atlas' | 'night';
 export type AspectRatio = 'landscape' | 'portrait';
 export type QualityPreset = 'compatibility' | 'standard';
+export type CameraMode = 'cinematic' | 'classic';
 export type StoryDuration = 4 | 10 | 20 | 30;
 export interface StoryConfig {
   readonly durationSeconds: StoryDuration;
@@ -10,6 +11,8 @@ export interface StoryConfig {
   readonly visualStyle: VisualStyle;
   readonly aspectRatio: AspectRatio;
   readonly qualityPreset: QualityPreset;
+  /** Omitted legacy configurations retain the classic renderer. */
+  readonly cameraMode?: CameraMode;
 }
 export const TITLE_LIMIT = 200;
 export const FPS = 24;
@@ -23,13 +26,14 @@ export function validateStoryConfig(input: StoryConfig, allowRegression = true):
   if (input.durationSeconds - input.introSeconds - input.outroSeconds < 1) throw new Error('Для повтора маршрута должна оставаться хотя бы 1 секунда.');
   if (typeof input.title !== 'string' || !input.title.trim() || input.title.length > TITLE_LIMIT || /[\u0000-\u001f\u007f]/.test(input.title)) throw new Error(`Название: от 1 до ${TITLE_LIMIT} символов, без управляющих знаков.`);
   if (!['atlas', 'night'].includes(input.visualStyle) || !['landscape', 'portrait'].includes(input.aspectRatio) || !['compatibility', 'standard'].includes(input.qualityPreset)) throw new Error('Неизвестный стиль, формат или качество видео.');
-  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset });
+  if (input.cameraMode !== undefined && !['cinematic', 'classic'].includes(input.cameraMode)) throw new Error('Неизвестный режим камеры.');
+  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset, cameraMode: input.cameraMode ?? 'classic' });
 }
 export function defaultStoryConfig(title = 'Мой маршрут'): Readonly<StoryConfig> {
-  return validateStoryConfig({ durationSeconds: 20, introSeconds: 2, outroSeconds: 2, title, visualStyle: 'atlas', aspectRatio: 'landscape', qualityPreset: 'compatibility' });
+  return validateStoryConfig({ durationSeconds: 20, introSeconds: 2, outroSeconds: 2, title, visualStyle: 'atlas', aspectRatio: 'landscape', qualityPreset: 'compatibility', cameraMode: 'cinematic' });
 }
 export function regressionStoryConfig(title = 'Тест экспорта'): Readonly<StoryConfig> {
-  return validateStoryConfig({ ...defaultStoryConfig(title), durationSeconds: 4, introSeconds: 0, outroSeconds: 0 });
+  return validateStoryConfig({ ...defaultStoryConfig(title), durationSeconds: 4, introSeconds: 0, outroSeconds: 0, cameraMode: 'classic' });
 }
 export function exportSettings(config: StoryConfig) {
   const { qualityPreset, aspectRatio, durationSeconds } = validateStoryConfig(config);

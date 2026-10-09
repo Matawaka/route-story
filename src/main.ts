@@ -9,8 +9,10 @@ const canvas = el<HTMLCanvasElement>('preview'), file = el<HTMLInputElement>('fi
 const button = el<HTMLButtonElement>('export'), cancel = el<HTMLButtonElement>('cancel');
 const play = el<HTMLButtonElement>('play'), scrub = el<HTMLInputElement>('scrub'), ratio = el<HTMLSelectElement>('ratio');
 const duration = el<HTMLSelectElement>('duration'), quality = el<HTMLSelectElement>('quality');
+const cameraMode=el<HTMLSelectElement>('camera-mode');
 const title = el<HTMLInputElement>('story-title');
 let story: Readonly<StoryConfig> = defaultStoryConfig();
+if(matchMedia('(prefers-reduced-motion: reduce)').matches){story=validateStoryConfig({...story,cameraMode:'classic'});cameraMode.value='classic';}
 let route: Route | undefined, renderer: RouteRenderer | undefined, style: VisualStyle = 'atlas';
 let exporting = false, loading = false, animationId = 0, playing = false, loadId = 0, probeId = 0;
 let controller: AbortController | undefined;
@@ -29,7 +31,7 @@ async function configure(): Promise<void> {
   if (exporting) return;
   const currentProbe = ++probeId; button.disabled = true; if (!route) return;
   try {
-    story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'] }, false);
+    story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'],cameraMode:cameraMode.value as StoryConfig['cameraMode'] }, false);
     title.removeAttribute('aria-invalid');
   } catch (error) { title.setAttribute('aria-invalid', 'true'); stop(); message((error as Error).message, true); return; }
   const land = await landPromise; if (currentProbe !== probeId) return;
@@ -72,6 +74,7 @@ document.querySelectorAll<HTMLButtonElement>('[data-style]').forEach(card => car
 ratio.addEventListener('change', () => void configure().catch(error => message(error.message, true)));
 duration.addEventListener('change', () => void configure().catch(error => message(error.message, true)));
 quality.addEventListener('change', () => void configure().catch(error => message(error.message, true)));
+cameraMode.addEventListener('change',()=>void configure().catch(error=>message(error.message,true)));
 title.addEventListener('input', () => void configure().catch(error => message(error.message, true)));
 scrub.addEventListener('input', () => { stop(); draw(); });
 play.addEventListener('click', () => {
@@ -85,7 +88,7 @@ cancel.addEventListener('click', () => controller?.abort());
 button.addEventListener('click', async () => {
   if (!renderer || exporting || loading) return;
   exporting = true; stop(); controller = new AbortController(); cancel.hidden = false;
-  const controls = [button, file, demo, ratio, duration, quality, title, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
+  const controls = [button, file, demo, ratio, duration, quality, title, cameraMode, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
   const active = renderer;
   try {
     performance.clearMarks('route-story-export-start'); performance.clearMarks('route-story-export-end'); performance.clearMeasures('route-story-export');
