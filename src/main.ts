@@ -42,7 +42,7 @@ async function configure(): Promise<void> {
   } catch (error) { title.setAttribute('aria-invalid', 'true'); stop(); message((error as Error).message, true); return; }
   let config=story,terrain:Awaited<ReturnType<typeof loadTerrain>>|undefined,terrainNote='';
   if(config.cameraMode==='terrain'||config.cameraMode==='auto'){
-    try{terrain=await loadTerrain(config.qualityPreset);if(!terrain.routeCoverage(route)||terrain.max-terrain.min<100)throw Error('Маршрут вне полного DEM-пакета или нет выразительного рельефа.');}
+    try{terrain=await loadTerrain(config.qualityPreset);if(!terrain.routeCoverage(route)||(config.cameraMode==='auto'&&terrain.routeReliefMeters(route)<100))throw Error('Маршрут вне полного DEM-пакета или вокруг пути нет выразительного рельефа.');}
     catch(error){terrain=undefined;if(config.cameraMode==='terrain')throw Error(`${(error as Error).message} Выберите «Кино · 2D».`);terrainNote=`Авто: ${(error as Error).message} Используется 2D.`;}
     config=validateStoryConfig({...config,cameraMode:terrain?'terrain':'cinematic'});
   }

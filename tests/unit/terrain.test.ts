@@ -17,6 +17,7 @@ describe('bounded real terrain model',()=>{
  it('rejects corrupt dimensions, unbounded resolution and extreme elevations',()=>{const t=fixture();expect(()=>new TerrainDataset(t.manifest,{...t.level,width:99999},t.heights)).toThrow();t.heights[0]=10000;expect(()=>new TerrainDataset(t.manifest,t.level,t.heights)).toThrow();});
  it('uses the short antimeridian arc and finite high-latitude local coordinates',()=>{const t=fixture(()=>200,[179.98,80]);const p={lon:-179.98,lat:80.01};const xy=t.world(p);expect(xy[0]).toBeGreaterThan(0);expect(xy[0]).toBeLessThan(1000);expect(t.geographic(xy).lon).toBeCloseTo(p.lon);expect(t.sampleXY(xy)).toBe(200);});
  it('rejects uncovered edges and holes even when endpoints are valid',()=>{const t=fixture();t.heights[100*201+100]=-32768;const r=route(t,[[[-2000,0],[2000,0]]]);expect(t.routeCoverage(r)).toBe(false);expect(()=>createTerrainCameraPlan(new StoryTimeline(r,defaultStoryConfig()),t,720,1280)).toThrow();});
+ it('Auto uses relief near the track, not distant mountains in the pack',()=>{const t=fixture((x)=>Math.abs(x)>4000?1400:100),flat=route(t,[[[-500,0],[500,0]]]),mountain=route(t,[[[3500,0],[4500,0]]]);expect(t.max-t.min).toBe(1300);expect(t.routeReliefMeters(flat)).toBe(0);expect(t.routeReliefMeters(mountain)).toBe(1300);});
 });
 describe('pure terrain camera and conservative flight envelope',()=>{
  for(const duration of [10,20,30] as const)for(const aspect of [[1280,720],[720,1280]])it(`deterministic ${duration}s ${aspect.join('x')} overview/follow/reveal`,()=>{

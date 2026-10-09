@@ -48,6 +48,16 @@ export class TerrainDataset {
   getTerrainResolution(){return this.level.spacingMeters;}
   getTerrainMinMax(){return {min:this.min,max:this.max};}
   getTerrainCoverage(){return {id:this.manifest.id,origin:this.manifest.origin,bounds:this.getTerrainBounds(),noDataSamples:this.heights.reduce((n,h)=>n+Number(h===this.manifest.noData),0)};}
+  /** Bounded neighbourhood samples for Auto, not remote mountains elsewhere in
+   * the pack. Runs only when preparing a route, never during animation. */
+  routeReliefMeters(route:Route):number{
+    const count=route.segments.reduce((n,s)=>n+s.length,0),stride=Math.max(1,Math.ceil(count/64));let index=0,relief=0;
+    for(const segment of route.segments)for(let i=0;i<segment.length;i++,index++)if(index%stride===0||i===segment.length-1){
+      const xy=this.world(segment[i]);let low=Infinity,high=-Infinity;
+      for(let y=-2;y<=2;y++)for(let x=-2;x<=2;x++){const h=this.sampleXY([xy[0]+x*500,xy[1]+y*500]);if(h!==undefined){low=Math.min(low,h);high=Math.max(high,h);}}
+      if(Number.isFinite(low))relief=Math.max(relief,high-low);
+    }return relief;
+  }
   routeCoverage(route:Route,margin=2000):boolean{
     let samples=0;
     for(const segment of route.segments){for(let i=0;i<segment.length;i++){

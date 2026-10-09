@@ -23,8 +23,12 @@ await (production?withProductionServer:withServer)(async url=>{
   for(const t of [0,1,2,duration/4,duration/2,duration-2,duration]){await page.locator('#scrub').fill(String(t));await page.locator('#preview').screenshot({path:`${folder}/${style}-${t}s-preview.png`});}
   const pending=page.waitForEvent('download',{timeout:120000});await page.locator('#export').click();const path=`${folder}/${style}-${duration}s.mp4`;await(await pending).saveAs(path);
   const width=aspect==='portrait'?720:1280,height=aspect==='portrait'?1280:720,video=validateVideo(path,width,height,duration);
+  // Inspect only the central geographic area of EVERY decoded frame, excluding
+  // HUD. Distinct frame hashes alone cannot catch a blank map behind a counter.
+  const statistics=execFileSync(ffmpeg,['-v','error','-i',path,'-vf','crop=iw*0.8:ih*0.5:iw*0.1:ih*0.25,signalstats,metadata=print:file=-','-f','null','-'],{windowsHide:true,encoding:'utf8',maxBuffer:8*1024*1024});
+  const minima=[...statistics.matchAll(/lavfi\.signalstats\.YMIN=(\d+)/g)].map(m=>Number(m[1])),maxima=[...statistics.matchAll(/lavfi\.signalstats\.YMAX=(\d+)/g)].map(m=>Number(m[1]));assert.equal(minima.length,duration*24);assert.equal(maxima.length,minima.length);const minimumMapLumaSpread=Math.min(...maxima.map((v,i)=>v-minima[i]));assert.ok(minimumMapLumaSpread>=8,'Blank/flat geographic frame detected');
   for(const time of [0,1,2,duration/4,duration/2,duration-2,duration-1/24])execFileSync(ffmpeg,['-y','-ss',String(time),'-i',path,'-frames:v','1',`${folder}/${style}-${time.toFixed(2)}s-decoded.png`],{windowsHide:true,stdio:'ignore'});
-  reports.push({style,aspect,duration,video,sha256:createHash('sha256').update(readFileSync(path)).digest('hex'),exportMs:await page.evaluate(()=>performance.getEntriesByName('route-story-export').at(-1).duration)});
+  reports.push({style,aspect,duration,video,minimumMapLumaSpread,sha256:createHash('sha256').update(readFileSync(path)).digest('hex'),exportMs:await page.evaluate(()=>performance.getEntriesByName('route-story-export').at(-1).duration)});
  }
  const storage=await page.evaluate(async()=>({local:localStorage.length,session:sessionStorage.length,databases:await indexedDB.databases()}));assert.deepEqual(storage,{local:0,session:0,databases:[]});
  await page.setViewportSize({width:393,height:851});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
