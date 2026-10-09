@@ -1,0 +1,1306 @@
+{
+  "schema": 1,
+  "date": "2026-10-09",
+  "candidate": true,
+  "published": false,
+  "acceptance": {
+    "sourceCommit": "0edebbf31db8c32f1c7e1dbeeac4f1b812bb8562",
+    "uncommitted": false,
+    "scope": "local production /route-story/ subpath",
+    "publicHttps": false,
+    "packageBytes": 4775047,
+    "manifestHashes": 19,
+    "os": "Windows_NT 10.0.26200 x64",
+    "browser": "Edge 154.0.4258.62",
+    "errors": [],
+    "external": [],
+    "badResponses": [],
+    "storage": {
+      "local": 0,
+      "session": 0,
+      "databases": []
+    },
+    "mobileViewportOverflow": false,
+    "reports": [
+      {
+        "style": "atlas",
+        "aspect": "landscape",
+        "duration": 20,
+        "video": {
+          "file": "artifacts/sprint8/final/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "fbd4229a47f7263841aaa6a99f118eca",
+          "lastFrameHash": "c309dd35efaef890d8524051309f9b8e",
+          "bytes": 12812946,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "minimumMapLumaSpread": 129,
+        "sha256": "2ad43337817337f4aa6e4ee3e3356b48d9d984171f876acb205cbfbe4bba6ada",
+        "exportMs": 1190.0999999940395
+      },
+      {
+        "style": "night",
+        "aspect": "portrait",
+        "duration": 30,
+        "video": {
+          "file": "artifacts/sprint8/final/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "45f6af8333c40b33ec5d350a57ba2484",
+          "lastFrameHash": "24e564a7073988fbfc3807d80c7656aa",
+          "bytes": 17894633,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "minimumMapLumaSpread": 155,
+        "sha256": "b2a9898056be0ecd2777ebf6abf6cb4dd0d0a5d357de06b87e9981edb430945f",
+        "exportMs": 1662.5
+      }
+    ]
+  },
+  "camera": {
+    "sourceCommit": "b3937e75430a5a656f765d2f3f89687385d3fb87",
+    "reports": [
+      {
+        "width": 640,
+        "height": 360,
+        "seconds": 20,
+        "quality": "compatibility",
+        "states": 481,
+        "finite": true,
+        "deterministic": true,
+        "markerSafe": true,
+        "minimumCameraClearanceMeters": 1020.8813900250293,
+        "minimumIndependentRayClearanceMeters": 20.5143016560188,
+        "maxStepAt24fpsMeters": 1064.2296583382629,
+        "overviewEqualsEnding": true,
+        "heightRangeMeters": [
+          2259.5411960388215,
+          26490.144622050757
+        ],
+        "pitchRangeDegrees": [
+          35.66089199531268,
+          84.53338337352199
+        ],
+        "keyframes": [
+          {
+            "t": 0,
+            "position": [
+              -1348.1108219911237,
+              -9100.182795615528,
+              26490.144622050757
+            ],
+            "target": [
+              -1348.1108219911237,
+              50.14898118551855,
+              1016.8836037667846
+            ],
+            "bearing": 0,
+            "pitch": 70.24104152060261,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "INTRO",
+            "segment": 0,
+            "clearance": 25432.144622050757,
+            "visibilityLift": 24196.9856538156
+          },
+          {
+            "t": 1,
+            "position": [
+              -3588.9312828790653,
+              -8403.321517468754,
+              14391.651795142958
+            ],
+            "target": [
+              -3424.054227795278,
+              -2724.924397186716,
+              992.2526387280784
+            ],
+            "bearing": 1.663164048726077,
+            "pitch": 67.0250669098744,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "INTRO",
+            "segment": 0,
+            "clearance": 13518.651795142958,
+            "visibilityLift": 12098.4928269078
+          },
+          {
+            "t": 2,
+            "position": [
+              -5829.751743767008,
+              -7706.460239321979,
+              2293.1589682351587
+            ],
+            "target": [
+              -5499.997633599433,
+              -5499.99777555895,
+              119.00043543241424
+            ],
+            "bearing": 8.499900572409693,
+            "pitch": 44.261153206138694,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "ROUTE_REPLAY",
+            "segment": 0,
+            "clearance": 1564.1589682351587,
+            "visibilityLift": 0
+          },
+          {
+            "t": 5,
+            "position": [
+              -5303.4575268172575,
+              -4102.694857835442,
+              3055.7880719113696
+            ],
+            "target": [
+              -3304.555896777239,
+              -2564.2778043196004,
+              1027.0321667922778
+            ],
+            "bearing": 52.41699688142235,
+            "pitch": 38.809943790058696,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "ROUTE_REPLAY",
+            "segment": 0,
+            "clearance": 2104.7880719113696,
+            "visibilityLift": 0
+          },
+          {
+            "t": 10,
+            "position": [
+              923.4571721520863,
+              -719.0341685825188,
+              2901.322057697301
+            ],
+            "target": [
+              1297.1207242297874,
+              1549.2790516146601,
+              1038.6190217017397
+            ],
+            "bearing": 9.354430709430904,
+            "pitch": 39.016601867564326,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "ROUTE_REPLAY",
+            "segment": 0,
+            "clearance": 1993.3220576973008,
+            "visibilityLift": 0
+          },
+          {
+            "t": 18,
+            "position": [
+              -1272.6522331935505,
+              4841.320844460426,
+              3046.5997346716495
+            ],
+            "target": [
+              -2100.000067967492,
+              2400.0012532365886,
+              1196.9998191094785
+            ],
+            "bearing": -161.27880394764344,
+            "pitch": 35.66089199531268,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "OUTRO",
+            "segment": 0,
+            "clearance": 2645.5997346716495,
+            "visibilityLift": 0
+          },
+          {
+            "t": 20,
+            "position": [
+              -1348.1108219911237,
+              -9100.182795615528,
+              26490.144622050757
+            ],
+            "target": [
+              -1348.1108219911237,
+              50.14898118551855,
+              1016.8836037667846
+            ],
+            "bearing": 0,
+            "pitch": 70.24104152060261,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "OUTRO",
+            "segment": 0,
+            "clearance": 25432.144622050757,
+            "visibilityLift": 23443.544887379107
+          }
+        ]
+      },
+      {
+        "width": 1280,
+        "height": 720,
+        "seconds": 20,
+        "quality": "standard",
+        "states": 481,
+        "finite": true,
+        "deterministic": true,
+        "markerSafe": true,
+        "minimumCameraClearanceMeters": 1018.2515527805435,
+        "minimumIndependentRayClearanceMeters": 4.406222593169787,
+        "maxStepAt24fpsMeters": 1064.4175266385391,
+        "overviewEqualsEnding": true,
+        "heightRangeMeters": [
+          2260.691105660501,
+          26495.123587583
+        ],
+        "pitchRangeDegrees": [
+          35.6539112522538,
+          84.53411472415603
+        ],
+        "keyframes": [
+          {
+            "t": 0,
+            "position": [
+              -1348.1108219911237,
+              -9100.595345234557,
+              26495.123587583
+            ],
+            "target": [
+              -1348.1108219911237,
+              50.14898118551855,
+              1020.3085912276453
+            ],
+            "bearing": 0,
+            "pitch": 70.24133168565486,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "INTRO",
+            "segment": 0,
+            "clearance": 25446.123587583,
+            "visibilityLift": 24220.6118144365
+          },
+          {
+            "t": 1,
+            "position": [
+              -3589.0054415615023,
+              -8403.927438816396,
+              14384.81768036475
+            ],
+            "target": [
+              -3424.054227795278,
+              -2724.924397186716,
+              990.5514393945803
+            ],
+            "bearing": 1.6637342577464533,
+            "pitch": 67.01497326591313,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "INTRO",
+            "segment": 0,
+            "clearance": 13550.81768036475,
+            "visibilityLift": 12110.30590721825
+          },
+          {
+            "t": 2,
+            "position": [
+              -5829.900061131881,
+              -7707.259532398235,
+              2274.5117731464998
+            ],
+            "target": [
+              -5499.997633599433,
+              -5499.99777555895,
+              119.00042975403352
+            ],
+            "bearing": 8.500633440287801,
+            "pitch": 44.004076137642286,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "ROUTE_REPLAY",
+            "segment": 0,
+            "clearance": 1545.5117731464998,
+            "visibilityLift": 0
+          },
+          {
+            "t": 5,
+            "position": [
+              -5305.684378589095,
+              -4104.551642225137,
+              3056.3706609978417
+            ],
+            "target": [
+              -3304.555896777239,
+              -2564.2778043196004,
+              1026.9866078245054
+            ],
+            "bearing": 52.414426948619294,
+            "pitch": 38.7864869746131,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "ROUTE_REPLAY",
+            "segment": 0,
+            "clearance": 2111.3706609978417,
+            "visibilityLift": 0
+          },
+          {
+            "t": 10,
+            "position": [
+              923.1079678070116,
+              -721.195920576252,
+              2911.4876366761737
+            ],
+            "target": [
+              1297.1207242297874,
+              1549.2790516146601,
+              1032.6479499925765
+            ],
+            "bearing": 9.354261059958953,
+            "pitch": 39.23182717929534,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "ROUTE_REPLAY",
+            "segment": 0,
+            "clearance": 2003.4876366761737,
+            "visibilityLift": 0
+          },
+          {
+            "t": 18,
+            "position": [
+              -1272.4573019083277,
+              4841.955004832652,
+              3046.5997475355157
+            ],
+            "target": [
+              -2100.000067967492,
+              2400.0012532365886,
+              1196.999816390779
+            ],
+            "bearing": -161.27922448255944,
+            "pitch": 35.6539112522538,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "OUTRO",
+            "segment": 0,
+            "clearance": 2645.5997475355157,
+            "visibilityLift": 0
+          },
+          {
+            "t": 20,
+            "position": [
+              -1348.1108219911237,
+              -9100.595345234557,
+              26495.123587583
+            ],
+            "target": [
+              -1348.1108219911237,
+              50.14898118551855,
+              1020.3085912276453
+            ],
+            "bearing": 0,
+            "pitch": 70.24133168565486,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "OUTRO",
+            "segment": 0,
+            "clearance": 25446.123587583,
+            "visibilityLift": 23448.523840047485
+          }
+        ]
+      },
+      {
+        "width": 720,
+        "height": 1280,
+        "seconds": 30,
+        "quality": "standard",
+        "states": 721,
+        "finite": true,
+        "deterministic": true,
+        "markerSafe": true,
+        "minimumCameraClearanceMeters": 1026.9592621233328,
+        "minimumIndependentRayClearanceMeters": 7.671597424913216,
+        "maxStepAt24fpsMeters": 1612.3674378945952,
+        "overviewEqualsEnding": true,
+        "heightRangeMeters": [
+          2259.1681126747044,
+          39104.411037858416
+        ],
+        "pitchRangeDegrees": [
+          35.6539112522538,
+          84.16291572188842
+        ],
+        "keyframes": [
+          {
+            "t": 0,
+            "position": [
+              -1348.1108219911237,
+              -15345.552007877986,
+              39104.411037858416
+            ],
+            "target": [
+              -1348.1108219911237,
+              50.14898118551855,
+              1020.3085912276453
+            ],
+            "bearing": 0,
+            "pitch": 67.98871680208063,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "INTRO",
+            "segment": 0,
+            "clearance": 39104.411037858416,
+            "visibilityLift": 36829.899264711916
+          },
+          {
+            "t": 1,
+            "position": [
+              -3589.0054415615023,
+              -11526.40577013811,
+              20689.461405502458
+            ],
+            "target": [
+              -3424.054227795278,
+              -2724.924397186716,
+              990.5514393945803
+            ],
+            "bearing": 1.0736717711980468,
+            "pitch": 65.92114065141762,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "INTRO",
+            "segment": 0,
+            "clearance": 19850.461405502458,
+            "visibilityLift": 18414.949632355958
+          },
+          {
+            "t": 2,
+            "position": [
+              -5829.900061131881,
+              -7707.259532398235,
+              2274.5117731464998
+            ],
+            "target": [
+              -5499.997633599433,
+              -5499.99777555895,
+              119.00042975403352
+            ],
+            "bearing": 8.500633440287801,
+            "pitch": 44.004076137642286,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "ROUTE_REPLAY",
+            "segment": 0,
+            "clearance": 1545.5117731464998,
+            "visibilityLift": 0
+          },
+          {
+            "t": 7.5,
+            "position": [
+              -4848.256100865955,
+              -3907.890006947569,
+              2985.6971753057173
+            ],
+            "target": [
+              -2847.61193302697,
+              -2398.7808637414555,
+              956.9432258665797
+            ],
+            "bearing": 52.9723252048377,
+            "pitch": 38.99230778957989,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "ROUTE_REPLAY",
+            "segment": 0,
+            "clearance": 2161.6971753057173,
+            "visibilityLift": 0
+          },
+          {
+            "t": 15,
+            "position": [
+              923.1079678070116,
+              -721.195920576252,
+              2911.4876366761737
+            ],
+            "target": [
+              1297.1207242297874,
+              1549.2790516146601,
+              1032.6479499925765
+            ],
+            "bearing": 9.354261059958953,
+            "pitch": 39.23182717929534,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "ROUTE_REPLAY",
+            "segment": 0,
+            "clearance": 2003.4876366761737,
+            "visibilityLift": 0
+          },
+          {
+            "t": 28,
+            "position": [
+              -1272.4573019083277,
+              4841.955004832652,
+              3046.5997475355157
+            ],
+            "target": [
+              -2100.000067967492,
+              2400.0012532365886,
+              1196.999816390779
+            ],
+            "bearing": -161.27922448255944,
+            "pitch": 35.6539112522538,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "OUTRO",
+            "segment": 0,
+            "clearance": 2645.5997475355157,
+            "visibilityLift": 0
+          },
+          {
+            "t": 30,
+            "position": [
+              -1348.1108219911237,
+              -15345.552007877986,
+              39104.411037858416
+            ],
+            "target": [
+              -1348.1108219911237,
+              50.14898118551855,
+              1020.3085912276453
+            ],
+            "bearing": 0,
+            "pitch": 67.98871680208063,
+            "roll": 0,
+            "fov": 46,
+            "near": 5,
+            "far": 100000,
+            "phase": "OUTRO",
+            "segment": 0,
+            "clearance": 39104.411037858416,
+            "visibilityLift": 36057.8112903229
+          }
+        ]
+      }
+    ]
+  },
+  "performance": {
+    "sourceCommit": "b3937e75430a5a656f765d2f3f89687385d3fb87",
+    "uncommitted": false,
+    "os": "Windows_NT 10.0.26200 x64",
+    "browser": "154.0.4258.62",
+    "method": "One warm-up then3 steady repeats, same721-point synthetic route; frame timing includes destination Canvas draw/copy but is not a GPU timer. Native/GPU memory measured separately or unmeasured.",
+    "gpxBytes": 30885,
+    "reports": [
+      {
+        "mode": "cinematic",
+        "quality": "compatibility",
+        "aspect": "landscape",
+        "duration": 20,
+        "summary": {
+          "parseMs": {
+            "median": 5.700000002980232,
+            "min": 5.5,
+            "max": 5.700000002980232
+          },
+          "loadMs": {
+            "median": 0,
+            "min": 0,
+            "max": 0.09999999403953552
+          },
+          "prepareMs": {
+            "median": 23.299999997019768,
+            "min": 20.799999997019768,
+            "max": 27.400000005960464
+          },
+          "firstFrameMs": {
+            "median": 2.4000000059604645,
+            "min": 2.1000000089406967,
+            "max": 2.4000000059604645
+          },
+          "exportMs": {
+            "median": 1333,
+            "min": 1324.2999999970198,
+            "max": 1338.6000000089407
+          },
+          "bytes": {
+            "median": 3231095,
+            "min": 3231095,
+            "max": 3231095
+          },
+          "frames": {
+            "median": 0.20000000298023224,
+            "min": 0.09999999403953552,
+            "max": 48.70000000298023
+          },
+          "seek": {
+            "median": 1.2000000029802322,
+            "min": 0.5,
+            "max": 28.5
+          }
+        }
+      },
+      {
+        "mode": "cinematic",
+        "quality": "standard",
+        "aspect": "landscape",
+        "duration": 20,
+        "summary": {
+          "parseMs": {
+            "median": 5.299999997019768,
+            "min": 5.200000002980232,
+            "max": 5.4000000059604645
+          },
+          "loadMs": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          },
+          "prepareMs": {
+            "median": 23.80000001192093,
+            "min": 23.200000002980232,
+            "max": 23.900000005960464
+          },
+          "firstFrameMs": {
+            "median": 13.299999997019768,
+            "min": 12.899999991059303,
+            "max": 14.199999988079071
+          },
+          "exportMs": {
+            "median": 4567.4000000059605,
+            "min": 4558.399999991059,
+            "max": 4588.29999999702
+          },
+          "bytes": {
+            "median": 9936366,
+            "min": 9936366,
+            "max": 9936366
+          },
+          "frames": {
+            "median": 8,
+            "min": 7.699999988079071,
+            "max": 11
+          },
+          "seek": {
+            "median": 8.899999991059303,
+            "min": 7.899999991059303,
+            "max": 9.599999994039536
+          }
+        }
+      },
+      {
+        "mode": "cinematic",
+        "quality": "standard",
+        "aspect": "portrait",
+        "duration": 30,
+        "summary": {
+          "parseMs": {
+            "median": 5.600000008940697,
+            "min": 5.5999999940395355,
+            "max": 5.699999988079071
+          },
+          "loadMs": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          },
+          "prepareMs": {
+            "median": 27.599999994039536,
+            "min": 27.100000008940697,
+            "max": 29.900000005960464
+          },
+          "firstFrameMs": {
+            "median": 26.799999997019768,
+            "min": 26.200000002980232,
+            "max": 29.899999991059303
+          },
+          "exportMs": {
+            "median": 17171.5,
+            "min": 17048.19999998808,
+            "max": 17479.30000001192
+          },
+          "bytes": {
+            "median": 16415577,
+            "min": 16415577,
+            "max": 16415577
+          },
+          "frames": {
+            "median": 22.599999994039536,
+            "min": 8.600000008940697,
+            "max": 28.299999997019768
+          },
+          "seek": {
+            "median": 23.799999997019768,
+            "min": 22.899999991059303,
+            "max": 26.200000002980232
+          }
+        }
+      },
+      {
+        "mode": "terrain",
+        "quality": "compatibility",
+        "aspect": "landscape",
+        "duration": 20,
+        "summary": {
+          "parseMs": {
+            "median": 5.299999997019768,
+            "min": 4.799999997019768,
+            "max": 5.5999999940395355
+          },
+          "loadMs": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          },
+          "prepareMs": {
+            "median": 70.5,
+            "min": 64,
+            "max": 73
+          },
+          "firstFrameMs": {
+            "median": 1.9000000059604645,
+            "min": 1.7000000029802322,
+            "max": 2.7000000029802322
+          },
+          "exportMs": {
+            "median": 619.2999999970198,
+            "min": 596.7999999970198,
+            "max": 630.1000000089407
+          },
+          "bytes": {
+            "median": 3863503,
+            "min": 3863503,
+            "max": 3863503
+          },
+          "frames": {
+            "median": 0.5,
+            "min": 0.29999999701976776,
+            "max": 1.2999999970197678
+          },
+          "seek": {
+            "median": 0.5,
+            "min": 0.3999999910593033,
+            "max": 0.7000000029802322
+          }
+        }
+      },
+      {
+        "mode": "terrain",
+        "quality": "standard",
+        "aspect": "landscape",
+        "duration": 20,
+        "summary": {
+          "parseMs": {
+            "median": 5.399999991059303,
+            "min": 5,
+            "max": 5.5
+          },
+          "loadMs": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          },
+          "prepareMs": {
+            "median": 192.6000000089407,
+            "min": 177.90000000596046,
+            "max": 192.79999999701977
+          },
+          "firstFrameMs": {
+            "median": 4.399999991059303,
+            "min": 4.399999991059303,
+            "max": 5
+          },
+          "exportMs": {
+            "median": 1138.699999988079,
+            "min": 1094.5,
+            "max": 1158.7000000029802
+          },
+          "bytes": {
+            "median": 12830178,
+            "min": 12830178,
+            "max": 12830178
+          },
+          "frames": {
+            "median": 0.5,
+            "min": 0.29999999701976776,
+            "max": 2.7000000029802322
+          },
+          "seek": {
+            "median": 0.4000000059604645,
+            "min": 0.29999999701976776,
+            "max": 0.699999988079071
+          }
+        }
+      },
+      {
+        "mode": "terrain",
+        "quality": "standard",
+        "aspect": "portrait",
+        "duration": 30,
+        "summary": {
+          "parseMs": {
+            "median": 5.299999997019768,
+            "min": 5.100000008940697,
+            "max": 5.5999999940395355
+          },
+          "loadMs": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          },
+          "prepareMs": {
+            "median": 215.70000000298023,
+            "min": 199.40000000596046,
+            "max": 216.09999999403954
+          },
+          "firstFrameMs": {
+            "median": 4.5,
+            "min": 4.200000002980232,
+            "max": 5.200000002980232
+          },
+          "exportMs": {
+            "median": 1663.0999999940395,
+            "min": 1586.6000000089407,
+            "max": 1704.5999999940395
+          },
+          "bytes": {
+            "median": 17908643,
+            "min": 17908643,
+            "max": 17908643
+          },
+          "frames": {
+            "median": 0.4000000059604645,
+            "min": 0.29999999701976776,
+            "max": 3.2000000029802322
+          },
+          "seek": {
+            "median": 0.5,
+            "min": 0.3999999910593033,
+            "max": 1.2999999970197678
+          }
+        }
+      }
+    ]
+  },
+  "memory": {
+    "baseline2D": {
+      "sourceCommit": "3037f30cdeb8f0e0efc0349cf3fa76fb780cd1a7",
+      "uncommitted": true,
+      "pointCount": 50000,
+      "gpxBytes": 2150102,
+      "method": "Separate isolated Edge root plus descendants; Windows PrivateMemorySize64 and WorkingSet64 sums. Private bytes are committed virtual memory, not resident physical memory; working-set sums double-count shared pages. Sampled peaks; CDP heap is separate. GPU VRAM and dedicated codec memory unmeasured. Test-only GC, never production.",
+      "audit": {
+        "disposed": 18,
+        "zero": true,
+        "remainingRenderers": 0,
+        "remainingRoutes": 0,
+        "local": 0,
+        "session": 0
+      },
+      "samples": 322,
+      "sampleIntervalMs": [
+        173,
+        315
+      ],
+      "privatePeakBytes": 876539904,
+      "workingSetPeakBytes": 1099489280,
+      "largestStageSampledJsHeapBytes": 70473304,
+      "stages": [
+        {
+          "label": "baseline",
+          "privateBytes": 295284736,
+          "workingSetBytes": 491094016,
+          "jsHeap": {
+            "JSHeapUsedSize": 7636648,
+            "JSHeapTotalSize": 10846208
+          }
+        },
+        {
+          "label": "cycle0-retained",
+          "privateBytes": 584151040,
+          "workingSetBytes": 817758208,
+          "jsHeap": {
+            "JSHeapUsedSize": 23025176,
+            "JSHeapTotalSize": 94289920
+          }
+        },
+        {
+          "label": "cycle1-retained",
+          "privateBytes": 581754880,
+          "workingSetBytes": 788512768,
+          "jsHeap": {
+            "JSHeapUsedSize": 26118568,
+            "JSHeapTotalSize": 35770368
+          }
+        },
+        {
+          "label": "cycle2-retained",
+          "privateBytes": 571973632,
+          "workingSetBytes": 782131200,
+          "jsHeap": {
+            "JSHeapUsedSize": 26348492,
+            "JSHeapTotalSize": 36294656
+          }
+        },
+        {
+          "label": "test-only-gc",
+          "privateBytes": 482988032,
+          "workingSetBytes": 693358592,
+          "jsHeap": {
+            "JSHeapUsedSize": 14222572,
+            "JSHeapTotalSize": 15515648
+          }
+        },
+        {
+          "label": "page-unload",
+          "privateBytes": 451125248,
+          "workingSetBytes": 694161408,
+          "jsHeap": {
+            "JSHeapUsedSize": 14606348,
+            "JSHeapTotalSize": 15777792
+          }
+        }
+      ]
+    },
+    "initial3D": {
+      "sourceCommit": "3037f30cdeb8f0e0efc0349cf3fa76fb780cd1a7",
+      "uncommitted": true,
+      "pointCount": 50000,
+      "gpxBytes": 2150102,
+      "method": "Separate isolated Edge root plus descendants; Windows PrivateMemorySize64 and WorkingSet64 sums. Private bytes are committed virtual memory, not resident physical memory; working-set sums double-count shared pages. Sampled peaks; CDP heap is separate. GPU VRAM and dedicated codec memory unmeasured. Test-only GC, never production.",
+      "audit": {
+        "disposed": 18,
+        "zero": true,
+        "remainingRenderers": 0,
+        "remainingRoutes": 0,
+        "local": 0,
+        "session": 0
+      },
+      "samples": 168,
+      "sampleIntervalMs": [
+        174,
+        299
+      ],
+      "privatePeakBytes": 1133375488,
+      "workingSetPeakBytes": 1300443136,
+      "largestStageSampledJsHeapBytes": 147397232,
+      "stages": [
+        {
+          "label": "baseline",
+          "privateBytes": 314425344,
+          "workingSetBytes": 512512000,
+          "jsHeap": {
+            "JSHeapUsedSize": 12937004,
+            "JSHeapTotalSize": 15441920
+          }
+        },
+        {
+          "label": "cycle0-retained",
+          "privateBytes": 1020870656,
+          "workingSetBytes": 1150013440,
+          "jsHeap": {
+            "JSHeapUsedSize": 69062572,
+            "JSHeapTotalSize": 136028160
+          }
+        },
+        {
+          "label": "cycle1-retained",
+          "privateBytes": 882573312,
+          "workingSetBytes": 1050595328,
+          "jsHeap": {
+            "JSHeapUsedSize": 20193116,
+            "JSHeapTotalSize": 92626944
+          }
+        },
+        {
+          "label": "cycle2-retained",
+          "privateBytes": 869502976,
+          "workingSetBytes": 1039290368,
+          "jsHeap": {
+            "JSHeapUsedSize": 29764036,
+            "JSHeapTotalSize": 97718272
+          }
+        },
+        {
+          "label": "test-only-gc",
+          "privateBytes": 631738368,
+          "workingSetBytes": 826679296,
+          "jsHeap": {
+            "JSHeapUsedSize": 15511100,
+            "JSHeapTotalSize": 16965632
+          }
+        },
+        {
+          "label": "page-unload",
+          "privateBytes": 632213504,
+          "workingSetBytes": 828026880,
+          "jsHeap": {
+            "JSHeapUsedSize": 15894964,
+            "JSHeapTotalSize": 17489920
+          }
+        }
+      ]
+    },
+    "allocationOptimised3D": {
+      "sourceCommit": "3037f30cdeb8f0e0efc0349cf3fa76fb780cd1a7",
+      "uncommitted": true,
+      "pointCount": 50000,
+      "gpxBytes": 2150102,
+      "method": "Separate isolated Edge root plus descendants; Windows PrivateMemorySize64 and WorkingSet64 sums. Private bytes are committed virtual memory, not resident physical memory; working-set sums double-count shared pages. Sampled peaks; CDP heap is separate. GPU VRAM and dedicated codec memory unmeasured. Test-only GC, never production.",
+      "audit": {
+        "disposed": 18,
+        "zero": true,
+        "remainingRenderers": 0,
+        "remainingRoutes": 0,
+        "local": 0,
+        "session": 0
+      },
+      "samples": 158,
+      "sampleIntervalMs": [
+        195,
+        306
+      ],
+      "privatePeakBytes": 1106493440,
+      "workingSetPeakBytes": 1272623104,
+      "largestStageSampledJsHeapBytes": 98221932,
+      "stages": [
+        {
+          "label": "baseline",
+          "privateBytes": 306683904,
+          "workingSetBytes": 488906752,
+          "jsHeap": {
+            "JSHeapUsedSize": 12952196,
+            "JSHeapTotalSize": 15704064
+          }
+        },
+        {
+          "label": "cycle0-retained",
+          "privateBytes": 881160192,
+          "workingSetBytes": 1018753024,
+          "jsHeap": {
+            "JSHeapUsedSize": 19681280,
+            "JSHeapTotalSize": 94199808
+          }
+        },
+        {
+          "label": "cycle1-retained",
+          "privateBytes": 1051021312,
+          "workingSetBytes": 1205452800,
+          "jsHeap": {
+            "JSHeapUsedSize": 39084876,
+            "JSHeapTotalSize": 108367872
+          }
+        },
+        {
+          "label": "cycle2-retained",
+          "privateBytes": 866693120,
+          "workingSetBytes": 1008906240,
+          "jsHeap": {
+            "JSHeapUsedSize": 20390796,
+            "JSHeapTotalSize": 95248384
+          }
+        },
+        {
+          "label": "test-only-gc",
+          "privateBytes": 670961664,
+          "workingSetBytes": 820920320,
+          "jsHeap": {
+            "JSHeapUsedSize": 15497048,
+            "JSHeapTotalSize": 16179200
+          }
+        },
+        {
+          "label": "page-unload",
+          "privateBytes": 650403840,
+          "workingSetBytes": 817360896,
+          "jsHeap": {
+            "JSHeapUsedSize": 15880912,
+            "JSHeapTotalSize": 16703488
+          }
+        }
+      ]
+    },
+    "final3D": {
+      "sourceCommit": "b3937e75430a5a656f765d2f3f89687385d3fb87",
+      "uncommitted": false,
+      "pointCount": 50000,
+      "gpxBytes": 2150102,
+      "method": "Separate isolated Edge root plus descendants; Windows PrivateMemorySize64 and WorkingSet64 sums. Private bytes are committed virtual memory, not resident physical memory; working-set sums double-count shared pages. Sampled peaks; CDP heap is separate. GPU VRAM and dedicated codec memory unmeasured. Test-only GC, never production.",
+      "audit": {
+        "disposed": 18,
+        "zero": true,
+        "remainingRenderers": 0,
+        "remainingRoutes": 0,
+        "local": 0,
+        "session": 0
+      },
+      "samples": 167,
+      "sampleIntervalMs": [
+        178,
+        320
+      ],
+      "privatePeakBytes": 1145262080,
+      "workingSetPeakBytes": 1287032832,
+      "largestStageSampledJsHeapBytes": 103247200,
+      "stages": [
+        {
+          "label": "baseline",
+          "privateBytes": 299651072,
+          "workingSetBytes": 480284672,
+          "jsHeap": {
+            "JSHeapUsedSize": 12958916,
+            "JSHeapTotalSize": 15179776
+          }
+        },
+        {
+          "label": "cycle0-retained",
+          "privateBytes": 989671424,
+          "workingSetBytes": 1114640384,
+          "jsHeap": {
+            "JSHeapUsedSize": 34464876,
+            "JSHeapTotalSize": 104828928
+          }
+        },
+        {
+          "label": "cycle1-retained",
+          "privateBytes": 1004036096,
+          "workingSetBytes": 1154203648,
+          "jsHeap": {
+            "JSHeapUsedSize": 49455460,
+            "JSHeapTotalSize": 105713664
+          }
+        },
+        {
+          "label": "cycle2-retained",
+          "privateBytes": 841052160,
+          "workingSetBytes": 1012662272,
+          "jsHeap": {
+            "JSHeapUsedSize": 20468588,
+            "JSHeapTotalSize": 93937664
+          }
+        },
+        {
+          "label": "test-only-gc",
+          "privateBytes": 645971968,
+          "workingSetBytes": 828669952,
+          "jsHeap": {
+            "JSHeapUsedSize": 15528756,
+            "JSHeapTotalSize": 17227776
+          }
+        },
+        {
+          "label": "page-unload",
+          "privateBytes": 631345152,
+          "workingSetBytes": 820682752,
+          "jsHeap": {
+            "JSHeapUsedSize": 15912620,
+            "JSHeapTotalSize": 17489920
+          }
+        }
+      ]
+    }
+  },
+  "browserMatrix": [
+    {
+      "name": "Edge",
+      "os": "Windows_NT 10.0.26200 x64",
+      "version": "154.0.4258.62",
+      "status": "VERIFIED",
+      "terrain": true,
+      "deterministic": true,
+      "codec": "avc1.42001f",
+      "bytes": 780238,
+      "error": null
+    },
+    {
+      "name": "Chrome",
+      "os": "Windows_NT 10.0.26200 x64",
+      "version": "154.0.8037.98",
+      "status": "VERIFIED",
+      "terrain": true,
+      "deterministic": true,
+      "codec": "avc1.42001f",
+      "bytes": 780238,
+      "error": null
+    },
+    {
+      "name": "Playwright Firefox",
+      "os": "Windows_NT 10.0.26200 x64",
+      "version": "157.0",
+      "status": "VERIFIED",
+      "terrain": true,
+      "deterministic": true,
+      "codec": "avc1.42001f",
+      "bytes": 399190,
+      "error": null
+    },
+    {
+      "name": "Playwright WebKit",
+      "os": "Windows_NT 10.0.26200 x64",
+      "version": "27.2",
+      "status": "UNSUPPORTED",
+      "terrain": true,
+      "deterministic": true,
+      "codec": null,
+      "bytes": null,
+      "error": "\u0420\u00ad\u0420\u0454\u0421\u0403\u0420\u0457\u0420\u0455\u0421\u0402\u0421\u201a \u0421\u201a\u0421\u0402\u0420\u00b5\u0420\u00b1\u0421\u0453\u0420\u00b5\u0421\u201a WebCodecs: \u0420\u0455\u0421\u201a\u0420\u0454\u0421\u0402\u0420\u0455\u0420\u2116\u0421\u201a\u0420\u00b5 \u0420\u0457\u0421\u0402\u0420\u0451\u0420\u00bb\u0420\u0455\u0420\u00b6\u0420\u00b5\u0420\u0405\u0420\u0451\u0420\u00b5 \u0420\u0406 \u0421\u0403\u0420\u0455\u0420\u0406\u0421\u0402\u0420\u00b5\u0420\u0458\u0420\u00b5\u0420\u0405\u0420\u0405\u0420\u0455\u0420\u0458 Chrome \u0420\u0451\u0420\u00bb\u0420\u0451 Edge \u0421\u2021\u0420\u00b5\u0421\u0402\u0420\u00b5\u0420\u00b7 HTTPS \u0420\u00bb\u0420\u0451\u0420\u00b1\u0420\u0455 localhost."
+    }
+  ],
+  "projection": {
+    "method": "WGS84 Geod vs local100m east-axis at9 scene positions",
+    "minRelativeError": -0.0017528782018001454,
+    "maxRelativeError": 0.009155864406884096
+  }
+}

@@ -19,6 +19,7 @@
         <label class="upload-zone" for="file"><span class="upload-symbol" aria-hidden="true">↑</span><strong>Выбрать GPX-файл</strong><span>До 10 МиБ · до 50 000 точек</span></label>
         <input id="file" type="file" accept=".gpx,application/gpx+xml,application/xml,text/xml" aria-label="Выбрать GPX-файл">
         <button id="cinematic-demo" class="text-button">Попробовать кино-демо · фьорды ↗</button>
+        <button id="terrain-demo" class="text-button">Попробовать 3D · горный рельеф ↗</button>
         <button id="demo" class="text-button">Открыть учебный пример ↗</button>
         <p id="route-info" class="route-info">Пример содержит синтетические точки.</p>
       </section>
@@ -34,7 +35,7 @@
         <label class="field-label" for="ratio">Формат видео</label>
         <select id="ratio"><option value="landscape">16:9 · горизонтальное</option><option value="portrait">9:16 · вертикальное</option></select>
         <label class="field-label" for="camera-mode">Камера</label>
-        <select id="camera-mode"><option value="cinematic">Кинематографическая</option><option value="classic">Классическая · без движения</option></select>
+        <select id="camera-mode"><option value="cinematic">Кино · 2D</option><option value="auto">Авто · 3D при наличии DEM</option><option value="terrain">Рельеф · 3D</option><option value="classic">Классическая · без движения</option></select>
         <label class="field-label" for="duration">Длительность видео</label>
         <select id="duration"><option value="10">10 секунд</option><option value="20" selected>20 секунд</option><option value="30">30 секунд</option></select>
         <label class="field-label" for="quality">Качество видео</label>

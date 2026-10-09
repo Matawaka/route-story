@@ -22,7 +22,7 @@ export async function exportVideo(options: {
   config?: StoryConfig;
   /** Internal Sprint 1 regression adapter; arbitrary dimensions are rejected. */
   width?: number; height?: number;
-  draw: (canvas: HTMLCanvasElement, seconds: number) => void;
+  draw: (canvas: HTMLCanvasElement, seconds: number) => void | Promise<void>;
   signal?: AbortSignal;
   onProgress?: (fraction: number) => void;
 }): Promise<Blob> {
@@ -51,7 +51,9 @@ export async function exportVideo(options: {
     await output.start();
     for (let frame = 0; frame < frameCount; frame++) {
       signal?.throwIfAborted();
-      options.draw(canvas, frame / fps);
+      // A renderer readiness barrier may complete asynchronously. Never capture
+      // a partially loaded scene; still retain only the current frame.
+      await options.draw(canvas, frame / fps);
       await source.add(frame / fps, 1 / fps);
       options.onProgress?.(0.98 * (frame + 1) / frameCount);
       // Let input and cancellation events run even on fast software encoders.
