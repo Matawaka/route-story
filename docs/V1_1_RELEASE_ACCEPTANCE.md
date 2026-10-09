@@ -38,3 +38,14 @@ If MP4 is unsupported, record UNSUPPORTED rather than failure of route preview. 
 6. Publish a new immutable v1.1.0 tag/release only after approval and acceptance, with independently decoded synthetic MP4s and finalized hashes. Never move v1.0.0.
 
 Historical desktop/MP4/memory evidence remains in TERRAIN_EVIDENCE.json and associated Sprint8 documents. It is not overwritten with unperformed device or public tests.
+
+## Current-version local production evidence
+
+Accepted application plus version promotion at `a9d480eab25b54145b25ed6396a0f5a091b75224`, clean tree. `npm.cmd run build; npm.cmd run release:package; $env:ACCEPTANCE_DIR='artifacts/sprint9/v1.1'; node scripts/acceptance/terrain.mjs --production`: PASS, Windows10.0.26200/Edge154.0.4258.62. Actual production UI below local `/route-story/`,19 manifest hashes/4775792B validated,0 errors/external requests/bad responses/storage/viewport overflow. This is not public HTTPS acceptance.
+
+| True3D output | Independently decoded | Bytes | Export wall clock (one observation) | SHA256 |
+| --- | --- | --- | --- | --- |
+| Atlas20s1280×720 | H.26424fps480frames | 12812946 |1198.1ms | a77ed890451a34d72c46ed6590b2c2d4501f58dc8af22660208b88bb96102588 |
+| Night30s720×1280 | H.26424fps720frames | 17894633 |1771.0ms | a0cc84ff7eeaebd6de1af5e42a1dccfc9edcea13f4d865b8d2af91897168dffd |
+
+FFmpeg6.1.1/ffprobe validate actual dimensions/container/codec/time/frame timestamps and every frame. Central-map minimum luma spread129/155; no blank geographic frames. Files/reports remain local under `artifacts/sprint9/v1.1`; new encoder bytes are not assigned old Sprint8 hashes. No new memory benchmark is claimed for this version-only change.
