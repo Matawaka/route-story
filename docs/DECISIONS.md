@@ -1,5 +1,13 @@
 # Decisions
 
+## Sprint 3: observed compatibility and resource costs
+
+Stack on accepted Sprint 2 head f9f63b5 because PRs #1/#2 remain open. Keep Canvas/Mediabunny/WebCodecs and all limits. Explicit opt-in local scripts test browser engines, large synthetic GPX and Windows process memory; routine CI remains affordable. Playwright mobile emulation is not physical-device acceptance; WebKit is not retail Safari. Windows WebKit preview works but VideoEncoder is absent.
+
+Firefox 157 returned the malformed AVC description recorded in Mozilla bug 2049470. Repair only the exact duplicate-SPS/PPS-header pattern with matching profile bytes before muxing, using original code; valid AVC records pass unchanged and unknown malformed records fail. Do not branch on browser identity. Independent decoding now rejects even recoverable decoder stderr errors.
+
+Profiled individual Canvas stroke-command pressure at 50k points. Use fixed 128-edge batches with disconnected subpaths, retaining deterministic cache boundaries and every point. Before/after OS samples show lower private committed memory but unchanged aggregate working sets; neither proves GPU VRAM use. Invalid import releases the hidden visible canvas too. Test-only GC/WeakRefs and four actual export/cancel/retry cycles observe cleanup without adding a production profiler. PERFORMANCE.md records before/after values and limitations.
+
 ## Sprint 2: bounded replay and shared timeline
 
 Sprint 1 PR #1 remains unmerged. Base branch: sprint-1-gpx-mp4 at 7caf13d; work branch: sprint-2-story-timeline. Use a stacked PR so the Sprint 2 diff excludes the existing implementation.

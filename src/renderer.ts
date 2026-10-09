@@ -12,6 +12,7 @@ export function metricLabel(route: Route): string {
   return route.elevationGain !== undefined ? `Набор высоты ${Math.round(route.elevationGain).toLocaleString('ru-RU')} м` : `${route.pointCount.toLocaleString('ru-RU')} точек маршрута`;
 }
 export const formatKm = (km: number) => km.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const STROKE_BATCH = 128;
 export class RouteRenderer {
   private readonly base: HTMLCanvasElement;
   readonly timeline: StoryTimeline;
@@ -72,6 +73,17 @@ export class RouteRenderer {
       if (i === 0 || Math.abs(this.projection.localLon(coordinates[i].lon) - this.projection.localLon(coordinates[i - 1].lon)) > 180) ctx.moveTo(x, y); else ctx.lineTo(x, y);
     } ctx.stroke();
   }
+  private strokeEdges(ctx: CanvasRenderingContext2D, begin: number, end: number): void {
+    if (begin === end) return;
+    ctx.beginPath();
+    for (let i = begin; i < end; i++) {
+      const edge = this.edges[i];
+      // Array identity also separates GPX segments and skipped projection seams.
+      if (i === begin || this.edges[i - 1].b !== edge.a) ctx.moveTo(...edge.a);
+      ctx.lineTo(...edge.b);
+    }
+    ctx.stroke();
+  }
   draw(canvas: HTMLCanvasElement, seconds: number): void {
     const ctx = canvas.getContext('2d'); if (!ctx) throw new Error('Canvas 2D недоступен.');
     const { width: w, height: h } = this; const unit = Math.min(w, h), colors = palette[this.style];
@@ -79,14 +91,17 @@ export class RouteRenderer {
     ctx.drawImage(this.base, 0, 0);
     ctx.lineCap = ctx.lineJoin = 'round'; ctx.lineWidth = unit / 95; ctx.strokeStyle = colors.line;
     const target = p === 1 ? this.edges.length : this.prefixes[state.segment][state.index];
+    const cachedTarget = Math.floor(target / STROKE_BATCH) * STROKE_BATCH;
     const highlighted = this.highlight.getContext('2d')!;
-    // Ascending edge strokes are replayed in exactly the same order after backward seeks.
-    if (target < this.paintedEdges) { highlighted.clearRect(0, 0, w, h); this.paintedEdges = 0; }
+    // Fixed batch boundaries, independent of frame/seek history, preserve exact pixels.
+    if (cachedTarget < this.paintedEdges) { highlighted.clearRect(0, 0, w, h); this.paintedEdges = 0; }
     highlighted.strokeStyle = colors.line; highlighted.lineWidth = unit / 95; highlighted.lineCap = highlighted.lineJoin = 'round';
-    while (this.paintedEdges < target) {
-      const edge = this.edges[this.paintedEdges++]; highlighted.beginPath(); highlighted.moveTo(...edge.a); highlighted.lineTo(...edge.b); highlighted.stroke();
+    while (this.paintedEdges < cachedTarget) {
+      this.strokeEdges(highlighted, this.paintedEdges, this.paintedEdges + STROKE_BATCH);
+      this.paintedEdges += STROKE_BATCH;
     }
     ctx.drawImage(this.highlight, 0, 0);
+    this.strokeEdges(ctx, this.paintedEdges, target);
     if (p < 1) {
       const previous = this.route.segments[state.segment][Math.max(0, state.index - 1)];
       if (Math.abs(this.projection.localLon(previous.lon) - this.projection.localLon(state.point.lon)) <= 180) {

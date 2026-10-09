@@ -57,6 +57,8 @@ async function importRoute(read: () => Promise<Route>, synthetic = false) {
   } catch (error) {
     if (currentLoad !== loadId) return;
     route = undefined; renderer?.dispose(); renderer = undefined; canvas.hidden = true; el('empty').hidden = false; el('facts').hidden = true;
+    // Release the visible canvas's last route image as well as the private render caches.
+    canvas.width = canvas.height = 0; delete canvas.dataset.phase; canvas.setAttribute('aria-label', 'Карта маршрута со стартом и финишем');
     play.disabled = scrub.disabled = title.disabled = true; el('route-info').textContent = 'Файл не принят. Выберите другой GPX.'; message((error as Error).message, true);
   } finally { if (currentLoad === loadId) loading = false; }
 }
