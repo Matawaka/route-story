@@ -2,9 +2,20 @@
 
 Локальный GPS Route Story Engine от Matawaka. Загрузите GPX, отредактируйте название, выберите 10, 20 или 30 секунд, «Атлас» или «Ночной» и сохраните H.264 MP4 в формате 16:9 или 9:16. Русский интерфейс, Canvas 2D, без обязательного сервера и платных API.
 
-Разработка началась **8 октября 2026 года** (Asia/Yekaterinburg). 14 октября — календарный день семь; отдельный срок подачи организаторами не указан. Sprint 3 основан на принятом Sprint 2 (`f9f63b5`): [PR #1](https://github.com/Matawaka/route-story/pull/1) и [PR #2](https://github.com/Matawaka/route-story/pull/2) ещё открыты. [PR #3 — Sprint 3](https://github.com/Matawaka/route-story/pull/3), ветка sprint-3-compatibility-memory, направлен в sprint-2-story-timeline; bootstrap main не используется как база. Слияние и публичное развёртывание автоматически не выполняются.
+**Публичное приложение: PENDING.** GitHub Pages ещё не опубликован; проверенного HTTPS URL пока нет. Готовится выпуск 1.0 в ветке `release/route-story-v1`. Sprint 1–3 уже объединены владельцем в main (`dd86c372b6d6c757d7327e22366b402f60ad9b4e`); release PR и публикация требуют отдельного разрешения. Точный статус, ссылки и результаты: [COMPETITION_DELIVERY](docs/COMPETITION_DELIVERY.md).
+
+![Проверенный production-предпросмотр синтетического маршрута](docs/images/route-story.png)
+
+Разработка началась **8 октября 2026 года** (Asia/Yekaterinburg). 14 октября — внутренний календарный день семь; отдельный срок подачи организаторами не указан. Конкурсная заявка пока не отправлена.
+
+## Локальный запуск
+
+Для подготовки этого выпуска из чистого checkout:
 
 ```powershell
+git clone https://github.com/Matawaka/route-story.git
+cd route-story
+git switch release/route-story-v1
 npm.cmd ci
 npm.cmd run build
 npm.cmd run preview
@@ -12,7 +23,20 @@ npm.cmd run preview
 
 В Windows PowerShell используйте `npm.cmd` и `npx.cmd`: это запускает командные обёртки Node.js и не требует разрешать выполнение `npm.ps1` или менять ExecutionPolicy. В Linux/macOS используйте `npm` и `npx` без `.cmd`.
 
-Откройте адрес localhost, напечатанный Vite (обычно http://127.0.0.1:4173). Для разработки в PowerShell: `npm.cmd run dev`. Требуется Node.js 22.12+; проверено на Node 24.19.0. Экспорт требует HTTPS или localhost и доступного WebCodecs H.264-кодировщика. Приложение проверяет поддержку на выбранных размерах и показывает причину недоступности. На Windows проверены Edge 154, Chrome 154, Playwright Firefox 157 и Chromium 156 с мобильной эмуляцией, включая независимо декодированные MP4 в обоих качествах/форматах. В Playwright WebKit 27.2 на Windows работает предпросмотр, но отсутствует VideoEncoder и экспорт недоступен. Safari, физические Android/iOS и их потребление памяти не проверены. Точные версии, статусы и воспроизведение: [COMPATIBILITY](docs/COMPATIBILITY.md).
+```sh
+git clone https://github.com/Matawaka/route-story.git
+cd route-story
+git switch release/route-story-v1
+npm ci
+npm run build
+npm run preview
+```
+
+После утверждённого слияния выпуска можно использовать main или проверенный release tag. Команды Linux/macOS приведены для воспроизводимости сборки; MP4-кодировщик на этих ОС в текущей приёмке не проверен. Для запуска нужен актуальный браузер с Canvas 2D, File/Blob и XML DOM; для экспорта дополнительно WebCodecs H.264. Общий минимальный объём RAM для всех устройств не установлен.
+
+Откройте адрес localhost, напечатанный Vite (обычно http://127.0.0.1:4173). Для разработки в PowerShell: `npm.cmd run dev`. Требуется Node.js 22.12+; проверено на Node 24.19.0. Экспорт требует HTTPS или localhost и доступного WebCodecs H.264-кодировщика. Приложение проверяет поддержку на выбранных размерах и показывает причину недоступности. На Windows проверены Edge 154, Chrome 154, Playwright Firefox 157 и Chromium 156 с мобильной эмуляцией, включая независимо декодированные MP4 в обоих качествах/форматах. В Playwright WebKit 27.2 на Windows работает предпросмотр, но отсутствует VideoEncoder и экспорт недоступен. Safari, физические Android/iOS и их потребление памяти не проверены. Краткое публичное заявление: [SUPPORTED_PLATFORMS](docs/SUPPORTED_PLATFORMS.md); точные версии, статусы и воспроизведение: [COMPATIBILITY](docs/COMPATIBILITY.md).
+
+## Маршруты, приватность и ограничения
 
 GPX остаётся в памяти браузера: без отправки, сохранения пользовательских маршрутов и телеметрии. Доступны GPX 1.0/1.1 (UTF-8), треки и route points, несколько отдельных сегментов, высота и временные метки при наличии. Расстояние рассчитано по исходным координатам и не включает разрывы. Набор высоты показывается только при полной серии высот; иначе — число точек. Метки времени извлекаются, но не используются для выдуманных скоростей или длительности поездки.
 
@@ -30,6 +54,8 @@ GPX остаётся в памяти браузера: без отправки, 
 | Стандартное | 1280×720 | 720×1280 | 24 | 5 Мбит/с |
 
 Standard проверяется на выбранных размерах. Если кодировщик недоступен, приложение предлагает выбрать совместимое качество; автоматического снижения качества или длительности нет. Экспорт ограничен 30 секундами, 720 кадрами и 32 МиБ закодированных пакетов (+ до 1 МиБ для MP4-контейнера). Это ограничение файла, не измеренный предел общей памяти браузера. Параметры фиксируются перед экспортом, конфликтующие элементы блокируются; отмена и повторный экспорт доступны. Четырёхсекундный режим сохранён только для внутренних регрессионных проверок.
+
+## Проверки
 
 Проверки на Windows с установленным Edge:
 
@@ -58,10 +84,34 @@ npm.cmd run validate:video -- artifacts/story-standard-30s-landscape.mp4 1280 72
 
 CI использует только синтетические данные. Учебный пример также синтетический. Реальный публичный Hong Kong Trail проверен отдельно и не включён в репозиторий из-за неразрешённых условий вышестоящих источников: [происхождение и результаты](docs/SAMPLE_PROVENANCE.md).
 
-Статическое размещение: опубликуйте содержимое `dist/` на любом HTTPS-хостинге с поддержкой статических файлов. Пути относительные, дополнительных API не требуется. Новое публичное развёртывание не является частью этого checkpoint.
+## Два примера и демонстрация
+
+Публичные видео-ссылки: **PENDING — ожидается разрешение на GitHub Release**. Большие MP4 не хранятся в source Git. Скрипт создаёт реальные файлы из [синтетического учебного GPX](public/samples/synthetic.gpx) и [синтетического перехода через 180°](public/samples/synthetic-antimeridian.gpx):
+
+| Пример | Параметры | Локальный результат |
+| --- | --- | --- |
+| ATLAS — «Учебный маршрут · ATLAS» | 16:9, 1280×720, 20s, 24 FPS, 480 кадров | `artifacts/release/atlas-20s.mp4` |
+| NIGHT — «Через 180° · NIGHT» | 9:16, 720×1280, 30s, 24 FPS, 720 кадров | `artifacts/release/night-30s.mp4` |
+
+```powershell
+npm.cmd run build
+npm.cmd run release:package
+$env:PLAYWRIGHT_CHANNEL = 'msedge'
+npm.cmd run release:acceptance
+```
+
+Оба файла создаются через интерфейс production-сборки, независимо проверяются FFmpeg/ffprobe и воспроизводятся в native video браузера. Результаты — [COMPETITION_DELIVERY](docs/COMPETITION_DELIVERY.md). Пошаговая публичная демонстрация: [DEMONSTRATION](docs/DEMONSTRATION.md). Встроенный учебный пример не требует скачивания сторонних GPS данных. Никакая личная история поездок не используется.
+
+## Публикация
+
+Подготовлен ручной workflow GitHub Pages, который принимает только полный проверенный SHA main с успешной приёмкой. Build/test имеют read-only права; запись Pages/OIDC доступна только deployment job, требующему отдельно настроенного owner approval. Пути относительные и проверены под `/route-story/`; приватные тестовые данные исключены из публичного пакета. Публикация сайта и релизных видео до разрешения не выполняется. [Проверка стека и точный порядок выпуска](docs/RELEASE.md).
+
+Production CSP остаётся ограниченным локальными ресурсами. На статическом хостинге meta CSP не заменяет все HTTP security headers; фактические заголовки и HTTPS должны проверяться после публикации. Никакие отсутствующие header-защиты не заявляются.
 
 Sprint 3 измеряет большие синтетические треки до 50 000 точек и отдельные категории памяти Windows; уменьшение private bytes не означает такое же снижение физической RAM. Подробности и воспроизводимые локальные команды: [PERFORMANCE](docs/PERFORMANCE.md). Снимки обоих стилей, форматов, качеств и крайних геометрий: [VISUAL_VALIDATION](docs/VISUAL_VALIDATION.md). Полная матрица/профилирование — отдельная локальная приёмка; обычный CI сохраняет короткий и средний экспорт. Зависимости и пределы экспорта не увеличены.
 
 Состояние: [IMPLEMENTATION_STATE](docs/IMPLEMENTATION_STATE.md). Решения: [DECISIONS](docs/DECISIONS.md). [Аудит исходного проекта](docs/UPSTREAM_AUDIT.md). [Проверка видео](docs/VIDEO_VALIDATION.md).
 
-Оригинальный код — MIT, Dmitrii Olegovich Kuznetsov (Matawaka). Сторонние лицензии и источники, включая сохранённую атрибуцию Travel Animation: [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md). Notices и полные лицензии автоматически включаются в сборку. Remotion не используется; возможная будущая интеграция не добавляет текущих задач.
+## Лицензии
+
+Оригинальный код — [MIT](LICENSE), Dmitrii Olegovich Kuznetsov (Matawaka). Сохранена атрибуция [Travel Animation / topmonroe9](https://github.com/topmonroe9/travel-animation/tree/840029273c420ed68e1483eb6c4d2ea464eb5109). Локальные очертания Natural Earth — public domain. Mediabunny 1.61.3 — неизменённая MPL-2.0 зависимость; её covered files сохраняют условия MPL. Сторонние лицензии и происхождение: [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md), [Travel Animation MIT notice](licenses/TRAVEL_ANIMATION.txt), [Mediabunny MPL text](licenses/MEDIABUNNY-MPL-2.0.txt). Notices и полные лицензии автоматически включаются в сборку и проверяются перед публикацией. Remotion и Higgsfield не используются.

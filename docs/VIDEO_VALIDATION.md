@@ -1,5 +1,11 @@
 # Browser MP4 proof
 
+## Sprint 4 release examples — 2026-10-09
+
+Identified production package source 67d1726662742af33066df8cffde331a4270f77b, Edge 154.0.4258.62 / Windows 10.0.26200 x64. `npm.cmd run release:acceptance` generated actual UI downloads Atlas20s (1280×720, 480 frames, 1553778 bytes, 1557.6ms) and Night30s antimeridian (720×1280, 720 frames, 2282557 bytes, 1737.7ms). Both Standard, H.264 avc1.42001f, exact selected duration, 24fps. Independent FFmpeg/ffprobe strictly decoded every frame, identified MP4, checked every timestamp and rejected decoder errors; first/last hashes differ and every frame hash is distinct. Both Blobs also loaded, sought and actually played in the tested browser.
+
+Source files contain only explicitly synthetic 9/80-point geometry. Representative decoded intro/middle/outro and beginning/ending frames were visually inspected. Machine evidence and SHA-256: RELEASE_EVIDENCE.json; complete delivery/commands: COMPETITION_DELIVERY.md and RELEASE.md. All full local regressions pass: 92 unit tests, build, 25 browser tests / one intentional unresolved-license external-data skip, including both original 30s/5000-point cases. Public HTTPS and published release assets remain PENDING pending owner authorization; local secure context does not verify deployment. No new memory benchmark is claimed.
+
 ## Sprint 3 final acceptance — 2026-10-09
 
 Application code commit `88b410bf9c60e31a24519d715a9040fc9eb8b379` on sprint-3-compatibility-memory, stacked on accepted Sprint 2 f9f63b5. `PLAYWRIGHT_CHANNEL=msedge FULL_EXPORT_ACCEPTANCE=1 npm.cmd run check`: 88 unit tests, build and 24 browser tests passed; one unresolved-license external-data test intentionally skipped (36.0s browser suite). All prior regression assertions retained. No duration/FPS/resolution/point/input limits increased. Dependencies/attributions unchanged; both audit commands report zero vulnerabilities.

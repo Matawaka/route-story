@@ -14,4 +14,6 @@ Run unit tests, build and browser smoke tests before reporting success. MP4 succ
 
 Routine CI retains the 4-second regression and a bounded 20-second Standard export. Full 30-second Standard exports in both aspects use FULL_EXPORT_ACCEPTANCE=1 locally. Windows PowerShell launch commands use npm.cmd without changing execution policy.
 
+Release publication is manual and requires explicit owner authorization. Pages builds must use the exact reviewed main SHA with successful main-push acceptance; configure a main-only github-pages environment with a required human reviewer before dispatch. Test the actual returned HTTPS URL separately; localhost is not public acceptance. Publish only independently validated synthetic demo assets and verified URLs.
+
 Work on short-lived branches and reviewable PRs after bootstrap. No automatic merges, force pushes or unrelated repository changes. Avoid speculative architecture. No subagents are required.
