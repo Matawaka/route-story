@@ -8,7 +8,7 @@ import ffmpeg from 'ffmpeg-static';
 import {withServer} from './server.mjs';
 import {withProductionServer} from './production.mjs';
 import {validateVideo} from '../validate-video.mjs';
-const production=process.argv.includes('--production'),folder=production?'artifacts/sprint8/final':'artifacts/sprint8/terrain';mkdirSync(folder,{recursive:true});
+const production=process.argv.includes('--production'),folder=process.env.ACCEPTANCE_DIR||(production?'artifacts/sprint8/final':'artifacts/sprint8/terrain');mkdirSync(folder,{recursive:true});
 await (production?withProductionServer:withServer)(async url=>{
  const browser=await chromium.launch({channel:'msedge',headless:true}),page=await browser.newPage(),reports=[],errors=[],external=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&/THREE|WebGL/.test(m.text()))errors.push(m.text());});

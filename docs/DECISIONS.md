@@ -1,5 +1,9 @@
 # Decisions
 
+## Sprint9: separate accepted release stabilization from imagery development
+
+Promote accepted merged main8f4d0f6 package/lock to1.1.0 in an independent stabilization PR. Main push CI must pass; required device results and final owner release approval remain explicit publication gates. Historical evidence and immutable v1.0 stay intact. Existing manual protected Pages workflow is unchanged. A configurable acceptance-output directory preserves prior video evidence when repeating current-version checks. Phototextured v1.2 work starts independently from merged main, never absorbs documentation PR5 or promises physical/mobile support without tests.
+
 ## Sprint 8: genuine bounded DEM mesh and safe timestamp camera
 
 Owner accepts Sprint7 visual cost and explicitly requests terrain3D. Static Canvas cannot represent a genuine height surface/depth camera; this is the concrete reason for the documented Three exception. Stack feature/terrain-aware-3d/PR#7 on accepted PR#6 a704f67. Stable main/tag/Pages5f39332/v1.0.0, public assets, manual workflow/protected environment and unrelated PR#5 remain unchanged. No merge/publication/contest repost.
