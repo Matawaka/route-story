@@ -77,3 +77,22 @@ Test-only WeakRefs observed 32 disposed renderer instances, all cached canvases 
 ## Limits and next release
 
 Parsing/validation dominates large-route preview initialization (~0.5s at 50k here); it remains synchronous and can briefly block input. Native resource use remains substantial, even after batching. Low-RAM physical mobile devices, other drivers, GPU VRAM and dedicated codec memory are not measured. Do not raise existing file/point/video limits or silently lower requested export settings. A real mobile stress/cancel/retry run and OS-specific memory observation should precede a mobile export support claim. No evidence currently justifies workers/WebGL/WASM or a pipeline replacement.
+
+## Title layout before/after
+
+Long 200-unit titles previously ran an ellipsis/measureText loop on every frame. Cache the title, static metric and fitting font sizes at renderer construction, with no change to validated source text. Separate opt-in visual measurements use 100 dense synthetic points, six captured states, one warm-up + three steady submissions of 120 frames. Instrumented Canvas fillText measures glyph bounds in **both** versions, so this timing includes diagnostic overhead and is not production FPS/GPU completion.
+
+Baseline uses `VISUAL_BASELINE_REF=d440732` with `visual.mjs`: it copies that commit's public renderer into an ignored local fixture, rewrites its imports to the current source modules, and reports known old defects without calling it acceptance. The new projection is shared for this isolated text comparison; dense geometry is unaffected by its minimum-span change. Clear the environment variable to test current acceptance. Geometry/palette/font layout also changed, so the observed difference is the full small composition change, dominated by removed repeated text measurement; no isolated per-function causal precision is claimed.
+
+| Style / quality / aspect | Before 120 draws ms (range) | After ms (range) |
+| --- | --- | --- |
+| Atlas / Compatibility / 16:9 | 70.3 (69.0–79.8) | 11.4 (11.1–12.0) |
+| Atlas / Compatibility / 9:16 | 74.8 (68.3–75.2) | 11.0 (10.0–11.2) |
+| Atlas / Standard / 16:9 | 66.0 (63.4–68.2) | 9.9 (9.7–10.5) |
+| Atlas / Standard / 9:16 | 70.3 (70.0–74.8) | 9.8 (9.5–9.8) |
+| Night / Compatibility / 16:9 | 65.8 (63.2–66.7) | 10.4 (9.6–11.1) |
+| Night / Compatibility / 9:16 | 67.9 (67.7–71.0) | 9.9 (9.3–10.4) |
+| Night / Standard / 16:9 | 65.7 (65.7–71.4) | 9.5 (9.4–9.9) |
+| Night / Standard / 9:16 | 69.2 (68.6–71.3) | 9.4 (9.4–10.1) |
+
+Raw repeated reports: ignored visual-baseline.json and preserved visual-text-after.json. Initial exploratory single-pass reports remain visual-before.json; those are not substituted for the repeated results above.

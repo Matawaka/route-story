@@ -8,6 +8,10 @@ Firefox 157 returned the malformed AVC description recorded in Mozilla bug 20494
 
 Profiled individual Canvas stroke-command pressure at 50k points. Use fixed 128-edge batches with disconnected subpaths, retaining deterministic cache boundaries and every point. Before/after OS samples show lower private committed memory but unchanged aggregate working sets; neither proves GPU VRAM use. Invalid import releases the hidden visible canvas too. Test-only GC/WeakRefs and four actual export/cancel/retry cycles observe cleanup without adding a production profiler. PERFORMANCE.md records before/after values and limitations.
 
+## Sprint 3: measured composition defects
+
+Retain the static equirectangular camera/Natural Earth outlines. Document high-latitude distortion and coarse coast/island limits; do not substitute online maps or guessed geography. Very short routes use a bounded 0.0001° minimum span rather than the prior kilometre-scale floor; stationary views keep 0.01°. Separate close endpoint labels outside both markers, add small map-colour backing and reserve overlay margins. Short distances use metres consistently, large counters fit by font size without hiding digits, and long title ellipsis/static metric layout are cached. Route contrast is tested against both flat map surfaces. Raw 64-configuration/384-frame evidence and repeated title CPU measurements are local opt-in, not expensive new CI jobs. VISUAL_VALIDATION.md records checks and limits; no duration/FPS/resolution increase.
+
 ## Sprint 2: bounded replay and shared timeline
 
 Sprint 1 PR #1 remains unmerged. Base branch: sprint-1-gpx-mp4 at 7caf13d; work branch: sprint-2-story-timeline. Use a stacked PR so the Sprint 2 diff excludes the existing implementation.

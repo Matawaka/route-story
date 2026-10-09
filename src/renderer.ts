@@ -4,14 +4,15 @@ import { StoryTimeline } from './timeline';
 import { regressionStoryConfig, type StoryConfig, type VisualStyle } from './story';
 export type { VisualStyle } from './story';
 export type Land = { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[] };
-const palette = {
-  atlas: { water: '#ecefe6', land: '#dae2d1', coast: '#bdcbb6', grid: '#d7ded1', ink: '#1c3b32', quiet: '#58695e', line: '#297856', track: '#7c9982' },
-  night: { water: '#102825', land: '#1b3932', coast: '#2c5045', grid: '#23443a', ink: '#f4f3e5', quiet: '#a3b7a4', line: '#b8ed8d', track: '#638171' }
+export const palette = {
+  atlas: { water: '#ecefe6', land: '#dae2d1', coast: '#bdcbb6', grid: '#d7ded1', ink: '#1c3b32', quiet: '#58695e', line: '#216542', track: '#667f6d' },
+  night: { water: '#102825', land: '#1b3932', coast: '#2c5045', grid: '#23443a', ink: '#f4f3e5', quiet: '#a3b7a4', line: '#b8ed8d', track: '#769382' }
 };
 export function metricLabel(route: Route): string {
   return route.elevationGain !== undefined ? `Набор высоты ${Math.round(route.elevationGain).toLocaleString('ru-RU')} м` : `${route.pointCount.toLocaleString('ru-RU')} точек маршрута`;
 }
 export const formatKm = (km: number) => km.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+export const formatDistance = (km: number, totalKm = km) => totalKm < 1 ? `${(km * 1000).toLocaleString('ru-RU', { maximumFractionDigits: 1 })} м` : `${formatKm(km)} км`;
 const STROKE_BATCH = 128;
 export class RouteRenderer {
   private readonly base: HTMLCanvasElement;
@@ -22,6 +23,11 @@ export class RouteRenderer {
   private readonly highlight: HTMLCanvasElement;
   private readonly edges: { a: [number, number]; b: [number, number] }[] = [];
   private readonly prefixes: number[][] = [];
+  private readonly displayTitle: string;
+  private readonly metric: string;
+  private readonly distanceFont: number;
+  private readonly metricFont: number;
+  private readonly endpointLabels: { text: string; x: number; y: number; width: number }[];
   private paintedEdges = 0;
   constructor(readonly route: Route, readonly land: Land, readonly width: number, readonly height: number, readonly style: VisualStyle, config?: StoryConfig) {
     this.base = document.createElement('canvas'); this.base.width = width; this.base.height = height;
@@ -39,7 +45,43 @@ export class RouteRenderer {
       }
       this.prefixes.push(prefix);
     });
+    const unit = Math.min(width, height), available = width - unit * .16, ctx = this.base.getContext('2d')!;
+    ctx.font = `650 ${unit * .057}px system-ui`;
+    const titlePoints = Array.from(this.config.title), titleLength = titlePoints.length;
+    while (ctx.measureText(titlePoints.join('') + (titlePoints.length < titleLength ? '…' : '')).width > available && titlePoints.length) titlePoints.pop();
+    this.displayTitle = titlePoints.join('') + (titlePoints.length < titleLength ? '…' : '');
+    this.metric = metricLabel(route);
+    const fitFont = (text: string, size: number, weight = '') => { ctx.font = `${weight} ${size}px system-ui`; return Math.min(size, size * available / Math.max(1, ctx.measureText(text).width)); };
+    this.distanceFont = fitFont(this.distanceText(this.timeline.path.total, false), unit * .052, '650');
+    this.metricFont = fitFont(this.metric, unit * .032);
+    const start = route.segments[0][0], finish = route.segments.at(-1)!.at(-1)!;
+    const sameEndpoint = Math.abs(start.lat - finish.lat) < 1e-8 && Math.abs(this.projection.localLon(start.lon) - this.projection.localLon(finish.lon)) < 1e-8;
+    ctx.font = `600 ${unit * .032}px system-ui`;
+    this.endpointLabels = (sameEndpoint ? [[start, 'Старт / финиш']] : [[start, 'Старт'], [finish, 'Финиш']]).map(([point, text]) => {
+      const [x,y] = this.projection.project(point as RoutePoint), label = text as string, tw = ctx.measureText(label).width;
+      return { text: label, width: tw, x: Math.min(width - tw - 8, Math.max(8, x + unit * .035)), y: Math.max(height * .23 + unit * .025, Math.min(height * .78 - unit * .025, y - unit * .055)) };
+    });
+    if (this.endpointLabels.length === 2) {
+      const [a,b] = this.endpointLabels;
+      const [sx,sy] = this.projection.project(start), [fx,fy] = this.projection.project(finish);
+      if (Math.hypot(sx - fx, sy - fy) < unit * .25) {
+        // Put close endpoint labels outside their shared footprint, away from both markers.
+        const place = (label: typeof a, x: number, y: number, left: boolean, below: boolean) => {
+          label.x = Math.max(8, Math.min(width - label.width - 8, x + (left ? -label.width - unit * .035 : unit * .035)));
+          label.y = Math.max(height * .23 + unit * .025, Math.min(height * .78 - unit * .025, y + (below ? 1 : -1) * unit * .055));
+        };
+        place(a,sx,sy,sx <= fx,sy >= fy); place(b,fx,fy,fx < sx,fy > sy);
+      }
+      if (a.x < b.x + b.width + unit * .018 && b.x < a.x + a.width + unit * .018 && Math.abs(a.y - b.y) < unit * .05) {
+        const [,y] = this.projection.project(finish);
+        b.y = Math.min(height * .78 - unit * .025, Math.max(a.y + unit * .06, y + unit * .055));
+      }
+    }
     this.drawBase();
+  }
+  private distanceText(travelled: number, outro: boolean): string {
+    const total = this.timeline.path.total;
+    return outro ? `Всего ${formatDistance(total)}` : `${formatDistance(travelled, total).replace(/ (км|м)$/, '')} / ${formatDistance(total)}`;
   }
   private drawBase(): void {
     const ctx = this.base.getContext('2d')!; const colors = palette[this.style]; const { width: w, height: h } = this;
@@ -109,17 +151,21 @@ export class RouteRenderer {
         ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.stroke();
       }
     }
-    const marker = (point: RoutePoint, label: string, solid = false) => {
+    const marker = (point: RoutePoint, solid = false) => {
       const [x, y] = this.projection.project(point);
       ctx.beginPath(); ctx.arc(x, y, unit / 65, 0, Math.PI * 2); ctx.fillStyle = solid ? colors.line : colors.water; ctx.fill();
       ctx.strokeStyle = colors.ink; ctx.lineWidth = 1.5; ctx.stroke();
-      if (label) { ctx.font = `600 ${unit * 0.032}px system-ui`; ctx.textBaseline = 'middle'; ctx.fillStyle = colors.ink; const tw = ctx.measureText(label).width; ctx.fillText(label, Math.min(w - tw - 8, Math.max(8, x + unit / 38)), Math.max(h * .23, Math.min(h * .78, y - unit * .035))); }
     };
     const start = this.route.segments[0][0], finish = this.route.segments.at(-1)!.at(-1)!;
-    const sameEndpoint = Math.abs(start.lat - finish.lat) < 1e-8 && Math.abs(this.projection.localLon(start.lon) - this.projection.localLon(finish.lon)) < 1e-8;
-    if (state.showStart) marker(start, sameEndpoint ? 'Старт / финиш' : 'Старт');
-    if (state.showFinish && !sameEndpoint) marker(finish, 'Финиш');
-    ctx.save(); ctx.globalAlpha = state.markerOpacity; marker(state.point, '', true); ctx.restore();
+    if (state.showStart) marker(start);
+    if (state.showFinish && this.endpointLabels.length === 2) marker(finish);
+    ctx.save(); ctx.globalAlpha = state.markerOpacity; marker(state.point, true); ctx.restore();
+    ctx.font = `600 ${unit * .032}px system-ui`; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+    for (const label of this.endpointLabels) {
+      const padding = unit * .009;
+      ctx.fillStyle = colors.water; ctx.fillRect(label.x - padding, label.y - unit * .025, label.width + 2 * padding, unit * .05);
+      ctx.fillStyle = colors.ink; ctx.fillText(label.text, label.x, label.y);
+    }
     ctx.fillStyle = colors.water; ctx.fillRect(0, 0, w, h * 0.22); ctx.fillRect(0, h * 0.8, w, h * 0.2);
     ctx.textBaseline = 'top'; ctx.textAlign = 'left';
     ctx.fillStyle = colors.quiet; ctx.font = `600 ${unit * .027}px system-ui`; ctx.fillText('ROUTE STORY', pad, h * .045);
@@ -129,9 +175,7 @@ export class RouteRenderer {
       ctx.fillText('Matawaka', w - pad, h * .045); ctx.restore();
     }
     ctx.fillStyle = colors.ink; ctx.font = `650 ${unit * .057}px system-ui`;
-    const titlePoints = Array.from(state.title), titleLength = titlePoints.length;
-    while (ctx.measureText(titlePoints.join('') + (titlePoints.length < titleLength ? '…' : '')).width > w - pad * 2 && titlePoints.length) titlePoints.pop();
-    ctx.fillText(titlePoints.join('') + (titlePoints.length < titleLength ? '…' : ''), pad, h * .092);
+    ctx.fillText(this.displayTitle, pad, h * .092);
     if (storytelling) {
       ctx.save(); ctx.fillStyle = colors.quiet; ctx.font = `${unit * .03}px system-ui`;
       if (state.phase === 'INTRO') {
@@ -143,9 +187,9 @@ export class RouteRenderer {
       } else ctx.fillText(`Повтор маршрута · сегмент ${state.segment + 1} из ${this.route.segments.length}`, pad, h * .167);
       ctx.restore();
     }
-    ctx.font = `650 ${unit * .052}px system-ui`;
-    ctx.fillText(storytelling && state.phase === 'OUTRO' ? `Всего ${formatKm(state.totalKm)} км` : `${formatKm(state.travelledKm)} / ${formatKm(state.totalKm)} км`, pad, h * .83);
-    ctx.font = `${unit * .032}px system-ui`; ctx.fillStyle = colors.quiet; ctx.fillText(metricLabel(this.route), pad, h * .902);
+    ctx.font = `650 ${this.distanceFont}px system-ui`;
+    ctx.fillText(this.distanceText(state.travelledKm, storytelling && state.phase === 'OUTRO'), pad, h * .83);
+    ctx.font = `${this.metricFont}px system-ui`; ctx.fillStyle = colors.quiet; ctx.fillText(this.metric, pad, h * .902);
     ctx.fillStyle = colors.line; ctx.fillRect(pad, h * .963, (w - 2 * pad) * state.timelineProgress, Math.max(2, unit * .005));
   }
   dispose(): void { this.base.width = this.base.height = this.highlight.width = this.highlight.height = 0; }

@@ -16,12 +16,14 @@ test('fixed stroke batches are independent of frame history and preserve every s
 test('native encoder failure closes encoder and temporary canvas resources',async({page})=>{
   await page.goto('/');
   const result=await page.evaluate(async()=>{
-    const path='/src/exporter.ts';const{exportVideo}=await import(path),Native=VideoEncoder,instances:VideoEncoder[]=[];let error='';
+    const path='/src/exporter.ts';const{exportVideo}=await import(path),Native=VideoEncoder,instances:VideoEncoder[]=[],canvases:HTMLCanvasElement[]=[],create=document.createElement.bind(document);let error='';
+    document.createElement=((tag:string,options?:ElementCreationOptions)=>{const e=create(tag,options);if(e instanceof HTMLCanvasElement)canvases.push(e);return e;}) as typeof document.createElement;
     window.VideoEncoder=class extends Native{constructor(init:VideoEncoderInit){super(init);instances.push(this);}encode(){throw new DOMException('Deliberate encoder failure','EncodingError');}};
-    try{await exportVideo({width:640,height:360,draw:(c:HTMLCanvasElement)=>c.getContext('2d')!.fillRect(0,0,10,10)});}catch(e){error=(e as Error).message;}finally{window.VideoEncoder=Native;}
-    return{error,states:instances.map(i=>i.state)};
+    try{await exportVideo({width:640,height:360,draw:(c:HTMLCanvasElement)=>c.getContext('2d')!.fillRect(0,0,10,10)});}catch(e){error=(e as Error).message;}finally{window.VideoEncoder=Native;document.createElement=create;}
+    return{error,states:instances.map(i=>i.state),canvasSizes:canvases.map(c=>[c.width,c.height])};
   });
   expect(result.error).toContain('Deliberate encoder failure');expect(result.states.length).toBeGreaterThan(0);expect(result.states.every(s=>s==='closed')).toBe(true);
+  expect(result.canvasSizes.length).toBeGreaterThan(0);expect(result.canvasSizes.every(([w,h])=>w===0&&h===0)).toBe(true);
 });
 test('invalid import releases visible canvas pixels and the next valid import works',async({page})=>{
   await page.goto('/');await page.locator('#demo').click();await expect(page.locator('#export')).toBeEnabled();
