@@ -1,6 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {execFileSync,spawnSync} from 'node:child_process';
 import {writeFileSync,unlinkSync} from 'node:fs';
+import {readFileSync} from 'node:fs';
 // @ts-expect-error Test-only static host for the actual production repository subpath.
 import {withProductionServer} from '../../scripts/acceptance/production.mjs';
 
@@ -21,7 +22,7 @@ test('release package rejects extra data and production works below /route-story
   });
   page.on('pageerror',e=>errors.push(e.message));
   const response=await page.goto(url);expect(response?.status()).toBe(200);
-  const manifest=await (await page.request.get(url+'release.json')).json();expect(manifest.version).toBe('1.0.0');expect(manifest.sourceCommit).toMatch(/^[a-f0-9]{40}$/);
+  const manifest=await (await page.request.get(url+'release.json')).json();expect(manifest.version).toBe(JSON.parse(readFileSync('package.json','utf8')).version);expect(manifest.sourceCommit).toMatch(/^[a-f0-9]{40}$/);
   await page.locator('#demo').click();await expect(page.locator('#export')).toBeEnabled();
   await expect(page.locator('#route-info')).toContainText('синтетический');
   await page.locator('#scrub').fill('1');await expect(page.locator('#preview')).toHaveAttribute('data-phase','INTRO');

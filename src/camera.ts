@@ -46,7 +46,7 @@ export function createCameraPlan(timeline: StoryTimeline, width: number, height:
   const cos=Math.max(.01,Math.cos((south+north)/2*Math.PI/180));
   const world=(p:RoutePoint):XY=>[wrapDelta(p.lon-longitude)*cos,-p.lat];
   const bounds=boundsOf(points.map(world)),unit=Math.min(width,height),pad=unit*.1;
-  const safe:Bounds=[pad,height*.20,width-pad,height*.81];
+  const safe:Bounds=[pad,height*.20,width-pad,Math.min(height*.86,height-unit*.22)];
   const stationary=timeline.path.total===0,minSpan=stationary?.01:.0001;
   const overview:XY=[(bounds[0]+bounds[2])/2,(bounds[1]+bounds[3])/2];
   const overviewScale=Math.min((safe[2]-safe[0])/Math.max(minSpan,bounds[2]-bounds[0]),(safe[3]-safe[1])/Math.max(minSpan,bounds[3]-bounds[1]));

@@ -4,12 +4,14 @@ import { RouteRenderer, formatDistance, type Land, type VisualStyle } from './re
 import type { Route } from './route';
 import { defaultStoryConfig, exportSettings, formatVideoTime, validateStoryConfig, videoFilename, type StoryConfig } from './story';
 import './style.css';
+import { loadGeography } from './geography';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const canvas = el<HTMLCanvasElement>('preview'), file = el<HTMLInputElement>('file'), demo = el<HTMLButtonElement>('demo');
 const button = el<HTMLButtonElement>('export'), cancel = el<HTMLButtonElement>('cancel');
 const play = el<HTMLButtonElement>('play'), scrub = el<HTMLInputElement>('scrub'), ratio = el<HTMLSelectElement>('ratio');
 const duration = el<HTMLSelectElement>('duration'), quality = el<HTMLSelectElement>('quality');
 const cameraMode=el<HTMLSelectElement>('camera-mode');
+const cinematicDemo=el<HTMLButtonElement>('cinematic-demo');
 const title = el<HTMLInputElement>('story-title');
 let story: Readonly<StoryConfig> = defaultStoryConfig();
 if(matchMedia('(prefers-reduced-motion: reduce)').matches){story=validateStoryConfig({...story,cameraMode:'classic'});cameraMode.value='classic';}
@@ -34,12 +36,16 @@ async function configure(): Promise<void> {
     story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'],cameraMode:cameraMode.value as StoryConfig['cameraMode'] }, false);
     title.removeAttribute('aria-invalid');
   } catch (error) { title.setAttribute('aria-invalid', 'true'); stop(); message((error as Error).message, true); return; }
-  const land = await landPromise; if (currentProbe !== probeId) return;
+  const config=story,landBase = await landPromise;
+  const land=config.cameraMode==='cinematic'?{...landBase,geography:await loadGeography()}:landBase;
+  if (currentProbe !== probeId) return;
   stop(); renderer?.dispose(); const portrait = ratio.value === 'portrait';
   const settings = exportSettings(story); canvas.width = settings.width; canvas.height = settings.height;
   scrub.max = String(story.durationSeconds); scrub.value = String(Math.min(Number(scrub.value), story.durationSeconds));
   canvas.classList.toggle('portrait', portrait); el('preview-format').textContent = portrait ? '9:16' : '16:9';
   renderer = new RouteRenderer(route, land, canvas.width, canvas.height, style, story); draw();
+  const region=land.geography?.region.extent,covered=region&&route.segments.every(s=>s.every(p=>p.lon>=region[0]&&p.lon<=region[2]&&p.lat>=region[1]&&p.lat<=region[3]));
+  el('map-detail-note').textContent=`Карта: Natural Earth · ${covered?'фьорды, острова и подписи 1:10m':'обзорная география '+(story.cameraMode==='cinematic'?'1:50m':'1:110m')} · без улиц. Время видео не является длительностью поездки.`;
   canvas.setAttribute('aria-label', `История «${story.title}»: карта маршрута со стартом и финишем`);
   el('export-note').textContent = `${story.durationSeconds} секунд · ${canvas.width} × ${canvas.height} · 24 кадра/с · H.264`;
   try { await detectEncoder(canvas.width, canvas.height, settings.bitrate, settings.fps); if (currentProbe === probeId) { button.disabled = exporting || loading; message('Маршрут готов. Можно сохранить видео.'); } }
@@ -66,6 +72,11 @@ async function importRoute(read: () => Promise<Route>, synthetic = false) {
 }
 file.addEventListener('change', () => { const selected = file.files?.[0]; if (selected) void importRoute(() => readGpx(selected)); file.value = ''; });
 demo.addEventListener('click', () => void importRoute(async () => { const response = await fetch(`${import.meta.env.BASE_URL}samples/synthetic.gpx`); if (!response.ok) throw new Error('Учебный GPX недоступен.'); return parseGpx(await response.text()); }, true));
+cinematicDemo.addEventListener('click',()=>{
+  if(exporting)return;
+  cameraMode.value='cinematic';ratio.value='portrait';quality.value='standard';duration.value='20';
+  void importRoute(async()=>{const response=await fetch(`${import.meta.env.BASE_URL}samples/cinematic-fjords.gpx`);if(!response.ok)throw new Error('Кино-демо недоступно.');return parseGpx(await response.text());},true).then(()=>{scrub.value='0';draw();});
+});
 document.querySelectorAll<HTMLButtonElement>('[data-style]').forEach(card => card.addEventListener('click', () => {
   if (exporting) return; style = card.dataset.style as VisualStyle;
   document.querySelectorAll<HTMLButtonElement>('[data-style]').forEach(item => { item.classList.toggle('active', item === card); item.setAttribute('aria-pressed', String(item === card)); });
@@ -88,7 +99,7 @@ cancel.addEventListener('click', () => controller?.abort());
 button.addEventListener('click', async () => {
   if (!renderer || exporting || loading) return;
   exporting = true; stop(); controller = new AbortController(); cancel.hidden = false;
-  const controls = [button, file, demo, ratio, duration, quality, title, cameraMode, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
+  const controls = [button, file, demo, cinematicDemo, ratio, duration, quality, title, cameraMode, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
   const active = renderer;
   try {
     performance.clearMarks('route-story-export-start'); performance.clearMarks('route-story-export-end'); performance.clearMeasures('route-story-export');

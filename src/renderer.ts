@@ -2,9 +2,10 @@ import type { Route, RoutePoint } from './route';
 import { fitProjection } from './geo';
 import { StoryTimeline } from './timeline';
 import { CinematicRenderer } from './cinematic';
+import type { CinematicGeography } from './geography';
 import { regressionStoryConfig, type StoryConfig, type VisualStyle } from './story';
 export type { VisualStyle } from './story';
-export type Land = { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[] };
+export type Land = { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[];geography?:CinematicGeography };
 export const palette = {
   atlas: { water: '#ecefe6', land: '#dae2d1', coast: '#bdcbb6', grid: '#d7ded1', ink: '#1c3b32', quiet: '#58695e', line: '#216542', track: '#667f6d' },
   night: { water: '#102825', land: '#1b3932', coast: '#2c5045', grid: '#23443a', ink: '#f4f3e5', quiet: '#a3b7a4', line: '#b8ed8d', track: '#769382' }
