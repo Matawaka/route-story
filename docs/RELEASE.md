@@ -1,5 +1,27 @@
 # Release preparation and publication
 
+## Current photo publication checkpoint — 2026-10-09
+
+Public https://matawaka.github.io/route-story/ currently serves accepted main8f4d0f665d3f6df7f9fdef0d356a33310d2800ab, version1.1.0-rc.1, DEM-only. Existing protected run37962492130 and anonymous HTTPS/full20–30s3D acceptance succeeded. v1.0.0 tag/assets remain immutable. The older release-preparation text below is retained as historical procedure/evidence.
+
+Owner approved final photographic videos, public deployment and package-size increase. PR9 prepares1.2.0-rc.1 with the bounded Sogne Sentinel pack; its merge is still awaiting explicit authorization. PR5 documentation/PR8 stable1.1 version promotion are separate and not absorbed. No new tag or GitHub Release is implied by photo deployment approval.
+
+Use ONLY existing Reviewed GitHub Pages release. After approved merge, verify the new full main SHA and its successful push check.yml; dispatch main with reviewed_sha set to that exact SHA, approve_publication=true and include_imagery=true. Owner personally approves github-pages when requested. The environment was reverified: GitHub Actions source, HTTPS enforced, main-only branch policy, required reviewer Matawaka, self-review permitted for solo owner. No environment bypass or broader job permissions.
+
+Photo mode builds BUILD_IMAGERY_PACK=1 and validates --imagery-release: exact three assets, source/hash checks, baseline≤5MiB, two JPEGs≤2MiB/3million pixels/2048 sides, COMPLETE package including manifest≤6MiB. Default include_imagery=false preserves the baseline; legacy20m comparison data, raw DEM/crops, private routes, diagnostics and MP4s are never shipped.
+
+The actual deploy-pages URL runs the existing2D smoke plus photographic10sCompatibility exports in both aspects, resident resources, forward/backward pixel check, cancellation/retry, empty storage, no external/POST/WebSocket requests, restrictive metaCSP, every manifest hash and every decoded/nonblank MP4 frame. The photo report is artifacts/release/imagery/acceptance.json. Separate full Standard20/30s proof on the actual public URL remains required on a verified GPU:
+
+```powershell
+$env:APP_URL = Read-Host 'Actual deploy-pages HTTPS URL ending with /'
+$env:EXPECTED_COMMIT = Read-Host 'Exact newly deployed main SHA'
+$env:ACCEPTANCE_DIR = 'artifacts/sprint9/public-photo-full'
+node scripts/acceptance/imagery.mjs --full
+Remove-Item Env:APP_URL, Env:EXPECTED_COMMIT, Env:ACCEPTANCE_DIR
+```
+
+For local authorized-package smoke, build with BUILD_IMAGERY_PACK=1, run package-release.mjs --imagery-release, then imagery.mjs --production --release --smoke. Public results and photo physical-device support are PENDING until actually observed. Do not advertise local acceptance as public acceptance.
+
 Status on 2026-10-09: release preparation is authorized; merging the release PR, enabling Pages, public deployment, tagging and publishing release assets still require explicit owner approval. No public application URL is verified yet. October 14 is internal calendar day seven; no organizer submission hour has been established.
 
 ## Verified merge checklist

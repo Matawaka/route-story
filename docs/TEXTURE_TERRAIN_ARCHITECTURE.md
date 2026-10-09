@@ -1,5 +1,11 @@
 # Adaptive photographic terrain — v1.2 review candidate
 
+## Owner-approved publication policy — 2026-10-09
+
+Owner approved final20/30s photographic videos, public deployment and package increase. Earlier no-publication/budget statements below are historical checkpoints. The complete approved regional package is now bounded to6MiB including release.json (baseline still≤5MiB; no texture/GPU/export-limit increase). Only the three fixed adaptive files are shipped; the old20m developer fixture stays excluded. Build with BUILD_IMAGERY_PACK=1 and validate with --imagery-release; manifest publicationApproved=true means owner's package authorization, not proof of deployment. Local --imagery-candidate remains available with publicationApproved=false.
+
+Existing manual Pages workflow adds optional include_imagery; false preserves the baseline. Exact-main CI and personally reviewed github-pages environment remain required. Bounded post-deploy photo smoke and independent full20/30s public-site proof use the same imagery acceptance tool, APP_URL and required EXPECTED_COMMIT; no parallel hosting/export mechanism. PR9 merge approval and actual photo HTTPS acceptance remain PENDING. No runtime renderer/camera change at this publication checkpoint.
+
 ## Current approved development checkpoint — 2026-10-09
 
 Owner reviewed the actual10s photo-3D MP4s and approved continued detail. The independent branch remains based on main8f4d0f6, without PR5/PR8 changes. No v1.2 merge/deploy or public package-budget increase is authorized. Accepted DEM-only main is now live at https://matawaka.github.io/route-story/: protected run37962492130 and HTTPS job succeeded after personal owner review. Independent anonymous Windows/Edge smoke and full20/30s3D decoding passed, exact source8f4d0f6/19hashes. Owner reports Xiaomi14/Pad2/MacBookM2 checks passed with Chrome/Brave/Safari; versions/individual device-browser pairing were not supplied. Do not infer iPhone or photo-v1.2 device support.

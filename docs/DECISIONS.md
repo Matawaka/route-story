@@ -1,5 +1,13 @@
 # Decisions
 
+## 2026-10-09: owner-approved bounded photo publication
+
+Owner explicitly approved the actual Atlas20s/Night30s videos, public deployment and increased local package size. Supersedes the earlier pending photo publication/budget gate below. Limit the COMPLETE adaptive package to6MiB including release.json, baseline≤5MiB and unchanged image runtime bounds (two textures,≤2MiB JPEG/3million pixels/2048 sides). Measured prior candidate5792186B excluding its small manifest; no nationwide pack or unbounded asset approval.
+
+Reuse the existing manual protected Pages workflow with optional include_imagery=false by default. True enables the exact three reviewed files, BUILD_IMAGERY_PACK=1 and --imagery-release; candidate mode remains explicitly publicationApproved=false. Public mode records owner authorization, not successful deployment. Exact reviewed main/passing main-push CI and personal human environment review remain mandatory; permissions/action pins unchanged. Add bounded actual HTTPS photo smoke (10s360p, both aspects, hash/CSP/privacy/reversible seek/cancel/retry/all-frame independent decoding); full20/30s720p public proof remains an opt-in local verified-GPU activity. No source renderer/exporter changes.
+
+No explicit authorization to merge PR9 or PR8/tag a stable release has been given. Prepare reviewable PR9 publication changes first, then obtain the missing merge decision. PR5/PR8 stay independent, v1.0 tag/assets immutable, no competition repost.
+
 ## Sprint9 follow-up: approved detail and proved local corridor
 
 Owner approved actual photographic prototype and requested further detail. Use the SAME reviewed scene/crops for40m overview plus bounded10m patch (997049B/2830000pixels), both resident before export. Pure scale/frustum choice,450m feather, mipmaps, fixed regional coverage and explicit missing-resource error; original20m developer fixture retained. No new service/source/codec/DEM and no public budget increase. Add optional local corridor with unchanged350m clearance, exact crossed-cell bounds for all interpolated legs/intro/outro, final triangle LOS and conservative default. Tests independently preserve coordinates/segments/seeking/pixel equivalence.

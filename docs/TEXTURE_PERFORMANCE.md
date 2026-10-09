@@ -1,5 +1,9 @@
 # Photographic prototype measurements
 
+## Publication approval — 2026-10-09
+
+Owner approved final photographic videos, public deployment and package-size increase. This supersedes older unapproved-budget statements below; their measurement checkpoints are preserved. Approved COMPLETE adaptive package limit6MiB including release.json, baseline≤5MiB and unchanged two-image/GPU/export bounds. No renderer/camera/image/performance change accompanies the workflow enablement. Previously measured adaptive payload5792186B/22files; current complete authorized-package bytes are recorded in IMPLEMENTATION_STATE after the publication-tool check. Public photo load/export performance and Xiaomi/MacBook photo-mode memory remain PENDING/NOT TESTED, distinct from accepted DEM-only public/device results.
+
 ## Approved adaptive comparison — clean7c12286994ae58b7731eb773341ccc217da03272
 
 Routine-CI limit observed independently: run37970102266 unit155/build pass,39browser pass, but new10s720p camera-photo export exceeded90s on virtual graphics. Preserve full assertion set as opt-in FULL_EXPORT_ACCEPTANCE; routine4s360p proof still checks every camera pose, corridor, both textures, exact seek/export pixels and independent MP4 decoding. A fast RTX3090 export is not evidence of software-GPU throughput. This test-scope correction does not modify the application renderer/exporter.

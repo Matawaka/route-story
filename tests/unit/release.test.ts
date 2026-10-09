@@ -14,3 +14,14 @@ describe('release authorization refuses unsafe contexts before network access',(
   expect(result.status).not.toBe(0);expect(result.stderr).toContain(message);
  });
 });
+
+describe('photo publication package requires an explicit bounded build',()=>{
+ it('rejects simultaneous candidate and publication modes',()=>{
+  const result=spawnSync(process.execPath,['scripts/package-release.mjs','--imagery-candidate','--imagery-release'],{encoding:'utf8',windowsHide:true,env:{...process.env,BUILD_IMAGERY_PACK:'1'}});
+  expect(result.status).not.toBe(0);expect(result.stderr).toContain('never both');
+ });
+ it('rejects publication without the matching photo build opt-in',()=>{
+  const result=spawnSync(process.execPath,['scripts/package-release.mjs','--imagery-release'],{encoding:'utf8',windowsHide:true,env:{...process.env,BUILD_IMAGERY_PACK:'0'}});
+  expect(result.status).not.toBe(0);expect(result.stderr).toContain('explicit build opt-in');
+ });
+});
