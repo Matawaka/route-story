@@ -52,7 +52,7 @@ async function accept(url){
   await expect(page.locator('#status')).toHaveText('Экспорт отменён.');await expect(page.locator('#export')).toBeEnabled();assert.equal(downloads,0);report.cancelAndRecovery='VERIFIED';
   const examples=[
    {name:'atlas-20s',file:'synthetic.gpx',style:'Атлас',aspect:'landscape',seconds:smoke?10:20,title:'Учебный маршрут · ATLAS',width:1280,height:720},
-   {name:'night-30s',file:'synthetic-antimeridian.gpx',style:'Ночной',aspect:'portrait',seconds:smoke?10:30,title:'Через 180° · синтетический маршрут',width:720,height:1280}
+   {name:'night-30s',file:'synthetic-antimeridian.gpx',style:'Ночной',aspect:'portrait',seconds:smoke?10:30,title:'Через 180° · NIGHT',width:720,height:1280}
   ];
   for(const example of examples){
    const sample=await context.request.get(url+'samples/'+example.file),input=await sample.body();assert.equal(sample.status(),200);
