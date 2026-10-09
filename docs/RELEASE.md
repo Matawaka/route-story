@@ -1,6 +1,6 @@
 # Release preparation and publication
 
-Status on 2026-10-09: owner has merged all four sprint PRs. Reviewed main `5f39332b7358949d248da6b2f99ba445ee1b41e8` passes exact-main CI and local acceptance. Environment protection is configured and verified; Pages source/site is still unconfigured. Enabling Pages, public deployment, tagging and publishing Release assets require explicit owner approval. No public application URL is verified yet. October 14 is internal calendar day seven; no organizer submission hour has been established.
+Status on 2026-10-09: owner merged all four sprint PRs and explicitly authorized Pages and GitHub Release v1.0.0. Reviewed main `5f39332b7358949d248da6b2f99ba445ee1b41e8` passes exact-main CI and local acceptance. Protected environment and Pages Actions source are verified. [Manual run 37901620765](https://github.com/Matawaka/route-story/actions/runs/37901620765) built successfully and deploy waits for human environment review. No public application URL is verified yet; Release publication requires successful actual HTTPS acceptance. October 14 is internal calendar day seven; no organizer submission hour has been established.
 
 ## Verified merge checklist
 
@@ -15,14 +15,14 @@ The owner, Matawaka, already merged the stack using GitHub on 2026-10-09:
 
 All four are MERGED by the owner. The agent did not merge them. `git merge-base --is-ancestor 3e4d6cb44b654c1b0a5616d20049a3a49e8916ff origin/main` succeeds; `git diff 3e4d6cb44b654c1b0a5616d20049a3a49e8916ff origin/main --stat` is empty. Main therefore contains the complete verified release tree. [Exact-main push acceptance](https://github.com/Matawaka/route-story/actions/runs/37896163991) passed: clean install, 92 unit tests, production build, 23 browser tests and 3 intentional opt-in skips. Mergeability no longer applies to merged PRs.
 
-At verification, main has no branch protection or rulesets, and no required checks are configured. Passing acceptance is observed evidence; the existing release guard additionally requires a successful exact-SHA push-to-main CI. Pages API returns 404: Pages is not configured. The protected environment below was configured as authorized preparation. Source branches are retained. Documentation changes use `codex/sprint-5-public-launch` from reviewed main; no additional automatic merge or deployment.
+At verification, main has no branch protection or rulesets, and no required checks are configured. Passing acceptance is observed evidence; the existing release guard additionally requires a successful exact-SHA push-to-main CI. Pages Actions source and the protected environment below are now configured with owner authority. Source branches are retained. Documentation changes use `codex/sprint-5-public-launch` from reviewed main; no additional automatic merge or deployment.
 
 Completed main gate and remaining publication checklist:
 
 1. VERIFIED: merged main is exactly the final Sprint 4 tree, with successful main-push CI and fresh local clean install, unit/build/browser/package/smoke acceptance.
 2. VERIFIED: short and bounded medium exports pass; both existing synthetic 20s/30s examples were independently decoded again and their hashes match historical evidence. Full 30s/5000-point acceptance remains valid for the identical code.
 3. VERIFIED: allowlisted production package, licenses/provenance and dependency audits; no new private route, runtime dependency or video in source Git.
-4. PENDING: explicit owner permission to enable Pages, dispatch publication and publish `v1.0.0` assets. The earlier merge does not provide it.
+4. VERIFIED: explicit owner permission to enable Pages, dispatch publication and publish `v1.0.0` assets received separately in this chat. Manual workflow dispatched; required environment approval must still be performed by the owner in GitHub.
 5. Immediately before authorized dispatch, recheck remote main, its exact successful push CI and environment rules. If main changes, review and validate the new SHA; do not silently deploy a different commit.
 
 ## Pages workflow
@@ -43,8 +43,8 @@ Actual environment settings read back on 2026-10-09:
 | Required human reviewer | Matawaka |
 | Prevent self-review | false; solo owner may approve their own initiated deployment |
 | Deployment policy | Selected branches/tags, exactly one allowed branch: `main` (type branch) |
-| Pages source | PENDING; site GET returns 404 |
-| Deployment runs / Releases | None |
+| Pages source | VERIFIED `build_type:workflow`; HTTPS enforced, no custom domain |
+| Deployment run / Releases | Run 37901620765 build passed, deploy WAITING for human; Release absent |
 
 Do not approve the environment on the owner's behalf. [GitHub environment protection documentation](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments).
 

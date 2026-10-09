@@ -2,7 +2,7 @@
 
 Локальный GPS Route Story Engine от Matawaka. Загрузите GPX, отредактируйте название, выберите 10, 20 или 30 секунд, «Атлас» или «Ночной» и сохраните H.264 MP4 в формате 16:9 или 9:16. Русский интерфейс, Canvas 2D, без обязательного сервера и платных API.
 
-**Публичное приложение: PENDING.** Владелец объединил все четыре sprint PR, включая [release PR #4](https://github.com/Matawaka/route-story/pull/4). Проверенный main — `5f39332b7358949d248da6b2f99ba445ee1b41e8`, [main-push CI](https://github.com/Matawaka/route-story/actions/runs/37896163991) прошёл. Версия пакета — 1.0.0; tag и GitHub Release `v1.0.0` пока не опубликованы. Окружение Pages защищено подтверждением владельца и разрешает только main; включение сайта и публикация требуют отдельного разрешения. Проверенного HTTPS URL пока нет. Точный статус и результаты: [COMPETITION_DELIVERY](docs/COMPETITION_DELIVERY.md).
+**Публичное приложение: PENDING.** Владелец объединил все четыре sprint PR, включая [release PR #4](https://github.com/Matawaka/route-story/pull/4). Проверенный main — `5f39332b7358949d248da6b2f99ba445ee1b41e8`, [main-push CI](https://github.com/Matawaka/route-story/actions/runs/37896163991) прошёл. Версия пакета — 1.0.0; tag и GitHub Release `v1.0.0` пока не опубликованы. Владелец отдельно разрешил Pages/Release; Actions source включён, окружение защищено human review и разрешает только main. [Первый manual deployment](https://github.com/Matawaka/route-story/actions/runs/37901620765) ожидает подтверждения владельца в GitHub. Проверенного HTTPS URL пока нет. Точный статус и результаты: [COMPETITION_DELIVERY](docs/COMPETITION_DELIVERY.md).
 
 ![Проверенный production-предпросмотр синтетического маршрута](docs/images/route-story.png)
 
@@ -104,7 +104,7 @@ npm.cmd run release:acceptance
 
 ## Публикация
 
-Подготовлен ручной workflow GitHub Pages, который принимает только полный проверенный SHA main с успешной приёмкой. Build/test имеют read-only права; запись Pages/OIDC доступна только deployment job. Реальные настройки `github-pages` проверены через API: требуется human reviewer Matawaka, разрешена только ветка main. Владелец может подтвердить собственный запуск; агент не подтверждает deployment за него. Pages source ещё не включён. Пути относительные и проверены под `/route-story/`; приватные тестовые данные исключены из публичного пакета. Публикация сайта и релизных видео до разрешения не выполняется. [Точный порядок выпуска](docs/RELEASE.md).
+Ручной workflow GitHub Pages принимает только полный проверенный SHA main с успешной приёмкой. Build/test имеют read-only права; запись Pages/OIDC доступна только deployment job. Реальные настройки `github-pages` проверены через API: требуется human reviewer Matawaka, разрешена только ветка main. Владелец может подтвердить собственный запуск; агент не подтверждает deployment за него. Pages Actions source включён после отдельного разрешения. Пути относительные и проверены под `/route-story/`; приватные тестовые данные исключены из публичного пакета. [Точный порядок выпуска](docs/RELEASE.md).
 
 Подготовлены [соответствие переданным условиям конкурса](docs/COMPETITION_DELIVERY.md#соответствие-переданному-анонсу-вайбатона) и [текст заявки для копирования](docs/COMPETITION_SUBMISSION.md). По указанию владельца комплект подаётся комментарием к посту в закрытом Telegram-канале «Вайбкодинговая»; точная ссылка пока не предоставлена. Отправка заявки не выполнялась.
 

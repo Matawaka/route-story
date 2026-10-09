@@ -53,8 +53,15 @@
       "publication": "PENDING"
     },
     "publicSyntheticGpxAnonymousHttp200": true,
-    "pagesSource": "PENDING; site not configured",
-    "publicationApproval": "PENDING explicit owner permission",
+    "pagesSource": "VERIFIED build_type:workflow; https_enforced:true; no custom domain",
+    "publicationApproval": "GRANTED explicitly by owner for Pages and GitHub Release v1.0.0",
+    "publicationWorkflow": {
+      "url": "https://github.com/Matawaka/route-story/actions/runs/37901620765",
+      "headSha": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
+      "build": "success",
+      "deploy": "WAITING for required human reviewer Matawaka",
+      "agentMustNotApproveEnvironment": true
+    },
     "liveApplicationUrl": null,
     "releaseTag": "v1.0.0 PENDING",
     "githubReleaseUrl": null,

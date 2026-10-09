@@ -1,6 +1,6 @@
 # Route Story — комплект конкурсной поставки
 
-Обновлено 9 октября 2026 года. **Все четыре sprint PR объединены владельцем; Gate 5A пройден на merged main. Публичная поставка PENDING.** Окружение `github-pages` защищено, но включение Pages, deployment и GitHub Release требуют отдельного разрешения владельца. Заявка организаторам не отправлена. 14 октября — внутренний календарный день семь; час подачи организаторами не установлен.
+Обновлено 9 октября 2026 года. **Все четыре sprint PR объединены владельцем; Gates 5A/5B пройдены. Публичная поставка PENDING.** Владелец отдельно разрешил Pages и GitHub Release v1.0.0; Actions source включён, manual workflow build прошёл, deploy ждёт human review в GitHub. Заявка организаторам не отправлена. 14 октября — внутренний календарный день семь; час подачи организаторами не установлен.
 
 ## Репозиторий и точный код
 
@@ -19,7 +19,7 @@
 | --- | --- |
 | Проверенный commit / версия | main `5f39332b7358949d248da6b2f99ba445ee1b41e8`, package 1.0.0; tag `v1.0.0` PENDING |
 | Публичный репозиторий | VERIFIED, ссылка выше |
-| Работающий HTTPS URL | PENDING: Pages source не включён, deployment не запускался |
+| Работающий HTTPS URL | PENDING: source Actions включён; [run 37901620765](https://github.com/Matawaka/route-story/actions/runs/37901620765) build passed, deploy WAITING for human review; фактический deploy-pages URL ещё не получен |
 | Защита publication | VERIFIED через API: `github-pages`, reviewer Matawaka, только main, owner self-review разрешён; требуется ручное подтверждение человеком |
 | Чистая локальная установка | VERIFIED: Node 24.19.0, `npm.cmd ci`, build/check; команды в README |
 | Публичный синтетический GPX | VERIFIED anonymous HTTP200, exact-main bytes: [учебный GPX](https://raw.githubusercontent.com/Matawaka/route-story/5f39332b7358949d248da6b2f99ba445ee1b41e8/public/samples/synthetic.gpx), [переход через 180°](https://raw.githubusercontent.com/Matawaka/route-story/5f39332b7358949d248da6b2f99ba445ee1b41e8/public/samples/synthetic-antimeridian.gpx); MIT, явно синтетические |
@@ -105,9 +105,9 @@ Route Story от Matawaka превращает GPX в воспроизводим
 
 ## Оставшиеся действия
 
-1. Получить отдельное разрешение владельца на включение Pages, manual dispatch и GitHub Release v1.0.0. Merge уже выполнен владельцем; разрешение публикации ещё отсутствует.
-2. Перед dispatch повторно проверить exact remote main и его successful main-push CI, существующий main-only/human-reviewer environment; включить Pages source GitHub Actions.
-3. Запустить существующий workflow с полным reviewed SHA; владелец вручную подтверждает защищённый deploy в GitHub. Агент не нажимает Approve за владельца.
+1. Разрешение Pages/Release получено; exact main/CI/environment перепроверены, source GitHub Actions включён, существующий workflow запущен с reviewed 5f39332.
+2. Владелец вручную подтверждает защищённый deploy в GitHub: [run 37901620765](https://github.com/Matawaka/route-story/actions/runs/37901620765) → Review deployments → github-pages → Approve and deploy. Агент не нажимает Approve за владельца.
+3. Дождаться deploy и HTTPS acceptance jobs; получить фактически возвращённый page_url.
 4. Проверить возвращённый HTTPS URL анонимно: assets/subpath/manifest/licenses/CSP/privacy, оба стиля/формата, seek/cancel/retry, independent decode. После smoke выполнить отдельный полный 20s/30s export на живом сайте.
 5. Опубликовать v1.0.0 на точном reviewed SHA, validated synthetic MP4/GPX/reports; анонимно скачать каждый asset и сверить SHA-256. Только затем заполнить реальные URL в focused docs PR. Не сливать PR/redeploy автоматически.
 6. Владелец размещает [готовый текст заявки](COMPETITION_SUBMISSION.md) и проверенные ссылки комментарием к посту в закрытом Telegram-канале «Вайбкодинговая». Точная ссылка пока не предоставлена. Отправка агентом требует отдельного доступа/разрешения. Статус: NOT SUBMITTED.
