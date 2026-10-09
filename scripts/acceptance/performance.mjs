@@ -18,8 +18,8 @@ await withServer(async url=>{
       const xml=syntheticGpx(count,kind),duration=count===50000&&quality==='standard'?30:10,iterations=[];
       for(let repeat=0;repeat<4;repeat++){
         const metrics=await page.evaluate(async({xml,quality,duration})=>{
-          const paths=['/src/gpx.ts','/src/geo.ts','/src/renderer.ts','/src/story.ts','/src/exporter.ts'];const[{parseGpx},{fitProjection},{RouteRenderer},{defaultStoryConfig,exportSettings},{detectEncoder,exportVideo}]=await Promise.all(paths.map(p=>import(p)));
-          const land=await(await fetch('/maps/ne_110m_land.geojson')).json(),config={...defaultStoryConfig('Синтетический benchmark'),durationSeconds:duration,qualityPreset:quality},settings=exportSettings(config);
+          const paths=['/src/gpx.ts','/src/geo.ts','/src/renderer.ts','/src/story.ts','/src/exporter.ts','/src/geography.ts'];const[{parseGpx},{fitProjection},{RouteRenderer},{defaultStoryConfig,exportSettings},{detectEncoder,exportVideo},{loadGeography}]=await Promise.all(paths.map(p=>import(p)));
+          const land={...await(await fetch('/maps/ne_110m_land.geojson')).json(),geography:await loadGeography()},config={...defaultStoryConfig('Синтетический benchmark'),durationSeconds:duration,qualityPreset:quality},settings=exportSettings(config);
           let begin=performance.now();const route=parseGpx(xml),parseMs=performance.now()-begin;
           begin=performance.now();fitProjection(route.segments,settings.width,settings.height);const projectionDiagnosticMs=performance.now()-begin;
           begin=performance.now();const renderer=new RouteRenderer(route,land,settings.width,settings.height,'atlas',config),prepareMs=performance.now()-begin;

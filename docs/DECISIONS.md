@@ -1,6 +1,19 @@
 # Decisions
 
+## Sprint 7: cinematic camera and bounded local cartography
+
+Owner replaces release freeze with v1.1 visual development. Stable main/tag5f39332 and published v1.0.0/Pages remain unchanged; PR #5 docs stay separate. New branch feature/cinematic-route-story-v1.1 / PR #6 targets main. No merge/publication/contest repost authorization. Owner reports the competition comment already submitted.
+
+Use one StoryTimeline plus pure CameraPlan/CameraState. Precompute per-segment smoothed distance keys; north-up equirectangular world coordinates use the route's circular longitude bounds and fixed latitude cosine. Intro/outro quintic easing, log-scale zoom interpolation, bounded look-ahead, marker-safe framing. Disconnected segments cut under a short fade rather than a fictitious camera journey. Stationary tracks have no follow zoom; metre-scale routes have <=1.18x. Ordinary replay has <=2.65x. Classic retains v1.0 renderer and four-second regression; prefers-reduced-motion initially selects it. No independent pacing clock or invented historical speed.
+
+A real local MapLibre6.13.0 feasibility MP4 and observed Pages HTTP206 range support establish basic viability, not a verified PMTiles regional pipeline. Choose prepared Canvas vectors plus NE50m global/NE10m fjord pack after measured source/output sizes; provenance and comparison in VISUAL_UPGRADE_AUDIT.md / GEOGRAPHY_SOURCES.json. No new runtime dependency, OSM data or package-size increase. 5MiB allowlist remains enforced. Map packs load from fixed first-party paths and validate before renderer/export; missing packs fail explicitly and can retry. Regional clipped fill boundaries are never drawn as fabricated coasts. Generalised geography remains honest about missing street-scale detail.
+
+World-space Path2D and route chunks render at destination resolution through the camera; screen-space captions/metrics/branding stay upright. Atlas parchment/blue water/rust route and serif title differ from Night navy/amber trace/glow. Real place labels use collision filtering; no reverse geocoding or stop inference. Global fallback is explicitly labelled. Fixed CPU raster surface prevents Chromium GPU-to-CPU readback switching from changing antialiased pixels; exact reversible pixel tests, measured performance and memory determine the cost. Batching and culling preserve all route points. Do not silently trade resolution/duration for performance.
+
+Measured full-vector dense50k/30s export14.2s and853ms CPU frame bursts justify two bounded maximum-zoom route buffers. Final6.86s with unchanged coordinates, exact-seek pixels and explicit memory/disposal tests. Geography remains vector, no low-resolution map enlargement. This improves the dense-route bottleneck but retains material cost versus static v1.0 and some small/global-route regressions; all measurements/limits in PERFORMANCE.md. v1.1.0-rc.1 is local/review-only. Existing stable tag, public assets, protected Pages environment and publication workflow remain unchanged.
+
 ## Sprint 4: reviewed static release, no new product features
+
 
 On 2026-10-09 the owner had already merged PR #1/#2/#3 into main dd86c372b6d6c757d7327e22366b402f60ad9b4e. Its tree exactly matches verified Sprint 3 488db3b; preserve history and start release/route-story-v1 from that main. The release PR targets main without a stacked dependency. No agent merge or publication is authorized yet.
 

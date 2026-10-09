@@ -1,4 +1,55 @@
-# Sprint 3 performance and memory — 2026-10-09
+# Performance and memory
+
+## Sprint 7 cinematic comparison — 2026-10-09
+
+Same machine: Windows_NT10.0.26200 x64, Node24.19.0, Microsoft Edge154.0.4258.62. Static main/tag baseline `5f39332b7358949d248da6b2f99ba445ee1b41e8` was measured before source changes. Final application checkpoint is `7443166d02dd3b78225725d69707c3d7a498a6c4`. Raw intermediate/final timings were captured immediately before that commit on the same application tree; they are not measurements of subsequent documentation changes. No other test/browser workload was run concurrently. One interrupted HMR-invalidated run was excluded. Public synthetic-only summaries: [CINEMATIC_EVIDENCE.json](CINEMATIC_EVIDENCE.json); raw files remain ignored under artifacts/sprint7.
+
+Reproduce sequentially with `node scripts/acceptance/performance.mjs`, then `node scripts/acceptance/memory.mjs`. The original dataset generator/counts below are unchanged. Current performance script additionally awaits the fixed local geography; CPU timings exclude its download/module import, while real-UI native-memory testing includes loading/cached layers. One warm-up excluded + three steady runs per case; table medians (range). Selected H.264 profile avc1.42001f, 24fps, unchanged 1.5/5Mbps presets. All eight final case outputs independently decoded with actual dimensions/duration/240 or720 frames and timestamps, with no error.
+
+| Points / GPX bytes / geometry | Preset / seconds | v1.0 export ms | v1.1 export ms (min–max) | v1.1 parse / prepare / preview ms | v1.1 output bytes |
+| --- | --- | ---: | --- | --- | ---: |
+| 100 / 6,508 / segments | Compatibility /10 | 389.7 | 824.6 (824.3–843.1) | 1.4 /22.9 /27.1 | 1,399,047 |
+| 100 / 6,508 / segments | Standard /10 | 686.3 | 2482.5 (2478.7–2523.4) | 1.5 /25.3 /41.8 | 4,563,022 |
+| 5000 /320,301 /antimeridian | Compatibility /10 | 380.0 | 707.2 (680.7–789.1) | 52.5 /24.9 /79.4 | 1,371,259 |
+| 5000 /320,301 /antimeridian | Standard /10 | 663.3 | 2321.8 (2301.0–2352.7) | 53.8 /26.1 /94.7 | 4,571,877 |
+| 20000 /1,267,225 /long | Compatibility /10 | 384.4 | 3275.4 (3266.2–3282.4) | 209.8 /44.1 /262.0 | 2,060,369 |
+| 20000 /1,267,225 /long | Standard /10 | 657.2 | 9640.4 (9433.3–9670.9) | 235.5 /48.7 /381.9 | 6,831,221 |
+| 50000 /3,075,653 /dense | Compatibility /10 | 397.8 | 786.7 (742.0–822.1) | 546.4 /41.8 /620.2 | 2,089,531 |
+| 50000 /3,075,653 /dense | Standard /30 | 1632.1 | 6857.2 (6682.0–6944.1) | 553.7 /59.3 /697.2 | 17,604,648 |
+
+These are Atlas benchmark cases, not a claim that Night or every region has these timings. Cinematic export is materially slower/larger than the static baseline: 50k Standard about4.2× wall time and5.6× bytes; long routes need to draw much more global geography and show larger differences per frame. No settings were silently reduced. Classic remains an explicit lower-motion/static alternative. Parsing code was unchanged; measured differences are not a parsing optimization claim. Worst measured global10s Standard nearly takes real-time to encode on this machine, so lower-resource devices may be significantly slower.
+
+### Measured route-cache optimization
+
+Profile before optimization: full-vector cinematic 50k/Standard30s export 14,197.7ms (14,106.5–14,310); sampled frame-submission median0.3/max853.4ms. Destination Canvas calls could defer large work, so that deceptively small median was not smooth displayed performance. Two fixed, maximum-camera-resolution route buffers avoid repeating large GPS rasterisation; map geography remains vector drawn. Final export6,857.2ms, sampled frame CPU median8.2/max9.2ms; alternating seek median16.0/max26.2ms on this case. Export is about52% faster than the all-vector intermediate, without reducing any route points or removing geographic layers.
+
+The change targets dense route bursts, not every map cost. 5000-point antimeridian Standard increased from intermediate1196.7ms to final2321.8ms; 20k/global Standard from9019.5 to9640.4ms. Buffer sampling/CPU raster determinism carry a real cost. Map clipping reduces offscreen geometry and corrects seam behaviour but is not claimed to solve this global-map bottleneck. No worker, WebGL production framework or spatial index was added.
+
+At720p/2.65× zoom, two3392×1908 RGBA route buffers total51,775,488 nominal pixel bytes (before native overhead). They are never enlarged past preparation scale and are zero-sized on disposal. The map itself is not a scaled low-resolution bitmap. Other caches/encoder/native processes add memory beyond these bytes. A future conditional route-buffer strategy or scoped map detail could be profiled separately; this candidate favours verified determinism and bounded allocations.
+
+Actual 700-point final demo exports: Atlas16:9/20s 5,598.7ms /11,837,253B; Night9:16/30s 18,145.4ms /17,367,156B. Single observations include real rendering/probe/encode/finalization, excluding download/FFmpeg. Night bloom is expensive; neither number is a repeated benchmark. Both videos independently decoded; see CINEMATIC_VALIDATION.md.
+
+### Fresh native-memory comparison
+
+Same Windows OS sampler/root+descendant method as below, four identical real-UI 50k cycles with successful export, quality change, cancellation/retry, replacement and invalid-file cleanup. Static baseline samples176–299ms; cinematic177–263ms. Both samplers ran through the final stages. An intermediate all-vector run exhausted its180s sampler before final cleanup; its missing native observations are not counted as measured. Final cache run completes all stages.
+
+| Observation, bytes | Fresh static v1.0 | Cinematic v1.1 |
+| --- | ---: | ---: |
+| Empty baseline last private process sum | 276,676,608 | 281,653,248 |
+| Observed peak private process sum | 1,022,545,920 | 989,151,232 |
+| Working-set sum at private peak | 1,203,224,576 | 1,186,582,528 |
+| Main renderer private bytes at that sample | 484,622,336 | 577,998,848 |
+| GPU-process CPU private bytes at that sample | 357,281,792 | 243,343,360 |
+| Final cleanup private sum | 592,965,632 | 531,619,840 |
+| Final cleanup page JS heap used | 13,099,528 | 25,058,048 |
+| After test-only GC page JS heap used | 8,813,004 | 14,224,028 |
+| After page unload last private sum | 574,357,504 | 495,890,432 |
+
+The3.3% lower observed total peak is not proof of a memory optimization or lower hardware requirement. Work distribution changes: a fixed CPU raster backend and detailed retained geography shift more bytes to the main renderer and JS heap. Working-set sums double-count shared pages; private bytes are committed virtual memory, not RAM. GPU-process values are **not GPU VRAM**. Native/dedicated codec allocations cannot be attributed reliably and remain unmeasured. No production hardware fingerprints/GC/telemetry are collected.
+
+Final cleanup private sums across four cycles:666,320,896;503,926,784;667,570,176;531,619,840B. They do not grow monotonically, and do not return to empty baseline because browsers/codec/map modules cache resources. Test-only GC/WeakRef audit:32 disposed renderers, all old temporary Canvas surfaces zero-sized, zero surviving old renderers and routes, eight tracked routes. This did not identify sustained retention in these cycles; it cannot establish memory safety on arbitrary devices or after unlimited operation. Next release should prioritize expensive global vector scenes/Night bloom and actual low-memory hardware testing before expanding coverage or resolution.
+
+## Historical Sprint 3 performance and memory — 2026-10-09
 
 Measured environment: Windows_NT 10.0.26200 x64, Node 24.19.0, headless Microsoft Edge 154.0.4258.62 in fresh isolated Playwright sessions. H.264 profile probe selected avc1.42001f, 24 fps, Compatibility 640×360 / 1.5 Mbps, Standard 1280×720 / 5 Mbps. These are observations on one machine, not guarantees for other devices. No hardware inventory or private route was collected.
 

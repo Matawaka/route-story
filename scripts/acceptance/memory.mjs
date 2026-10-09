@@ -25,7 +25,7 @@ await withServer(async url=>{
       const path='/src/renderer.ts', {RouteRenderer}=await import(path),nativeDraw=RouteRenderer.prototype.draw,nativeDispose=RouteRenderer.prototype.dispose,seen=new WeakSet(),seenRoutes=new WeakSet();
       window.resourceAudit={renderers:[],routes:[],disposed:0,zeroSized:true};
       RouteRenderer.prototype.draw=function(...args){if(!seen.has(this)){seen.add(this);window.resourceAudit.renderers.push(new WeakRef(this));}if(!seenRoutes.has(this.route)){seenRoutes.add(this.route);window.resourceAudit.routes.push(new WeakRef(this.route));}return nativeDraw.apply(this,args);};
-      RouteRenderer.prototype.dispose=function(){nativeDispose.call(this);window.resourceAudit.disposed++;window.resourceAudit.zeroSized&&=this.base.width===0&&this.highlight.width===0;};
+      RouteRenderer.prototype.dispose=function(){nativeDispose.call(this);window.resourceAudit.disposed++;window.resourceAudit.zeroSized&&=this.base.width===0&&this.highlight.width===0&&(!this.cinematic||(this.cinematic.routeBase.width===0&&this.cinematic.routeTrace.width===0));};
     });
     for(let i=0;i<50&&(!existsSync(file)||readFileSync(file,'utf8').split('\n').length<3);i++)await page.waitForTimeout(100);
     if(!existsSync(file)||readFileSync(file,'utf8').trim().length===0)throw new Error(`OS sampler unavailable: ${samplerError}`);

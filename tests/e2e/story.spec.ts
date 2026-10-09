@@ -26,9 +26,9 @@ test('bounded medium 20-second Standard export independently decodes', async ({p
 test('export snapshot ignores mutation and reproduces the preview frame', async ({page}) => {
   await page.goto('/');await page.locator('#demo').click();await page.getByLabel('Длительность видео').selectOption('10');await expect(page.locator('#export')).toBeEnabled();await page.locator('#scrub').fill('6');
   const result=await page.evaluate(async()=>{
-    const paths=['/src/exporter.ts','/src/renderer.ts','/src/story.ts','/src/gpx.ts'];
-    const [{exportVideo},{RouteRenderer},{defaultStoryConfig},{parseGpx}]=await Promise.all(paths.map(p=>import(p)));
-    const route=parseGpx(await(await fetch('/samples/synthetic.gpx')).text()),land=await(await fetch('/maps/ne_110m_land.geojson')).json();
+    const paths=['/src/exporter.ts','/src/renderer.ts','/src/story.ts','/src/gpx.ts','/src/geography.ts'];
+    const [{exportVideo},{RouteRenderer},{defaultStoryConfig},{parseGpx},{loadGeography}]=await Promise.all(paths.map(p=>import(p)));
+    const route=parseGpx(await(await fetch('/samples/synthetic.gpx')).text()),land={...await(await fetch('/maps/ne_110m_land.geojson')).json(),geography:await loadGeography()};
     const mutable={...defaultStoryConfig(route.name),durationSeconds:10};const renderer=new RouteRenderer(route,land,640,360,'atlas',mutable);let matched=false,frames=0;
     try { const blob=await exportVideo({config:mutable,draw:(canvas:HTMLCanvasElement,t:number)=>{renderer.draw(canvas,t);frames++;if(t===6)matched=canvas.toDataURL()===(document.querySelector('#preview') as HTMLCanvasElement).toDataURL();},onProgress:()=>{mutable.durationSeconds=30;}}); return {matched,frames,bytes:blob.size}; }
     finally{renderer.dispose();}

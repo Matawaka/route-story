@@ -1,5 +1,5 @@
 import {chromium,expect} from '@playwright/test';
-import {mkdirSync,writeFileSync} from 'node:fs';
+import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import os from 'node:os';
 import assert from 'node:assert/strict';
@@ -9,6 +9,7 @@ import {validateVideo} from '../validate-video.mjs';
 // Opt-in acceptance of the real production UI, locally or at the published URL.
 // No source-module imports, route uploads, account session or fake exporter.
 const smoke=process.argv.includes('--smoke'),remote=process.env.APP_URL;
+const expectedVersion=process.env.EXPECTED_VERSION||JSON.parse(readFileSync('package.json','utf8')).version;
 const directory='artifacts/release';mkdirSync(directory,{recursive:true});
 if(remote){const u=new URL(remote);assert.equal(u.protocol,'https:','public acceptance requires HTTPS');assert.ok(!u.username&&!u.password&&!u.search&&!u.hash,'plain public application URL required');assert.ok(u.pathname.endsWith('/'),'application URL must end with /');}
 const report={status:'PENDING',scope:remote?'public HTTPS':'local production subpath',publicHttps:false,os:`${os.type()} ${os.release()} ${os.arch()}`,physicalMobile:false,outputs:[]};
@@ -35,7 +36,7 @@ async function accept(url){
   report.csp={responseHeader:response.headers()['content-security-policy']||null,meta:await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content')};
   assert.ok(report.csp.meta.includes("connect-src 'self'")&&report.csp.meta.includes("object-src 'none'"));assert.ok(!/unsafe-inline|unsafe-eval/.test(report.csp.meta));
   const manifestResponse=await context.request.get(url+'release.json');assert.equal(manifestResponse.status(),200);const manifest=await manifestResponse.json();
-  assert.equal(manifest.version,'1.0.0');assert.match(manifest.sourceCommit,/^[a-f0-9]{40}$/);if(process.env.EXPECTED_COMMIT)assert.equal(manifest.sourceCommit,process.env.EXPECTED_COMMIT);
+  assert.equal(manifest.version,expectedVersion);assert.match(manifest.sourceCommit,/^[a-f0-9]{40}$/);if(process.env.EXPECTED_COMMIT)assert.equal(manifest.sourceCommit,process.env.EXPECTED_COMMIT);
   report.sourceCommit=manifest.sourceCommit;report.version=manifest.version;report.packageBytes=manifest.totalBytes;
   for(const file of manifest.files){
    assert.ok(!file.path.startsWith('/')&&!file.path.includes('..'),'local manifest path');
