@@ -1,27 +1,34 @@
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import ffmpeg from 'ffmpeg-static';
 import ffprobe from '@ffprobe-installer/ffprobe';
 import assert from 'node:assert/strict';
+function checkedDecode(executable, args, maxBuffer = 8 * 1024 * 1024) {
+  const result = spawnSync(executable, args, { encoding: 'utf8', maxBuffer, windowsHide: true });
+  if (result.error) throw result.error;
+  assert.equal(result.status, 0, `independent decoder exit: ${result.stderr}`);
+  assert.equal(result.stderr.trim(), '', 'independent decoder must report no errors at -v error');
+  return result.stdout;
+}
 
 export function validateVideo(path, width, height, durationSeconds = 4, fps = 24) {
   assert.ok([4,10,20,30].includes(durationSeconds), 'bounded expected duration');
   assert.equal(fps,24,'expected frame rate');
   const expectedFrames = durationSeconds * fps;
-  const metadata = JSON.parse(execFileSync(process.env.FFPROBE_PATH || ffprobe.path, ['-v', 'error', '-count_frames', '-show_streams', '-show_format', '-of', 'json', path], { encoding: 'utf8' }));
+  const metadata = JSON.parse(checkedDecode(process.env.FFPROBE_PATH || ffprobe.path, ['-v', 'error', '-count_frames', '-show_streams', '-show_format', '-of', 'json', path]));
   const stream = metadata.streams.find(item => item.codec_type === 'video');
   assert.ok(stream, 'video stream'); assert.equal(stream.codec_name, 'h264');
   assert.equal(stream.width, width); assert.equal(stream.height, height);
   assert.ok(Math.abs(Number(metadata.format.duration) - durationSeconds) <= 1 / fps, 'requested duration');
   assert.equal(stream.avg_frame_rate,`${fps}/1`,'requested frame rate');
   assert.equal(Number(stream.nb_read_frames), expectedFrames, 'all expected frames decoded');
-  const timestamps = JSON.parse(execFileSync(process.env.FFPROBE_PATH || ffprobe.path, ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'frame=best_effort_timestamp_time,pkt_duration_time', '-of', 'json', path], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 })).frames;
+  const timestamps = JSON.parse(checkedDecode(process.env.FFPROBE_PATH || ffprobe.path, ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'frame=best_effort_timestamp_time,pkt_duration_time', '-of', 'json', path])).frames;
   assert.equal(timestamps.length, expectedFrames, 'all frame timestamps present');
   timestamps.forEach((frame, index) => {
     assert.ok(Math.abs(Number(frame.best_effort_timestamp_time) - index / fps) < 0.00001, `frame ${index} has deterministic timestamp`);
     assert.ok(Math.abs(Number(frame.pkt_duration_time) - 1 / fps) < 0.00001, `frame ${index} has requested duration`);
   });
-  const hashes = execFileSync(process.env.FFMPEG_PATH || ffmpeg, ['-v', 'error', '-i', path, '-map', '0:v:0', '-f', 'framemd5', '-'], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  const hashes = checkedDecode(process.env.FFMPEG_PATH || ffmpeg, ['-v', 'error', '-i', path, '-map', '0:v:0', '-f', 'framemd5', '-']);
   const frames = hashes.split('\n').filter(line => line && !line.startsWith('#'));
   assert.equal(frames.length, expectedFrames, 'FFmpeg independently decoded every frame');
   assert.ok(new Set(frames.map(line => line.split(',').at(-1).trim())).size > 20, 'actual changing animation');
