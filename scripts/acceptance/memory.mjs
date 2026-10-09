@@ -22,9 +22,9 @@ await withServer(async url=>{
   try{
     await page.goto(url);
     await page.evaluate(async()=>{
-      const path='/src/renderer.ts', {RouteRenderer}=await import(path),nativeDraw=RouteRenderer.prototype.draw,nativeDispose=RouteRenderer.prototype.dispose,seen=new WeakSet();
-      window.resourceAudit={renderers:[],disposed:0,zeroSized:true};
-      RouteRenderer.prototype.draw=function(...args){if(!seen.has(this)){seen.add(this);window.resourceAudit.renderers.push(new WeakRef(this));}return nativeDraw.apply(this,args);};
+      const path='/src/renderer.ts', {RouteRenderer}=await import(path),nativeDraw=RouteRenderer.prototype.draw,nativeDispose=RouteRenderer.prototype.dispose,seen=new WeakSet(),seenRoutes=new WeakSet();
+      window.resourceAudit={renderers:[],routes:[],disposed:0,zeroSized:true};
+      RouteRenderer.prototype.draw=function(...args){if(!seen.has(this)){seen.add(this);window.resourceAudit.renderers.push(new WeakRef(this));}if(!seenRoutes.has(this.route)){seenRoutes.add(this.route);window.resourceAudit.routes.push(new WeakRef(this.route));}return nativeDraw.apply(this,args);};
       RouteRenderer.prototype.dispose=function(){nativeDispose.call(this);window.resourceAudit.disposed++;window.resourceAudit.zeroSized&&=this.base.width===0&&this.highlight.width===0;};
     });
     for(let i=0;i<50&&(!existsSync(file)||readFileSync(file,'utf8').split('\n').length<3);i++)await page.waitForTimeout(100);
@@ -48,8 +48,8 @@ await withServer(async url=>{
     assert.deepEqual(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length})),{local:0,session:0});
     // Test-only GC observation; never shipped or called by production application.
     await stage('test-only-gc',async()=>{await cdp.send('HeapProfiler.collectGarbage');await page.waitForTimeout(1000);});
-    const audit=await page.evaluate(()=>({disposed:window.resourceAudit.disposed,zeroSized:window.resourceAudit.zeroSized,remaining:window.resourceAudit.renderers.filter(ref=>ref.deref()).length}));
-    assert.ok(audit.disposed>=8);assert.equal(audit.zeroSized,true);assert.equal(audit.remaining,0);writeFileSync('artifacts/sprint3/resource-audit.json',JSON.stringify(audit,null,2));
+    const audit=await page.evaluate(()=>({disposed:window.resourceAudit.disposed,zeroSized:window.resourceAudit.zeroSized,remaining:window.resourceAudit.renderers.filter(ref=>ref.deref()).length,trackedRoutes:window.resourceAudit.routes.length,remainingRoutes:window.resourceAudit.routes.filter(ref=>ref.deref()).length}));
+    assert.ok(audit.disposed>=8);assert.equal(audit.zeroSized,true);assert.equal(audit.remaining,0);assert.equal(audit.trackedRoutes,8);assert.equal(audit.remainingRoutes,0);writeFileSync('artifacts/sprint3/resource-audit.json',JSON.stringify(audit,null,2));
     await stage('after-page-unload',async()=>{await page.goto('about:blank');await page.waitForTimeout(1000);});
   }finally{writeFileSync(stop,'stop');await new Promise(resolve=>{const timer=setTimeout(()=>{sampler.kill();resolve();},3000);sampler.once('exit',()=>{clearTimeout(timer);resolve();});});await browser.close();await server.close();}
   if(samplerError)throw new Error(samplerError);

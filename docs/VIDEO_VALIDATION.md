@@ -1,5 +1,17 @@
 # Browser MP4 proof
 
+## Sprint 3 final acceptance — 2026-10-09
+
+Application code commit `88b410bf9c60e31a24519d715a9040fc9eb8b379` on sprint-3-compatibility-memory, stacked on accepted Sprint 2 f9f63b5. `PLAYWRIGHT_CHANNEL=msedge FULL_EXPORT_ACCEPTANCE=1 npm.cmd run check`: 88 unit tests, build and 24 browser tests passed; one unresolved-license external-data test intentionally skipped (36.0s browser suite). All prior regression assertions retained. No duration/FPS/resolution/point/input limits increased. Dependencies/attributions unchanged; both audit commands report zero vulnerabilities.
+
+Strict independent FFmpeg 6.1.1/ffprobe validation now rejects decoder stderr errors even when process exit/frame count appear successful. This exposed Firefox's malformed AVC headers, repaired only for the demonstrated duplicate-NAL-header pattern before muxing. All 16 final browser-matrix exports passed 10.000s, 240 frames, 24fps, H.264, actual selected dimensions and timestamp checks. Each also decoded/seeks in its tested browser's native HTML video element. Versions, unsupported WebKit and physical-mobile/Safari limitations: COMPATIBILITY.md.
+
+Both original 5000-point full 30s fixtures passed: Atlas landscape 1280×720 / 3,120,320 bytes / 1672.8ms; Night portrait 720×1280 / 3,039,156 bytes / 1724.8ms. Each is 30.000s / 720 decoded frames / 24fps / H.264 / avc1.42001f. Actual final decoded frames at 1/15/29s were extracted with ffmpeg-static and visually inspected, with readable captions/title/metrics and endpoints framed. Memory was not sampled in these original full-test runs; separate Windows process-memory measurements cover 50k real UI cycles.
+
+Final 50,000-point dense Standard export: 1280×720, 30.000s, 720 frames, 3,122,941 bytes, median 1631.6ms (1622.3–1634.8), one warm-up + three steady exports. Seven additional quality/dataset cases independently decoded; two final native-memory sessions also completed Compatibility/Standard/cancel/retry cycles with their last outputs independently validated. PERFORMANCE.md separates CPU timing, JS heap, native working-set/private-commit samples and unmeasured GPU/encoder memory.
+
+64 configuration / 384-frame visual acceptance and explicit segment-boundary states are recorded in VISUAL_VALIDATION.md. Direct/incremental/backward-seek drawing matches exactly across 5000 points; every segment gap remains unbridged. Native encoder/renderer failure, cancellation, invalid-file clearing and successful retry pass. Production privacy/CSP tests retain no cross-origin runtime requests, local/session storage, IndexedDB, caches or cookies. Only synthetic evidence enters GitHub artifacts.
+
 ## Sprint 2 — 2026-10-09
 
 Preserved Sprint 1's real four-second regression and added public 10/20/30-second exports from the same validated configuration/timeline as preview. Final local command: `$env:PLAYWRIGHT_CHANNEL='msedge'; $env:FULL_EXPORT_ACCEPTANCE='1'; npm.cmd run check`. Results: 67 unit tests, production build and 20 browser tests passed; one external-data test intentionally skipped; browser suite 31.4s. Full dependency audit: zero vulnerabilities; no dependency/version/license changes.

@@ -96,3 +96,24 @@ Baseline uses `VISUAL_BASELINE_REF=d440732` with `visual.mjs`: it copies that co
 | Night / Standard / 9:16 | 69.2 (68.6–71.3) | 9.4 (9.4–10.1) |
 
 Raw repeated reports: ignored visual-baseline.json and preserved visual-text-after.json. Initial exploratory single-pass reports remain visual-before.json; those are not substituted for the repeated results above.
+
+## Final-code confirmation
+
+On pushed application commit `88b410bf9c60e31a24519d715a9040fc9eb8b379`, both scripts were rerun sequentially after composition changes. Same environment/datasets, one warm-up + three steady performance runs; all eight final MP4s independently passed strict decoding. Raw `performance-final.json`:
+
+| Points | Quality / resolution / seconds | Parse ms | Prepare ms | Preview ms | Export median ms (min–max) | MP4 bytes |
+| ---: | --- | ---: | ---: | ---: | --- | ---: |
+| 100 | Compatibility / 640×360 / 10 | 1.8 | 1.9 | 3.8 | 378.5 (374.3–476.1) | 289,794 |
+| 100 | Standard / 1280×720 / 10 | 1.2 | 1.9 | 3.8 | 642.4 (642.2–648.7) | 660,796 |
+| 5,000 | Compatibility / 640×360 / 10 | 54.3 | 3.2 | 58.0 | 431.8 (424.3–465.4) | 343,291 |
+| 5,000 | Standard / 1280×720 / 10 | 53.5 | 6.2 | 60.1 | 682.3 (668.1–696.2) | 781,777 |
+| 20,000 | Compatibility / 640×360 / 10 | 216.3 | 14.4 | 225.5 | 395.3 (385.2–412.9) | 625,809 |
+| 20,000 | Standard / 1280×720 / 10 | 209.3 | 16.6 | 222.1 | 666.4 (649.7–678.3) | 1,313,388 |
+| 50,000 | Compatibility / 640×360 / 10 | 524.5 | 26.7 | 552.2 | 405.4 (388.3–427.9) | 481,261 |
+| 50,000 | Standard / 1280×720 / 30 | 543.7 | 32.6 | 577.9 | 1631.6 (1622.3–1634.8) | 3,122,941 |
+
+Final 50k Standard: sampled frame CPU median 0.2ms (0–1.3), alternating seek median 1.0ms (0.1–2.5), standalone projection 6.0ms (5.9–6.5). Page JS heap after the three steady exports: 34,798,152 / 30,704,592 / 30,129,964 bytes; these are separate non-GC observations, not native-memory peaks. Additional original Sprint 2 fixtures (5,000 points) passed 30s/720p acceptance in both formats: landscape 3,120,320 bytes / 1672.8ms, portrait 3,039,156 bytes / 1724.8ms, both 720 independently decoded frames.
+
+Two more fresh native-memory sessions on final code observed private-sum peaks 990,760,960 and 987,529,216 bytes (working-set sums at those peaks 1,166,938,112 / 1,191,362,560). Sampling intervals 171–269ms and 172–272ms. This variability versus the earlier batch-only 907,104,256-byte sample must remain visible; do not substitute the lowest run as a final RAM guarantee. After-change observed private peaks across these three sessions are 18–25% below the one before session, while working-set sums do not improve. No robust physical-RAM or GPU-memory reduction claim.
+
+Final-code cleanup private sums over four cycles: first session 748,638,208 / 753,938,432 / 898,502,656 / 580,812,800; route-audit session 765,112,320 / 749,932,544 / 852,647,936 / 569,372,672. Last session after test-only GC: page JS heap 8,813,568 bytes and last private sum 549,507,072; after page unload 9,191,856 and 546,557,952 respectively. Retention rises mid-session then falls; no sustained monotonic leak is confirmed. An extended test-only WeakRef audit also tracked eight distinct prior route objects: all eight and all 32 disposed renderers were collectible after invalid cleanup/explicit test GC; cached canvases were zero-sized. Files: memory-final.json, memory-route-audit.json, resource-audit.json. Dedicated encoder/GPU VRAM remain unmeasured.
