@@ -1,4 +1,59 @@
 {
+  "sprint5Preparation": {
+    "reviewedMainCommit": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
+    "finalSprint4Head": "3e4d6cb44b654c1b0a5616d20049a3a49e8916ff",
+    "mergedTreeMatches": true,
+    "mainPushCi": {
+      "url": "https://github.com/Matawaka/route-story/actions/runs/37896163991",
+      "conclusion": "success",
+      "unitPassed": 92,
+      "browserPassed": 23,
+      "browserSkipped": 3,
+      "failed": 0,
+      "productionBuild": "passed"
+    },
+    "freshLocalMainAcceptance": {
+      "cleanInstall": "passed; zero audit vulnerabilities",
+      "unitPassed": 92,
+      "browserPassed": 23,
+      "browserSkipped": 3,
+      "failed": 0,
+      "productionBuild": "passed",
+      "packageFiles": 10,
+      "packageBytes": 392837,
+      "scope": "local production subpath",
+      "publicHttps": false,
+      "smokeDurationsSeconds": [10, 10],
+      "nativePlaybackAndIndependentDecode": "passed"
+    },
+    "environmentReadBack": {
+      "name": "github-pages",
+      "requiredHumanReviewer": "Matawaka",
+      "preventSelfReview": false,
+      "allowedBranch": "main",
+      "branchPolicyType": "branch"
+    },
+    "existingDemoAssetsRevalidated": true,
+    "historicalVideoHashesMatch": true,
+    "historicalVideoSourceCommit": "67d1726662742af33066df8cffde331a4270f77b",
+    "candidateArchive": {
+      "name": "route-story-v1.0.0-candidate.zip",
+      "bytes": 3326641,
+      "entries": 19,
+      "sha256": "74d433faa39e81fca4c7367e7c74026e0d61c13f3fae2781ae560feafe9455b4",
+      "sourceCommit": "5f39332b7358949d248da6b2f99ba445ee1b41e8",
+      "entryHashesVerified": true,
+      "publication": "PENDING"
+    },
+    "publicSyntheticGpxAnonymousHttp200": true,
+    "pagesSource": "PENDING; site not configured",
+    "publicationApproval": "PENDING explicit owner permission",
+    "liveApplicationUrl": null,
+    "releaseTag": "v1.0.0 PENDING",
+    "githubReleaseUrl": null,
+    "publicVideoAssetUrls": [],
+    "competitionSubmission": "NOT SUBMITTED"
+  },
   "status": "VERIFIED",
   "scope": "local production subpath",
   "publicHttps": false,

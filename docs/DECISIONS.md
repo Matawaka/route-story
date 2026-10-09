@@ -1,5 +1,17 @@
 # Decisions
 
+## Sprint 5: exact merged release and separate publication approval
+
+Owner merged PR #4 on 2026-10-09. All four sprint PRs are merged into main `5f39332b7358949d248da6b2f99ba445ee1b41e8`; its tree exactly matches the final Sprint 4 head `3e4d6cb44b654c1b0a5616d20049a3a49e8916ff`. Successful push-to-main CI 37896163991 and a fresh local clean-install/check/package/smoke validate this exact main, rather than relying only on an earlier branch run. Preserve the existing application and sole manual Pages workflow. No new dependency, codec, feature or resource limit.
+
+Sprint 5 authorizes preparatory environment configuration. Actual `github-pages` environment now requires human reviewer Matawaka and permits only the `main` branch. `prevent_self_review=false` allows the solo owner to approve their own initiated run; the agent must never submit that environment approval. Pages site/source is still unconfigured. Enabling Pages, dispatching publication and creating tag/Release/assets remain behind explicit owner permission. Merge permission is not publication permission.
+
+Use the complete reviewed main SHA for deployment and the immutable `v1.0.0` tag. Recheck remote main and its successful main-push CI immediately before authorized dispatch; if the SHA changes, reassess before publishing. Public acceptance must use the returned deploy-pages URL, including a separate full-duration export. Fill public links only after verification. Documentation changes use `codex/sprint-5-public-launch` and a focused PR; no automatic merge or redeployment for documentation.
+
+Existing synthetic Atlas20s/Night30s files are present and independently revalidated; their hashes match Sprint 4. Preserve the original source-commit evidence, do not mislabel these as exports from the public site. Keep diagnostic/API responses and MP4s outside source Git. After public acceptance, finalize Release assets, download each independently and compare hashes. Encoder output may differ after a genuine public-site regeneration.
+
+The owner provided the contest announcement text: GPX is an accepted documented import format, and the minimum includes two styles, two factual information elements, both aspect ratios, actual replay/export and an independently runnable product. Map these requirements to observed evidence, emphasizing actual output. An original rules URL, submission channel/form and permission to submit have not been supplied; do not claim official compliance or submission.
+
 ## Sprint 4: reviewed static release, no new product features
 
 On 2026-10-09 the owner had already merged PR #1/#2/#3 into main dd86c372b6d6c757d7327e22366b402f60ad9b4e. Its tree exactly matches verified Sprint 3 488db3b; preserve history and start release/route-story-v1 from that main. The release PR targets main without a stacked dependency. No agent merge or publication is authorized yet.
