@@ -1,5 +1,15 @@
 # Decisions
 
+## Sprint 4: reviewed static release, no new product features
+
+On 2026-10-09 the owner had already merged PR #1/#2/#3 into main dd86c372b6d6c757d7327e22366b402f60ad9b4e. Its tree exactly matches verified Sprint 3 488db3b; preserve history and start release/route-story-v1 from that main. The release PR targets main without a stacked dependency. No agent merge or publication is authorized yet.
+
+Prepare a manual-only GitHub Pages workflow with exact reviewed-main SHA and successful main-push acceptance checks. Read-only build/test jobs; pages/id-token write permissions confined to a deployment job that runs only pinned official actions. Owner must separately configure Pages source and a required-reviewer main-only github-pages environment before authorized dispatch. A YAML environment name alone is not approval protection. No automatic push deployment or PAT/secrets. Pages/custom-domain/Timeweb settings remain untouched during preparation.
+
+Validate a public-file allowlist and provenance before uploading dist; include a small source-commit/file-hash manifest, excluding user data and videos. Test the real production bundle at /route-story/ and test the actual anonymous HTTPS URL separately after deployment. Localhost secure context is not HTTPS acceptance. Keep restrictive meta CSP; document the response-header protections that static hosting/meta cannot promise.
+
+Release examples come from two explicitly synthetic public GPX files via the actual UI, not a substitute renderer. Atlas landscape 20s / Night antimeridian portrait 30s, both Standard, must independently decode and play in the tested browser. Keep MP4s out of source Git and publish validated assets only after permission. Package version 1.0.0 denotes the prepared release candidate, not a published tag. Browser/device claims remain limited to Sprint 3 evidence. No major feature, dependency or resource-limit changes.
+
 ## Sprint 3: observed compatibility and resource costs
 
 Stack on accepted Sprint 2 head f9f63b5 because PRs #1/#2 remain open. Keep Canvas/Mediabunny/WebCodecs and all limits. Explicit opt-in local scripts test browser engines, large synthetic GPX and Windows process memory; routine CI remains affordable. Playwright mobile emulation is not physical-device acceptance; WebKit is not retail Safari. Windows WebKit preview works but VideoEncoder is absent.

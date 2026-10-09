@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+const {REVIEWED_SHA,GITHUB_SHA,GITHUB_REF,GITHUB_EVENT_NAME,GITHUB_REPOSITORY,GH_TOKEN}=process.env;
+assert.equal(GITHUB_EVENT_NAME,'workflow_dispatch','publication must be explicitly dispatched');
+assert.equal(GITHUB_REF,'refs/heads/main','no PR/feature-branch deployment');
+assert.match(REVIEWED_SHA??'',/^[a-f0-9]{40}$/,'full reviewed SHA required');
+assert.equal(REVIEWED_SHA,GITHUB_SHA,'dispatch must use the exact reviewed main commit');
+assert.ok(GH_TOKEN,'read-only workflow token required');
+const response=await fetch(`https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/check.yml/runs?head_sha=${GITHUB_SHA}&event=push&status=success`,{headers:{Authorization:`Bearer ${GH_TOKEN}`,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
+assert.ok(response.ok,`acceptance query status ${response.status}`);
+const {workflow_runs}=await response.json();
+assert.ok(workflow_runs.some(r=>r.head_sha===GITHUB_SHA&&r.head_branch==='main'&&r.event==='push'&&r.conclusion==='success'),'exact main commit needs successful main acceptance first');
+console.log(`Reviewed main ${GITHUB_SHA}: acceptance verified. Environment approval remains required.`);

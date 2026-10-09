@@ -1,0 +1,176 @@
+{
+  "status": "VERIFIED",
+  "scope": "local production subpath",
+  "publicHttps": false,
+  "os": "Windows_NT 10.0.26200 x64",
+  "physicalMobile": false,
+  "outputs": [
+    {
+      "name": "atlas-20s",
+      "source": "synthetic.gpx",
+      "sourceBytes": 897,
+      "sourceSha256": "a5aec675bbc85106fc1fa4e3dec45961f373ba2c4562a1216e1c1da43b259149",
+      "points": 9,
+      "title": "Учебный маршрут · ATLAS",
+      "style": "Атлас",
+      "aspect": "landscape",
+      "quality": "standard",
+      "phases": [
+        {
+          "phase": "INTRO",
+          "time": 1
+        },
+        {
+          "phase": "ROUTE_REPLAY",
+          "time": 10
+        },
+        {
+          "phase": "OUTRO",
+          "time": 19
+        }
+      ],
+      "exportMilliseconds": 1557.5999999940395,
+      "encoder": {
+        "codec": "avc1.42001f",
+        "width": 1280,
+        "height": 720,
+        "displayWidth": 1280,
+        "displayHeight": 720,
+        "bitrate": 5000000,
+        "bitrateMode": "variable",
+        "alpha": "discard",
+        "framerate": 24,
+        "avc": {
+          "format": "avc"
+        }
+      },
+      "video": {
+        "file": "artifacts/release/atlas-20s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 1280,
+        "height": 720,
+        "duration": 20,
+        "decodedFrames": 480,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 480,
+        "firstFrameHash": "61b424c7c2cf24f458b791c7891f70fc",
+        "lastFrameHash": "601c1ce3f4ec77bb15f12a6a6870bbfb",
+        "bytes": 1553778,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers",
+        "sha256": "8eca832f3eab547c07b3a3a22765711e4019d7427fdb023e3dadd04d6aeb4b26"
+      },
+      "nativePlayback": {
+        "width": 1280,
+        "height": 720,
+        "duration": 20,
+        "pixelVariation": 81,
+        "playbackAdvancedSeconds": 0.1590480000000003
+      }
+    },
+    {
+      "name": "night-30s",
+      "source": "synthetic-antimeridian.gpx",
+      "sourceBytes": 5383,
+      "sourceSha256": "d9482d29de71796e50dacfc22fefe9b53ad02b0f9ce12312d0547eca7ebe50d8",
+      "points": 80,
+      "title": "Через 180° · NIGHT",
+      "style": "Ночной",
+      "aspect": "portrait",
+      "quality": "standard",
+      "phases": [
+        {
+          "phase": "INTRO",
+          "time": 1
+        },
+        {
+          "phase": "ROUTE_REPLAY",
+          "time": 15
+        },
+        {
+          "phase": "OUTRO",
+          "time": 29
+        }
+      ],
+      "exportMilliseconds": 1737.7000000029802,
+      "encoder": {
+        "codec": "avc1.42001f",
+        "width": 720,
+        "height": 1280,
+        "displayWidth": 720,
+        "displayHeight": 1280,
+        "bitrate": 5000000,
+        "bitrateMode": "variable",
+        "alpha": "discard",
+        "framerate": 24,
+        "avc": {
+          "format": "avc"
+        }
+      },
+      "video": {
+        "file": "artifacts/release/night-30s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 720,
+        "height": 1280,
+        "duration": 30,
+        "decodedFrames": 720,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 720,
+        "firstFrameHash": "be4a32c680da5e6291bd4d655e59d9f9",
+        "lastFrameHash": "97dd75c47867c554fc77a0e9f997077f",
+        "bytes": 2282557,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers",
+        "sha256": "80a12e42c94315a9269dbf67d0d121ba0a6e71a6537b155fb9b40371af8ea60a"
+      },
+      "nativePlayback": {
+        "width": 720,
+        "height": 1280,
+        "duration": 30,
+        "pixelVariation": 62,
+        "playbackAdvancedSeconds": 0.15537899999999993
+      }
+    }
+  ],
+  "browser": {
+    "channel": "msedge",
+    "version": "154.0.4258.62"
+  },
+  "url": "http://127.0.0.1:4185/route-story/",
+  "secureContext": true,
+  "csp": {
+    "responseHeader": null,
+    "meta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+  },
+  "sourceCommit": "67d1726662742af33066df8cffde331a4270f77b",
+  "version": "1.0.0",
+  "packageBytes": 392357,
+  "packageHashesVerified": 10,
+  "cancelAndRecovery": "VERIFIED",
+  "unsupportedEncoder": "VERIFIED simulated unavailable API",
+  "privacy": {
+    "storage": {
+      "local": 0,
+      "session": 0,
+      "databases": [],
+      "caches": [],
+      "cookies": ""
+    },
+    "unexpectedRequests": [],
+    "badResponses": [],
+    "pageErrors": [],
+    "firstPartyBrowserRequests": 14,
+    "routeLostOnReload": true
+  },
+  "memory": {
+    "jsHeap": "NOT MEASURED in this acceptance",
+    "nativeProcessMemory": "NOT MEASURED in this acceptance",
+    "gpuMemory": "NOT MEASURED"
+  }
+}
