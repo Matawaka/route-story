@@ -47,13 +47,16 @@ async function configure(): Promise<void> {
     config=validateStoryConfig({...config,cameraMode:terrain?'terrain':'cinematic'});
   }
   const landBase = await landPromise;
-  const land=config.cameraMode==='cinematic'?{...landBase,geography:await loadGeography()}:landBase;
+  let land=config.cameraMode==='cinematic'?{...landBase,geography:await loadGeography()}:landBase;
   if (currentProbe !== probeId) return;
   stop(); renderer?.dispose();renderer=undefined; const portrait = ratio.value === 'portrait';
   const settings = exportSettings(story); canvas.width = settings.width; canvas.height = settings.height;
   scrub.max = String(story.durationSeconds); scrub.value = String(Math.min(Number(scrub.value), story.durationSeconds));
   canvas.classList.toggle('portrait', portrait); el('preview-format').textContent = portrait ? '9:16' : '16:9';
-  if(terrain){const {TerrainRenderer}=await import('./terrain-renderer');if(currentProbe!==probeId)return;renderer=new TerrainRenderer(route,terrain,canvas.width,canvas.height,config);}
+  if(terrain){const {TerrainRenderer}=await import('./terrain-renderer');if(currentProbe!==probeId)return;
+    try{renderer=new TerrainRenderer(route,terrain,canvas.width,canvas.height,config);}
+    catch(error){if(story.cameraMode!=='auto')throw error;terrain=undefined;terrainNote=`Авто: ${(error as Error).message} Используется 2D.`;config=validateStoryConfig({...config,cameraMode:'cinematic'});land={...landBase,geography:await loadGeography()};if(currentProbe!==probeId)return;renderer=new RouteRenderer(route,land,canvas.width,canvas.height,style,config);}
+  }
   else renderer = new RouteRenderer(route, land, canvas.width, canvas.height, style, config);
   draw();
   const region=land.geography?.region.extent,covered=region&&route.segments.every(s=>s.every(p=>p.lon>=region[0]&&p.lon<=region[2]&&p.lat>=region[1]&&p.lat<=region[3]));
@@ -68,12 +71,15 @@ async function importRoute(read: () => Promise<Route>, synthetic = false) {
   message('Читаем GPX на вашем устройстве…');
   try {
     const loaded = await read(); await landPromise; if (currentLoad !== loadId) return;
+    renderer?.dispose();renderer=undefined;canvas.width=canvas.height=0;
     route = loaded; story = validateStoryConfig({ ...story, title: loaded.name }); title.value = story.title; title.disabled = false; loading = false; scrub.value = duration.value; canvas.hidden = false; el('empty').hidden = true; el('facts').hidden = false; play.disabled = scrub.disabled = false;
     el('distance').textContent = formatDistance(route.distanceKm); el('segments').textContent = String(route.segments.length);
     el('metric-name').textContent = route.elevationGain !== undefined ? 'Набор высоты по GPX' : 'Точки маршрута';
     el('metric-value').textContent = route.elevationGain !== undefined ? `${Math.round(route.elevationGain).toLocaleString('ru-RU')} м` : route.pointCount.toLocaleString('ru-RU');
     el('route-info').textContent = `${route.name} · ${route.pointCount.toLocaleString('ru-RU')} точек${synthetic ? ' · синтетический пример' : ''}`;
-    await configure();
+    // A valid GPX must survive map/GPU preparation failure so selecting 2D can
+    // recover without another import. Only file/parser failures clear route data.
+    try{await configure();}catch(error){stop();button.disabled=true;message((error as Error).message,true);}
   } catch (error) {
     if (currentLoad !== loadId) return;
     route = undefined; renderer?.dispose(); renderer = undefined; canvas.hidden = true; el('empty').hidden = false; el('facts').hidden = true;

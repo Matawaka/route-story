@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { StoryTimeline } from './timeline';
-import { createTerrainCameraPlan,getTerrainCameraStateAt } from './terrain-camera';
+import { createTerrainCameraPlan,getTerrainCameraStateAt,requiredVisibleAltitude } from './terrain-camera';
 import { TerrainDataset,type TerrainXY } from './terrain';
 import { haversine,wrapDelta } from './geo';
 import { metricLabel,formatDistance } from './renderer';
@@ -30,7 +30,8 @@ export class TerrainRenderer {
     const begin=performance.now();this.timeline=new StoryTimeline(route,config);this.config=this.timeline.config;
     this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height);
     const canvas=document.createElement('canvas');
-    this.gpu=new T.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:true,powerPreference:'default'});
+    try{this.gpu=new T.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:true,powerPreference:'default'});}
+    catch{throw Error('На этом устройстве недоступен WebGL 2 для рельефа. Выберите «Кино · 2D».');}
     this.gpu.setPixelRatio(1);this.gpu.setSize(width,height,false);this.gpu.outputColorSpace=T.SRGBColorSpace;
     this.gpu.debug.onShaderError=()=>{throw Error('Не удалось подготовить 3D-шейдер. Экспорт остановлен; выберите 2D.');};
     canvas.addEventListener('webglcontextlost',this.onLost);
@@ -39,17 +40,26 @@ export class TerrainRenderer {
     this.camera=new T.PerspectiveCamera(46,width/height,5,100000);
     this.camera.setViewOffset(width,height,0,Math.min(width,height)*.04,width,height);
     try{
-      const {level,manifest,heights}=terrain,count=level.width*level.height,positions=new Float32Array(count*3),colors=new Float32Array(count*3),indices:number[]=[];
+      const {level,manifest,heights}=terrain,count=level.width*level.height,positions=new Float32Array(count*3),colors=new Float32Array(count*3),indices=new Uint32Array((level.width-1)*(level.height-1)*6);let indexCount=0;
       const low=new T.Color(night?'#102f3b':'#4e735f'),mid=new T.Color(night?'#31546a':'#9b9e7d'),high=new T.Color(night?'#6c8795':'#dbd9c4'),water=new T.Color(night?'#092431':'#4c91a4');
       for(let y=0;y<level.height;y++)for(let x=0;x<level.width;x++){
         const i=y*level.width+x,h=heights[i];positions.set([manifest.westMeters+x*level.spacingMeters,h===manifest.noData?0:h,-manifest.southMeters-y*level.spacingMeters],i*3);
         // Near-zero cells are styled as the DEM surface, not classified as known
         // water. No lakes/roads/places are invented from height alone.
-        const c=h<2?water.clone():h<650?low.clone().lerp(mid,Math.max(0,h)/650):mid.clone().lerp(high,Math.min(1,(h-650)/800));colors.set([c.r,c.g,c.b],i*3);
-        if(x<level.width-1&&y<level.height-1){const corners=[i,i+1,i+level.width,i+level.width+1];if(corners.every(j=>heights[j]!==manifest.noData))indices.push(i,i+1,i+level.width,i+1,i+level.width+1,i+level.width);}
+        const a=h<650?low:mid,b=h<650?mid:high,t=h<650?Math.max(0,h)/650:Math.min(1,(h-650)/800);
+        colors[i*3]=h<2?water.r:a.r+(b.r-a.r)*t;colors[i*3+1]=h<2?water.g:a.g+(b.g-a.g)*t;colors[i*3+2]=h<2?water.b:a.b+(b.b-a.b)*t;
+        if(x<level.width-1&&y<level.height-1){const corners=[i,i+1,i+level.width,i+level.width+1];if(corners.every(j=>heights[j]!==manifest.noData)){indices.set([i,i+1,i+level.width,i+1,i+level.width+1,i+level.width],indexCount);indexCount+=6;}}
       }
-      this.terrainGeometry=new T.BufferGeometry();this.terrainGeometry.setAttribute('position',new T.BufferAttribute(positions,3));this.terrainGeometry.setAttribute('color',new T.BufferAttribute(colors,3));this.terrainGeometry.setIndex(indices);this.terrainGeometry.computeVertexNormals();this.disposables.push(this.terrainGeometry);
-      const terrainMaterial=new T.MeshLambertMaterial({vertexColors:true,side:T.FrontSide});this.disposables.push(terrainMaterial);this.scene.add(new T.Mesh(this.terrainGeometry,terrainMaterial));
+      this.terrainGeometry=new T.BufferGeometry();this.terrainGeometry.setAttribute('position',new T.BufferAttribute(positions,3));this.terrainGeometry.setAttribute('color',new T.BufferAttribute(colors,3));this.terrainGeometry.setIndex(new T.BufferAttribute(indices.subarray(0,indexCount),1));this.terrainGeometry.computeVertexNormals();this.disposables.push(this.terrainGeometry);
+      const terrainMaterial=new T.MeshLambertMaterial({vertexColors:true,side:T.FrontSide});
+      terrainMaterial.onBeforeCompile=shader=>{
+        shader.uniforms.bounds={value:new T.Vector4(manifest.westMeters,manifest.southMeters,manifest.eastMeters,manifest.northMeters)};shader.uniforms.edgeColor={value:this.scene.background};
+        shader.vertexShader='varying vec3 demPosition;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ndemPosition=position;');
+        shader.fragmentShader='varying vec3 demPosition;uniform vec4 bounds;uniform vec3 edgeColor;\n'+shader.fragmentShader
+          .replace('#include <color_fragment>',`#include <color_fragment>\nfloat contour=abs(fract(demPosition.y/100.0+0.5)-0.5);float aa=max(fwidth(demPosition.y/100.0),0.006);float line=1.0-smoothstep(0.0,aa*1.1,contour);if(demPosition.y>15.0)diffuseColor.rgb=mix(diffuseColor.rgb,${night?'vec3(0.19,0.29,0.33)':'vec3(0.10,0.16,0.12)'},line*${night?'0.23':'0.17'});`)
+          .replace('#include <opaque_fragment>','#include <opaque_fragment>\nfloat boundary=min(min(demPosition.x-bounds.x,bounds.z-demPosition.x),min(-demPosition.z-bounds.y,bounds.w+demPosition.z));gl_FragColor.rgb=mix(edgeColor,gl_FragColor.rgb,smoothstep(0.0,1800.0,boundary));');
+      };
+      this.disposables.push(terrainMaterial);this.scene.add(new T.Mesh(this.terrainGeometry,terrainMaterial));
       this.scene.add(new T.HemisphereLight(night?0x9bbdda:0xf8f4db,night?0x03151f:0x344337,night?.8:1));
       const light=new T.DirectionalLight(night?0xa6c8e5:0xfff1d7,night?1.25:1.5);light.position.set(-6000,8000,4500);this.scene.add(light);
       const vertices:number[]=[],distances:number[]=[],triangles:number[]=[];let travelled=0;
@@ -95,6 +105,12 @@ export class TerrainRenderer {
     ctx.fillStyle=ink;ctx.font=`650 ${u*.023}px system-ui`;ctx.fillText('ROUTE STORY  /  TERRAIN',p,p);
     ctx.font=`650 ${u*(state.phase==='INTRO'?.059:.043)}px ${night?'system-ui':'Georgia'}`;ctx.fillText(this.title,p,p+u*.071);
     ctx.font=`500 ${u*.026}px system-ui`;ctx.fillText(state.phase==='INTRO'?'Реальный рельеф · камера над маршрутом':state.phase==='OUTRO'?'Маршрут целиком':`Сегмент ${state.segment+1} / ${this.timeline.route.segments.length}`,p,p+u*.116);
+    if(state.phase!=='ROUTE_REPLAY')for(const [mesh,text] of [[this.start,'Старт'],[this.finish,'Финиш']] as const){
+      if(!mesh.visible)continue;const v=mesh.position.clone().project(this.camera),x=(v.x+1)*w/2,y=(1-v.y)*h/2;
+      if(v.z>1||x<p||x>w-p||y<u*.25||y>h-u*.28||requiredVisibleAltitude(this.terrain,pose.position,[mesh.position.x,-mesh.position.z,mesh.position.y])>pose.position[2]+.01)continue;
+      ctx.font=`650 ${u*.022}px system-ui`;const tw=ctx.measureText(text).width,lx=Math.max(p,Math.min(w-p-tw-12,x+u*.023)),ly=y-u*.018;
+      ctx.fillStyle=night?'#071521d9':'#173d4bd9';ctx.fillRect(lx-5,ly-u*.026,tw+10,u*.035);ctx.fillStyle=ink;ctx.fillText(text,lx,ly);
+    }
     const bottom=ctx.createLinearGradient(0,h-u*.3,0,h);bottom.addColorStop(0,'#07152100');bottom.addColorStop(1,'#071521ed');ctx.fillStyle=bottom;ctx.fillRect(0,h-u*.3,w,u*.3);
     ctx.fillStyle=ink;ctx.font=`650 ${u*.045}px system-ui`;ctx.fillText(`${formatDistance(state.travelledKm,state.totalKm)} / ${formatDistance(state.totalKm)}`,p,h-u*.16);
     ctx.font=`500 ${u*.025}px system-ui`;ctx.fillText(metricLabel(this.timeline.route),p,h-u*.111);

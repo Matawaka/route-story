@@ -1,7 +1,7 @@
 """Bounded developer-only DEM preprocessing; rasterio 1.4.4 / pyproj 3.7.2.
 Original licensed GeoTIFF stays outside Git. Never processes user GPX.
 """
-import argparse, hashlib, json, math, pathlib, time
+import argparse, hashlib, json, math, pathlib, time, zipfile
 import numpy as np
 import rasterio
 from pyproj import Transformer
@@ -12,6 +12,14 @@ p = argparse.ArgumentParser()
 p.add_argument('source', type=pathlib.Path)
 p.add_argument('--output', type=pathlib.Path, default=pathlib.Path('public/terrain'))
 a = p.parse_args(); begin = time.perf_counter(); a.output.mkdir(parents=True, exist_ok=True)
+if a.source.suffix.lower()=='.zip':
+    assert a.source.stat().st_size<=120*1024*1024
+    assert hashlib.sha256(a.source.read_bytes()).hexdigest()=='5b786c10d7d81313b8d729bcdb696a7b9abd747ecf2fe27929efc5b16bc6d280', 'Unreviewed source archive'
+    with zipfile.ZipFile(a.source) as archive:
+        # Exact reviewed filename only; no arbitrary archive paths are extracted.
+        tile=a.source.parent/'6800_3_10m_z33.tif'; tile.write_bytes(archive.read('6800_3_10m_z33.tif')); a.source=tile
+assert a.source.stat().st_size<=120*1024*1024
+assert hashlib.sha256(a.source.read_bytes()).hexdigest()=='c906919a78bde45c26cb02d5b646681eb0b8283bf42594e0078a5e0d2ef82280', 'Unreviewed GeoTIFF'
 origin = [6.2, 61.28]; radius = 6371008.8; cosine = math.cos(math.radians(origin[1]))
 project = Transformer.from_crs(4326, 25833, always_xy=True)
 with rasterio.open(a.source) as source:
