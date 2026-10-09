@@ -22,6 +22,7 @@ export function validateVideo(path, width, height, durationSeconds = 4, fps = 24
   assert.ok(Math.abs(Number(metadata.format.duration) - durationSeconds) <= 1 / fps, 'requested duration');
   assert.equal(stream.avg_frame_rate,`${fps}/1`,'requested frame rate');
   assert.equal(Number(stream.nb_read_frames), expectedFrames, 'all expected frames decoded');
+  assert.ok(metadata.format.format_name.split(',').includes('mp4'), 'independent MP4 container identification');
   const timestamps = JSON.parse(checkedDecode(process.env.FFPROBE_PATH || ffprobe.path, ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'frame=best_effort_timestamp_time,pkt_duration_time', '-of', 'json', path])).frames;
   assert.equal(timestamps.length, expectedFrames, 'all frame timestamps present');
   timestamps.forEach((frame, index) => {
@@ -31,9 +32,11 @@ export function validateVideo(path, width, height, durationSeconds = 4, fps = 24
   const hashes = checkedDecode(process.env.FFMPEG_PATH || ffmpeg, ['-v', 'error', '-i', path, '-map', '0:v:0', '-f', 'framemd5', '-']);
   const frames = hashes.split('\n').filter(line => line && !line.startsWith('#'));
   assert.equal(frames.length, expectedFrames, 'FFmpeg independently decoded every frame');
-  assert.ok(new Set(frames.map(line => line.split(',').at(-1).trim())).size > 20, 'actual changing animation');
+  const frameHashes = frames.map(line => line.split(',').at(-1).trim());
+  assert.ok(new Set(frameHashes).size > 20, 'actual changing animation');
+  assert.notEqual(frameHashes[0], frameHashes.at(-1), 'beginning and ending contain different valid images');
   assert.ok(readFileSync(path).subarray(4, 8).equals(Buffer.from('ftyp')), 'MP4 signature');
-  const report = { file: path, codec: stream.codec_name, width, height, duration: Number(metadata.format.duration), decodedFrames: frames.length, fps: stream.avg_frame_rate, frameTimestampsVerified: true, bytes: Number(metadata.format.size), validator: 'Independent FFmpeg + ffprobe', ffmpegVersion: execFileSync(process.env.FFMPEG_PATH || ffmpeg, ['-version'], { encoding: 'utf8' }).split('\n')[0] };
+  const report = { file: path, container: metadata.format.format_name, codec: stream.codec_name, profile: stream.profile, width, height, duration: Number(metadata.format.duration), decodedFrames: frames.length, fps: stream.avg_frame_rate, frameTimestampsVerified: true, distinctFrames: new Set(frameHashes).size, firstFrameHash: frameHashes[0], lastFrameHash: frameHashes.at(-1), bytes: Number(metadata.format.size), validator: 'Independent FFmpeg + ffprobe', ffmpegVersion: execFileSync(process.env.FFMPEG_PATH || ffmpeg, ['-version'], { encoding: 'utf8', windowsHide: true }).split('\n')[0] };
   writeFileSync(path + '.validation.json', JSON.stringify(report, null, 2) + '\n');
   return report;
 }
