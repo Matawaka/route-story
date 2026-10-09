@@ -5,6 +5,8 @@ import type { Route } from './route';
 import { defaultStoryConfig, exportSettings, formatVideoTime, validateStoryConfig, videoFilename, type StoryConfig } from './story';
 import './style.css';
 import { loadGeography } from './geography';
+import { loadTerrain } from './terrain';
+import type { TerrainRenderer } from './terrain-renderer';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const canvas = el<HTMLCanvasElement>('preview'), file = el<HTMLInputElement>('file'), demo = el<HTMLButtonElement>('demo');
 const button = el<HTMLButtonElement>('export'), cancel = el<HTMLButtonElement>('cancel');
@@ -12,10 +14,11 @@ const play = el<HTMLButtonElement>('play'), scrub = el<HTMLInputElement>('scrub'
 const duration = el<HTMLSelectElement>('duration'), quality = el<HTMLSelectElement>('quality');
 const cameraMode=el<HTMLSelectElement>('camera-mode');
 const cinematicDemo=el<HTMLButtonElement>('cinematic-demo');
+const terrainDemo=el<HTMLButtonElement>('terrain-demo');
 const title = el<HTMLInputElement>('story-title');
 let story: Readonly<StoryConfig> = defaultStoryConfig();
 if(matchMedia('(prefers-reduced-motion: reduce)').matches){story=validateStoryConfig({...story,cameraMode:'classic'});cameraMode.value='classic';}
-let route: Route | undefined, renderer: RouteRenderer | undefined, style: VisualStyle = 'atlas';
+let route: Route | undefined, renderer: RouteRenderer | TerrainRenderer | undefined, style: VisualStyle = 'atlas';
 let exporting = false, loading = false, animationId = 0, playing = false, loadId = 0, probeId = 0;
 let controller: AbortController | undefined;
 const landPromise: Promise<Land> = fetch(`${import.meta.env.BASE_URL}maps/ne_110m_land.geojson`).then(response => { if (!response.ok) throw new Error('Не удалось загрузить локальную карту.'); return response.json(); });
@@ -23,7 +26,8 @@ landPromise.catch(error => message(error.message, true));
 function message(text: string, error = false) { el('status').textContent = text; el('status').classList.toggle('error', error); }
 function stop() { playing = false; cancelAnimationFrame(animationId); play.textContent = '▶'; play.setAttribute('aria-label', 'Воспроизвести'); }
 function draw() {
-  const time = Number(scrub.value); renderer?.draw(canvas, time);
+  const time = Number(scrub.value);
+  try{renderer?.draw(canvas,time);}catch(error){stop();button.disabled=true;message((error as Error).message,true);return;}
   el('time').textContent = `${formatVideoTime(time)} / ${formatVideoTime(story.durationSeconds)}`;
   if (renderer) { const state = renderer.timeline.at(time); canvas.dataset.phase = state.phase;
     el('preview-phase').textContent = `${state.phase === 'INTRO' ? 'Вступление' : state.phase === 'OUTRO' ? 'Финиш' : 'Повтор маршрута'} · сегмент ${state.segment + 1} из ${route!.segments.length}${state.stationary ? ' · нет непрерывного перемещения в GPX' : ''}`;
@@ -36,16 +40,24 @@ async function configure(): Promise<void> {
     story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'],cameraMode:cameraMode.value as StoryConfig['cameraMode'] }, false);
     title.removeAttribute('aria-invalid');
   } catch (error) { title.setAttribute('aria-invalid', 'true'); stop(); message((error as Error).message, true); return; }
-  const config=story,landBase = await landPromise;
+  let config=story,terrain:Awaited<ReturnType<typeof loadTerrain>>|undefined,terrainNote='';
+  if(config.cameraMode==='terrain'||config.cameraMode==='auto'){
+    try{terrain=await loadTerrain(config.qualityPreset);if(!terrain.routeCoverage(route)||terrain.max-terrain.min<100)throw Error('Маршрут вне полного DEM-пакета или нет выразительного рельефа.');}
+    catch(error){terrain=undefined;if(config.cameraMode==='terrain')throw Error(`${(error as Error).message} Выберите «Кино · 2D».`);terrainNote=`Авто: ${(error as Error).message} Используется 2D.`;}
+    config=validateStoryConfig({...config,cameraMode:terrain?'terrain':'cinematic'});
+  }
+  const landBase = await landPromise;
   const land=config.cameraMode==='cinematic'?{...landBase,geography:await loadGeography()}:landBase;
   if (currentProbe !== probeId) return;
-  stop(); renderer?.dispose(); const portrait = ratio.value === 'portrait';
+  stop(); renderer?.dispose();renderer=undefined; const portrait = ratio.value === 'portrait';
   const settings = exportSettings(story); canvas.width = settings.width; canvas.height = settings.height;
   scrub.max = String(story.durationSeconds); scrub.value = String(Math.min(Number(scrub.value), story.durationSeconds));
   canvas.classList.toggle('portrait', portrait); el('preview-format').textContent = portrait ? '9:16' : '16:9';
-  renderer = new RouteRenderer(route, land, canvas.width, canvas.height, style, story); draw();
+  if(terrain){const {TerrainRenderer}=await import('./terrain-renderer');if(currentProbe!==probeId)return;renderer=new TerrainRenderer(route,terrain,canvas.width,canvas.height,config);}
+  else renderer = new RouteRenderer(route, land, canvas.width, canvas.height, style, config);
+  draw();
   const region=land.geography?.region.extent,covered=region&&route.segments.every(s=>s.every(p=>p.lon>=region[0]&&p.lon<=region[2]&&p.lat>=region[1]&&p.lat<=region[3]));
-  el('map-detail-note').textContent=`Карта: Natural Earth · ${covered?'фьорды, острова и подписи 1:10m':'обзорная география '+(story.cameraMode==='cinematic'?'1:50m':'1:110m')} · без улиц. Время видео не является длительностью поездки.`;
+  el('map-detail-note').textContent=terrain?`Рельеф: © Kartverket · CC BY 4.0 · DEM ${terrain.level.spacingMeters} м · без преувеличения высот. Локальный пакет Согне-фьорда; высоты GPX сохранены. Вертикальный датум источника не указан. Не для навигации.`:`${terrainNote} Карта: Natural Earth · ${covered?'фьорды, острова и подписи 1:10m':'обзорная география '+(config.cameraMode==='cinematic'?'1:50m':'1:110m')} · без улиц. Время видео не является длительностью поездки.`;
   canvas.setAttribute('aria-label', `История «${story.title}»: карта маршрута со стартом и финишем`);
   el('export-note').textContent = `${story.durationSeconds} секунд · ${canvas.width} × ${canvas.height} · 24 кадра/с · H.264`;
   try { await detectEncoder(canvas.width, canvas.height, settings.bitrate, settings.fps); if (currentProbe === probeId) { button.disabled = exporting || loading; message('Маршрут готов. Можно сохранить видео.'); } }
@@ -77,6 +89,10 @@ cinematicDemo.addEventListener('click',()=>{
   cameraMode.value='cinematic';ratio.value='portrait';quality.value='standard';duration.value='20';
   void importRoute(async()=>{const response=await fetch(`${import.meta.env.BASE_URL}samples/cinematic-fjords.gpx`);if(!response.ok)throw new Error('Кино-демо недоступно.');return parseGpx(await response.text());},true).then(()=>{scrub.value='0';draw();});
 });
+terrainDemo.addEventListener('click',()=>{
+  if(exporting)return;cameraMode.value='terrain';ratio.value='portrait';quality.value='standard';duration.value='20';
+  void importRoute(async()=>{const r=await fetch(`${import.meta.env.BASE_URL}samples/terrain-sogne.gpx`);if(!r.ok)throw Error('3D-демо недоступно.');return parseGpx(await r.text());},true).then(()=>{scrub.value='0';draw();});
+});
 document.querySelectorAll<HTMLButtonElement>('[data-style]').forEach(card => card.addEventListener('click', () => {
   if (exporting) return; style = card.dataset.style as VisualStyle;
   document.querySelectorAll<HTMLButtonElement>('[data-style]').forEach(item => { item.classList.toggle('active', item === card); item.setAttribute('aria-pressed', String(item === card)); });
@@ -99,7 +115,7 @@ cancel.addEventListener('click', () => controller?.abort());
 button.addEventListener('click', async () => {
   if (!renderer || exporting || loading) return;
   exporting = true; stop(); controller = new AbortController(); cancel.hidden = false;
-  const controls = [button, file, demo, cinematicDemo, ratio, duration, quality, title, cameraMode, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
+  const controls = [button, file, demo, cinematicDemo, terrainDemo, ratio, duration, quality, title, cameraMode, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
   const active = renderer;
   try {
     performance.clearMarks('route-story-export-start'); performance.clearMarks('route-story-export-end'); performance.clearMeasures('route-story-export');

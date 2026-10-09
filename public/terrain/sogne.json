@@ -1,0 +1,47 @@
+{
+  "id": "kartverket-dtm10-2020-sogne",
+  "origin": [
+    6.2,
+    61.28
+  ],
+  "westMeters": -15000,
+  "southMeters": -20000,
+  "eastMeters": 15000,
+  "northMeters": 20000,
+  "lods": [
+    {
+      "file": "sogne-50m.i16",
+      "spacingMeters": 50,
+      "width": 601,
+      "height": 801,
+      "bytes": 962802,
+      "sha256": "bf6ebc34cfe4420a416acbefa76b834e4d356f0389ea61caed42ef2e103b5159",
+      "noDataCount": 0
+    },
+    {
+      "file": "sogne-100m.i16",
+      "spacingMeters": 100,
+      "width": 301,
+      "height": 401,
+      "bytes": 241402,
+      "sha256": "51350b3f83e533540a47ad35c87eea60b1a32c7dd5aea1d18c183b9b532c2d65",
+      "noDataCount": 0
+    }
+  ],
+  "noData": -32768,
+  "minElevation": -0.006707749232557924,
+  "maxElevation": 1457.4019937423695,
+  "verticalScale": 1,
+  "units": "metres",
+  "verticalDatum": "Unspecified in supplied 2020 metadata and GeoTIFF; no assumed NN2000 conversion",
+  "sourceCrs": "EPSG:25833",
+  "sourceResolutionMeters": 10,
+  "attribution": "\u00a9 Kartverket \u00b7 CC BY 4.0 \u00b7 cropped/resampled",
+  "sourceSha256": "c906919a78bde45c26cb02d5b646681eb0b8283bf42594e0078a5e0d2ef82280",
+  "mapLibreSpike": {
+    "z": 10,
+    "x": 529,
+    "y": 289,
+    "noDataPixels": 0
+  }
+}

@@ -2,11 +2,13 @@
 
 Read docs/IMPLEMENTATION_STATE.md before resuming work. Reconcile it with git status and HEAD.
 
-Stack: Vite, TypeScript, Canvas 2D, local GPX processing and real WebCodecs H.264 MP4 export. Russian UI. Prioritize reliability and bounded resources. No React, MapLibre, Three.js, Remotion, paid services or required remote APIs without a documented concrete blocker.
+Stack: Vite, TypeScript, Canvas 2D, local GPX processing and real WebCodecs H.264 MP4 export. Sprint 8 adds pinned Three.js for owner-authorized genuine local DEM terrain; see TERRAIN_ARCHITECTURE.md. Russian UI. Prioritize reliability and bounded resources. No React, Remotion, paid services or required remote APIs. MapLibre remains an ignored feasibility tool, not a runtime dependency.
 
 Preview and export share the validated immutable StoryConfig and timestamp-based StoryTimeline. Public durations are 10/20/30 seconds, maximum 720 frames at 24 fps; 4 seconds is internal Classic regression only. Compatibility is 360p/1.5 Mbps, Standard is 720p/5 Mbps with explicit capability checks and no silent downgrade. Cinematic camera uses a pure timestamp function and precomputed per-segment plan; Classic remains available for comparison/reduced motion. Preserve segment gaps, antimeridian short arcs, north-up orientation and precomputed geometry. No mutable UI reads during export. Encoded payload is limited to 32 MiB.
 
 Cinematic geography is bounded local Natural Earth 50m global / 10m western-Norway vectors, with exact provenance/hashes and readiness validation. Do not export before required layers load; never fetch external tiles or geocode GPX. Map labels are sourced anchors, not inferred visits. Retain the 5 MiB production package allowlist, Classic 110m fallback, destination-resolution vector drawing and fixed raster backend for pixel-identical seeking/export. Any new map pack requires licensing, size and actual export verification.
+
+Terrain 3D uses reviewed Kartverket CC BY4.0 crop, ≤500000 mesh /400000 ribbon vertices, ≤1000000B per height grid. DEM and GPX elevations remain separate. Preserve no-data, true1:1 heights, segment cuts, deterministic camera and conservative terrain clearance. Shader/resources/framebuffer must be ready before encoding; context failure offers explicit2D recovery. Keep terrain attribution in output and do not claim an unspecified vertical datum or worldwide terrain coverage. No raw DEM archive in Git. No automatic release/merge/deploy of this candidate.
 
 Keep route data in memory. Never upload or persist user routes. No telemetry, external runtime assets, unsafe HTML, executable SVG or dynamic user URLs. Preserve segment boundaries and actual geometry. Reject DTD/entities, malformed XML, invalid coordinates, files over 10 MiB and routes over 50,000 points; never silently truncate.
 
