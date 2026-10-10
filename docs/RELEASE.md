@@ -1,10 +1,10 @@
 # Release preparation and publication
 
-## Current photo publication checkpoint — 2026-10-09
+## Current photo publication checkpoint — 2026-10-10
 
 Public https://matawaka.github.io/route-story/ currently serves accepted main8f4d0f665d3f6df7f9fdef0d356a33310d2800ab, version1.1.0-rc.1, DEM-only. Existing protected run37962492130 and anonymous HTTPS/full20–30s3D acceptance succeeded. v1.0.0 tag/assets remain immutable. The older release-preparation text below is retained as historical procedure/evidence.
 
-Owner approved final photographic videos, public deployment and package-size increase. PR9 prepares1.2.0-rc.1 with the bounded Sogne Sentinel pack; its merge is still awaiting explicit authorization. PR5 documentation/PR8 stable1.1 version promotion are separate and not absorbed. No new tag or GitHub Release is implied by photo deployment approval.
+Owner approved final photographic videos, public deployment and package-size increase, then explicitly authorized PR9 merge on10October2026. PR9 is MERGED at main126dd98805594a1547b858c02922dfa565c24b81, version1.2.0-rc.1; its tree exactly matches reviewed2a15d84. Exact-main push CI38010552547 SUCCESS; existing manual workflow dispatched ONCE as38010896357 with reviewed_sha126dd988/approve_publication=true/include_imagery=true. Build SUCCESS, deploy WAITING for required personal reviewer Matawaka. Actual Pages archive independently verifies22file hashes and5794476B complete package. Actual photo public acceptance is still PENDING; resume this run, never dispatch a duplicate. PR5 documentation/PR8 stable1.1 version promotion are separate and not absorbed. No new tag or GitHub Release is implied by photo deployment approval.
 
 Use ONLY existing Reviewed GitHub Pages release. After approved merge, verify the new full main SHA and its successful push check.yml; dispatch main with reviewed_sha set to that exact SHA, approve_publication=true and include_imagery=true. Owner personally approves github-pages when requested. The environment was reverified: GitHub Actions source, HTTPS enforced, main-only branch policy, required reviewer Matawaka, self-review permitted for solo owner. No environment bypass or broader job permissions.
 

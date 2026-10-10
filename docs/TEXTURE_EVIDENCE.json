@@ -7,7 +7,23 @@
     "photoDeploymentAuthorized": true,
     "packageIncreaseAuthorized": true,
     "completePackageLimitBytes": 6291456,
-    "pr9MergeAuthorization": "PENDING",
+    "pr9MergeAuthorization": "APPROVED",
+    "pr9MergedMain": "126dd98805594a1547b858c02922dfa565c24b81",
+    "mainPushCI": {
+      "run": "https://github.com/Matawaka/route-story/actions/runs/38010552547",
+      "status": "SUCCESS",
+      "unitPass": 157,
+      "browserPass": 40,
+      "browserSkip": 4
+    },
+    "photoDeployment": {
+      "run": "https://github.com/Matawaka/route-story/actions/runs/38010896357",
+      "build": "SUCCESS",
+      "deploy": "WAITING FOR OWNER ENVIRONMENT REVIEW",
+      "actualArtifactFileHashesVerified": 22,
+      "actualCompletePackageBytes": 5794476,
+      "artifactTarSha256": "69ecb5a76ca7437229a9b5c515e20458a38eb2c62f173a9376c203f25fa95350"
+    },
     "photoPublicHttpsAcceptance": "PENDING",
     "stableTagPublication": "NOT AUTHORIZED"
   },

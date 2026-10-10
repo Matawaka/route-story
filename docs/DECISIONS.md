@@ -1,5 +1,9 @@
 # Decisions
 
+## 2026-10-10: explicitly authorized PR9 merge
+
+Owner explicitly authorized PR9 merge. Native merge preserves history and matches exact reviewed head2a15d84206ac7fd343391faac2eb7aed4129c408; main126dd98805594a1547b858c02922dfa565c24b81 has an identical tree. Earlier PR9 merge-PENDING statements are historical. PR5/PR8 and stable tags remain separate. Continue already approved photographic deployment through exact-main push-CI gate and existing personally protected workflow; do not bypass reviewer or dispatch duplicates. Prepare factual publication journal separately from immutable reviewed deployment SHA, no automatic docs merge/redeployment.
+
 ## 2026-10-09: owner-approved bounded photo publication
 
 Owner explicitly approved the actual Atlas20s/Night30s videos, public deployment and increased local package size. Supersedes the earlier pending photo publication/budget gate below. Limit the COMPLETE adaptive package to6MiB including release.json, baseline≤5MiB and unchanged image runtime bounds (two textures,≤2MiB JPEG/3million pixels/2048 sides). Measured prior candidate5792186B excluding its small manifest; no nationwide pack or unbounded asset approval.
