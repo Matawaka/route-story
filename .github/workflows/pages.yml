@@ -11,6 +11,11 @@ on:
         required: true
         default: false
         type: boolean
+      include_imagery:
+        description: Include the owner-approved Sogne photo pack within the 6 MiB package limit
+        required: true
+        default: false
+        type: boolean
 permissions:
   contents: read
 concurrency:
@@ -24,6 +29,8 @@ jobs:
     permissions:
       contents: read
       actions: read
+    env:
+      BUILD_IMAGERY_PACK: ${{ inputs.include_imagery && '1' || '0' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -44,7 +51,7 @@ jobs:
       - name: Validate and identify public-only package
         env:
           BUILD_COMMIT: ${{ github.sha }}
-        run: node scripts/package-release.mjs
+        run: node scripts/package-release.mjs ${{ inputs.include_imagery && '--imagery-release' || '' }}
       - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
           path: dist
@@ -92,6 +99,13 @@ jobs:
           APP_URL: ${{ needs.deploy.outputs.page_url }}
           EXPECTED_COMMIT: ${{ github.sha }}
         run: node scripts/acceptance/release.mjs --smoke
+      - name: Verify resident photo terrain, cancellation and decoded MP4 in both aspects
+        if: inputs.include_imagery
+        env:
+          APP_URL: ${{ needs.deploy.outputs.page_url }}
+          EXPECTED_COMMIT: ${{ github.sha }}
+          ACCEPTANCE_DIR: artifacts/release/imagery
+        run: node scripts/acceptance/imagery.mjs --smoke
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:

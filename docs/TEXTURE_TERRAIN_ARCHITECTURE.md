@@ -1,0 +1,49 @@
+# Adaptive photographic terrain — v1.2 review candidate
+
+## Owner-approved publication policy — 2026-10-09
+
+Owner approved final20/30s photographic videos, public deployment and package increase. Earlier no-publication/budget statements below are historical checkpoints. The complete approved regional package is now bounded to6MiB including release.json (baseline still≤5MiB; no texture/GPU/export-limit increase). Only the three fixed adaptive files are shipped; the old20m developer fixture stays excluded. Build with BUILD_IMAGERY_PACK=1 and validate with --imagery-release; manifest publicationApproved=true means owner's package authorization, not proof of deployment. Local --imagery-candidate remains available with publicationApproved=false.
+
+Existing manual Pages workflow adds optional include_imagery; false preserves the baseline. Exact-main CI and personally reviewed github-pages environment remain required. Bounded post-deploy photo smoke and independent full20/30s public-site proof use the same imagery acceptance tool, APP_URL and required EXPECTED_COMMIT; no parallel hosting/export mechanism. PR9 merge approval and actual photo HTTPS acceptance remain PENDING. No runtime renderer/camera change at this publication checkpoint.
+
+## Current approved development checkpoint — 2026-10-09
+
+Owner reviewed the actual10s photo-3D MP4s and approved continued detail. The independent branch remains based on main8f4d0f6, without PR5/PR8 changes. No v1.2 merge/deploy or public package-budget increase is authorized. Accepted DEM-only main is now live at https://matawaka.github.io/route-story/: protected run37962492130 and HTTPS job succeeded after personal owner review. Independent anonymous Windows/Edge smoke and full20/30s3D decoding passed, exact source8f4d0f6/19hashes. Owner reports Xiaomi14/Pad2/MacBookM2 checks passed with Chrome/Brave/Safari; versions/individual device-browser pairing were not supplied. Do not infer iPhone or photo-v1.2 device support.
+
+Two actual same-scene layers replace the single-image default:40m750×1000 over30×40km;10m1300×1600 over local bounds[-8000,-8000,5000,8000], enclosing the synthetic demo plus a margin. Same DEM-local coordinates/date/reprojection/color processing. Original20m image/metadata remain developer comparison fixtures and are excluded from the adaptive production package. Mesh50m/100m LODs/heights/triangles remain unchanged1:1.
+
+`imageryDetailWeight` is pure camera-distance/FOV/output-height interpolation: fine contribution smoothly changes over15–35metres per output pixel. A450m geographic feather and camera-frustum intersection give coarse fallback outside the fine patch. Both use mipmaps/linear filtering and bounded≤4× anisotropy. World-space UV north0/south1, Texture.flipY=false. No frame-history hysteresis, invented details or screen-bitmap scaling.
+
+The loader validates both fixed filenames, shared origin/contained bounds, actual spacing, exact bytes/SHA/dimensions. Each side≤2048, aggregate≤3million pixels and2MiB JPEG; two levels maximum. Current2830000pixels/997049B+7789Bmanifest. RGBA estimate11.32MB/mip-chain≈15.1MB, not measured VRAM; Standard UV≈3.85MB. Both ImageBitmaps load/hash/decode before renderer exposure; GPU capacity checked, both samplers upload/compile and actual destination frame draws before encoding. **All required assets are resident for every frame**; no partial tiles, encoding-time fetches or uncontrolled frame archive. Corrupt/missing detail blocks photo export with explicit DEM/2D recovery. Abort/replacement/error/pagehide close both bitmaps/textures/GL; browser caches may remain. Default≤5MiB production excludes the pack and experimental controls; local opt-in allowlist/publicationApproved=false and protected Pages workflow unchanged.
+
+`terrainFlight:'conservative'|'corridor'` is immutable/validated. GlobalmaxDEM+350m default remains. Optional closer corridor retains350m safety. All grid/triangle intersections partition each straight camera leg; maximum cell-corner height bounds its terrain, minimum linearly interpolated endpoint altitude bounds its camera. Lift both endpoints by worst deficit and recheck **every leg including intro/outro**. Raising endpoints cannot invalidate a proved leg. Segment cuts skip connecting flight. Final pure timestamp poses also check local-cell clearance, above-mesh gaze+24m, exact triangular LOS and finite≤80km height. No collision test is relaxed. Safety is relative to the available discretized DEM, not unseen buildings/finer terrain/real-aircraft navigation. LOS may still force higher ridge views.
+
+Reproduce with pinned Python: `python scripts/terrain/prepare-imagery.py` then `python scripts/terrain/prepare-adaptive-imagery.py`. Source crops and all derived JPEG hashes are checked. Raw crops remain ignored. Real UI full comparisons: `node scripts/acceptance/imagery.mjs --full --compare`; local opt-in build/package followed by `node scripts/acceptance/imagery.mjs --production --full`. Timing/native: `node scripts/acceptance/terrain-performance.mjs --adaptive`, `node scripts/acceptance/imagery-memory.mjs --adaptive`. Full routine regressions use PLAYWRIGHT_CHANNEL=msedge/FULL_EXPORT_ACCEPTANCE=1. Detailed measured results are recorded separately in TEXTURE_PERFORMANCE.md, not inferred from this design.
+
+## Historical20m prototype architecture (superseded by the checkpoint above)
+
+New `feature/phototextured-terrain-v1.2` starts at merged main8f4d0f6. Independent v1.1 stabilization PR8 and documentation PR5 are not absorbed. Stable v1.0 tag/assets remain immutable. Owner separately requested deploying **accepted main8f4d0f6** before physical tests; existing protected run37962492130 awaits owner environment review. That deployment does not contain this imagery prototype.
+
+## Proven photographic result
+
+Actual Sentinel2C2025-09-27 orthorectified RGB is sampled from EPSG32632 into **the same local east/north coordinates as the existing DEM**. Pixel centres align to20m texture cells; mesh coordinates/heights/triangles and existing50m/100m LODs are unchanged. UV north is0 and south1; ImageBitmap decoding without orientation/color transforms plus Texture.flipY=false ensures north-up, independently tested at corners/pixel centres. No flat background photo plane, pseudo3D or synthetic geographic features.
+
+The existing Three renderer receives an already decoded `PreparedImagery`; config stores immutable `terrainSurface:'dem'|'photo'`. DEM-only, Cinematic2D and Classic remain available. Mesh texture uses sRGB, linear filtering, generated mipmaps and clamped edges, without altitude colour multiplication/contour strokes. Existing normal-based hemisphere/directional lighting and fog remain deterministic artistic presentation, not historical sun/weather. Camera/timeline/drape/distance/segment logic is identical for controlled comparison.
+
+## Readiness and ownership
+
+Loader whitelists one local manifest/filename and bounds streamed bytes≤2MiB, dimensions≤2048, pixels≤3million. Validates georeference, exact bytes/SHA256 and decoded dimensions. No route is sent to a service. Renderer checks complete DEM coverage and MAX_TEXTURE_SIZE, uploads/compiles/draws the actual scene before enabling export. All240frames of10s proofs use **one resident texture**, no resource fetching in encoding callbacks and no pre-capture archive. Thus resource readiness covers the entire fixed regional camera plan; asynchronous tile readiness is not assumed.
+
+Replacement aborts obsolete image fetch/decode work, closes obsolete ImageBitmaps and avoids stale state. Export controls freeze; shader/context/coverage errors retain explicit DEM/2D recovery with GPX intact. Constructor failure/disposal/pagehide release image, texture, geometry and GL surface. Native GPU caches may persist; dispose does not imply immediate process-memory return.
+
+## Budget and future LOD gate
+
+Baseline production is still≤5MiB. Default build excludes `public/imagery` and hides photo control; normal package allowlist still rejects unexpected assets. Development serves only first-party sample. `BUILD_IMAGERY_PACK=1` builds a local opt-in photographic candidate; **the existing Pages workflow does not set it**, and the default release allowlist rejects this extra pack. No deployment increase or new publication path is introduced.
+
+Current texture1127607B plus manifest,3million RGBA pixels≈12MB decoded; estimated GPU base+mip chain≈16MB (allocation calculation, **not measured VRAM**), plus3.85MB Standard UV buffer. Camera may show coverage edge/blurred slopes/shadow clipping. This single20m source texture with mipmaps is a **prototype**, not completed geographic multi-resolution LOD or nationwide/street-level mapping.
+
+Owner sees decoded comparisons and genuine10s MP4s before major pack expansion. Proposed next accepted step: one coarse regional overview plus bounded higher-detail patches from the **same verified10m scene**, shared alignment, feathered valid coverage, camera-frustum/footprint selection and complete deterministic residency plan. Avoid promising resolution absent from source; no nationwide DEM/image downloads. New source/detail or baseline budget increases need measured assets/licensing and owner review before deployment. Local camera-clearance refinement remains deferred until this visual basis is accepted; current safe global envelope is preserved.
+
+## Reproduce
+
+Windows: `npm.cmd ci`, `npm.cmd run build`, `$env:PLAYWRIGHT_CHANNEL='msedge'; npm.cmd run check`; real prototype UI/export evidence: `node scripts/acceptance/imagery.mjs`; comparisons: `python scripts/terrain/imagery-evidence.py` with pinned terrain preprocessing environment. Actual files: ignored artifacts/sprint9/imagery; committed decoded contact sheets: docs/images/imagery-*.jpg. Acquisition/rights/crop hashes: IMAGERY_SOURCE_AUDIT.md and public/imagery/sogne-sentinel.json. A new local deployment package is not permission to publish.

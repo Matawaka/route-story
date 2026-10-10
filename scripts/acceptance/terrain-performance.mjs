@@ -5,22 +5,22 @@ import {execFileSync} from 'node:child_process';
 import os from 'node:os';
 import {withServer} from './server.mjs';
 import {validateVideo} from '../validate-video.mjs';
-const folder=process.argv.includes('--final')?'artifacts/sprint8/performance-final':process.argv.includes('--after')?'artifacts/sprint8/performance-after':'artifacts/sprint8/performance';mkdirSync(folder,{recursive:true});
+const adaptive=process.argv.includes('--adaptive'),imagery=adaptive||process.argv.includes('--imagery'),folder=process.env.ACCEPTANCE_DIR||(adaptive?'artifacts/sprint9/adaptive-performance':imagery?'artifacts/sprint9/performance':process.argv.includes('--final')?'artifacts/sprint8/performance-final':process.argv.includes('--after')?'artifacts/sprint8/performance-after':'artifacts/sprint8/performance');mkdirSync(folder,{recursive:true});
 const spread=v=>{const s=[...v].sort((a,b)=>a-b);return {median:s[Math.floor(s.length/2)],min:s[0],max:s.at(-1)};};
 const xml=readFileSync('public/samples/terrain-sogne.gpx','utf8'),reports=[];
 await withServer(async url=>{
  const browser=await chromium.launch({channel:'msedge',headless:true}),page=await browser.newPage();
- try{await page.goto(url);for(const mode of process.argv.includes('--terrain-only')?['terrain']:['cinematic','terrain'])for(const [quality,aspect,duration] of [['compatibility','landscape',20],['standard','landscape',20],['standard','portrait',30]]){
+ try{await page.goto(url);for(const mode of adaptive?['plain','photo','corridor']:imagery?['terrain','photo']:process.argv.includes('--terrain-only')?['terrain']:['cinematic','terrain'])for(const [quality,aspect,duration] of imagery?[['compatibility','landscape',10],['standard','landscape',10],['standard','portrait',10]]:[['compatibility','landscape',20],['standard','landscape',20],['standard','portrait',30]]){
   const runs=[];for(let repeat=0;repeat<4;repeat++){
    const r=await page.evaluate(async({xml,mode,quality,aspect,duration})=>{
-    const paths=['/src/terrain-renderer.ts','/src/terrain.ts','/src/renderer.ts','/src/geography.ts','/src/gpx.ts','/src/story.ts','/src/exporter.ts'];
-    const [{TerrainRenderer},{loadTerrain},{RouteRenderer},{loadGeography},{parseGpx},{defaultStoryConfig,exportSettings},{exportVideo,detectEncoder}]=await Promise.all(paths.map(p=>import(p)));
-    let begin=performance.now();const route=parseGpx(xml),parseMs=performance.now()-begin,config={...defaultStoryConfig('Synthetic benchmark'),cameraMode:mode,qualityPreset:quality,aspectRatio:aspect,durationSeconds:duration,visualStyle:aspect==='portrait'?'night':'atlas'},settings=exportSettings(config);
-    begin=performance.now();const data=mode==='terrain'?await loadTerrain(quality):{features:[],geography:await loadGeography()},loadMs=performance.now()-begin;
-    begin=performance.now();const renderer=mode==='terrain'?new TerrainRenderer(route,data,settings.width,settings.height,config):new RouteRenderer(route,data,settings.width,settings.height,config.visualStyle,config),prepareMs=performance.now()-begin,c=document.createElement('canvas');c.width=settings.width;c.height=settings.height;
+    const paths=['/src/terrain-renderer.ts','/src/terrain.ts','/src/renderer.ts','/src/geography.ts','/src/gpx.ts','/src/story.ts','/src/exporter.ts','/src/imagery.ts'];
+    const [{TerrainRenderer},{loadTerrain},{RouteRenderer},{loadGeography},{parseGpx},{defaultStoryConfig,exportSettings},{exportVideo,detectEncoder},{loadImagery}]=await Promise.all(paths.map(p=>import(p)));
+    const isTerrain=mode!=='cinematic',photo=['plain','photo','corridor'].includes(mode);let begin=performance.now();const route=parseGpx(xml),parseMs=performance.now()-begin,config={...defaultStoryConfig('Synthetic benchmark'),cameraMode:isTerrain?'terrain':'cinematic',terrainSurface:photo?'photo':'dem',terrainFlight:mode==='corridor'?'corridor':'conservative',qualityPreset:quality,aspectRatio:aspect,durationSeconds:duration,visualStyle:aspect==='portrait'?'night':'atlas'},settings=exportSettings(config);
+    begin=performance.now();const data=isTerrain?await loadTerrain(quality):{features:[],geography:await loadGeography()},image=photo?await loadImagery(undefined,mode==='plain'):undefined,loadMs=performance.now()-begin;
+    begin=performance.now();const renderer=isTerrain?new TerrainRenderer(route,data,settings.width,settings.height,config,image):new RouteRenderer(route,data,settings.width,settings.height,config.visualStyle,config),prepareMs=performance.now()-begin,c=document.createElement('canvas');c.width=settings.width;c.height=settings.height;
     try{begin=performance.now();renderer.draw(c,0);const firstFrameMs=performance.now()-begin,frames=[],seek=[];for(let i=0;i<30;i++){begin=performance.now();renderer.draw(c,i*duration/29);frames.push(performance.now()-begin);}for(const t of [.1,.9,.2,.8,.3,.7]){begin=performance.now();renderer.draw(c,t*duration);seek.push(performance.now()-begin);}
      const codec=await detectEncoder(settings.width,settings.height,settings.bitrate);begin=performance.now();window.terrainBenchmarkBlob=await exportVideo({config,draw:(target,t)=>renderer.draw(target,t)});
-     const exportMs=performance.now()-begin,gpu=mode==='terrain'?{vertices:renderer.terrainGeometry.attributes.position.count,triangles:renderer.terrainGeometry.index.count/3,drawCalls:renderer.gpu.info.render.calls}:null;
+     const exportMs=performance.now()-begin,gpu=isTerrain?{vertices:renderer.terrainGeometry.attributes.position.count,triangles:renderer.terrainGeometry.index.count/3,drawCalls:renderer.gpu.info.render.calls,textures:renderer.gpu.info.memory.textures}:null;
      return {pointCount:route.pointCount,distanceKm:route.distanceKm,parseMs,loadMs,prepareMs,firstFrameMs,frames,seek,exportMs,bytes:window.terrainBenchmarkBlob.size,codec,gpu,...settings};
     }finally{renderer.dispose();c.width=c.height=0;}
    },{xml,mode,quality,aspect,duration});r.warmup=repeat===0;runs.push(r);

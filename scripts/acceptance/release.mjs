@@ -10,7 +10,7 @@ import {validateVideo} from '../validate-video.mjs';
 // No source-module imports, route uploads, account session or fake exporter.
 const smoke=process.argv.includes('--smoke'),remote=process.env.APP_URL;
 const expectedVersion=process.env.EXPECTED_VERSION||JSON.parse(readFileSync('package.json','utf8')).version;
-const directory='artifacts/release';mkdirSync(directory,{recursive:true});
+const directory=process.env.ACCEPTANCE_DIR||'artifacts/release';mkdirSync(directory,{recursive:true});
 if(remote){const u=new URL(remote);assert.equal(u.protocol,'https:','public acceptance requires HTTPS');assert.ok(!u.username&&!u.password&&!u.search&&!u.hash,'plain public application URL required');assert.ok(u.pathname.endsWith('/'),'application URL must end with /');}
 const report={status:'PENDING',scope:remote?'public HTTPS':'local production subpath',publicHttps:false,os:`${os.type()} ${os.release()} ${os.arch()}`,physicalMobile:false,outputs:[]};
 async function accept(url){

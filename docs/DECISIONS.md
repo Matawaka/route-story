@@ -1,5 +1,25 @@
 # Decisions
 
+## 2026-10-09: owner-approved bounded photo publication
+
+Owner explicitly approved the actual Atlas20s/Night30s videos, public deployment and increased local package size. Supersedes the earlier pending photo publication/budget gate below. Limit the COMPLETE adaptive package to6MiB including release.json, baseline≤5MiB and unchanged image runtime bounds (two textures,≤2MiB JPEG/3million pixels/2048 sides). Measured prior candidate5792186B excluding its small manifest; no nationwide pack or unbounded asset approval.
+
+Reuse the existing manual protected Pages workflow with optional include_imagery=false by default. True enables the exact three reviewed files, BUILD_IMAGERY_PACK=1 and --imagery-release; candidate mode remains explicitly publicationApproved=false. Public mode records owner authorization, not successful deployment. Exact reviewed main/passing main-push CI and personal human environment review remain mandatory; permissions/action pins unchanged. Add bounded actual HTTPS photo smoke (10s360p, both aspects, hash/CSP/privacy/reversible seek/cancel/retry/all-frame independent decoding); full20/30s720p public proof remains an opt-in local verified-GPU activity. No source renderer/exporter changes.
+
+No explicit authorization to merge PR9 or PR8/tag a stable release has been given. Prepare reviewable PR9 publication changes first, then obtain the missing merge decision. PR5/PR8 stay independent, v1.0 tag/assets immutable, no competition repost.
+
+## Sprint9 follow-up: approved detail and proved local corridor
+
+Owner approved actual photographic prototype and requested further detail. Use the SAME reviewed scene/crops for40m overview plus bounded10m patch (997049B/2830000pixels), both resident before export. Pure scale/frustum choice,450m feather, mipmaps, fixed regional coverage and explicit missing-resource error; original20m developer fixture retained. No new service/source/codec/DEM and no public budget increase. Add optional local corridor with unchanged350m clearance, exact crossed-cell bounds for all interpolated legs/intro/outro, final triangle LOS and conservative default. Tests independently preserve coordinates/segments/seeking/pixel equivalence.
+
+Protected accepted-main run37962492130 completed after owner approval; actual Pages URL/19manifest hashes/source8f4d0f6 and public20/30s3D MP4s verified separately. Owner reports successful Xiaomi14/Pad2/MacBookM2 tests and Chrome/Brave/Safari; missing versions/pairing are explicitly unmeasured, not fabricated. Candidate remains1.1.0-rc.1; PR8 final version and stable tag/release require review/final owner release approval. No photo deployment or contest repost.
+
+## Sprint9: lawful photo proof before regional LOD expansion
+
+Use actual Copernicus Sentinel2C L2A20250927 scenes32VLN/32VLP, fixed Sogne regional windows, official open-data terms with required modified-data attribution. Norwegian ortho reuse rights are unresolved; no unauthorized image scraping. Source10m RGB is resampled20m into existing DEM local coordinates. Preserve heights and conservative camera exactly for comparison. One validated resident texture, readiness draw and deterministic mipmaps prove true3D photographic MP4 before designing complex tiles. Optional candidate pack is excluded from default≤5MiB production; no budget or v1.2 deployment approval. Major multi-resolution packs/local-clearance refinement wait for owner visual review of actual footage. Prior DEM/2D/Classic fallback remains available. Reproduction/source-window hashes and real output evidence are recorded separately from publishedv1.0.
+
+Owner's follow-up explicitly authorizes deploying **already accepted merged main8f4d0f6** before Xiaomi14/Pad2/MacBookM2 physical tests. Reuse protected manual workflow/run37962492130, owner approves environment personally. This is candidate access for testing; final stablev1.1.0 tag/release approval remains pending. No inference that devices have passed; no v1.2 public changes or new deployment mechanism.
+
 ## Sprint 8: genuine bounded DEM mesh and safe timestamp camera
 
 Owner accepts Sprint7 visual cost and explicitly requests terrain3D. Static Canvas cannot represent a genuine height surface/depth camera; this is the concrete reason for the documented Three exception. Stack feature/terrain-aware-3d/PR#7 on accepted PR#6 a704f67. Stable main/tag/Pages5f39332/v1.0.0, public assets, manual workflow/protected environment and unrelated PR#5 remain unchanged. No merge/publication/contest repost.

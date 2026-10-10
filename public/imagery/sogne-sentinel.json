@@ -1,0 +1,238 @@
+{
+  "schema": 1,
+  "id": "sogne-sentinel-20250927",
+  "origin": [
+    6.2,
+    61.28
+  ],
+  "bounds": [
+    -15000,
+    -20000,
+    15000,
+    20000
+  ],
+  "width": 750,
+  "height": 1000,
+  "spacingMeters": 40,
+  "file": "sogne-sentinel-40m.jpg",
+  "bytes": 339524,
+  "sha256": "ad88bb13cc1e5fb62e9b5575d5ec43176bd61ae22aae9d0f7fbd8e5a1388a441",
+  "attribution": "Contains modified Copernicus Sentinel data 2025",
+  "licenseUrl": "https://cds.climate.copernicus.eu/licences/ec-sentinel",
+  "acquiredDate": "2025-09-27",
+  "sourceResolutionMeters": 10,
+  "pixelOrientation": "north-up; row0 north; pixel centres; bounds are pixel edges",
+  "changes": [
+    "fixed regional crop",
+    "same local tangent coordinates as DEM",
+    "bilinear40m resampling of10m TCI",
+    "JPEG quality88 RGB compression"
+  ],
+  "sources": [
+    {
+      "id": "S2C_32VLN_20250927_0_L2A",
+      "acquired": "2025-09-27T11:14:21.781Z",
+      "sceneCloudPercent": 0.228456,
+      "product": "S2C_MSIL2A_20250927T110841_N0511_R137_T32VLN_20250927T144213.SAFE",
+      "assets": [
+        {
+          "kind": "scl",
+          "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LN/2025/9/S2C_32VLN_20250927_0_L2A/SCL.tif",
+          "cropBytes": 137894,
+          "cropSha256": "9b69d4d84910381c3eedc6a482f632ec0dee3a7d608945e6322389bf33e0f55d",
+          "cropBounds": [
+            333900.0,
+            6776520.0,
+            365760.0,
+            6800040.0
+          ],
+          "crs": "EPSG:32632",
+          "sourceSpacingMeters": 20.0
+        },
+        {
+          "kind": "visual",
+          "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LN/2025/9/S2C_32VLN_20250927_0_L2A/TCI.tif",
+          "cropBytes": 15084609,
+          "cropSha256": "b456872d34cf66a43244eeb4f5013bdd5d5afb19a5a4a9936cf085a9b20ff437",
+          "cropBounds": [
+            333910.0,
+            6776530.0,
+            365770.0,
+            6800040.0
+          ],
+          "crs": "EPSG:32632",
+          "sourceSpacingMeters": 10.0
+        }
+      ]
+    },
+    {
+      "id": "S2C_32VLP_20250927_0_L2A",
+      "acquired": "2025-09-27T11:14:08.408Z",
+      "sceneCloudPercent": 0.441697,
+      "product": "S2C_MSIL2A_20250927T110841_N0511_R137_T32VLP_20250927T144213.SAFE",
+      "assets": [
+        {
+          "kind": "scl",
+          "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LP/2025/9/S2C_32VLP_20250927_0_L2A/SCL.tif",
+          "cropBytes": 189065,
+          "cropSha256": "fe62334d502d5bb49f436566084b7a41f1ea3d52527de5c8dcbf80643fc6077a",
+          "cropBounds": [
+            333900.0,
+            6790200.0,
+            365760.0,
+            6817920.0
+          ],
+          "crs": "EPSG:32632",
+          "sourceSpacingMeters": 20.0
+        },
+        {
+          "kind": "visual",
+          "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LP/2025/9/S2C_32VLP_20250927_0_L2A/TCI.tif",
+          "cropBytes": 19362521,
+          "cropSha256": "e686e8928261007b629b9531d8659b3cc7d56cad76dd555dd6e14359ad5cd45f",
+          "cropBounds": [
+            333910.0,
+            6790200.0,
+            365770.0,
+            6817920.0
+          ],
+          "crs": "EPSG:32632",
+          "sourceSpacingMeters": 10.0
+        }
+      ]
+    }
+  ],
+  "coveragePixels": 750000,
+  "classificationCounts": {
+    "2": 118775,
+    "4": 383446,
+    "5": 128434,
+    "6": 115686,
+    "7": 19,
+    "9": 1,
+    "10": 192,
+    "11": 3447
+  },
+  "cloudPercent": 0.025733333333333334,
+  "snowPercent": 0.4596,
+  "cloudShadowPercent": 0.0,
+  "prepareMs": 1412.8728000068804,
+  "detail": {
+    "schema": 1,
+    "id": "sogne-sentinel-20250927",
+    "origin": [
+      6.2,
+      61.28
+    ],
+    "bounds": [
+      -8000,
+      -8000,
+      5000,
+      8000
+    ],
+    "width": 1300,
+    "height": 1600,
+    "spacingMeters": 10,
+    "file": "sogne-sentinel-10m.jpg",
+    "bytes": 657525,
+    "sha256": "d74099be2da8bed8fbbbfafb7a5426ca21546adb7d300180869dfb23e5cea996",
+    "attribution": "Contains modified Copernicus Sentinel data 2025",
+    "licenseUrl": "https://cds.climate.copernicus.eu/licences/ec-sentinel",
+    "acquiredDate": "2025-09-27",
+    "sourceResolutionMeters": 10,
+    "pixelOrientation": "north-up; row0 north; pixel centres; bounds are pixel edges",
+    "changes": [
+      "fixed regional crop",
+      "same local tangent coordinates as DEM",
+      "bilinear10m resampling of10m TCI",
+      "JPEG quality88 RGB compression"
+    ],
+    "sources": [
+      {
+        "id": "S2C_32VLN_20250927_0_L2A",
+        "acquired": "2025-09-27T11:14:21.781Z",
+        "sceneCloudPercent": 0.228456,
+        "product": "S2C_MSIL2A_20250927T110841_N0511_R137_T32VLN_20250927T144213.SAFE",
+        "assets": [
+          {
+            "kind": "scl",
+            "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LN/2025/9/S2C_32VLN_20250927_0_L2A/SCL.tif",
+            "cropBytes": 137894,
+            "cropSha256": "9b69d4d84910381c3eedc6a482f632ec0dee3a7d608945e6322389bf33e0f55d",
+            "cropBounds": [
+              333900.0,
+              6776520.0,
+              365760.0,
+              6800040.0
+            ],
+            "crs": "EPSG:32632",
+            "sourceSpacingMeters": 20.0
+          },
+          {
+            "kind": "visual",
+            "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LN/2025/9/S2C_32VLN_20250927_0_L2A/TCI.tif",
+            "cropBytes": 15084609,
+            "cropSha256": "b456872d34cf66a43244eeb4f5013bdd5d5afb19a5a4a9936cf085a9b20ff437",
+            "cropBounds": [
+              333910.0,
+              6776530.0,
+              365770.0,
+              6800040.0
+            ],
+            "crs": "EPSG:32632",
+            "sourceSpacingMeters": 10.0
+          }
+        ]
+      },
+      {
+        "id": "S2C_32VLP_20250927_0_L2A",
+        "acquired": "2025-09-27T11:14:08.408Z",
+        "sceneCloudPercent": 0.441697,
+        "product": "S2C_MSIL2A_20250927T110841_N0511_R137_T32VLP_20250927T144213.SAFE",
+        "assets": [
+          {
+            "kind": "scl",
+            "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LP/2025/9/S2C_32VLP_20250927_0_L2A/SCL.tif",
+            "cropBytes": 189065,
+            "cropSha256": "fe62334d502d5bb49f436566084b7a41f1ea3d52527de5c8dcbf80643fc6077a",
+            "cropBounds": [
+              333900.0,
+              6790200.0,
+              365760.0,
+              6817920.0
+            ],
+            "crs": "EPSG:32632",
+            "sourceSpacingMeters": 20.0
+          },
+          {
+            "kind": "visual",
+            "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LP/2025/9/S2C_32VLP_20250927_0_L2A/TCI.tif",
+            "cropBytes": 19362521,
+            "cropSha256": "e686e8928261007b629b9531d8659b3cc7d56cad76dd555dd6e14359ad5cd45f",
+            "cropBounds": [
+              333910.0,
+              6790200.0,
+              365770.0,
+              6817920.0
+            ],
+            "crs": "EPSG:32632",
+            "sourceSpacingMeters": 10.0
+          }
+        ]
+      }
+    ],
+    "coveragePixels": 2080000,
+    "classificationCounts": {
+      "2": 443043,
+      "4": 1095576,
+      "5": 417145,
+      "6": 123689,
+      "10": 316,
+      "11": 231
+    },
+    "cloudPercent": 0.015192307692307692,
+    "snowPercent": 0.011105769230769232,
+    "cloudShadowPercent": 0.0,
+    "prepareMs": 2396.867099989322
+  }
+}

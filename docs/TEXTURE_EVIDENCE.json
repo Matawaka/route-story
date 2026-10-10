@@ -1,0 +1,2831 @@
+{
+  "schema": 1,
+  "date": "2026-10-09",
+  "ownerPublicationDecision": {
+    "date": "2026-10-09",
+    "finalVideosApproved": true,
+    "photoDeploymentAuthorized": true,
+    "packageIncreaseAuthorized": true,
+    "completePackageLimitBytes": 6291456,
+    "pr9MergeAuthorization": "PENDING",
+    "photoPublicHttpsAcceptance": "PENDING",
+    "stableTagPublication": "NOT AUTHORIZED"
+  },
+  "prototype": {
+    "timing": {
+      "sourceCommit": "f4bb3ae38307735c4c947d1b2feebe08b49bc61a",
+      "uncommitted": false,
+      "os": "Windows_NT 10.0.26200 x64",
+      "browser": "154.0.4258.62",
+      "method": "One warm-up then3 steady repeats, same721-point synthetic route; frame timing includes destination Canvas draw/copy but is not a GPU timer. Native/GPU memory measured separately or unmeasured.",
+      "gpxBytes": 31609,
+      "reports": [
+        {
+          "mode": "terrain",
+          "quality": "compatibility",
+          "aspect": "landscape",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 6,
+              "min": 5.700000002980232,
+              "max": 7.799999997019768
+            },
+            "loadMs": {
+              "median": 0,
+              "min": 0,
+              "max": 0
+            },
+            "prepareMs": {
+              "median": 76.70000000298023,
+              "min": 72.90000000596046,
+              "max": 98.6000000089407
+            },
+            "firstFrameMs": {
+              "median": 2.2999999970197678,
+              "min": 2.199999988079071,
+              "max": 2.5
+            },
+            "exportMs": {
+              "median": 413,
+              "min": 392,
+              "max": 433.3999999910593
+            },
+            "bytes": {
+              "median": 2048801,
+              "min": 2048801,
+              "max": 2048801
+            },
+            "frames": {
+              "median": 0.5999999940395355,
+              "min": 0.29999999701976776,
+              "max": 1.4000000059604645
+            },
+            "seek": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 0.7000000029802322
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/performance/terrain-compatibility-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "4a5179fbcdc7e9b9c094d37adbd71397",
+            "lastFrameHash": "a7c34421a2b50019bd53ad43fd4c22d4",
+            "bytes": 2048801,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 120701,
+            "triangles": 240000,
+            "drawCalls": 6,
+            "textures": 0
+          }
+        },
+        {
+          "mode": "terrain",
+          "quality": "standard",
+          "aspect": "landscape",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.4000000059604645,
+              "min": 5.0999999940395355,
+              "max": 6.799999997019768
+            },
+            "loadMs": {
+              "median": 0,
+              "min": 0,
+              "max": 0
+            },
+            "prepareMs": {
+              "median": 182.8999999910593,
+              "min": 172.90000000596046,
+              "max": 215.6000000089407
+            },
+            "firstFrameMs": {
+              "median": 4.5999999940395355,
+              "min": 4.4000000059604645,
+              "max": 7.700000002980232
+            },
+            "exportMs": {
+              "median": 692.9000000059605,
+              "min": 681.5999999940395,
+              "max": 748.6999999880791
+            },
+            "bytes": {
+              "median": 6749307,
+              "min": 6749307,
+              "max": 6749307
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 6.5999999940395355
+            },
+            "seek": {
+              "median": 0.4000000059604645,
+              "min": 0.29999999701976776,
+              "max": 0.5999999940395355
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/performance/terrain-standard-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "4667717e8325453e46a53fe4ca8ccf14",
+            "lastFrameHash": "638d0e2ff51c67264476b789d9eefe01",
+            "bytes": 6749307,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 481401,
+            "triangles": 960000,
+            "drawCalls": 6,
+            "textures": 0
+          }
+        },
+        {
+          "mode": "terrain",
+          "quality": "standard",
+          "aspect": "portrait",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.200000002980232,
+              "min": 5.100000008940697,
+              "max": 5.4000000059604645
+            },
+            "loadMs": {
+              "median": 0,
+              "min": 0,
+              "max": 0
+            },
+            "prepareMs": {
+              "median": 182.29999999701977,
+              "min": 174.70000000298023,
+              "max": 183
+            },
+            "firstFrameMs": {
+              "median": 4.799999997019768,
+              "min": 4.600000008940697,
+              "max": 5
+            },
+            "exportMs": {
+              "median": 693.8999999910593,
+              "min": 674.9000000059605,
+              "max": 729.6000000089407
+            },
+            "bytes": {
+              "median": 6360083,
+              "min": 6360083,
+              "max": 6360083
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 2.5999999940395355
+            },
+            "seek": {
+              "median": 0.4000000059604645,
+              "min": 0.29999999701976776,
+              "max": 0.5999999940395355
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/performance/terrain-standard-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "1ef6d420b25523b92742c06fec466eac",
+            "lastFrameHash": "929a7b93fbb5258383d40f2cd32be575",
+            "bytes": 6360083,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 481401,
+            "triangles": 960000,
+            "drawCalls": 6,
+            "textures": 0
+          }
+        },
+        {
+          "mode": "photo",
+          "quality": "compatibility",
+          "aspect": "landscape",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.4000000059604645,
+              "min": 5.100000008940697,
+              "max": 5.9000000059604645
+            },
+            "loadMs": {
+              "median": 34.79999999701977,
+              "min": 34.599999994039536,
+              "max": 36.3999999910593
+            },
+            "prepareMs": {
+              "median": 121.5,
+              "min": 104.80000001192093,
+              "max": 126.1000000089407
+            },
+            "firstFrameMs": {
+              "median": 2,
+              "min": 1.6000000089406967,
+              "max": 2.2000000029802322
+            },
+            "exportMs": {
+              "median": 419.30000001192093,
+              "min": 392,
+              "max": 421.79999999701977
+            },
+            "bytes": {
+              "median": 2097183,
+              "min": 2097183,
+              "max": 2097183
+            },
+            "frames": {
+              "median": 0.4000000059604645,
+              "min": 0.29999999701976776,
+              "max": 3.0999999940395355
+            },
+            "seek": {
+              "median": 0.4000000059604645,
+              "min": 0.30000001192092896,
+              "max": 0.6000000089406967
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/performance/photo-compatibility-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "4aea9a77314968beab5c0a2be2693d25",
+            "lastFrameHash": "62d3e2b253f6b540638fcedb7fe26cee",
+            "bytes": 2097183,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 120701,
+            "triangles": 240000,
+            "drawCalls": 6,
+            "textures": 1
+          }
+        },
+        {
+          "mode": "photo",
+          "quality": "standard",
+          "aspect": "landscape",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.399999991059303,
+              "min": 5.200000002980232,
+              "max": 5.399999991059303
+            },
+            "loadMs": {
+              "median": 34.29999999701977,
+              "min": 34.1000000089407,
+              "max": 37.29999999701977
+            },
+            "prepareMs": {
+              "median": 214.70000000298023,
+              "min": 211.79999999701977,
+              "max": 244.20000000298023
+            },
+            "firstFrameMs": {
+              "median": 4.899999991059303,
+              "min": 4.200000002980232,
+              "max": 5.100000008940697
+            },
+            "exportMs": {
+              "median": 689,
+              "min": 661.7000000029802,
+              "max": 697
+            },
+            "bytes": {
+              "median": 6982397,
+              "min": 6982397,
+              "max": 6982397
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 2.8999999910593033
+            },
+            "seek": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 0.5
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/performance/photo-standard-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "ac5bf9c26649c0cd87c96898baa711b6",
+            "lastFrameHash": "3f4672f4032caa0a84f887f15826917b",
+            "bytes": 6982397,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 481401,
+            "triangles": 960000,
+            "drawCalls": 6,
+            "textures": 1
+          }
+        },
+        {
+          "mode": "photo",
+          "quality": "standard",
+          "aspect": "portrait",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.299999997019768,
+              "min": 5.199999988079071,
+              "max": 5.5
+            },
+            "loadMs": {
+              "median": 34.6000000089407,
+              "min": 33.70000000298023,
+              "max": 35.70000000298023
+            },
+            "prepareMs": {
+              "median": 215.90000000596046,
+              "min": 214.59999999403954,
+              "max": 223.59999999403954
+            },
+            "firstFrameMs": {
+              "median": 4.799999997019768,
+              "min": 4.399999991059303,
+              "max": 5
+            },
+            "exportMs": {
+              "median": 673,
+              "min": 665.2000000029802,
+              "max": 722.2999999970198
+            },
+            "bytes": {
+              "median": 7102486,
+              "min": 7102486,
+              "max": 7102486
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 3.2999999970197678
+            },
+            "seek": {
+              "median": 0.4000000059604645,
+              "min": 0.29999999701976776,
+              "max": 0.5
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/performance/photo-standard-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "4beae59e8d88caeb72ab085691965df3",
+            "lastFrameHash": "737a78425336840bc61a05760dacc429",
+            "bytes": 7102486,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 481401,
+            "triangles": 960000,
+            "drawCalls": 6,
+            "textures": 1
+          }
+        }
+      ]
+    },
+    "memory": [
+      {
+        "surface": "dem",
+        "sourceCommit": "f4bb3ae38307735c4c947d1b2feebe08b49bc61a",
+        "uncommitted": false,
+        "os": "Windows_NT 10.0.26200",
+        "method": "Fresh isolated Edge process tree per surface; Windows private committed bytes, separate CDP JS heap; shared resident pages may be counted twice. No GPU VRAM or separate codec memory measurement. Test-only GC, never production.",
+        "pointCount": 721,
+        "duration": 10,
+        "width": 720,
+        "height": 1280,
+        "privatePeak": 806879232,
+        "workingSetPeak": 978792448,
+        "intervalMs": {
+          "min": 188,
+          "max": 269
+        },
+        "audit": {
+          "disposed": 6,
+          "closed": true,
+          "retainedRenderers": 0,
+          "retainedImages": 0,
+          "local": 0,
+          "session": 0
+        },
+        "stages": [
+          {
+            "label": "baseline",
+            "beforeHeap": 11967712,
+            "afterHeap": 11967712,
+            "samples": 8,
+            "privatePeak": 323092480,
+            "lastPrivate": 319983616
+          },
+          {
+            "label": "cycle0-import",
+            "beforeHeap": 11967712,
+            "afterHeap": 18916292,
+            "samples": 4,
+            "privatePeak": 568901632,
+            "lastPrivate": 568901632
+          },
+          {
+            "label": "cycle0-export",
+            "beforeHeap": 18916292,
+            "afterHeap": 18369292,
+            "samples": 4,
+            "privatePeak": 645468160,
+            "lastPrivate": 634449920
+          },
+          {
+            "label": "cycle0-cancel-retry",
+            "beforeHeap": 18369292,
+            "afterHeap": 18104600,
+            "samples": 5,
+            "privatePeak": 748257280,
+            "lastPrivate": 748257280
+          },
+          {
+            "label": "cycle0-retained",
+            "beforeHeap": 18271228,
+            "afterHeap": 18271236,
+            "samples": 6,
+            "privatePeak": 753025024,
+            "lastPrivate": 748052480
+          },
+          {
+            "label": "cycle1-import",
+            "beforeHeap": 18271236,
+            "afterHeap": 21481468,
+            "samples": 2,
+            "privatePeak": 803921920,
+            "lastPrivate": 747687936
+          },
+          {
+            "label": "cycle1-export",
+            "beforeHeap": 21481468,
+            "afterHeap": 21763556,
+            "samples": 4,
+            "privatePeak": 792276992,
+            "lastPrivate": 774975488
+          },
+          {
+            "label": "cycle1-cancel-retry",
+            "beforeHeap": 21763556,
+            "afterHeap": 18801424,
+            "samples": 4,
+            "privatePeak": 805625856,
+            "lastPrivate": 794587136
+          },
+          {
+            "label": "cycle1-retained",
+            "beforeHeap": 18901708,
+            "afterHeap": 18901716,
+            "samples": 6,
+            "privatePeak": 797569024,
+            "lastPrivate": 783429632
+          },
+          {
+            "label": "cycle2-import",
+            "beforeHeap": 18901716,
+            "afterHeap": 20143936,
+            "samples": 2,
+            "privatePeak": 806879232,
+            "lastPrivate": 747692032
+          },
+          {
+            "label": "cycle2-export",
+            "beforeHeap": 20143936,
+            "afterHeap": 22105556,
+            "samples": 4,
+            "privatePeak": 789012480,
+            "lastPrivate": 788561920
+          },
+          {
+            "label": "cycle2-cancel-retry",
+            "beforeHeap": 22105556,
+            "afterHeap": 16799052,
+            "samples": 4,
+            "privatePeak": 805335040,
+            "lastPrivate": 803614720
+          },
+          {
+            "label": "cycle2-retained",
+            "beforeHeap": 16899496,
+            "afterHeap": 16899504,
+            "samples": 6,
+            "privatePeak": 781709312,
+            "lastPrivate": 758132736
+          },
+          {
+            "label": "test-only-gc",
+            "beforeHeap": 16899504,
+            "afterHeap": 15127648,
+            "samples": 6,
+            "privatePeak": 663355392,
+            "lastPrivate": 657297408
+          },
+          {
+            "label": "unload",
+            "beforeHeap": 15150508,
+            "afterHeap": 15513236,
+            "samples": 6,
+            "privatePeak": 643584000,
+            "lastPrivate": 604913664
+          }
+        ]
+      },
+      {
+        "surface": "photo",
+        "sourceCommit": "f4bb3ae38307735c4c947d1b2feebe08b49bc61a",
+        "uncommitted": false,
+        "os": "Windows_NT 10.0.26200",
+        "method": "Fresh isolated Edge process tree per surface; Windows private committed bytes, separate CDP JS heap; shared resident pages may be counted twice. No GPU VRAM or separate codec memory measurement. Test-only GC, never production.",
+        "pointCount": 721,
+        "duration": 10,
+        "width": 720,
+        "height": 1280,
+        "privatePeak": 905814016,
+        "workingSetPeak": 1032335360,
+        "intervalMs": {
+          "min": 190,
+          "max": 302
+        },
+        "audit": {
+          "disposed": 6,
+          "closed": true,
+          "retainedRenderers": 0,
+          "retainedImages": 0,
+          "local": 0,
+          "session": 0
+        },
+        "stages": [
+          {
+            "label": "baseline",
+            "beforeHeap": 11969980,
+            "afterHeap": 11969980,
+            "samples": 9,
+            "privatePeak": 302256128,
+            "lastPrivate": 299651072
+          },
+          {
+            "label": "cycle0-import",
+            "beforeHeap": 11969980,
+            "afterHeap": 18789684,
+            "samples": 5,
+            "privatePeak": 636952576,
+            "lastPrivate": 636952576
+          },
+          {
+            "label": "cycle0-export",
+            "beforeHeap": 15337540,
+            "afterHeap": 16554868,
+            "samples": 3,
+            "privatePeak": 665804800,
+            "lastPrivate": 665804800
+          },
+          {
+            "label": "cycle0-cancel-retry",
+            "beforeHeap": 16554868,
+            "afterHeap": 16318564,
+            "samples": 5,
+            "privatePeak": 784990208,
+            "lastPrivate": 784990208
+          },
+          {
+            "label": "cycle0-retained",
+            "beforeHeap": 16492260,
+            "afterHeap": 16492268,
+            "samples": 6,
+            "privatePeak": 737050624,
+            "lastPrivate": 735928320
+          },
+          {
+            "label": "cycle1-import",
+            "beforeHeap": 16492268,
+            "afterHeap": 18729940,
+            "samples": 4,
+            "privatePeak": 848732160,
+            "lastPrivate": 848732160
+          },
+          {
+            "label": "cycle1-export",
+            "beforeHeap": 18729940,
+            "afterHeap": 16526424,
+            "samples": 3,
+            "privatePeak": 833683456,
+            "lastPrivate": 833683456
+          },
+          {
+            "label": "cycle1-cancel-retry",
+            "beforeHeap": 16526424,
+            "afterHeap": 18969120,
+            "samples": 4,
+            "privatePeak": 845078528,
+            "lastPrivate": 845078528
+          },
+          {
+            "label": "cycle1-retained",
+            "beforeHeap": 19063860,
+            "afterHeap": 19063868,
+            "samples": 6,
+            "privatePeak": 849141760,
+            "lastPrivate": 829644800
+          },
+          {
+            "label": "cycle2-import",
+            "beforeHeap": 19063868,
+            "afterHeap": 24814644,
+            "samples": 4,
+            "privatePeak": 874991616,
+            "lastPrivate": 874991616
+          },
+          {
+            "label": "cycle2-export",
+            "beforeHeap": 17086724,
+            "afterHeap": 19315424,
+            "samples": 3,
+            "privatePeak": 864899072,
+            "lastPrivate": 864899072
+          },
+          {
+            "label": "cycle2-cancel-retry",
+            "beforeHeap": 19315424,
+            "afterHeap": 16985992,
+            "samples": 4,
+            "privatePeak": 905814016,
+            "lastPrivate": 905814016
+          },
+          {
+            "label": "cycle2-retained",
+            "beforeHeap": 17085100,
+            "afterHeap": 17085108,
+            "samples": 6,
+            "privatePeak": 831111168,
+            "lastPrivate": 815558656
+          },
+          {
+            "label": "test-only-gc",
+            "beforeHeap": 17085108,
+            "afterHeap": 15222640,
+            "samples": 6,
+            "privatePeak": 743223296,
+            "lastPrivate": 733069312
+          },
+          {
+            "label": "unload",
+            "beforeHeap": 15245668,
+            "afterHeap": 15608396,
+            "samples": 6,
+            "privatePeak": 727760896,
+            "lastPrivate": 663318528
+          }
+        ]
+      }
+    ],
+    "production": {
+      "sourceCommit": "99d8d7ea65cbbe66b6561a98c6fbc77a8b013270",
+      "uncommitted": false,
+      "scope": "local production /route-story/ UI; not public HTTPS",
+      "browser": "Edge 154.0.4258.62",
+      "os": "Windows_NT 10.0.26200",
+      "manifestHashes": 21,
+      "packageBytes": 5913713,
+      "external": [],
+      "errors": [],
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "db": []
+      },
+      "reports": [
+        {
+          "id": "atlas-landscape-standard-dem",
+          "validation": {
+            "file": "artifacts/sprint9/imagery-production/atlas-landscape-standard-dem-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "725fa9a8c80eed22a4a005c23f2d5f8a",
+            "lastFrameHash": "b6e3c19c854f37bf2d9dbe6df3341d2c",
+            "bytes": 6778233,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 131,
+          "sha256": "aa9ee2140baf50c16e2870788c527c58c8bc7b630561460edcf9c186ea71ef58",
+          "exportMs": 782.5
+        },
+        {
+          "id": "atlas-landscape-standard-photo",
+          "validation": {
+            "file": "artifacts/sprint9/imagery-production/atlas-landscape-standard-photo-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "eb8c3ea40cd7b989ccd7febdeb20645b",
+            "lastFrameHash": "04d646a14763cf816e65155a1a8c4747",
+            "bytes": 7011107,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 198,
+          "sha256": "a7a0948360617610a3c6d334d9382073b9667fa3b58bf0a0d3274883a1806fe9",
+          "exportMs": 751.5
+        },
+        {
+          "id": "night-portrait-standard-dem",
+          "validation": {
+            "file": "artifacts/sprint9/imagery-production/night-portrait-standard-dem-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "08c1e4e9f96318de5b787cc0856d5313",
+            "lastFrameHash": "9fad7baa1cdd22e4395fc3b40a10db53",
+            "bytes": 6377110,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 155,
+          "sha256": "0a567a40e45914c11a4ebdce6701f987eaae56cd9a49dafc774a200c30d4cd5b",
+          "exportMs": 734.0999999940395
+        },
+        {
+          "id": "night-portrait-standard-photo",
+          "validation": {
+            "file": "artifacts/sprint9/imagery-production/night-portrait-standard-photo-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "878d9ed7c45e2313a031c23251adfb9c",
+            "lastFrameHash": "b154bc09aebd02866cd51143e346b171",
+            "bytes": 7125807,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 174,
+          "sha256": "f12f0e4046c8c3d7c9e9c7b74c787e5011d68eb5330feef28c83f37df149e2be",
+          "exportMs": 727.8999999910593
+        },
+        {
+          "id": "atlas-landscape-compatibility-dem",
+          "validation": {
+            "file": "artifacts/sprint9/imagery-production/atlas-landscape-compatibility-dem-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "9c19a830d3bb659817615a1f6630dca6",
+            "lastFrameHash": "baba33911ec539abe73e1f123fd60929",
+            "bytes": 2050783,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 129,
+          "sha256": "c0d796d922dd49321a792d9fb92b1f3d0ba3184a420c4c9b005316c64430c179",
+          "exportMs": 546.2000000029802
+        },
+        {
+          "id": "atlas-landscape-compatibility-photo",
+          "validation": {
+            "file": "artifacts/sprint9/imagery-production/atlas-landscape-compatibility-photo-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "cc757d7b26799f191b96673252169e4a",
+            "lastFrameHash": "e200d00a39323a61c0cda4f37a3a8b35",
+            "bytes": 2098137,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 195,
+          "sha256": "6c8f124f8acfb73d9338b96cdd5a36942c032a4a3166d32a4b8ff68bc38fe322",
+          "exportMs": 583.6000000089407
+        }
+      ]
+    }
+  },
+  "adaptive": {
+    "timing": {
+      "sourceCommit": "7c12286994ae58b7731eb773341ccc217da03272",
+      "uncommitted": false,
+      "os": "Windows_NT 10.0.26200 x64",
+      "browser": "154.0.4258.62",
+      "method": "One warm-up then3 steady repeats, same721-point synthetic route; frame timing includes destination Canvas draw/copy but is not a GPU timer. Native/GPU memory measured separately or unmeasured.",
+      "gpxBytes": 31609,
+      "reports": [
+        {
+          "mode": "plain",
+          "quality": "compatibility",
+          "aspect": "landscape",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 6.5999999940395355,
+              "min": 5.4000000059604645,
+              "max": 7.4000000059604645
+            },
+            "loadMs": {
+              "median": 37.29999999701977,
+              "min": 35,
+              "max": 39.29999999701977
+            },
+            "prepareMs": {
+              "median": 110.70000000298023,
+              "min": 108.29999999701977,
+              "max": 133.5
+            },
+            "firstFrameMs": {
+              "median": 2.1000000089406967,
+              "min": 1.7999999970197678,
+              "max": 2.6000000089406967
+            },
+            "exportMs": {
+              "median": 457.8999999910593,
+              "min": 437.8999999910593,
+              "max": 458.20000000298023
+            },
+            "bytes": {
+              "median": 2097183,
+              "min": 2097183,
+              "max": 2097183
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 1.8999999910593033
+            },
+            "seek": {
+              "median": 0.5,
+              "min": 0.3999999910593033,
+              "max": 0.7999999970197678
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/adaptive-performance/plain-compatibility-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "4aea9a77314968beab5c0a2be2693d25",
+            "lastFrameHash": "62d3e2b253f6b540638fcedb7fe26cee",
+            "bytes": 2097183,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 120701,
+            "triangles": 240000,
+            "drawCalls": 6,
+            "textures": 1
+          }
+        },
+        {
+          "mode": "plain",
+          "quality": "standard",
+          "aspect": "landscape",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 6.0999999940395355,
+              "min": 5.5,
+              "max": 6.100000008940697
+            },
+            "loadMs": {
+              "median": 39,
+              "min": 35,
+              "max": 43.70000000298023
+            },
+            "prepareMs": {
+              "median": 257.70000000298023,
+              "min": 231.40000000596046,
+              "max": 282.79999999701977
+            },
+            "firstFrameMs": {
+              "median": 5.299999997019768,
+              "min": 5,
+              "max": 6.399999991059303
+            },
+            "exportMs": {
+              "median": 726.6000000089407,
+              "min": 715,
+              "max": 797.5999999940395
+            },
+            "bytes": {
+              "median": 6982397,
+              "min": 6982397,
+              "max": 6982397
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 4.299999997019768
+            },
+            "seek": {
+              "median": 0.5999999940395355,
+              "min": 0.4000000059604645,
+              "max": 1
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/adaptive-performance/plain-standard-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "ac5bf9c26649c0cd87c96898baa711b6",
+            "lastFrameHash": "3f4672f4032caa0a84f887f15826917b",
+            "bytes": 6982397,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 481401,
+            "triangles": 960000,
+            "drawCalls": 6,
+            "textures": 1
+          }
+        },
+        {
+          "mode": "plain",
+          "quality": "standard",
+          "aspect": "portrait",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.4000000059604645,
+              "min": 5.200000002980232,
+              "max": 5.899999991059303
+            },
+            "loadMs": {
+              "median": 34.599999994039536,
+              "min": 34.400000005960464,
+              "max": 38
+            },
+            "prepareMs": {
+              "median": 226.6000000089407,
+              "min": 221.29999999701977,
+              "max": 229.90000000596046
+            },
+            "firstFrameMs": {
+              "median": 5.399999991059303,
+              "min": 4.9000000059604645,
+              "max": 5.5999999940395355
+            },
+            "exportMs": {
+              "median": 752.6999999880791,
+              "min": 689,
+              "max": 780.2000000029802
+            },
+            "bytes": {
+              "median": 7102486,
+              "min": 7102486,
+              "max": 7102486
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 4.299999997019768
+            },
+            "seek": {
+              "median": 0.5,
+              "min": 0.3999999910593033,
+              "max": 0.6000000089406967
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/adaptive-performance/plain-standard-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "4beae59e8d88caeb72ab085691965df3",
+            "lastFrameHash": "737a78425336840bc61a05760dacc429",
+            "bytes": 7102486,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 481401,
+            "triangles": 960000,
+            "drawCalls": 6,
+            "textures": 1
+          }
+        },
+        {
+          "mode": "photo",
+          "quality": "compatibility",
+          "aspect": "landscape",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.299999997019768,
+              "min": 5,
+              "max": 20
+            },
+            "loadMs": {
+              "median": 36.5,
+              "min": 34.3999999910593,
+              "max": 38
+            },
+            "prepareMs": {
+              "median": 109.79999999701977,
+              "min": 101.79999999701977,
+              "max": 123.40000000596046
+            },
+            "firstFrameMs": {
+              "median": 1.7000000029802322,
+              "min": 1.5,
+              "max": 2.1000000089406967
+            },
+            "exportMs": {
+              "median": 463.29999999701977,
+              "min": 436.90000000596046,
+              "max": 466
+            },
+            "bytes": {
+              "median": 2093849,
+              "min": 2093849,
+              "max": 2093849
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 1.2999999970197678
+            },
+            "seek": {
+              "median": 0.5,
+              "min": 0.3999999910593033,
+              "max": 0.7000000029802322
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/adaptive-performance/photo-compatibility-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "ef05e2057737b51e7501cb274db4e01f",
+            "lastFrameHash": "c90a37a972db8955ce20c73fcec2c6e4",
+            "bytes": 2093849,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 120701,
+            "triangles": 240000,
+            "drawCalls": 6,
+            "textures": 2
+          }
+        },
+        {
+          "mode": "photo",
+          "quality": "standard",
+          "aspect": "landscape",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.200000002980232,
+              "min": 5.200000002980232,
+              "max": 5.5
+            },
+            "loadMs": {
+              "median": 36.3999999910593,
+              "min": 35.5,
+              "max": 37
+            },
+            "prepareMs": {
+              "median": 225,
+              "min": 222.1000000089407,
+              "max": 279.90000000596046
+            },
+            "firstFrameMs": {
+              "median": 4.5999999940395355,
+              "min": 4.399999991059303,
+              "max": 5
+            },
+            "exportMs": {
+              "median": 742.0999999940395,
+              "min": 739.5,
+              "max": 753
+            },
+            "bytes": {
+              "median": 7008834,
+              "min": 7008834,
+              "max": 7008834
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 2.7000000029802322
+            },
+            "seek": {
+              "median": 0.5,
+              "min": 0.3999999910593033,
+              "max": 0.7000000029802322
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/adaptive-performance/photo-standard-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "9c2db4009086e00466b8f013d1a4b399",
+            "lastFrameHash": "5139f432e5b67a860f02f32db4a63246",
+            "bytes": 7008834,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 481401,
+            "triangles": 960000,
+            "drawCalls": 6,
+            "textures": 2
+          }
+        },
+        {
+          "mode": "photo",
+          "quality": "standard",
+          "aspect": "portrait",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.5999999940395355,
+              "min": 5.5999999940395355,
+              "max": 7.200000002980232
+            },
+            "loadMs": {
+              "median": 35.6000000089407,
+              "min": 35.20000000298023,
+              "max": 36.20000000298023
+            },
+            "prepareMs": {
+              "median": 221.40000000596046,
+              "min": 217.79999999701977,
+              "max": 222.09999999403954
+            },
+            "firstFrameMs": {
+              "median": 5,
+              "min": 4.5,
+              "max": 5.299999997019768
+            },
+            "exportMs": {
+              "median": 739.3999999910593,
+              "min": 707.9000000059605,
+              "max": 818.7000000029802
+            },
+            "bytes": {
+              "median": 7158104,
+              "min": 7158104,
+              "max": 7158104
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 2.7999999970197678
+            },
+            "seek": {
+              "median": 0.5,
+              "min": 0.3999999910593033,
+              "max": 0.7000000029802322
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/adaptive-performance/photo-standard-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "50bf3b376987833d34c38e83c13b4705",
+            "lastFrameHash": "3542491b1988f1b841f18e5ef4be27cb",
+            "bytes": 7158104,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 481401,
+            "triangles": 960000,
+            "drawCalls": 6,
+            "textures": 2
+          }
+        },
+        {
+          "mode": "corridor",
+          "quality": "compatibility",
+          "aspect": "landscape",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.699999988079071,
+              "min": 5.299999997019768,
+              "max": 6
+            },
+            "loadMs": {
+              "median": 39.3999999910593,
+              "min": 36.400000005960464,
+              "max": 43.400000005960464
+            },
+            "prepareMs": {
+              "median": 104.5,
+              "min": 103,
+              "max": 135.59999999403954
+            },
+            "firstFrameMs": {
+              "median": 2.699999988079071,
+              "min": 2.2000000029802322,
+              "max": 3.1000000089406967
+            },
+            "exportMs": {
+              "median": 446.70000000298023,
+              "min": 436.20000000298023,
+              "max": 511
+            },
+            "bytes": {
+              "median": 2097514,
+              "min": 2097514,
+              "max": 2097514
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 1.5
+            },
+            "seek": {
+              "median": 0.5,
+              "min": 0.30000001192092896,
+              "max": 0.5999999940395355
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/adaptive-performance/corridor-compatibility-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "ef05e2057737b51e7501cb274db4e01f",
+            "lastFrameHash": "9c6a2aa8e7731424e4b7dc994a6c73f1",
+            "bytes": 2097514,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 120701,
+            "triangles": 240000,
+            "drawCalls": 6,
+            "textures": 2
+          }
+        },
+        {
+          "mode": "corridor",
+          "quality": "standard",
+          "aspect": "landscape",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.299999997019768,
+              "min": 5.100000008940697,
+              "max": 5.5
+            },
+            "loadMs": {
+              "median": 36.099999994039536,
+              "min": 34.6000000089407,
+              "max": 36.70000000298023
+            },
+            "prepareMs": {
+              "median": 209.69999998807907,
+              "min": 207.59999999403954,
+              "max": 219.29999999701977
+            },
+            "firstFrameMs": {
+              "median": 4.899999991059303,
+              "min": 4.600000008940697,
+              "max": 5.0999999940395355
+            },
+            "exportMs": {
+              "median": 692.6999999880791,
+              "min": 658.2000000029802,
+              "max": 721.2999999970198
+            },
+            "bytes": {
+              "median": 7058751,
+              "min": 7058751,
+              "max": 7058751
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 2.800000011920929
+            },
+            "seek": {
+              "median": 0.5,
+              "min": 0.30000001192092896,
+              "max": 0.7000000029802322
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/adaptive-performance/corridor-standard-landscape.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "9c2db4009086e00466b8f013d1a4b399",
+            "lastFrameHash": "07e8cbe241a6522358613563e7d70f41",
+            "bytes": 7058751,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 481401,
+            "triangles": 960000,
+            "drawCalls": 6,
+            "textures": 2
+          }
+        },
+        {
+          "mode": "corridor",
+          "quality": "standard",
+          "aspect": "portrait",
+          "duration": 10,
+          "summary": {
+            "parseMs": {
+              "median": 5.0999999940395355,
+              "min": 5,
+              "max": 5.5
+            },
+            "loadMs": {
+              "median": 34.80000001192093,
+              "min": 34.80000001192093,
+              "max": 35.20000000298023
+            },
+            "prepareMs": {
+              "median": 210.19999998807907,
+              "min": 206.29999999701977,
+              "max": 214
+            },
+            "firstFrameMs": {
+              "median": 4.0999999940395355,
+              "min": 4.0999999940395355,
+              "max": 4.600000008940697
+            },
+            "exportMs": {
+              "median": 687.6000000089407,
+              "min": 661.9000000059605,
+              "max": 692.0999999940395
+            },
+            "bytes": {
+              "median": 7102583,
+              "min": 7102583,
+              "max": 7102583
+            },
+            "frames": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 2.7000000029802322
+            },
+            "seek": {
+              "median": 0.5,
+              "min": 0.29999999701976776,
+              "max": 0.6000000089406967
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/adaptive-performance/corridor-standard-portrait.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "50bf3b376987833d34c38e83c13b4705",
+            "lastFrameHash": "4e4f6bdfcb53c37941b701602470cb3b",
+            "bytes": 7102583,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "gpu": {
+            "vertices": 481401,
+            "triangles": 960000,
+            "drawCalls": 6,
+            "textures": 2
+          }
+        }
+      ]
+    },
+    "memory": [
+      {
+        "surface": "plain",
+        "sourceCommit": "7c12286994ae58b7731eb773341ccc217da03272",
+        "uncommitted": false,
+        "os": "Windows_NT 10.0.26200",
+        "method": "Fresh isolated Edge process tree per surface; Windows private committed bytes, separate CDP JS heap; shared resident pages may be counted twice. No GPU VRAM or separate codec memory measurement. Test-only GC, never production.",
+        "pointCount": 721,
+        "duration": 10,
+        "width": 720,
+        "height": 1280,
+        "privatePeak": 899739648,
+        "workingSetPeak": 1026834432,
+        "intervalMs": {
+          "min": 195,
+          "max": 334
+        },
+        "audit": {
+          "disposed": 6,
+          "closed": true,
+          "retainedRenderers": 0,
+          "retainedImages": 0,
+          "local": 0,
+          "session": 0
+        },
+        "stages": [
+          {
+            "label": "baseline",
+            "beforeHeap": 11973464,
+            "afterHeap": 11973464,
+            "samples": 5,
+            "privatePeak": 302071808,
+            "lastPrivate": 301006848
+          },
+          {
+            "label": "cycle0-import",
+            "beforeHeap": 11973464,
+            "afterHeap": 18876752,
+            "samples": 5,
+            "privatePeak": 637403136,
+            "lastPrivate": 637403136
+          },
+          {
+            "label": "cycle0-export",
+            "beforeHeap": 15431340,
+            "afterHeap": 16621288,
+            "samples": 3,
+            "privatePeak": 675995648,
+            "lastPrivate": 675995648
+          },
+          {
+            "label": "cycle0-cancel-retry",
+            "beforeHeap": 16621288,
+            "afterHeap": 19490916,
+            "samples": 5,
+            "privatePeak": 788811776,
+            "lastPrivate": 788811776
+          },
+          {
+            "label": "cycle0-retained",
+            "beforeHeap": 19665812,
+            "afterHeap": 19665820,
+            "samples": 6,
+            "privatePeak": 742371328,
+            "lastPrivate": 734814208
+          },
+          {
+            "label": "cycle1-import",
+            "beforeHeap": 19665820,
+            "afterHeap": 22907224,
+            "samples": 3,
+            "privatePeak": 829878272,
+            "lastPrivate": 829878272
+          },
+          {
+            "label": "cycle1-export",
+            "beforeHeap": 22907224,
+            "afterHeap": 16633380,
+            "samples": 4,
+            "privatePeak": 845631488,
+            "lastPrivate": 845631488
+          },
+          {
+            "label": "cycle1-cancel-retry",
+            "beforeHeap": 16633380,
+            "afterHeap": 16681812,
+            "samples": 4,
+            "privatePeak": 866377728,
+            "lastPrivate": 866377728
+          },
+          {
+            "label": "cycle1-retained",
+            "beforeHeap": 16785120,
+            "afterHeap": 16785128,
+            "samples": 5,
+            "privatePeak": 817799168,
+            "lastPrivate": 792535040
+          },
+          {
+            "label": "cycle2-import",
+            "beforeHeap": 16785128,
+            "afterHeap": 22821596,
+            "samples": 4,
+            "privatePeak": 885075968,
+            "lastPrivate": 885075968
+          },
+          {
+            "label": "cycle2-export",
+            "beforeHeap": 22821596,
+            "afterHeap": 16881260,
+            "samples": 3,
+            "privatePeak": 877506560,
+            "lastPrivate": 877506560
+          },
+          {
+            "label": "cycle2-cancel-retry",
+            "beforeHeap": 16881260,
+            "afterHeap": 16958652,
+            "samples": 4,
+            "privatePeak": 899739648,
+            "lastPrivate": 899739648
+          },
+          {
+            "label": "cycle2-retained",
+            "beforeHeap": 17060548,
+            "afterHeap": 17060556,
+            "samples": 6,
+            "privatePeak": 825032704,
+            "lastPrivate": 778457088
+          },
+          {
+            "label": "test-only-gc",
+            "beforeHeap": 17060556,
+            "afterHeap": 15264460,
+            "samples": 6,
+            "privatePeak": 698920960,
+            "lastPrivate": 682913792
+          },
+          {
+            "label": "unload",
+            "beforeHeap": 15287472,
+            "afterHeap": 15650200,
+            "samples": 6,
+            "privatePeak": 682741760,
+            "lastPrivate": 632123392
+          }
+        ]
+      },
+      {
+        "surface": "photo",
+        "sourceCommit": "7c12286994ae58b7731eb773341ccc217da03272",
+        "uncommitted": false,
+        "os": "Windows_NT 10.0.26200",
+        "method": "Fresh isolated Edge process tree per surface; Windows private committed bytes, separate CDP JS heap; shared resident pages may be counted twice. No GPU VRAM or separate codec memory measurement. Test-only GC, never production.",
+        "pointCount": 721,
+        "duration": 10,
+        "width": 720,
+        "height": 1280,
+        "privatePeak": 826531840,
+        "workingSetPeak": 1002237952,
+        "intervalMs": {
+          "min": 196,
+          "max": 517
+        },
+        "audit": {
+          "disposed": 6,
+          "closed": true,
+          "retainedRenderers": 0,
+          "retainedImages": 0,
+          "local": 0,
+          "session": 0
+        },
+        "stages": [
+          {
+            "label": "baseline",
+            "beforeHeap": 11987868,
+            "afterHeap": 11987868,
+            "samples": 8,
+            "privatePeak": 312946688,
+            "lastPrivate": 311209984
+          },
+          {
+            "label": "cycle0-import",
+            "beforeHeap": 11987868,
+            "afterHeap": 19106788,
+            "samples": 5,
+            "privatePeak": 643391488,
+            "lastPrivate": 643391488
+          },
+          {
+            "label": "cycle0-export",
+            "beforeHeap": 15460496,
+            "afterHeap": 17466736,
+            "samples": 4,
+            "privatePeak": 706658304,
+            "lastPrivate": 706658304
+          },
+          {
+            "label": "cycle0-cancel-retry",
+            "beforeHeap": 17466736,
+            "afterHeap": 16600768,
+            "samples": 4,
+            "privatePeak": 794120192,
+            "lastPrivate": 794120192
+          },
+          {
+            "label": "cycle0-retained",
+            "beforeHeap": 16775888,
+            "afterHeap": 16775896,
+            "samples": 6,
+            "privatePeak": 753704960,
+            "lastPrivate": 737988608
+          },
+          {
+            "label": "cycle1-import",
+            "beforeHeap": 16775896,
+            "afterHeap": 20931100,
+            "samples": 4,
+            "privatePeak": 794390528,
+            "lastPrivate": 788496384
+          },
+          {
+            "label": "cycle1-export",
+            "beforeHeap": 20931100,
+            "afterHeap": 17822860,
+            "samples": 3,
+            "privatePeak": 813858816,
+            "lastPrivate": 813858816
+          },
+          {
+            "label": "cycle1-cancel-retry",
+            "beforeHeap": 17822860,
+            "afterHeap": 16762476,
+            "samples": 4,
+            "privatePeak": 826531840,
+            "lastPrivate": 819351552
+          },
+          {
+            "label": "cycle1-retained",
+            "beforeHeap": 16865700,
+            "afterHeap": 16865708,
+            "samples": 6,
+            "privatePeak": 788934656,
+            "lastPrivate": 757436416
+          },
+          {
+            "label": "cycle2-import",
+            "beforeHeap": 16865708,
+            "afterHeap": 25535328,
+            "samples": 5,
+            "privatePeak": 823492608,
+            "lastPrivate": 823492608
+          },
+          {
+            "label": "cycle2-export",
+            "beforeHeap": 17209764,
+            "afterHeap": 21289592,
+            "samples": 4,
+            "privatePeak": 792317952,
+            "lastPrivate": 792317952
+          },
+          {
+            "label": "cycle2-cancel-retry",
+            "beforeHeap": 21289592,
+            "afterHeap": 17147108,
+            "samples": 4,
+            "privatePeak": 800002048,
+            "lastPrivate": 793104384
+          },
+          {
+            "label": "cycle2-retained",
+            "beforeHeap": 17247732,
+            "afterHeap": 17247740,
+            "samples": 5,
+            "privatePeak": 788713472,
+            "lastPrivate": 768245760
+          },
+          {
+            "label": "test-only-gc",
+            "beforeHeap": 17247740,
+            "afterHeap": 15345212,
+            "samples": 6,
+            "privatePeak": 689889280,
+            "lastPrivate": 665792512
+          },
+          {
+            "label": "unload",
+            "beforeHeap": 15368308,
+            "afterHeap": 15731036,
+            "samples": 6,
+            "privatePeak": 663351296,
+            "lastPrivate": 582377472
+          }
+        ]
+      },
+      {
+        "surface": "corridor",
+        "sourceCommit": "7c12286994ae58b7731eb773341ccc217da03272",
+        "uncommitted": false,
+        "os": "Windows_NT 10.0.26200",
+        "method": "Fresh isolated Edge process tree per surface; Windows private committed bytes, separate CDP JS heap; shared resident pages may be counted twice. No GPU VRAM or separate codec memory measurement. Test-only GC, never production.",
+        "pointCount": 721,
+        "duration": 10,
+        "width": 720,
+        "height": 1280,
+        "privatePeak": 879779840,
+        "workingSetPeak": 1031127040,
+        "intervalMs": {
+          "min": 202,
+          "max": 283
+        },
+        "audit": {
+          "disposed": 6,
+          "closed": true,
+          "retainedRenderers": 0,
+          "retainedImages": 0,
+          "local": 0,
+          "session": 0
+        },
+        "stages": [
+          {
+            "label": "baseline",
+            "beforeHeap": 11987072,
+            "afterHeap": 11987072,
+            "samples": 8,
+            "privatePeak": 317345792,
+            "lastPrivate": 316928000
+          },
+          {
+            "label": "cycle0-import",
+            "beforeHeap": 11987072,
+            "afterHeap": 19093492,
+            "samples": 5,
+            "privatePeak": 652959744,
+            "lastPrivate": 652959744
+          },
+          {
+            "label": "cycle0-export",
+            "beforeHeap": 15501836,
+            "afterHeap": 18206008,
+            "samples": 3,
+            "privatePeak": 708915200,
+            "lastPrivate": 708915200
+          },
+          {
+            "label": "cycle0-cancel-retry",
+            "beforeHeap": 18206008,
+            "afterHeap": 18906796,
+            "samples": 5,
+            "privatePeak": 803508224,
+            "lastPrivate": 803508224
+          },
+          {
+            "label": "cycle0-retained",
+            "beforeHeap": 19081916,
+            "afterHeap": 19081924,
+            "samples": 6,
+            "privatePeak": 750907392,
+            "lastPrivate": 743882752
+          },
+          {
+            "label": "cycle1-import",
+            "beforeHeap": 19081924,
+            "afterHeap": 24731692,
+            "samples": 3,
+            "privatePeak": 867663872,
+            "lastPrivate": 838995968
+          },
+          {
+            "label": "cycle1-export",
+            "beforeHeap": 16991708,
+            "afterHeap": 17516860,
+            "samples": 3,
+            "privatePeak": 846004224,
+            "lastPrivate": 844120064
+          },
+          {
+            "label": "cycle1-cancel-retry",
+            "beforeHeap": 17516860,
+            "afterHeap": 21691572,
+            "samples": 4,
+            "privatePeak": 878338048,
+            "lastPrivate": 847454208
+          },
+          {
+            "label": "cycle1-retained",
+            "beforeHeap": 21792956,
+            "afterHeap": 21792964,
+            "samples": 5,
+            "privatePeak": 849227776,
+            "lastPrivate": 828858368
+          },
+          {
+            "label": "cycle2-import",
+            "beforeHeap": 21792964,
+            "afterHeap": 20860456,
+            "samples": 3,
+            "privatePeak": 879779840,
+            "lastPrivate": 834940928
+          },
+          {
+            "label": "cycle2-export",
+            "beforeHeap": 20860456,
+            "afterHeap": 22178528,
+            "samples": 4,
+            "privatePeak": 865394688,
+            "lastPrivate": 847171584
+          },
+          {
+            "label": "cycle2-cancel-retry",
+            "beforeHeap": 22178528,
+            "afterHeap": 22944424,
+            "samples": 4,
+            "privatePeak": 876457984,
+            "lastPrivate": 853889024
+          },
+          {
+            "label": "cycle2-retained",
+            "beforeHeap": 23049828,
+            "afterHeap": 23049836,
+            "samples": 6,
+            "privatePeak": 821743616,
+            "lastPrivate": 804614144
+          },
+          {
+            "label": "test-only-gc",
+            "beforeHeap": 23049836,
+            "afterHeap": 15361688,
+            "samples": 5,
+            "privatePeak": 710938624,
+            "lastPrivate": 686952448
+          },
+          {
+            "label": "unload",
+            "beforeHeap": 15384784,
+            "afterHeap": 15747512,
+            "samples": 6,
+            "privatePeak": 673808384,
+            "lastPrivate": 631959552
+          }
+        ]
+      }
+    ],
+    "comparative": {
+      "sourceCommit": "7c12286994ae58b7731eb773341ccc217da03272",
+      "uncommitted": false,
+      "scope": "local dev actual UI; not public HTTPS",
+      "browser": "Edge 154.0.4258.62",
+      "os": "Windows_NT 10.0.26200",
+      "external": [],
+      "errors": [],
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "db": []
+      },
+      "reports": [
+        {
+          "id": "atlas-landscape-standard-dem",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/atlas-landscape-standard-dem-20s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 20,
+            "decodedFrames": 480,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 480,
+            "firstFrameHash": "725fa9a8c80eed22a4a005c23f2d5f8a",
+            "lastFrameHash": "60fb61705a437c88aa55bfaadd0db5e7",
+            "bytes": 12819238,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 130,
+          "sha256": "4992fd077605d5f4c2322cddc86b9464460a8bf5a10fc4881728665c54150a81",
+          "exportMs": 1260.8999999910593
+        },
+        {
+          "id": "atlas-landscape-standard-single",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/atlas-landscape-standard-single-20s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 20,
+            "decodedFrames": 480,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 480,
+            "firstFrameHash": "eb8c3ea40cd7b989ccd7febdeb20645b",
+            "lastFrameHash": "b8500c21823414fd05a6c64845bda940",
+            "bytes": 13350304,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 198,
+          "sha256": "af4df7ce082ba23d3e5e3474e4a62bc67e1b40f67afce00930a94cddcff6ed7d",
+          "exportMs": 1281.0999999940395
+        },
+        {
+          "id": "atlas-landscape-standard-photo",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/atlas-landscape-standard-photo-20s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 20,
+            "decodedFrames": 480,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 480,
+            "firstFrameHash": "329c42656a3595d6a6cbe0721b511b82",
+            "lastFrameHash": "355bc03a2b7400f4f999898ebe96d0bd",
+            "bytes": 13342429,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 196,
+          "sha256": "40d441798115cd341c9a890d7b350f4c98c0aaeb0da897a42e390c71d147ca10",
+          "exportMs": 1258.300000011921
+        },
+        {
+          "id": "atlas-landscape-standard-corridor",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/atlas-landscape-standard-corridor-20s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 20,
+            "decodedFrames": 480,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 480,
+            "firstFrameHash": "329c42656a3595d6a6cbe0721b511b82",
+            "lastFrameHash": "31a8316847eaf25e323e76592df2d441",
+            "bytes": 13464236,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 196,
+          "sha256": "99863c2f9c5c8d1ad5cda7c5318e9ad64a50937b76b504e8cb4bfc11c0893221",
+          "exportMs": 1259.2000000029802
+        },
+        {
+          "id": "night-portrait-standard-dem",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/night-portrait-standard-dem-30s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 30,
+            "decodedFrames": 720,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 720,
+            "firstFrameHash": "08c1e4e9f96318de5b787cc0856d5313",
+            "lastFrameHash": "df6fb146edd133b49cb96763fef9585a",
+            "bytes": 17924730,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 155,
+          "sha256": "b315eb94ba73f9fcd84dde71ba1d1877dbf64f4571b11f07f4793b94e715c970",
+          "exportMs": 1863.300000011921
+        },
+        {
+          "id": "night-portrait-standard-single",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/night-portrait-standard-single-30s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 30,
+            "decodedFrames": 720,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 720,
+            "firstFrameHash": "878d9ed7c45e2313a031c23251adfb9c",
+            "lastFrameHash": "43e9e8a04224ca85cdcb23dec2c9de7d",
+            "bytes": 19376984,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 174,
+          "sha256": "60b3db1fcb8c185f0445172741674f6138b1e044ca787ee53dcedd52e0232ac1",
+          "exportMs": 1756.5
+        },
+        {
+          "id": "night-portrait-standard-photo",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/night-portrait-standard-photo-30s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 30,
+            "decodedFrames": 720,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 720,
+            "firstFrameHash": "44efcac2e39d97a7767416efff33e2e4",
+            "lastFrameHash": "27be4bed79fef33f974b93d201c888e0",
+            "bytes": 19435847,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 173,
+          "sha256": "45b9df49506008bfed159c3eb42f53234c53a3e4912c6e73dc2b1a9ec329972f",
+          "exportMs": 1840
+        },
+        {
+          "id": "night-portrait-standard-corridor",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/night-portrait-standard-corridor-30s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 30,
+            "decodedFrames": 720,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 720,
+            "firstFrameHash": "44efcac2e39d97a7767416efff33e2e4",
+            "lastFrameHash": "6f0cf401970959aa54110e1068b067f7",
+            "bytes": 19415975,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 172,
+          "sha256": "0213a1156f7235d51872509d4976d8c85529511bda3803ad927946414b258b98",
+          "exportMs": 1705.7000000029802
+        },
+        {
+          "id": "atlas-landscape-compatibility-dem",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/atlas-landscape-compatibility-dem-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "9c19a830d3bb659817615a1f6630dca6",
+            "lastFrameHash": "baba33911ec539abe73e1f123fd60929",
+            "bytes": 2050783,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 129,
+          "sha256": "358caf56ecedcf1009ee00ed33a0befc27f0d69806008bec05f3770de053fc7d",
+          "exportMs": 490.30000001192093
+        },
+        {
+          "id": "atlas-landscape-compatibility-single",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/atlas-landscape-compatibility-single-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "cc757d7b26799f191b96673252169e4a",
+            "lastFrameHash": "e200d00a39323a61c0cda4f37a3a8b35",
+            "bytes": 2098137,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 195,
+          "sha256": "a5f86cffb8bab1f9000354044683970573140a156ec71bff6ec21abddcdf6a26",
+          "exportMs": 563.7999999970198
+        },
+        {
+          "id": "atlas-landscape-compatibility-photo",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/atlas-landscape-compatibility-photo-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "761926403303854475eea26be9b8ad80",
+            "lastFrameHash": "9adff7c95932d12b60e8b6f0c7045412",
+            "bytes": 2084945,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 197,
+          "sha256": "abda83cfb81209efe5c6b19162590b1fc7f9f68991e43068a486ed72895ada80",
+          "exportMs": 560.9000000059605
+        },
+        {
+          "id": "atlas-landscape-compatibility-corridor",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-full/atlas-landscape-compatibility-corridor-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "761926403303854475eea26be9b8ad80",
+            "lastFrameHash": "7f218c78502c7c1a8410918642e216ea",
+            "bytes": 2087950,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 196,
+          "sha256": "71de55e03da4041334e002b5b28b3127d4cc3bf652efecc365b86b7f78325737",
+          "exportMs": 547.2999999970198
+        }
+      ]
+    },
+    "production": {
+      "sourceCommit": "7c12286994ae58b7731eb773341ccc217da03272",
+      "uncommitted": true,
+      "scope": "local production /route-story/ UI; not public HTTPS",
+      "browser": "Edge 154.0.4258.62",
+      "os": "Windows_NT 10.0.26200",
+      "manifestHashes": 22,
+      "packageBytes": 5792186,
+      "external": [],
+      "errors": [],
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "db": []
+      },
+      "reports": [
+        {
+          "id": "atlas-landscape-standard-dem",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-production/atlas-landscape-standard-dem-20s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 20,
+            "decodedFrames": 480,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 480,
+            "firstFrameHash": "725fa9a8c80eed22a4a005c23f2d5f8a",
+            "lastFrameHash": "60fb61705a437c88aa55bfaadd0db5e7",
+            "bytes": 12819238,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 130,
+          "sha256": "aa57d7314df6a4575d20ed87a72aceef2d0ff9132f7b7f287247d22a49d575f6",
+          "exportMs": 1193.2999999970198
+        },
+        {
+          "id": "atlas-landscape-standard-photo",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-production/atlas-landscape-standard-photo-20s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 20,
+            "decodedFrames": 480,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 480,
+            "firstFrameHash": "329c42656a3595d6a6cbe0721b511b82",
+            "lastFrameHash": "355bc03a2b7400f4f999898ebe96d0bd",
+            "bytes": 13342429,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 196,
+          "sha256": "7cc3c235765b87c9fe57c0ca5b0f3cd4d160f1be4e4c2e6fb21c076f8196ffe6",
+          "exportMs": 1242.5
+        },
+        {
+          "id": "atlas-landscape-standard-corridor",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-production/atlas-landscape-standard-corridor-20s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 20,
+            "decodedFrames": 480,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 480,
+            "firstFrameHash": "329c42656a3595d6a6cbe0721b511b82",
+            "lastFrameHash": "31a8316847eaf25e323e76592df2d441",
+            "bytes": 13464236,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 196,
+          "sha256": "e3e62aee580603940d1dae31d5dcee594c6bf11f8ca3cc2e9855cfef15e446a7",
+          "exportMs": 1310.5
+        },
+        {
+          "id": "night-portrait-standard-dem",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-production/night-portrait-standard-dem-30s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 30,
+            "decodedFrames": 720,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 720,
+            "firstFrameHash": "08c1e4e9f96318de5b787cc0856d5313",
+            "lastFrameHash": "df6fb146edd133b49cb96763fef9585a",
+            "bytes": 17924730,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 155,
+          "sha256": "9bdb84dfc59595f344850f90653e073c607a908723a4dbfa483423f7132ad13c",
+          "exportMs": 1767.2999999970198
+        },
+        {
+          "id": "night-portrait-standard-photo",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-production/night-portrait-standard-photo-30s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 30,
+            "decodedFrames": 720,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 720,
+            "firstFrameHash": "44efcac2e39d97a7767416efff33e2e4",
+            "lastFrameHash": "27be4bed79fef33f974b93d201c888e0",
+            "bytes": 19435847,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 173,
+          "sha256": "9506f94da147f78aae2cdeb246a34a8dc667e6cdc7a15564a08d941bdd0fd3b4",
+          "exportMs": 1703.1000000089407
+        },
+        {
+          "id": "night-portrait-standard-corridor",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-production/night-portrait-standard-corridor-30s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 30,
+            "decodedFrames": 720,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 720,
+            "firstFrameHash": "44efcac2e39d97a7767416efff33e2e4",
+            "lastFrameHash": "6f0cf401970959aa54110e1068b067f7",
+            "bytes": 19415975,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 172,
+          "sha256": "2f5ccc23bed5d8adb39109cd27cc5d0c117c830429bdc0faa3d6a333bf354c35",
+          "exportMs": 1787
+        },
+        {
+          "id": "atlas-landscape-compatibility-dem",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-production/atlas-landscape-compatibility-dem-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "9c19a830d3bb659817615a1f6630dca6",
+            "lastFrameHash": "baba33911ec539abe73e1f123fd60929",
+            "bytes": 2050783,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 129,
+          "sha256": "5245c9ce14ec44f5fb264f8bd7d107ed1434627610060ab2e70e44bf7757529a",
+          "exportMs": 478.90000000596046
+        },
+        {
+          "id": "atlas-landscape-compatibility-photo",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-production/atlas-landscape-compatibility-photo-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "761926403303854475eea26be9b8ad80",
+            "lastFrameHash": "9adff7c95932d12b60e8b6f0c7045412",
+            "bytes": 2084945,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 197,
+          "sha256": "d8fae29664bd01d224e6f7ba46d2034a281063bc914d50eed3946e48b488df7f",
+          "exportMs": 471.29999999701977
+        },
+        {
+          "id": "atlas-landscape-compatibility-corridor",
+          "validation": {
+            "file": "artifacts/sprint9/adaptive-production/atlas-landscape-compatibility-corridor-10s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "761926403303854475eea26be9b8ad80",
+            "lastFrameHash": "7f218c78502c7c1a8410918642e216ea",
+            "bytes": 2087950,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 196,
+          "sha256": "fdc4a09ba59d13e406e5a700e85d0d0231bd2b408d89b96d226863bbf912956e",
+          "exportMs": 483.29999999701977
+        }
+      ]
+    }
+  },
+  "publicAcceptedMain": {
+    "deploymentRun": "https://github.com/Matawaka/route-story/actions/runs/37962492130",
+    "smoke": {
+      "status": "VERIFIED",
+      "scope": "public HTTPS",
+      "publicHttps": true,
+      "os": "Windows_NT 10.0.26200 x64",
+      "physicalMobile": false,
+      "outputs": [
+        {
+          "name": "atlas-20s",
+          "source": "synthetic.gpx",
+          "sourceBytes": 897,
+          "sourceSha256": "a5aec675bbc85106fc1fa4e3dec45961f373ba2c4562a1216e1c1da43b259149",
+          "points": 9,
+          "title": "Учебный маршрут · ATLAS",
+          "style": "Атлас",
+          "aspect": "landscape",
+          "quality": "standard",
+          "phases": [
+            {
+              "phase": "INTRO",
+              "time": 1
+            },
+            {
+              "phase": "ROUTE_REPLAY",
+              "time": 5
+            },
+            {
+              "phase": "OUTRO",
+              "time": 9
+            }
+          ],
+          "exportMilliseconds": 2855.6000000089407,
+          "encoder": {
+            "codec": "avc1.42001f",
+            "width": 1280,
+            "height": 720,
+            "displayWidth": 1280,
+            "displayHeight": 720,
+            "bitrate": 5000000,
+            "bitrateMode": "variable",
+            "alpha": "discard",
+            "framerate": 24,
+            "avc": {
+              "format": "avc"
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/public-v1.1/smoke-atlas-20s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "963ce10d5109141d09df2cf40758dbf6",
+            "lastFrameHash": "c5445fc7dd43ea0c2ccba875e7aa0c82",
+            "bytes": 4570349,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "nativePlayback": {
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "pixelVariation": 95,
+            "playbackAdvancedSeconds": 0.15688999999999975
+          }
+        },
+        {
+          "name": "night-30s",
+          "source": "synthetic-antimeridian.gpx",
+          "sourceBytes": 5383,
+          "sourceSha256": "d9482d29de71796e50dacfc22fefe9b53ad02b0f9ce12312d0547eca7ebe50d8",
+          "points": 80,
+          "title": "Через 180° · NIGHT",
+          "style": "Ночной",
+          "aspect": "portrait",
+          "quality": "standard",
+          "phases": [
+            {
+              "phase": "INTRO",
+              "time": 1
+            },
+            {
+              "phase": "ROUTE_REPLAY",
+              "time": 5
+            },
+            {
+              "phase": "OUTRO",
+              "time": 9
+            }
+          ],
+          "exportMilliseconds": 6489.100000008941,
+          "encoder": {
+            "codec": "avc1.42001f",
+            "width": 720,
+            "height": 1280,
+            "displayWidth": 720,
+            "displayHeight": 1280,
+            "bitrate": 5000000,
+            "bitrateMode": "variable",
+            "alpha": "discard",
+            "framerate": 24,
+            "avc": {
+              "format": "avc"
+            }
+          },
+          "video": {
+            "file": "artifacts/sprint9/public-v1.1/smoke-night-30s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "decodedFrames": 240,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 240,
+            "firstFrameHash": "b57349c275d5fd85ca068eb5bf41fe65",
+            "lastFrameHash": "5a37746709e7b017e8d097352bbddf11",
+            "bytes": 3257626,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "nativePlayback": {
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "pixelVariation": 101,
+            "playbackAdvancedSeconds": 0.15716199999999958
+          }
+        }
+      ],
+      "browser": {
+        "channel": "msedge",
+        "version": "154.0.4258.62"
+      },
+      "url": "https://matawaka.github.io/route-story/",
+      "secureContext": true,
+      "csp": {
+        "responseHeader": null,
+        "meta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+      },
+      "sourceCommit": "8f4d0f665d3f6df7f9fdef0d356a33310d2800ab",
+      "version": "1.1.0-rc.1",
+      "packageBytes": 4774481,
+      "packageHashesVerified": 19,
+      "cancelAndRecovery": "VERIFIED",
+      "unsupportedEncoder": "VERIFIED simulated unavailable API",
+      "privacy": {
+        "storage": {
+          "local": 0,
+          "session": 0,
+          "databases": [],
+          "caches": [],
+          "cookies": ""
+        },
+        "unexpectedRequests": [],
+        "badResponses": [],
+        "pageErrors": [],
+        "firstPartyBrowserRequests": 18,
+        "routeLostOnReload": true
+      }
+    },
+    "fullTerrain": {
+      "sourceCommit": "8f4d0f665d3f6df7f9fdef0d356a33310d2800ab",
+      "acceptanceToolCommit": "99d8d7ea65cbbe66b6561a98c6fbc77a8b013270",
+      "uncommitted": true,
+      "scope": "public HTTPS",
+      "url": "https://matawaka.github.io/route-story/",
+      "publicHttps": true,
+      "packageBytes": 4774481,
+      "manifestHashes": 19,
+      "os": "Windows_NT 10.0.26200 x64",
+      "browser": "Edge 154.0.4258.62",
+      "errors": [],
+      "external": [],
+      "badResponses": [],
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "databases": []
+      },
+      "mobileViewportOverflow": false,
+      "reports": [
+        {
+          "style": "atlas",
+          "aspect": "landscape",
+          "duration": 20,
+          "video": {
+            "file": "artifacts/sprint9/public-v1.1-terrain/atlas-20s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 1280,
+            "height": 720,
+            "duration": 20,
+            "decodedFrames": 480,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 480,
+            "firstFrameHash": "fbd4229a47f7263841aaa6a99f118eca",
+            "lastFrameHash": "c309dd35efaef890d8524051309f9b8e",
+            "bytes": 12812946,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 129,
+          "sha256": "dcb982a2ed6ad8b14c7fcfcbf7b89721679865c67ba7207b28f49d77136ab938",
+          "exportMs": 1238.7000000029802
+        },
+        {
+          "style": "night",
+          "aspect": "portrait",
+          "duration": 30,
+          "video": {
+            "file": "artifacts/sprint9/public-v1.1-terrain/night-30s.mp4",
+            "container": "mov,mp4,m4a,3gp,3g2,mj2",
+            "codec": "h264",
+            "profile": "Constrained Baseline",
+            "width": 720,
+            "height": 1280,
+            "duration": 30,
+            "decodedFrames": 720,
+            "fps": "24/1",
+            "frameTimestampsVerified": true,
+            "distinctFrames": 720,
+            "firstFrameHash": "45f6af8333c40b33ec5d350a57ba2484",
+            "lastFrameHash": "24e564a7073988fbfc3807d80c7656aa",
+            "bytes": 17894633,
+            "validator": "Independent FFmpeg + ffprobe",
+            "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+          },
+          "minimumMapLumaSpread": 155,
+          "sha256": "2be3efe61ff42e39de200cad76200d543bf8d16f6112f65e81d221db6b80a0c8",
+          "exportMs": 1755.7999999970198
+        }
+      ]
+    }
+  },
+  "ownerDeviceAcceptance": {
+    "date": "2026-10-09",
+    "method": "Owner-reported successful checks, not agent-operated benchmark",
+    "devices": [
+      "Xiaomi14",
+      "XiaomiPad2",
+      "MacBookM2"
+    ],
+    "reportedBrowsers": [
+      "Chrome",
+      "Brave",
+      "Safari"
+    ],
+    "scope": "Accepted DEM-only main8f4d0f6 on the public HTTPS site; GPX/3D preview/replay/seek/export/cancel-retry checklist reported passed, all qualities/aspects",
+    "versions": "NOT PROVIDED",
+    "osVersions": "NOT PROVIDED",
+    "deviceBrowserPairing": "NOT PROVIDED",
+    "v12PhotographicAcceptance": "NOT TESTED"
+  },
+  "limitations": [
+    "Dedicated GPU VRAM and encoder-only memory UNMEASURED",
+    "CPU Canvas draw/copy is not GPU completion time",
+    "Isolated Windows process-tree private commit and working-set sums are distinct; sampled peaks/cache retention do not prove universal memory safety",
+    "Native phone/laptop photographic-candidate performance NOT TESTED",
+    "Production adaptive proof includes uncommitted evidence-only contact sheets/script, no uncommitted application/public package changes",
+    "No v1.2 deployment or application-budget increase approval"
+  ]
+}
