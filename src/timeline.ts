@@ -1,4 +1,5 @@
 import { RoutePath } from './geo';
+import { RouteDynamics } from './terrain-dynamics';
 import { progressAt } from './animation';
 import type { Route, RoutePoint } from './route';
 import { validateStoryConfig, type StoryConfig } from './story';
@@ -25,11 +26,16 @@ export interface StoryState {
 export class StoryTimeline {
   readonly config: Readonly<StoryConfig>;
   readonly path: RoutePath;
+  readonly dynamics?: RouteDynamics;
   private readonly boundaries: number[];
-  constructor(readonly route: Route, config: StoryConfig) {
+  constructor(readonly route: Route, config: StoryConfig, elevationAt?: (point: RoutePoint) => number | undefined) {
     if (!route.segments.length || route.segments.some(segment => !segment.length)) throw new Error('Для таймлайна нужен непустой маршрут.');
     this.config = validateStoryConfig(config);
     this.path = new RoutePath(route.segments);
+    if(this.config.terrainDynamics && elevationAt) {
+      const candidate=new RouteDynamics(this.path,elevationAt);
+      if(candidate.hasData)this.dynamics=candidate;
+    }
     let previous = 0;
     this.boundaries = this.path.edges.filter(edge => { const changed = edge.segment !== previous; previous = edge.segment; return changed; }).map(edge => edge.start / this.path.total);
   }
@@ -39,7 +45,8 @@ export class StoryTimeline {
     const replayEnd = c.durationSeconds - c.outroSeconds, replayLength = replayEnd - c.introSeconds;
     const phase: StoryPhase = time < c.introSeconds ? 'INTRO' : time >= replayEnd ? 'OUTRO' : 'ROUTE_REPLAY';
     const routeProgress = c.durationSeconds === 4 ? progressAt(time, 4) : phase === 'INTRO' ? 0 : phase === 'OUTRO' ? 1 : (time - c.introSeconds) / replayLength;
-    const position = this.path.at(routeProgress);
+    const distanceProgress=this.dynamics?.distanceAtProgress(routeProgress)??routeProgress;
+    const position = this.path.at(distanceProgress);
     let markerOpacity = 1;
     if (c.durationSeconds !== 4 && phase === 'ROUTE_REPLAY' && this.boundaries.length) {
       let lo = 0, hi = this.boundaries.length;
@@ -47,7 +54,7 @@ export class StoryTimeline {
       const nearest = Math.min(Math.abs(routeProgress - (this.boundaries[lo] ?? Infinity)), Math.abs(routeProgress - (this.boundaries[lo - 1] ?? Infinity)));
       markerOpacity = Math.min(1, nearest * replayLength / 0.12);
     }
-    return { phase, timeSeconds: time, timelineProgress: time / c.durationSeconds, routeProgress, point: position.point, segment: position.segment, index: position.index, travelledKm: position.distance, totalKm: this.path.total,
+    return { phase, timeSeconds: time, timelineProgress: time / c.durationSeconds, routeProgress: distanceProgress, point: position.point, segment: position.segment, index: position.index, travelledKm: position.distance, totalKm: this.path.total,
       introProgress: c.introSeconds ? Math.min(1, time / c.introSeconds) : 1,
       outroProgress: c.outroSeconds ? Math.max(0, Math.min(1, (time - replayEnd) / c.outroSeconds)) : Number(phase === 'OUTRO'),
       showStart: true, showFinish: true, markerOpacity, title: c.title, stationary: this.path.total === 0 };
