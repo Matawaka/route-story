@@ -1,5 +1,9 @@
 # Implementation state
 
+## Owner preset naming — 2026-10-11
+
+Marker correction81732ac pushed to existing PR10. Owner subsequently named the colorful rider `Шах`; display option is now `Шах · турист на моноколесе`, immutable value/asset/rendering remain traveler. No geographic/person-history claim is inferred from a preset name. UI/docs-only follow-up; exact current HEAD from Git. Full previous56browser/183unit and real20/30s proofs at81732ac remain applicable to video pixels; rerun smallest relevant UI/build checks, package exact final source before opening local preview. No merge/deploy. Continue separate Swiss pilot afterwards.
+
 ## v1.3 Phase A / PR10 corrections — 2026-10-11
 
 Actual branch codex/terrain-dynamics-markers, parent checkpoint07313b51cbd735abc6149c2a0639b614c964c323, main126dd98805594a1547b858c02922dfa565c24b81 unchanged; main CI38010552547 SUCCESS, PR10 OPEN. Owner explicitly approved a faithful256PNG derivative of the actual1254alpha attachment after requested hash942a… was absent. Actual source1ad57317…, derivedeb39e771…/76427B/39873transparent pixels recorded in RIDER_ASSET.json. No substitute art. Preferred readable annotation, original depth-tested world geometry, explicit behind-ridge caption, bounded sizes, label collision avoidance; optional occluded Sprite remains. Static JPEG<=2MiB/2048side/4million pixels with checked EXIF orientation; no background removal/upload/persistence. CPU marker rasters/clones fix exact first-frame/seek copy differences; no equality tolerance. Grade/pacing/camera source geometry unchanged.
