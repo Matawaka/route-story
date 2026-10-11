@@ -1,5 +1,11 @@
 # Imagery feasibility — fixed public Sogne region
 
+## 2026-10-11: actual Swiss pilot, independently scoped
+
+The previously proposed Swiss study is now a downloaded and rendered developer candidate: [source manifest](../data/swiss-pilot/manifest.json), [implementation/rights](SWISS_PILOT.md), [actual video/performance evidence](SWISS_PILOT_EVIDENCE.json). Selected official ordinary OGD COG pair is SWISSIMAGE `2023_2670-1157` and swissALTI3D `2024_2670-1157`: SAME LV95 tile, verified full provider hashes and matching LN02 DEM. The initial `2671-1159` was inspected but lacked the desired road. No test-only product ZIP or unauthorized map tiles were used.
+
+The selected image has 0.1m raster spacing; its native 10/25cm optical class remains NOT CLASSIFIED. Derived 0.5/1m texture spacing is therefore stated separately, as are acquisition year/exact-date uncertainty and DEM spacing/vertical accuracy. Attribution is `© swisstopo`; OGD permissions and our derivative-video interpretation are linked in the implementation report. Raw data/crops are not committed or publicly shipped. The Sogne sources/approved production assets below remain unchanged; Swiss publication needs its own size/hosting/owner review.
+
 ## Approved adaptive derivatives — 2026-10-09
 
 Same reviewed source crops/date/rights, no new imagery download: coarse40m750×1000,339524B,SHA256`ad88bb13cc1e5fb62e9b5575d5ec43176bd61ae22aae9d0f7fbd8e5a1388a441`; fine10m1300×1600,657525B,SHA256`d74099be2da8bed8fbbbfafb7a5426ca21546adb7d300180869dfb23e5cea996`. Fine bounds in DEM local metres[-8000,-8000,5000,8000], common origin[6.2,61.28]. Total997049B/2830000pixels, all classified source coverage valid. Coarse cloud0.0257333%/snow0.4596%; fine cloud0.0151923%/snow0.0111058%; cloud-shadow class0% in both. Real dark terrain shadows remain. JPEG quality88/subsampling0/bilinear10m or40m resampling, same provenance/modified-data credit. Original20m derivative below is preserved as the historical controlled comparison, not current adaptive default. `prepare-adaptive-imagery.py` reproduces both and enforces exact output/source hashes. This is regional10m satellite detail, not buildings/street-scale/global coverage.

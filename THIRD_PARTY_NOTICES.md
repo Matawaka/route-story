@@ -49,3 +49,9 @@ External manual acceptance candidate: public Hong Kong Trail geometry by nichola
 ## Owner-supplied traveler artwork
 
 The colorful electric-unicycle traveler PNG was supplied by the project owner. Its faithful256×256 alpha derivative was explicitly approved on2026-10-11 for the built-in preset. Source/derived hashes and transformation are in docs/RIDER_ASSET.json. No external stock/font/SVG source was introduced. No attribution to an unverified third-party artist is invented.
+
+## Developer-only Swiss geographic pilot
+
+SWISSIMAGE 2023 and swissALTI3D 2024 tile 2670-1157, **© swisstopo**. Ordinary OGD downloads under [swisstopo's free-geodata terms](https://www.swisstopo.admin.ch/en/terms-of-use-free-geodata-and-geoservices), permitting processing/distribution with source acknowledgement; no CC license is invented and application MIT does not relicense source geography. Our rendered MP4 derivatives apply these general permissions and retain the source credit. Product-specific test-only sample ZIPs were not used.
+
+Full source hashes/URLs, CRS LV95/LN02, output resampling/cropping/DEM rounding and synthetic road-centre provenance are in data/swiss-pilot/manifest.json and docs/SWISS_PILOT.md. The selected native 10/25cm class/exact photo day remain unverified; 0.1m source pixels are not advertised as 10cm acquisition. Derived source crops stay outside Git/production; committed comparisons retain attribution. The regional pilot is not included in the public Sogne imagery package or its approved 6MiB budget.

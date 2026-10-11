@@ -1,0 +1,2082 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "scope": "Local developer candidate only; no public Swiss deployment",
+  "branch": "codex/swiss-alps-pilot",
+  "testedParentCommit": "b6050458d23f7745d530d73364e0b14f7a4c2265",
+  "testedSourceSha256": {
+    "src/terrain.ts": "30d906b35c334b11d6febb75a15f725a63fd09d99e5515c7f0b621d9530aef39",
+    "src/terrain-camera.ts": "9d688415c432951b4d68fa06cebd479ced818b8a762ef7804f3dc296e449ffa5",
+    "src/terrain-renderer.ts": "10b1fbd3e81d81b2dfe45b75e9d6c1eaaf94061368d6061a6ef8087d4023bca8",
+    "src/regional-projection.ts": "7d5e87965970f5770fa499814c3e965bb2634995c25526baa6bcfdeabf0ee679",
+    "src/swiss-pilot.ts": "69a6e7197e848e9244fa468a148179dd0d5033e52633ac9a6dd6ad082f31427b",
+    "src/swiss-pilot-main.ts": "a2da74f074d70e4be8fec376b58b4469b8982f19f0bb01ae1070b95674092a79",
+    "src/imagery.ts": "de0d73418f8acbd9437c982ac5f44127ca8eafc1f29b408eea5497222e1dafb3",
+    "tests/e2e/swiss.spec.ts": "94733aa6137185155784c05c82552a0a42a15229f033181978b2e198ae764428",
+    "data/swiss-pilot/manifest.json": "bdd60c349f425938546382b3653dded7c9853f2db24200e0342d0df463236830"
+  },
+  "dependency": {
+    "pullRequest": "https://github.com/Matawaka/route-story/pull/10",
+    "head": "3113f4367171fed21907a53ccd4c5b0fd5c83cf1",
+    "main": "126dd98805594a1547b858c02922dfa565c24b81"
+  },
+  "environment": {
+    "os": "Windows 10.0.26200 x64",
+    "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+    "gpu": "Same previously documented NVIDIA RTX 3090 development computer; no fresh hardware fingerprint collection",
+    "physicalMobile": "NOT TESTED",
+    "ordinaryLaptop": "NOT TESTED"
+  },
+  "sourceManifest": "data/swiss-pilot/manifest.json",
+  "sources": [
+    {
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "item": "swissimage-dop10_2023_2670-1157",
+      "asset": "swissimage-dop10_2023_2670-1157_0.1_2056.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissimage-dop10/swissimage-dop10_2023_2670-1157/swissimage-dop10_2023_2670-1157_0.1_2056.tif",
+      "bytes": 45009298,
+      "sha256": "5e324e639876a227f397f0dd45de7413a563a8702acd58e5e97b5591e81d8031"
+    },
+    {
+      "collection": "ch.swisstopo.swissalti3d",
+      "item": "swissalti3d_2024_2670-1157",
+      "asset": "swissalti3d_2024_2670-1157_2_2056_5728.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissalti3d/swissalti3d_2024_2670-1157/swissalti3d_2024_2670-1157_2_2056_5728.tif",
+      "bytes": 1186083,
+      "sha256": "df2126dc6e28098a0127fa099367471638422d07be386732bd82e38380d2eecb"
+    }
+  ],
+  "derivedBoundsAndBudgets": {
+    "imageryPixels": 2960000,
+    "decodedRGBABytes": 11840000,
+    "heightGridBytes": 453152,
+    "meshVertices": 226576
+  },
+  "nativeAcquisitionResolution": "NOT CLASSIFIED: source raster 0.1m, native published classes 0.1/0.25m; derived output 0.5/1m",
+  "projectionProof": {
+    "forwardMaximumMeters": 6.111778308805912e-9,
+    "inverseMaximumMeters": 1.0022541158846991e-8,
+    "projRoundTripMaximumMeters": 0.0012775229162313084,
+    "independentCheckCount": 7743,
+    "referencePoints": [
+      {
+        "lon": 8.351879080850672,
+        "lat": 46.56084391637724,
+        "world": [
+          -475,
+          -475
+        ]
+      },
+      {
+        "lon": 8.364413628543206,
+        "lat": 46.569289011360475,
+        "world": [
+          475,
+          475
+        ]
+      },
+      {
+        "lon": 8.35202326336848,
+        "lat": 46.569389139902405,
+        "world": [
+          -475,
+          475
+        ]
+      },
+      {
+        "lon": 8.364267488567126,
+        "lat": 46.56074380348953,
+        "world": [
+          475,
+          -475
+        ]
+      },
+      {
+        "lon": 8.358145865332382,
+        "lat": 46.56506663713058,
+        "world": [
+          0,
+          0
+        ]
+      },
+      {
+        "lon": 8.36008294323135,
+        "lat": 46.56392644156047,
+        "world": [
+          150,
+          -125
+        ]
+      },
+      {
+        "lon": 8.354005098897938,
+        "lat": 46.56316584229175,
+        "world": [
+          -315,
+          -215
+        ]
+      }
+    ]
+  },
+  "finalRegression": {
+    "command": "SWISS_PILOT=1 PLAYWRIGHT_CHANNEL=msedge FULL_EXPORT_ACCEPTANCE=1 OWNER_JPEG_PATH=<local file> npm.cmd run check (BUILD_IMAGERY_PACK unset)",
+    "cleanInstall": "npm.cmd ci: 76 packages installed / 77 audited / 0 vulnerabilities",
+    "unit": {
+      "passed": 189,
+      "files": 17,
+      "failed": 0
+    },
+    "build": "PASS",
+    "browser": {
+      "passed": 61,
+      "failed": 0,
+      "skipped": 1,
+      "skipReason": "External-data GPX opt-in intentionally unavailable",
+      "elapsedMinutes": 3.1
+    },
+    "initialWrongBuildMode": {
+      "browserPassed": 60,
+      "browserFailed": 1,
+      "browserSkipped": 1,
+      "reason": "BUILD_IMAGERY_PACK=1 supplied to baseline release allowlist test; guard correctly rejected extra files. Corrected full run above; no assertions weakened."
+    },
+    "dependencyAudit": "npm.cmd audit: 0 vulnerabilities"
+  },
+  "videos": [
+    {
+      "file": "artifacts/sprint11/swiss/landscape-low10m-20s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 1280,
+      "height": 720,
+      "duration": 20,
+      "decodedFrames": 480,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 480,
+      "firstFrameHash": "3b1d6d0309114b0de04aeb38a166a5a5",
+      "lastFrameHash": "cd620c8a16695a0774b77ab789f6582f",
+      "bytes": 12420273,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "seekEqual": true,
+      "exportEqual": true,
+      "cancelled": true,
+      "loadMs": 43.80000001192093,
+      "preparedMs": 209,
+      "exportMs": 1205.300000011921,
+      "textures": 2,
+      "vertices": 226576,
+      "sourceHashesVerified": true,
+      "endpointLabelsAvoidRider": true,
+      "imageBytes": 283156,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "previewDecodedMeanError": 1.4650636574074074,
+      "allFramesNonblank": true,
+      "sameCameraVerified": true,
+      "sha256": "fddf4847aaaeeec801fb1686defc1085900ea04be8c3aa710fd356c815db8861"
+    },
+    {
+      "file": "artifacts/sprint11/swiss/landscape-high-20s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 1280,
+      "height": 720,
+      "duration": 20,
+      "decodedFrames": 480,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 480,
+      "firstFrameHash": "a59d47f4c3e08f0719ad5879819de0b4",
+      "lastFrameHash": "55c9c8f8ee3c8f2f2a1ebc8f9714d059",
+      "bytes": 12994142,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "seekEqual": true,
+      "exportEqual": true,
+      "cancelled": true,
+      "loadMs": 45.900000005960464,
+      "preparedMs": 164.19999998807907,
+      "exportMs": 1199.800000011921,
+      "textures": 2,
+      "vertices": 226576,
+      "sourceHashesVerified": true,
+      "endpointLabelsAvoidRider": true,
+      "imageBytes": 1233109,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "previewDecodedMeanError": 2.3058680555555555,
+      "allFramesNonblank": true,
+      "sameCameraVerified": true,
+      "sha256": "ee5ebdb28de441bb4d9d38d392e58a6b5b1b95371080a3b7264ad71a9a04fc3f"
+    },
+    {
+      "file": "artifacts/sprint11/swiss/portrait-low10m-30s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 720,
+      "height": 1280,
+      "duration": 30,
+      "decodedFrames": 720,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 720,
+      "firstFrameHash": "5b50a5922e47ef1751db782870160a89",
+      "lastFrameHash": "7698762c504da83998c8df203b965cbe",
+      "bytes": 17952741,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "seekEqual": true,
+      "exportEqual": true,
+      "cancelled": true,
+      "loadMs": 43.70000001788139,
+      "preparedMs": 202.90000000596046,
+      "exportMs": 1753.5999999940395,
+      "textures": 2,
+      "vertices": 226576,
+      "sourceHashesVerified": true,
+      "endpointLabelsAvoidRider": true,
+      "imageBytes": 283156,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "previewDecodedMeanError": 1.4172164351851853,
+      "allFramesNonblank": true,
+      "sameCameraVerified": true,
+      "sha256": "1cd1eea8dff3e74e28ee223eb2641f383daf2d9b64fc28dfc86475944c31e1a1"
+    },
+    {
+      "file": "artifacts/sprint11/swiss/portrait-high-30s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 720,
+      "height": 1280,
+      "duration": 30,
+      "decodedFrames": 720,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 720,
+      "firstFrameHash": "8ca741905c85d56ed4bcbf03df6b66e5",
+      "lastFrameHash": "84bc53a9707554c0ec6e58611e21b8b5",
+      "bytes": 19199197,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "seekEqual": true,
+      "exportEqual": true,
+      "cancelled": true,
+      "loadMs": 47.599999994039536,
+      "preparedMs": 196.2999999821186,
+      "exportMs": 1711.0999999940395,
+      "textures": 2,
+      "vertices": 226576,
+      "sourceHashesVerified": true,
+      "endpointLabelsAvoidRider": true,
+      "imageBytes": 1233109,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "previewDecodedMeanError": 1.9072106481481481,
+      "allFramesNonblank": true,
+      "sameCameraVerified": true,
+      "sha256": "fabd3e85953964b07fc658dd276845088a0a7567c88050dc9d8a15574f1a5223"
+    }
+  ],
+  "benchmarkVideos": [
+    {
+      "file": "artifacts/sprint11/swiss/performance/low10m-landscape-10s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 1280,
+      "height": 720,
+      "duration": 10,
+      "decodedFrames": 240,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 240,
+      "firstFrameHash": "b13c369ae5172cf36a7d99c8295d1269",
+      "lastFrameHash": "127b1edc12701928b43d3d2fdbbd1a70",
+      "bytes": 6604937,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sha256": "b173001d12035ef0b40a8c8c9ca9deab2e9eca686b51cee07d30e05033041509"
+    },
+    {
+      "file": "artifacts/sprint11/swiss/performance/low10m-portrait-10s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 720,
+      "height": 1280,
+      "duration": 10,
+      "decodedFrames": 240,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 240,
+      "firstFrameHash": "61cc261f27b4d219508e210aa3c26121",
+      "lastFrameHash": "8816671dd2e098e9e4db2cb760ef71cf",
+      "bytes": 6329870,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sha256": "d1d64520b9fd6e2a8155ff37c4e925feee202bf53034fca446efd274f5f9eafb"
+    },
+    {
+      "file": "artifacts/sprint11/swiss/performance/high-landscape-10s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 1280,
+      "height": 720,
+      "duration": 10,
+      "decodedFrames": 240,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 240,
+      "firstFrameHash": "cc004fc27e695aabafa9eac7afcb4003",
+      "lastFrameHash": "e4f103c5c70e573a4cc6d981f01befac",
+      "bytes": 6909752,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sha256": "a6418af11d22235fe154e08382772037d19d602234315b98859aef1f3cd6aa90"
+    },
+    {
+      "file": "artifacts/sprint11/swiss/performance/high-portrait-10s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 720,
+      "height": 1280,
+      "duration": 10,
+      "decodedFrames": 240,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 240,
+      "firstFrameHash": "9b86017ff80064586a29ff189db7787e",
+      "lastFrameHash": "58dd387975862e4217cdfacd9c9d8934",
+      "bytes": 6812005,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sha256": "f761a5900c19e8238dda06fa1fde74e25200d81648469fb2bae03b53cf83052c"
+    }
+  ],
+  "performance": {
+    "method": "Isolated Edge sessions; same26point Swiss route/2m DEM/camera/720p24fps. One warmup+3steady per aspect;10s videos; export cancelled before each successful retry. CPU draw submission+copy is not GPU timer. CDP JS heap, test-onlyGC: never production. Native/VRAM peaks NOT MEASURED.",
+    "nativeMemory": "NOT MEASURED",
+    "gpuMemory": "NOT MEASURED",
+    "reports": [
+      {
+        "mode": "low10m",
+        "aspect": "landscape",
+        "duration": 10,
+        "warmup": {
+          "loadMs": 61.20000001788139,
+          "prepareMs": 221.7999999821186,
+          "exportMs": 750.7999999821186,
+          "frameMs": [
+            6.800000011920929,
+            5.199999988079071,
+            113.7000000178814,
+            1.0999999940395355,
+            0.9000000059604645,
+            1,
+            2.4000000059604645,
+            1.5,
+            6.299999982118607,
+            0.9000000059604645,
+            1.199999988079071,
+            0.9000000059604645,
+            1,
+            0.9000000059604645,
+            0.9000000059604645,
+            0.7999999821186066,
+            1.2000000178813934,
+            1,
+            1.4000000059604645,
+            1,
+            1.0999999940395355,
+            0.9000000059604645,
+            0.7999999821186066,
+            0.800000011920929,
+            1.4000000059604645,
+            1,
+            0.7999999821186066,
+            0.7000000178813934,
+            0.699999988079071,
+            0.800000011920929
+          ],
+          "bytes": 6604937,
+          "textures": 2,
+          "vertices": 226576,
+          "cancelled": true,
+          "width": 1280,
+          "height": 720,
+          "fps": 24,
+          "frameCount": 240,
+          "bitrate": 5000000,
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+        },
+        "runs": [
+          {
+            "loadMs": 33.599999994039536,
+            "prepareMs": 145.19999998807907,
+            "exportMs": 719.3000000119209,
+            "frameMs": [
+              7.5999999940395355,
+              2.699999988079071,
+              1.100000023841858,
+              0.5999999940395355,
+              0.699999988079071,
+              0.5999999940395355,
+              0.6000000238418579,
+              0.5999999940395355,
+              0.7999999821186066,
+              0.9000000059604645,
+              0.800000011920929,
+              0.699999988079071,
+              0.7000000178813934,
+              0.699999988079071,
+              0.800000011920929,
+              0.699999988079071,
+              1,
+              1.0999999940395355,
+              1,
+              1,
+              1,
+              0.9000000059604645,
+              1,
+              1,
+              1,
+              1.199999988079071,
+              1.100000023841858,
+              0.7999999821186066,
+              0.800000011920929,
+              0.699999988079071
+            ],
+            "bytes": 6604937,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 1280,
+            "height": 720,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          },
+          {
+            "loadMs": 32.29999998211861,
+            "prepareMs": 185.90000000596046,
+            "exportMs": 734.4000000059605,
+            "frameMs": [
+              4.4000000059604645,
+              3,
+              1.0999999940395355,
+              0.7000000178813934,
+              0.5999999940395355,
+              0.699999988079071,
+              0.5999999940395355,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.9000000059604645,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.7000000178813934,
+              0.8999999761581421,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.800000011920929,
+              0.800000011920929,
+              0.699999988079071,
+              0.699999988079071,
+              0.800000011920929,
+              0.699999988079071,
+              0.9000000059604645,
+              0.800000011920929,
+              1,
+              0.5999999940395355,
+              0.5999999940395355,
+              0.6000000238418579,
+              0.699999988079071,
+              0.699999988079071
+            ],
+            "bytes": 6604937,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 1280,
+            "height": 720,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          },
+          {
+            "loadMs": 36.599999994039536,
+            "prepareMs": 172,
+            "exportMs": 713.4000000059605,
+            "frameMs": [
+              5.0999999940395355,
+              2.7999999821186066,
+              1.100000023841858,
+              0.5,
+              0.699999988079071,
+              1,
+              0.699999988079071,
+              0.5,
+              0.9000000059604645,
+              0.800000011920929,
+              0.7999999821186066,
+              0.800000011920929,
+              0.5999999940395355,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.800000011920929,
+              1.0999999940395355,
+              1.199999988079071,
+              0.9000000059604645,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.800000011920929,
+              0.699999988079071,
+              0.7000000178813934,
+              0.8999999761581421,
+              0.7000000178813934,
+              0.5999999940395355,
+              0.5999999940395355,
+              0.7000000178813934,
+              0.5999999940395355
+            ],
+            "bytes": 6604937,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 1280,
+            "height": 720,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          }
+        ],
+        "summary": {
+          "loadMs": {
+            "median": 33.599999994039536,
+            "min": 32.29999998211861,
+            "max": 36.599999994039536
+          },
+          "prepareMs": {
+            "median": 172,
+            "min": 145.19999998807907,
+            "max": 185.90000000596046
+          },
+          "exportMs": {
+            "median": 719.3000000119209,
+            "min": 713.4000000059605,
+            "max": 734.4000000059605
+          },
+          "frameMs": {
+            "median": 0.7999999821186066,
+            "min": 0.5,
+            "max": 7.5999999940395355
+          },
+          "bytes": {
+            "median": 6604937,
+            "min": 6604937,
+            "max": 6604937
+          }
+        }
+      },
+      {
+        "mode": "low10m",
+        "aspect": "portrait",
+        "duration": 10,
+        "warmup": {
+          "loadMs": 34.29999998211861,
+          "prepareMs": 178,
+          "exportMs": 761.4000000059605,
+          "frameMs": [
+            9.700000017881393,
+            4.0999999940395355,
+            1.5,
+            0.699999988079071,
+            0.6000000238418579,
+            0.699999988079071,
+            1.699999988079071,
+            0.800000011920929,
+            1.5,
+            1,
+            0.800000011920929,
+            0.7999999821186066,
+            0.7000000178813934,
+            0.8999999761581421,
+            0.800000011920929,
+            0.9000000059604645,
+            0.699999988079071,
+            0.800000011920929,
+            0.7999999821186066,
+            0.800000011920929,
+            0.800000011920929,
+            0.5999999940395355,
+            1.0999999940395355,
+            0.5999999940395355,
+            0.9000000059604645,
+            0.699999988079071,
+            0.7000000178813934,
+            0.5999999940395355,
+            0.5999999940395355,
+            0.5999999940395355
+          ],
+          "bytes": 6329870,
+          "textures": 2,
+          "vertices": 226576,
+          "cancelled": true,
+          "width": 720,
+          "height": 1280,
+          "fps": 24,
+          "frameCount": 240,
+          "bitrate": 5000000,
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+        },
+        "runs": [
+          {
+            "loadMs": 33.400000005960464,
+            "prepareMs": 181.80000001192093,
+            "exportMs": 733.3999999761581,
+            "frameMs": [
+              4.699999988079071,
+              3,
+              1.300000011920929,
+              0.5999999940395355,
+              0.800000011920929,
+              0.5999999940395355,
+              0.699999988079071,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.9000000059604645,
+              0.9000000059604645,
+              0.7999999821186066,
+              0.800000011920929,
+              0.699999988079071,
+              0.800000011920929,
+              0.9000000059604645,
+              0.699999988079071,
+              0.800000011920929,
+              0.7999999821186066,
+              0.800000011920929,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.800000011920929,
+              0.7999999821186066,
+              0.800000011920929,
+              0.699999988079071,
+              0.6000000238418579,
+              0.5999999940395355,
+              0.699999988079071,
+              0.5999999940395355
+            ],
+            "bytes": 6329870,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 720,
+            "height": 1280,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          },
+          {
+            "loadMs": 29.19999998807907,
+            "prepareMs": 163.80000001192093,
+            "exportMs": 751.4000000059605,
+            "frameMs": [
+              4.800000011920929,
+              3.199999988079071,
+              1,
+              0.5999999940395355,
+              0.7000000178813934,
+              0.699999988079071,
+              0.9000000059604645,
+              0.699999988079071,
+              0.9000000059604645,
+              0.800000011920929,
+              0.8999999761581421,
+              0.9000000059604645,
+              0.800000011920929,
+              0.699999988079071,
+              0.7000000178813934,
+              0.699999988079071,
+              0.9000000059604645,
+              0.699999988079071,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.800000011920929,
+              0.5999999940395355,
+              0.699999988079071,
+              0.800000011920929,
+              0.699999988079071,
+              0.7000000178813934,
+              0.5999999940395355,
+              0.5999999940395355,
+              0.7000000178813934,
+              0.5999999940395355
+            ],
+            "bytes": 6329870,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 720,
+            "height": 1280,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          },
+          {
+            "loadMs": 30.80000001192093,
+            "prepareMs": 143.90000000596046,
+            "exportMs": 734.6999999880791,
+            "frameMs": [
+              4.800000011920929,
+              3,
+              1.0999999940395355,
+              0.5999999940395355,
+              0.5999999940395355,
+              0.5999999940395355,
+              0.6000000238418579,
+              0.699999988079071,
+              0.9000000059604645,
+              0.9000000059604645,
+              0.8999999761581421,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.9000000059604645,
+              0.9000000059604645,
+              0.800000011920929,
+              0.699999988079071,
+              0.9000000059604645,
+              0.7999999821186066,
+              0.800000011920929,
+              0.800000011920929,
+              0.7999999821186066,
+              0.7000000178813934,
+              0.5999999940395355,
+              0.7999999821186066,
+              0.7000000178813934,
+              0.699999988079071,
+              0.5,
+              0.7000000178813934,
+              0.5999999940395355
+            ],
+            "bytes": 6329870,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 720,
+            "height": 1280,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          }
+        ],
+        "summary": {
+          "loadMs": {
+            "median": 30.80000001192093,
+            "min": 29.19999998807907,
+            "max": 33.400000005960464
+          },
+          "prepareMs": {
+            "median": 163.80000001192093,
+            "min": 143.90000000596046,
+            "max": 181.80000001192093
+          },
+          "exportMs": {
+            "median": 734.6999999880791,
+            "min": 733.3999999761581,
+            "max": 751.4000000059605
+          },
+          "frameMs": {
+            "median": 0.7999999821186066,
+            "min": 0.5,
+            "max": 4.800000011920929
+          },
+          "bytes": {
+            "median": 6329870,
+            "min": 6329870,
+            "max": 6329870
+          }
+        }
+      },
+      {
+        "mode": "low10m",
+        "heap": {
+          "baselineHeap": 6921712,
+          "retainedHeap": 27357156,
+          "afterTestOnlyGC": 14271476,
+          "cycles": [
+            {
+              "aspect": "landscape",
+              "repeat": 0,
+              "heapAfterDispose": 18296904
+            },
+            {
+              "aspect": "landscape",
+              "repeat": 1,
+              "heapAfterDispose": 15518480
+            },
+            {
+              "aspect": "landscape",
+              "repeat": 2,
+              "heapAfterDispose": 21597700
+            },
+            {
+              "aspect": "landscape",
+              "repeat": 3,
+              "heapAfterDispose": 17875584
+            },
+            {
+              "aspect": "portrait",
+              "repeat": 0,
+              "heapAfterDispose": 15829916
+            },
+            {
+              "aspect": "portrait",
+              "repeat": 1,
+              "heapAfterDispose": 20740992
+            },
+            {
+              "aspect": "portrait",
+              "repeat": 2,
+              "heapAfterDispose": 20842512
+            },
+            {
+              "aspect": "portrait",
+              "repeat": 3,
+              "heapAfterDispose": 27353492
+            }
+          ]
+        }
+      },
+      {
+        "mode": "high",
+        "aspect": "landscape",
+        "duration": 10,
+        "warmup": {
+          "loadMs": 98.40000000596046,
+          "prepareMs": 224.7999999821186,
+          "exportMs": 749.4000000059605,
+          "frameMs": [
+            7.200000017881393,
+            5.299999982118607,
+            115.2000000178814,
+            1.199999988079071,
+            1.0999999940395355,
+            1.100000023841858,
+            3,
+            2.0999999940395355,
+            10.900000005960464,
+            3.399999976158142,
+            2.800000011920929,
+            2.0999999940395355,
+            2.300000011920929,
+            2,
+            1.7999999821186066,
+            2.2000000178813934,
+            1.699999988079071,
+            1.600000023841858,
+            1.699999988079071,
+            1.0999999940395355,
+            1.300000011920929,
+            1.5,
+            1.2999999821186066,
+            1.300000011920929,
+            2.4000000059604645,
+            1.199999988079071,
+            1.5999999940395355,
+            1.100000023841858,
+            1.0999999940395355,
+            1.199999988079071
+          ],
+          "bytes": 6909752,
+          "textures": 2,
+          "vertices": 226576,
+          "cancelled": true,
+          "width": 1280,
+          "height": 720,
+          "fps": 24,
+          "frameCount": 240,
+          "bitrate": 5000000,
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+        },
+        "runs": [
+          {
+            "loadMs": 49.900000005960464,
+            "prepareMs": 151.19999998807907,
+            "exportMs": 764.5,
+            "frameMs": [
+              4.700000017881393,
+              2.899999976158142,
+              1.100000023841858,
+              1,
+              0.699999988079071,
+              0.5,
+              0.699999988079071,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.800000011920929,
+              0.5999999940395355,
+              0.800000011920929,
+              0.699999988079071,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.5999999940395355,
+              0.800000011920929,
+              0.699999988079071,
+              0.7000000178813934,
+              0.699999988079071,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.800000011920929,
+              0.699999988079071,
+              0.800000011920929,
+              0.7999999821186066,
+              0.7000000178813934,
+              0.5999999940395355,
+              0.5999999940395355,
+              0.9000000059604645
+            ],
+            "bytes": 6909752,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 1280,
+            "height": 720,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          },
+          {
+            "loadMs": 45.900000005960464,
+            "prepareMs": 182.59999999403954,
+            "exportMs": 740.0999999940395,
+            "frameMs": [
+              4.5999999940395355,
+              2.7000000178813934,
+              0.9000000059604645,
+              0.5999999940395355,
+              0.699999988079071,
+              0.9000000059604645,
+              0.699999988079071,
+              0.6000000238418579,
+              0.7999999821186066,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.800000011920929,
+              0.9000000059604645,
+              0.699999988079071,
+              0.800000011920929,
+              0.699999988079071,
+              0.699999988079071,
+              0.800000011920929,
+              1.0999999940395355,
+              1.0999999940395355,
+              1.100000023841858,
+              0.5,
+              0.8999999761581421,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.7000000178813934,
+              0.5,
+              0.5999999940395355,
+              0.5999999940395355,
+              0.7000000178813934
+            ],
+            "bytes": 6909752,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 1280,
+            "height": 720,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          },
+          {
+            "loadMs": 51.79999998211861,
+            "prepareMs": 176,
+            "exportMs": 738.3000000119209,
+            "frameMs": [
+              6.4000000059604645,
+              5.800000011920929,
+              1,
+              0.699999988079071,
+              0.800000011920929,
+              0.699999988079071,
+              0.7000000178813934,
+              0.5,
+              0.7999999821186066,
+              0.800000011920929,
+              0.800000011920929,
+              0.8999999761581421,
+              0.7000000178813934,
+              0.699999988079071,
+              1.0999999940395355,
+              0.9000000059604645,
+              1,
+              1.5,
+              0.9000000059604645,
+              0.699999988079071,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.7000000178813934,
+              1,
+              0.7999999821186066,
+              0.800000011920929,
+              0.5,
+              0.5999999940395355,
+              0.9000000059604645,
+              0.699999988079071
+            ],
+            "bytes": 6909752,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 1280,
+            "height": 720,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          }
+        ],
+        "summary": {
+          "loadMs": {
+            "median": 49.900000005960464,
+            "min": 45.900000005960464,
+            "max": 51.79999998211861
+          },
+          "prepareMs": {
+            "median": 176,
+            "min": 151.19999998807907,
+            "max": 182.59999999403954
+          },
+          "exportMs": {
+            "median": 740.0999999940395,
+            "min": 738.3000000119209,
+            "max": 764.5
+          },
+          "frameMs": {
+            "median": 0.7999999821186066,
+            "min": 0.5,
+            "max": 6.4000000059604645
+          },
+          "bytes": {
+            "median": 6909752,
+            "min": 6909752,
+            "max": 6909752
+          }
+        }
+      },
+      {
+        "mode": "high",
+        "aspect": "portrait",
+        "duration": 10,
+        "warmup": {
+          "loadMs": 45,
+          "prepareMs": 176.59999999403954,
+          "exportMs": 722.1000000238419,
+          "frameMs": [
+            6.9000000059604645,
+            7.300000011920929,
+            1.7999999821186066,
+            0.9000000059604645,
+            0.7000000178813934,
+            0.5999999940395355,
+            1.9000000059604645,
+            0.7999999821186066,
+            1.5999999940395355,
+            1,
+            0.9000000059604645,
+            0.800000011920929,
+            0.7999999821186066,
+            0.800000011920929,
+            0.699999988079071,
+            1.100000023841858,
+            0.699999988079071,
+            0.800000011920929,
+            0.7999999821186066,
+            0.7000000178813934,
+            0.7999999821186066,
+            0.7000000178813934,
+            0.8999999761581421,
+            0.800000011920929,
+            0.800000011920929,
+            0.7999999821186066,
+            0.800000011920929,
+            0.5999999940395355,
+            0.5,
+            0.5999999940395355
+          ],
+          "bytes": 6812005,
+          "textures": 2,
+          "vertices": 226576,
+          "cancelled": true,
+          "width": 720,
+          "height": 1280,
+          "fps": 24,
+          "frameCount": 240,
+          "bitrate": 5000000,
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+        },
+        "runs": [
+          {
+            "loadMs": 45.80000001192093,
+            "prepareMs": 180.7999999821186,
+            "exportMs": 760,
+            "frameMs": [
+              4.5999999940395355,
+              3.100000023841858,
+              1,
+              0.5999999940395355,
+              0.5999999940395355,
+              0.800000011920929,
+              0.5999999940395355,
+              0.5999999940395355,
+              0.800000011920929,
+              0.699999988079071,
+              0.800000011920929,
+              0.7999999821186066,
+              0.5,
+              0.800000011920929,
+              0.5999999940395355,
+              0.699999988079071,
+              0.800000011920929,
+              0.699999988079071,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.800000011920929,
+              0.5999999940395355,
+              0.7000000178813934,
+              0.5999999940395355,
+              0.9000000059604645,
+              0.5999999940395355,
+              0.5999999940395355,
+              0.5,
+              0.5,
+              0.5999999940395355
+            ],
+            "bytes": 6812005,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 720,
+            "height": 1280,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          },
+          {
+            "loadMs": 42.80000001192093,
+            "prepareMs": 166.19999998807907,
+            "exportMs": 747.4000000059605,
+            "frameMs": [
+              8.100000023841858,
+              3.5,
+              0.7999999821186066,
+              0.7000000178813934,
+              0.699999988079071,
+              0.5,
+              0.699999988079071,
+              0.6000000238418579,
+              0.8999999761581421,
+              0.7000000178813934,
+              0.699999988079071,
+              0.800000011920929,
+              0.699999988079071,
+              0.800000011920929,
+              0.7999999821186066,
+              0.6000000238418579,
+              0.7999999821186066,
+              0.7000000178813934,
+              0.699999988079071,
+              0.699999988079071,
+              0.9000000059604645,
+              0.5999999940395355,
+              0.7000000178813934,
+              0.699999988079071,
+              0.9000000059604645,
+              0.699999988079071,
+              0.5,
+              0.6000000238418579,
+              0.5,
+              0.5999999940395355
+            ],
+            "bytes": 6812005,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 720,
+            "height": 1280,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          },
+          {
+            "loadMs": 44,
+            "prepareMs": 154,
+            "exportMs": 708.5999999940395,
+            "frameMs": [
+              6.300000011920929,
+              3.199999988079071,
+              1.199999988079071,
+              0.6000000238418579,
+              0.699999988079071,
+              0.699999988079071,
+              0.7000000178813934,
+              0.699999988079071,
+              0.9000000059604645,
+              0.9000000059604645,
+              1,
+              0.7999999821186066,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.7000000178813934,
+              0.7999999821186066,
+              0.800000011920929,
+              0.800000011920929,
+              0.7999999821186066,
+              0.7000000178813934,
+              0.699999988079071,
+              0.800000011920929,
+              0.699999988079071,
+              0.699999988079071,
+              0.800000011920929,
+              0.5999999940395355,
+              0.5999999940395355,
+              0.6000000238418579,
+              0.699999988079071,
+              0.5
+            ],
+            "bytes": 6812005,
+            "textures": 2,
+            "vertices": 226576,
+            "cancelled": true,
+            "width": 720,
+            "height": 1280,
+            "fps": 24,
+            "frameCount": 240,
+            "bitrate": 5000000,
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+          }
+        ],
+        "summary": {
+          "loadMs": {
+            "median": 44,
+            "min": 42.80000001192093,
+            "max": 45.80000001192093
+          },
+          "prepareMs": {
+            "median": 166.19999998807907,
+            "min": 154,
+            "max": 180.7999999821186
+          },
+          "exportMs": {
+            "median": 747.4000000059605,
+            "min": 708.5999999940395,
+            "max": 760
+          },
+          "frameMs": {
+            "median": 0.7000000178813934,
+            "min": 0.5,
+            "max": 8.100000023841858
+          },
+          "bytes": {
+            "median": 6812005,
+            "min": 6812005,
+            "max": 6812005
+          }
+        }
+      },
+      {
+        "mode": "high",
+        "heap": {
+          "baselineHeap": 6925048,
+          "retainedHeap": 27378988,
+          "afterTestOnlyGC": 14266928,
+          "cycles": [
+            {
+              "aspect": "landscape",
+              "repeat": 0,
+              "heapAfterDispose": 18097328
+            },
+            {
+              "aspect": "landscape",
+              "repeat": 1,
+              "heapAfterDispose": 15164952
+            },
+            {
+              "aspect": "landscape",
+              "repeat": 2,
+              "heapAfterDispose": 21092156
+            },
+            {
+              "aspect": "landscape",
+              "repeat": 3,
+              "heapAfterDispose": 18579948
+            },
+            {
+              "aspect": "portrait",
+              "repeat": 0,
+              "heapAfterDispose": 15738304
+            },
+            {
+              "aspect": "portrait",
+              "repeat": 1,
+              "heapAfterDispose": 20687856
+            },
+            {
+              "aspect": "portrait",
+              "repeat": 2,
+              "heapAfterDispose": 18979892
+            },
+            {
+              "aspect": "portrait",
+              "repeat": 3,
+              "heapAfterDispose": 27375324
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "localTexelFootprint": {
+    "method": "Projected east/north mesh edges at the genuine timeline anchor; maximum edge length in destination pixels. Same 20s Standard corridor camera. Local samples only, not an all-surface or occlusion bound. Actual native acquisition class remains unknown; 0.5m/1m refer to derived texture spacing. No sharpening or camera modification.",
+    "rows": [
+      {
+        "aspect": "landscape",
+        "time": 0,
+        "anchorLocalMeters": [
+          -329.9993647646059,
+          -219.9988910754696
+        ],
+        "output": [
+          1280,
+          720
+        ],
+        "detailHalfMeterTexelPixels": 0.2881936588245253,
+        "overviewOneMeterTexelPixels": 0.5763873176490506,
+        "lowControlTenMeterTexelPixels": 6.118872367676249
+      },
+      {
+        "aspect": "landscape",
+        "time": 2,
+        "anchorLocalMeters": [
+          -329.9993647646059,
+          -219.9988910754696
+        ],
+        "output": [
+          1280,
+          720
+        ],
+        "detailHalfMeterTexelPixels": 0.7228153940062415,
+        "overviewOneMeterTexelPixels": 1.445405972453269,
+        "lowControlTenMeterTexelPixels": 15.706551228954693
+      },
+      {
+        "aspect": "landscape",
+        "time": 5,
+        "anchorLocalMeters": [
+          -181.08637501647635,
+          -167.56853324348648
+        ],
+        "output": [
+          1280,
+          720
+        ],
+        "detailHalfMeterTexelPixels": 0.6844540522246915,
+        "overviewOneMeterTexelPixels": 1.4464930777417364,
+        "lowControlTenMeterTexelPixels": 15.48790809174916
+      },
+      {
+        "aspect": "landscape",
+        "time": 10,
+        "anchorLocalMeters": [
+          -23.859416846374614,
+          -141.87300559727183
+        ],
+        "output": [
+          1280,
+          720
+        ],
+        "detailHalfMeterTexelPixels": 0.6804978879573581,
+        "overviewOneMeterTexelPixels": 1.3612605661597263,
+        "lowControlTenMeterTexelPixels": 12.930434709153442
+      },
+      {
+        "aspect": "landscape",
+        "time": 15,
+        "anchorLocalMeters": [
+          -249.09451972895633,
+          -278.6833973423987
+        ],
+        "output": [
+          1280,
+          720
+        ],
+        "detailHalfMeterTexelPixels": 0.6656228283761157,
+        "overviewOneMeterTexelPixels": 1.3479165353455165,
+        "lowControlTenMeterTexelPixels": 13.861371723305485
+      },
+      {
+        "aspect": "landscape",
+        "time": 19.9,
+        "anchorLocalMeters": [
+          -378.9993639801027,
+          -368.99889405615704
+        ],
+        "output": [
+          1280,
+          720
+        ],
+        "detailHalfMeterTexelPixels": 0.29054855170861144,
+        "overviewOneMeterTexelPixels": 0.581163120824966,
+        "lowControlTenMeterTexelPixels": 6.117853586781182
+      },
+      {
+        "aspect": "portrait",
+        "time": 0,
+        "anchorLocalMeters": [
+          -329.9993647646059,
+          -219.9988910754696
+        ],
+        "output": [
+          720,
+          1280
+        ],
+        "detailHalfMeterTexelPixels": 0.3115438747620374,
+        "overviewOneMeterTexelPixels": 0.6230877495240179,
+        "lowControlTenMeterTexelPixels": 6.484860303212533
+      },
+      {
+        "aspect": "portrait",
+        "time": 2,
+        "anchorLocalMeters": [
+          -329.9993647646059,
+          -219.9988910754696
+        ],
+        "output": [
+          720,
+          1280
+        ],
+        "detailHalfMeterTexelPixels": 1.285005144899998,
+        "overviewOneMeterTexelPixels": 2.569610617694631,
+        "lowControlTenMeterTexelPixels": 27.922757740364066
+      },
+      {
+        "aspect": "portrait",
+        "time": 5,
+        "anchorLocalMeters": [
+          -181.08637501647635,
+          -167.56853324348648
+        ],
+        "output": [
+          720,
+          1280
+        ],
+        "detailHalfMeterTexelPixels": 1.2168072039550701,
+        "overviewOneMeterTexelPixels": 2.5715432493187644,
+        "lowControlTenMeterTexelPixels": 27.534058829776352
+      },
+      {
+        "aspect": "portrait",
+        "time": 10,
+        "anchorLocalMeters": [
+          -23.859416846374614,
+          -141.87300559727183
+        ],
+        "output": [
+          720,
+          1280
+        ],
+        "detailHalfMeterTexelPixels": 1.2097740230351615,
+        "overviewOneMeterTexelPixels": 2.4200187842839753,
+        "lowControlTenMeterTexelPixels": 22.98743948293947
+      },
+      {
+        "aspect": "portrait",
+        "time": 15,
+        "anchorLocalMeters": [
+          -249.09451972895633,
+          -278.6833973423987
+        ],
+        "output": [
+          720,
+          1280
+        ],
+        "detailHalfMeterTexelPixels": 1.1833294726686983,
+        "overviewOneMeterTexelPixels": 2.396296062836503,
+        "lowControlTenMeterTexelPixels": 24.642438619209774
+      },
+      {
+        "aspect": "portrait",
+        "time": 19.9,
+        "anchorLocalMeters": [
+          -378.9993639801027,
+          -368.99889405615704
+        ],
+        "output": [
+          720,
+          1280
+        ],
+        "detailHalfMeterTexelPixels": 0.31179306199692447,
+        "overviewOneMeterTexelPixels": 0.6236376341565365,
+        "lowControlTenMeterTexelPixels": 6.447584631331342
+      }
+    ]
+  },
+  "sognePixelRegression": {
+    "baseline": "e6dd3659a77c8a5f4db2568f581dcfeded057ed5",
+    "checks": [
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": false,
+        "time": 0,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": false,
+        "time": 2,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": false,
+        "time": 5,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": false,
+        "time": 10,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": false,
+        "time": 15,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": false,
+        "time": 19.958333333333332,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": true,
+        "time": 0,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": true,
+        "time": 2,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": true,
+        "time": 5,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": true,
+        "time": 10,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": true,
+        "time": 15,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "atlas",
+        "graded": true,
+        "time": 19.958333333333332,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": false,
+        "time": 0,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": false,
+        "time": 2,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": false,
+        "time": 5,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": false,
+        "time": 10,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": false,
+        "time": 15,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": false,
+        "time": 19.958333333333332,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": true,
+        "time": 0,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": true,
+        "time": 2,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": true,
+        "time": 5,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": true,
+        "time": 10,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": true,
+        "time": 15,
+        "different": 0
+      },
+      {
+        "aspect": "landscape",
+        "style": "night",
+        "graded": true,
+        "time": 19.958333333333332,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": false,
+        "time": 0,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": false,
+        "time": 2,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": false,
+        "time": 5,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": false,
+        "time": 10,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": false,
+        "time": 15,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": false,
+        "time": 19.958333333333332,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": true,
+        "time": 0,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": true,
+        "time": 2,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": true,
+        "time": 5,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": true,
+        "time": 10,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": true,
+        "time": 15,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "atlas",
+        "graded": true,
+        "time": 19.958333333333332,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": false,
+        "time": 0,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": false,
+        "time": 2,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": false,
+        "time": 5,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": false,
+        "time": 10,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": false,
+        "time": 15,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": false,
+        "time": 19.958333333333332,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": true,
+        "time": 0,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": true,
+        "time": 2,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": true,
+        "time": 5,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": true,
+        "time": 10,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": true,
+        "time": 15,
+        "different": 0
+      },
+      {
+        "aspect": "portrait",
+        "style": "night",
+        "graded": true,
+        "time": 19.958333333333332,
+        "different": 0
+      }
+    ],
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+  },
+  "latestPhaseAExports": [
+    {
+      "file": "artifacts/sprint11/full/landscape-traveler-20s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 1280,
+      "height": 720,
+      "duration": 20,
+      "decodedFrames": 480,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 480,
+      "firstFrameHash": "0831d78d84a732041836e75649a79223",
+      "lastFrameHash": "9164aaf5540cbb76b92a8e938818083c",
+      "bytes": 13420164,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "exportMs": 1229.5999999940395,
+      "preparedMs": 293.30000001192093,
+      "previewExportEqual": true,
+      "seekEqual": true,
+      "decodedPixelError": 1.8263310185185184,
+      "allFramesNonblank": true,
+      "cancelledThenRetried": true,
+      "labels": [
+        {
+          "time": 0,
+          "box": [
+            456.1778771376537,
+            406.04302428130245,
+            553.3778771376537,
+            503.24302428130244
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 2,
+          "box": [
+            591.4000000000004,
+            226.00000000000045,
+            688.6000000000005,
+            323.20000000000044
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 5,
+          "box": [
+            591.3999999999999,
+            226,
+            688.5999999999999,
+            323.2
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 10,
+          "box": [
+            591.4,
+            226,
+            688.6,
+            323.2
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 15,
+          "box": [
+            591.4,
+            226.00000000000017,
+            688.6,
+            323.20000000000016
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 19.958333333333332,
+          "box": [
+            568.3765438475716,
+            172.79999999999998,
+            665.5765438475717,
+            270
+          ],
+          "labelCount": 1
+        }
+      ],
+      "sha256": "ba5b59a7b1bef283eb5295583a99ec047583164003416e20b26f9b09da101ba9",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+    },
+    {
+      "file": "artifacts/sprint11/full/portrait-traveler-30s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 720,
+      "height": 1280,
+      "duration": 30,
+      "decodedFrames": 720,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 720,
+      "firstFrameHash": "e51dd221f3a130a9b18fcf7020c1056e",
+      "lastFrameHash": "4b300b967fb333cd12dbd8d55491adab",
+      "bytes": 19411851,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "exportMs": 1672.9000000059605,
+      "preparedMs": 353.09999999403954,
+      "previewExportEqual": true,
+      "seekEqual": true,
+      "decodedPixelError": 1.4770891203703704,
+      "allFramesNonblank": true,
+      "cancelledThenRetried": true,
+      "labels": [
+        {
+          "time": 0,
+          "box": [
+            154.24720911236906,
+            713.5517119299038,
+            251.44720911236908,
+            810.7517119299039
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 3,
+          "box": [
+            311.4,
+            506.00000000000034,
+            408.59999999999997,
+            603.2000000000004
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 7.5,
+          "box": [
+            311.40000000000015,
+            505.99999999999943,
+            408.60000000000014,
+            603.1999999999995
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 15,
+          "box": [
+            311.4,
+            506,
+            408.59999999999997,
+            603.2
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 22.5,
+          "box": [
+            311.4000000000003,
+            506,
+            408.6000000000003,
+            603.2
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 29.958333333333332,
+          "box": [
+            284.2761703204749,
+            425.019764817213,
+            381.47617032047486,
+            522.219764817213
+          ],
+          "labelCount": 1
+        }
+      ],
+      "sha256": "e8988b221892670735df5f3fe1e4e6c930fa1e86bdcfbee21033b258fabcc390",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+    }
+  ],
+  "historicalPhaseAEvidence": "docs/RIDER_EVIDENCE.json preserved",
+  "memoryLimitations": {
+    "nativeBrowserProcess": "NOT MEASURED",
+    "rendererMediaProcesses": "NOT MEASURED",
+    "gpuPeak": "NOT MEASURED",
+    "encoderPeak": "NOT MEASURED",
+    "jsHeap": "CDP observations in performance; test-only GC is never production",
+    "analyticalDecodedRgbaBytes": 11840000,
+    "analyticalMipChainBytes": 15786667,
+    "analyticalMeshArraysBytes": 15384344,
+    "heightGridBytes": 453152
+  },
+  "knownLimitations": [
+    "Small 1km coverage boundary and empty overview surroundings remain visible",
+    "Selected optical native GSD/date within year not independently resolved",
+    "Integer-metre DEM storage adds up to 0.5m rounding; source height accuracy is separate",
+    "Native/GPU peaks and lower-powered/physical-mobile acceptance unavailable",
+    "No Swiss public package, hosting approval or deployment"
+  ],
+  "ownerGate": "Visual review of actual MP4/decoded comparisons before any Swiss merge/hosting/package expansion"
+}

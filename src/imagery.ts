@@ -3,7 +3,7 @@ import type {TerrainDataset,TerrainXY} from './terrain';
 export interface ImageryManifest {
   schema:1; id:string; origin:readonly number[]; bounds:readonly number[];
   width:number; height:number; spacingMeters:number; file:string; bytes:number; sha256:string;
-  attribution:string; acquiredDate:string; sourceResolutionMeters:number;
+  attribution:string; acquiredDate:string; sourceResolutionMeters:number|null;
   detail?:ImageryManifest;
   /** Bounded developer regional pack, never accepted by the Sogne loader. */
   boundaryFeatherMeters?:number;

@@ -74,7 +74,7 @@ def main():
         im=Image.fromarray(image)
         if low: im=im.resize((w,h),Image.Resampling.BILINEAR)
         p=out/name;im.save(p,quality=90,subsampling=0)
-        return dict(schema=1,id='furka-swissimage-2023',origin=[lon,lat],bounds=[bounds[0]-E,bounds[1]-N,bounds[2]-E,bounds[3]-N],width=w,height=h,spacingMeters=(bounds[2]-bounds[0])/w,**record(p),attribution='© swisstopo · SWISSIMAGE 2023',acquiredDate='2023 (acquisition year; exact day not verified)',sourceResolutionMeters=.25,effectiveDetailMeters=10 if low else (bounds[2]-bounds[0])/w,nativeResolutionStatus='10cm or25cm acquisition; selected tile not independently classified',boundaryFeatherMeters=40)
+        return dict(schema=1,id='furka-swissimage-2023',origin=[lon,lat],bounds=[bounds[0]-E,bounds[1]-N,bounds[2]-E,bounds[3]-N],width=w,height=h,spacingMeters=(bounds[2]-bounds[0])/w,**record(p),attribution='© swisstopo · SWISSIMAGE 2023',acquiredDate='2023 (acquisition year; exact day not verified)',sourceResolutionMeters=None,conservativeNativeGsdUpperBoundMeters=.25,effectiveDetailMeters=10 if low else (bounds[2]-bounds[0])/w,nativeResolutionStatus='10cm or25cm acquisition; selected tile not independently classified',boundaryFeatherMeters=40)
     imagery={}
     with rasterio.open(source_dir/'selected-image.tif') as src:
         assert str(src.crs)=='EPSG:2056' and src.res==(.1,.1)

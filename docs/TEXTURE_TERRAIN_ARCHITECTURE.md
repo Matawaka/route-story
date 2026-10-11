@@ -1,5 +1,13 @@
 # Adaptive photographic terrain — v1.2 review candidate
 
+## 2026-10-11: separate bounded Swiss developer pilot
+
+[Swiss implementation/evidence](SWISS_PILOT.md) extends the existing renderer through a validated LV95/LN02 regional descriptor, not a replacement Sogne origin/allowlist. Fine 476²/2m heights fit the unchanged 500k mesh/1MB height bounds; without this validated regional contract the existing 10m minimum still applies. Projection is precomputed from pinned PROJ over a bounded 1km tile; numerical fit residual is explicitly separate from geodetic accuracy. Source/image UV corners, north-up axes, no-data and out-of-domain rejection have dedicated tests.
+
+SWISSIMAGE 1m overview/0.5m detail are two fully resident, hash/decode/GPU-ready textures within the existing 2MiB/3million-pixel/2048-side limits. No new online tile architecture or asset fetching during encoding. Raw/cropped files remain ignored; fixed opt-in development middleware and the pilot entry are excluded from production. Public package budgets and protected Pages workflow remain unchanged.
+
+Regional scene framing, 40m edge fades and 4m ribbon suit the short road corridor; original Sogne constants and all 48 sampled destination frames are unchanged. The same camera safety proof retains 350m clearance, every-cell interpolated-leg checks and exact triangle LOS. Same-camera photographic low/high MP4s and a separately labelled 50m/2m geometry comparison are actual evidence, not swapped GPX coordinates. Small-crop boundaries remain visible and need a separate future package/hosting/device decision.
+
 ## 2026-10-11: measured source footprint, no new geography
 
 Main126dd988 and protected photo deployment38010896357 are now verified; earlier pending statements below are historical checkpoints. New independent `codex/terrain-dynamics-markers` candidate retains the same assets, alignment, terrain camera and two-image residency/readiness. Optional256² marker is a third small GPU texture, not a third geographic level. Grade colors are attributes on the existing depth-tested route geometry; terrain phototexture is unchanged.
