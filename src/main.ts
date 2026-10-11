@@ -18,6 +18,7 @@ const cinematicDemo=el<HTMLButtonElement>('cinematic-demo');
 const terrainDemo=el<HTMLButtonElement>('terrain-demo');
 const terrainSurface=el<HTMLSelectElement>('terrain-surface');
 const terrainFlight=el<HTMLSelectElement>('terrain-flight');
+const terrainDynamics=el<HTMLSelectElement>('terrain-dynamics');
 declare const __IMAGERY_ENABLED__:boolean;
 if(!__IMAGERY_ENABLED__){terrainSurface.hidden=true;el('terrain-surface-label').hidden=true;terrainFlight.hidden=true;el('terrain-flight-label').hidden=true;}
 const title = el<HTMLInputElement>('story-title');
@@ -44,7 +45,7 @@ async function configure(): Promise<void> {
   imageryController?.abort();imageryController=new AbortController();const imagerySignal=imageryController.signal;
   const currentProbe = ++probeId; button.disabled = true; if (!route) return;
   try {
-    story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'],cameraMode:cameraMode.value as StoryConfig['cameraMode'],terrainSurface:terrainSurface.value as StoryConfig['terrainSurface'],terrainFlight:terrainFlight.value as StoryConfig['terrainFlight'] }, false);
+    story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'],cameraMode:cameraMode.value as StoryConfig['cameraMode'],terrainSurface:terrainSurface.value as StoryConfig['terrainSurface'],terrainFlight:terrainFlight.value as StoryConfig['terrainFlight'],terrainDynamics:terrainDynamics.value==='grade' }, false);
     title.removeAttribute('aria-invalid');
   } catch (error) { title.setAttribute('aria-invalid', 'true'); stop(); message((error as Error).message, true); return; }
   let config=story,terrain:Awaited<ReturnType<typeof loadTerrain>>|undefined,terrainNote='';
@@ -120,6 +121,7 @@ quality.addEventListener('change', () => void configure().catch(error => message
 cameraMode.addEventListener('change',()=>void configure().catch(error=>message(error.message,true)));
 terrainSurface.addEventListener('change',()=>void configure().catch(error=>message(error.message,true)));
 terrainFlight.addEventListener('change',()=>void configure().catch(error=>message(error.message,true)));
+terrainDynamics.addEventListener('change',()=>void configure().catch(error=>message(error.message,true)));
 title.addEventListener('input', () => void configure().catch(error => message(error.message, true)));
 scrub.addEventListener('input', () => { stop(); draw(); });
 play.addEventListener('click', () => {
@@ -133,7 +135,7 @@ cancel.addEventListener('click', () => controller?.abort());
 button.addEventListener('click', async () => {
   if (!renderer || exporting || loading) return;
   exporting = true; stop(); controller = new AbortController(); cancel.hidden = false;
-  const controls = [button, file, demo, cinematicDemo, terrainDemo, ratio, duration, quality, title, cameraMode, terrainSurface, terrainFlight, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
+  const controls = [button, file, demo, cinematicDemo, terrainDemo, ratio, duration, quality, title, cameraMode, terrainSurface, terrainFlight, terrainDynamics, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
   const active = renderer;
   try {
     performance.clearMarks('route-story-export-start'); performance.clearMarks('route-story-export-end'); performance.clearMeasures('route-story-export');
