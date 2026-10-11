@@ -30,6 +30,12 @@ test('owner original JPEG imports locally, keeps its background and exports afte
  const pending=page.waitForEvent('download');await page.locator('#export').click();await(await pending).saveAs('artifacts/sprint11/original-jpeg-10s.mp4');expect(validateVideo('artifacts/sprint11/original-jpeg-10s.mp4',360,640,10).decodedFrames).toBe(240);expect(external).toEqual([]);expect(uploads).toEqual([]);
 });
 
+test('JPEG notice preserves an unsupported encoder explanation and usable preview',async({page})=>{
+ await page.addInitScript(()=>Object.defineProperty(globalThis,'VideoEncoder',{configurable:true,value:undefined}));await page.goto('/');await page.locator('#demo').click();await expect(page.locator('#status')).toContainText('WebCodecs');
+ const bytes=await page.evaluate(async()=>{const c=document.createElement('canvas');c.width=c.height=1254;c.getContext('2d')!.fillRect(0,0,1254,1254);const b=await new Promise<Blob>(r=>c.toBlob(b=>r(b!),'image/jpeg'));return Array.from(new Uint8Array(await b.arrayBuffer()));});
+ await page.locator('#marker-file').setInputFiles({name:'local.JPG',mimeType:'image/jpeg',buffer:Buffer.from(bytes)});await expect(page.locator('#marker')).toHaveValue('custom');await expect(page.locator('#marker-note')).toContainText('JPG загружен. Для прозрачного фона используйте PNG/WebP.');await expect(page.locator('#status')).toContainText('WebCodecs');await expect(page.locator('#export')).toBeDisabled();await page.locator('#scrub').fill('6');await expect(page.locator('#preview')).toHaveAttribute('data-phase','ROUTE_REPLAY');
+});
+
 for(const aspect of ['landscape','portrait'])test(`colorful annotation actual MP4 and label/seek proof (${aspect})`,async({page})=>{
  test.setTimeout(180000);const full=!!process.env.FULL_EXPORT_ACCEPTANCE,duration=full?(aspect==='landscape'?20:30):4,width=aspect==='landscape'?(full?1280:640):(full?720:360),height=aspect==='landscape'?(full?720:360):(full?1280:640);
  await page.goto('/');const proof=await page.evaluate(async({duration,width,height,aspect,full})=>{
