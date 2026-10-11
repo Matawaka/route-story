@@ -20,7 +20,7 @@ export class TerrainRenderer {
   readonly gpu:T.WebGLRenderer;
   readonly terrainGeometry:T.BufferGeometry;
   private readonly disposables:{dispose:()=>void}[]=[];
-  private readonly marker:T.Mesh;
+  private readonly marker:T.Mesh|T.Sprite;
   private readonly start:T.Mesh;
   private readonly finish:T.Mesh;
   private readonly routeMaterial:T.ShaderMaterial;
@@ -32,7 +32,7 @@ export class TerrainRenderer {
   private detailBox?:T.Box3;
   private readonly frustum=new T.Frustum();
   private readonly viewProjection=new T.Matrix4();
-  constructor(route:Route,readonly terrain:TerrainDataset,readonly width:number,readonly height:number,config:StoryConfig,readonly imagery?:PreparedImagery){
+  constructor(route:Route,readonly terrain:TerrainDataset,readonly width:number,readonly height:number,config:StoryConfig,readonly imagery?:PreparedImagery,readonly markerImage?:CanvasImageSource){
     const begin=performance.now();this.timeline=new StoryTimeline(route,config,p=>terrain.meshElevation(terrain.world(p)));this.config=this.timeline.config;
     try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height);}catch(error){imagery?.dispose();throw error;}
     const canvas=document.createElement('canvas');
@@ -101,7 +101,12 @@ export class TerrainRenderer {
       for(let i=0;i<distances.length;i+=2){for(let axis=0;axis<3;axis++)centres[i/2*3+axis]=(vertices[i*3+axis]+vertices[(i+1)*3+axis])/2;centreDistances[i/2]=distances[i];centreGrades[i/2]=grades[i];}
       const centreGeometry=new T.BufferGeometry();centreGeometry.setAttribute('position',new T.BufferAttribute(centres,3));centreGeometry.setAttribute('routeDistance',new T.BufferAttribute(centreDistances,1));centreGeometry.setAttribute('routeGrade',new T.BufferAttribute(centreGrades,1));this.disposables.push(centreGeometry);this.scene.add(new T.LineSegments(centreGeometry,this.routeMaterial));
       const sphere=new T.SphereGeometry(1,20,12),markerMaterial=new T.MeshBasicMaterial({color:night?'#ffe1a0':'#fff7d8'}),endpointMaterial=new T.MeshBasicMaterial({color:night?'#84d4dc':'#124d54'});this.disposables.push(sphere,markerMaterial,endpointMaterial);
-      this.marker=new T.Mesh(sphere,markerMaterial);this.start=new T.Mesh(sphere,endpointMaterial);this.finish=new T.Mesh(sphere,markerMaterial);this.scene.add(this.marker,this.start,this.finish);
+      if(markerImage){
+        const tex=new T.Texture(markerImage as HTMLCanvasElement | ImageBitmap);tex.colorSpace=T.SRGBColorSpace;tex.needsUpdate=true;
+        const mat=new T.SpriteMaterial({map:tex,transparent:true,depthTest:true,depthWrite:false});
+        this.disposables.push(tex,mat);this.marker=new T.Sprite(mat);
+      }else this.marker=new T.Mesh(sphere,markerMaterial);
+      this.start=new T.Mesh(sphere,endpointMaterial);this.finish=new T.Mesh(sphere,markerMaterial);this.scene.add(this.marker,this.start,this.finish);
       const point=(p:typeof route.segments[0][0],mesh:T.Mesh)=>{const xy=terrain.world(p);mesh.position.set(xy[0],terrain.meshElevation(xy)!+24,-xy[1]);};point(route.segments[0][0],this.start);point(route.segments.at(-1)!.at(-1)!,this.finish);
       const ctx=document.createElement('canvas').getContext('2d')!,unit=Math.min(width,height);ctx.font=`650 ${unit*.059}px ${night?'system-ui':'Georgia'}`;
       const chars=Array.from(config.title),original=chars.length;while(chars.length&&ctx.measureText(chars.join('')+(chars.length<original?'…':'')).width>width-unit*.16)chars.pop();this.title=chars.join('')+(chars.length<original?'…':'');
@@ -118,6 +123,13 @@ export class TerrainRenderer {
     if(this.imagery){this.camera.updateMatrixWorld();this.viewProjection.multiplyMatrices(this.camera.projectionMatrix,this.camera.matrixWorldInverse);this.frustum.setFromProjectionMatrix(this.viewProjection);this.detailWeight.value=imageryDetailWeight(this.imagery.manifest,Math.hypot(...pose.position.map((v,i)=>v-pose.target[i])),pose.fov,this.height,!!this.detailBox&&this.frustum.intersectsBox(this.detailBox));}
     const xy=this.terrain.world(state.point);this.marker.position.set(xy[0],this.terrain.meshElevation(xy)!+24,-xy[1]);this.routeMaterial.uniforms.progress.value=state.travelledKm;
     for(const mesh of [this.marker,this.start,this.finish])mesh.scale.setScalar(this.camera.position.distanceTo(mesh.position)*.009);
+    if(this.markerImage){
+      // Camera-facing sprite: bounded visual pixel footprint at every zoom level.
+      const distance=this.camera.position.distanceTo(this.marker.position),angle=this.camera.fov*Math.PI/360;
+      const displayPixels=Math.min(this.width,this.height)*.10;
+      const worldSize=2*distance*Math.tan(angle)*displayPixels/this.height;
+      this.marker.scale.set(worldSize,worldSize,1);
+    }
     this.marker.visible=state.markerOpacity>.1;this.finish.visible=state.phase==='OUTRO'||state.routeProgress>.9;
     this.gpu.render(this.scene,this.camera);
     const gl=this.gpu.getContext();if(gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)throw Error('3D-кадр не готов.');
