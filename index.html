@@ -43,6 +43,11 @@
         <label class="field-label" for="terrain-dynamics">Подъёмы и спуски · 3D</label>
         <select id="terrain-dynamics"><option value="off">Обычный маршрут</option><option value="grade">Цвет и темп по уклону DEM</option></select>
         <p class="route-info">Красный — подъём, зелёный — спуск. Темп художественный, не реальная скорость.</p>
+        <label class="field-label" for="marker-style">Значок путешественника</label>
+        <select id="marker-style"><option value="dot">Точка</option><option value="unicycle">Человек на моноколесе</option><option value="custom" disabled>Мой значок</option></select>
+        <label class="field-label" for="marker-file">Загрузить свой прозрачный PNG/WebP</label>
+        <input id="marker-file" type="file" accept=".png,.webp,image/png,image/webp" aria-label="Загрузить изображение значка до 1 МиБ и 1024 пикселей">
+        <p class="route-info">Файл используется локально. Допускается PNG/WebP до 1 МиБ и 1024 × 1024 пикселей.</p>
         <label class="field-label" for="duration">Длительность видео</label>
         <select id="duration"><option value="10">10 секунд</option><option value="20" selected>20 секунд</option><option value="30">30 секунд</option></select>
         <label class="field-label" for="quality">Качество видео</label>
