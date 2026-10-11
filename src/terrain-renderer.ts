@@ -33,7 +33,7 @@ export class TerrainRenderer {
   private readonly frustum=new T.Frustum();
   private readonly viewProjection=new T.Matrix4();
   constructor(route:Route,readonly terrain:TerrainDataset,readonly width:number,readonly height:number,config:StoryConfig,readonly imagery?:PreparedImagery){
-    const begin=performance.now();this.timeline=new StoryTimeline(route,config);this.config=this.timeline.config;
+    const begin=performance.now();this.timeline=new StoryTimeline(route,config,p=>terrain.meshElevation(terrain.world(p)));this.config=this.timeline.config;
     try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height);}catch(error){imagery?.dispose();throw error;}
     const canvas=document.createElement('canvas');
     try{this.gpu=new T.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:true,powerPreference:'default'});}
@@ -77,28 +77,29 @@ export class TerrainRenderer {
       this.disposables.push(terrainMaterial);this.scene.add(new T.Mesh(this.terrainGeometry,terrainMaterial));
       this.scene.add(new T.HemisphereLight(night?0x9bbdda:0xf8f4db,night?0x03151f:0x344337,night?.8:1));
       const light=new T.DirectionalLight(night?0xa6c8e5:0xfff1d7,night?1.25:1.5);light.position.set(-6000,8000,4500);this.scene.add(light);
-      const vertices:number[]=[],distances:number[]=[],triangles:number[]=[];let travelled=0;
-      const ribbon=(a:TerrainXY,b:TerrainXY,da:number,db:number)=>{
+      const vertices:number[]=[],distances:number[]=[],grades:number[]=[],triangles:number[]=[];let travelled=0,edgeIndex=0;
+      const ribbon=(a:TerrainXY,b:TerrainXY,da:number,db:number,grade:number)=>{
         const dx=b[0]-a[0],dy=b[1]-a[1],length=Math.hypot(dx,dy);if(length===0)return;
         const offset=9,ox=-dy/length*offset,oy=dx/length*offset,base=vertices.length/3;
-        for(const [point,d,sign] of [[a,da,-1],[a,da,1],[b,db,-1],[b,db,1]] as const){const xy:TerrainXY=[point[0]+ox*sign,point[1]+oy*sign],h=terrain.meshElevation(xy);if(h===undefined)throw Error('Высоты пути неполны. Выберите 2D.');vertices.push(xy[0],h+10,-xy[1]);distances.push(d);}
+        for(const [point,d,sign] of [[a,da,-1],[a,da,1],[b,db,-1],[b,db,1]] as const){const xy:TerrainXY=[point[0]+ox*sign,point[1]+oy*sign],h=terrain.meshElevation(xy);if(h===undefined)throw Error('Высоты пути неполны. Выберите 2D.');vertices.push(xy[0],h+10,-xy[1]);distances.push(d);grades.push(grade);}
         triangles.push(base,base+1,base+2,base+1,base+3,base+2);
       };
       for(const segment of route.segments)for(let i=1;i<segment.length;i++){
         const a=terrain.world(segment[i-1]),b=terrain.world(segment[i]),length=haversine(segment[i-1],segment[i]),steps=Math.max(1,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/(level.spacingMeters/8)));
         if(vertices.length/3+steps*4>400000)throw Error('3D-путь превышает лимит 400 000 вершин. Выберите 2D без изменения GPX.');
-        for(let j=0;j<steps;j++)ribbon([a[0]+(b[0]-a[0])*j/steps,a[1]+(b[1]-a[1])*j/steps],[a[0]+(b[0]-a[0])*(j+1)/steps,a[1]+(b[1]-a[1])*(j+1)/steps],travelled+length*j/steps,travelled+length*(j+1)/steps);
+        const grade=length>0?(this.timeline.dynamics?.grades[edgeIndex++]??0):0;
+        for(let j=0;j<steps;j++)ribbon([a[0]+(b[0]-a[0])*j/steps,a[1]+(b[1]-a[1])*j/steps],[a[0]+(b[0]-a[0])*(j+1)/steps,a[1]+(b[1]-a[1])*(j+1)/steps],travelled+length*j/steps,travelled+length*(j+1)/steps,grade);
         travelled+=length;
       }
-      const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(vertices,3));geometry.setAttribute('routeDistance',new T.Float32BufferAttribute(distances,1));geometry.setIndex(triangles);this.disposables.push(geometry);
-      this.routeMaterial=new T.ShaderMaterial({side:T.DoubleSide,depthTest:true,depthWrite:true,uniforms:{progress:{value:0},traceColor:{value:new T.Color(night?'#ffcd69':'#ff682f')},quietColor:{value:new T.Color(night?'#8facb9':'#d6dfc9')}},vertexShader:'attribute float routeDistance; varying float distanceAlong; void main(){distanceAlong=routeDistance;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',fragmentShader:'uniform float progress;uniform vec3 traceColor;uniform vec3 quietColor;varying float distanceAlong;void main(){gl_FragColor=vec4(distanceAlong<=progress?traceColor:quietColor,1.0);\n#include <colorspace_fragment>\n}'});this.disposables.push(this.routeMaterial);this.scene.add(new T.Mesh(geometry,this.routeMaterial));
+      const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(vertices,3));geometry.setAttribute('routeDistance',new T.Float32BufferAttribute(distances,1));geometry.setAttribute('routeGrade',new T.Float32BufferAttribute(grades,1));geometry.setIndex(triangles);this.disposables.push(geometry);
+      this.routeMaterial=new T.ShaderMaterial({side:T.DoubleSide,depthTest:true,depthWrite:true,uniforms:{progress:{value:0},gradeMode:{value:this.timeline.dynamics?1:0},traceColor:{value:new T.Color(night?'#ffcd69':'#ff682f')},quietColor:{value:new T.Color(night?'#8facb9':'#d6dfc9')}},vertexShader:'attribute float routeDistance;attribute float routeGrade;varying float distanceAlong;varying float gradeAlong;void main(){distanceAlong=routeDistance;gradeAlong=routeGrade;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',fragmentShader:'uniform float progress;uniform float gradeMode;uniform vec3 traceColor;uniform vec3 quietColor;varying float distanceAlong;varying float gradeAlong;void main(){float intensity=clamp(abs(gradeAlong)/0.10,0.0,1.0);vec3 uphill=vec3(0.96,0.22,0.16),flat=vec3(1.0,0.78,0.25),downhill=vec3(0.13,0.80,0.34);vec3 gradeColor=mix(flat,gradeAlong>=0.0?uphill:downhill,intensity);vec3 active=mix(traceColor,gradeColor,gradeMode);gl_FragColor=vec4(distanceAlong<=progress?active:quietColor,1.0);\n#include <colorspace_fragment>\n}'});this.disposables.push(this.routeMaterial);this.scene.add(new T.Mesh(geometry,this.routeMaterial));
       // A depth-tested one-pixel centre trace keeps the metric ribbon legible
       // at overview scale. Independent pairs cannot bridge GPX segments. This
       // adds at most200k vertices, reuses the same progress shader and does not
       // project a screen-space path through occluding mountains.
-      const centres=new Float32Array(vertices.length/2),centreDistances=new Float32Array(distances.length/2);
-      for(let i=0;i<distances.length;i+=2){for(let axis=0;axis<3;axis++)centres[i/2*3+axis]=(vertices[i*3+axis]+vertices[(i+1)*3+axis])/2;centreDistances[i/2]=distances[i];}
-      const centreGeometry=new T.BufferGeometry();centreGeometry.setAttribute('position',new T.BufferAttribute(centres,3));centreGeometry.setAttribute('routeDistance',new T.BufferAttribute(centreDistances,1));this.disposables.push(centreGeometry);this.scene.add(new T.LineSegments(centreGeometry,this.routeMaterial));
+      const centres=new Float32Array(vertices.length/2),centreDistances=new Float32Array(distances.length/2),centreGrades=new Float32Array(grades.length/2);
+      for(let i=0;i<distances.length;i+=2){for(let axis=0;axis<3;axis++)centres[i/2*3+axis]=(vertices[i*3+axis]+vertices[(i+1)*3+axis])/2;centreDistances[i/2]=distances[i];centreGrades[i/2]=grades[i];}
+      const centreGeometry=new T.BufferGeometry();centreGeometry.setAttribute('position',new T.BufferAttribute(centres,3));centreGeometry.setAttribute('routeDistance',new T.BufferAttribute(centreDistances,1));centreGeometry.setAttribute('routeGrade',new T.BufferAttribute(centreGrades,1));this.disposables.push(centreGeometry);this.scene.add(new T.LineSegments(centreGeometry,this.routeMaterial));
       const sphere=new T.SphereGeometry(1,20,12),markerMaterial=new T.MeshBasicMaterial({color:night?'#ffe1a0':'#fff7d8'}),endpointMaterial=new T.MeshBasicMaterial({color:night?'#84d4dc':'#124d54'});this.disposables.push(sphere,markerMaterial,endpointMaterial);
       this.marker=new T.Mesh(sphere,markerMaterial);this.start=new T.Mesh(sphere,endpointMaterial);this.finish=new T.Mesh(sphere,markerMaterial);this.scene.add(this.marker,this.start,this.finish);
       const point=(p:typeof route.segments[0][0],mesh:T.Mesh)=>{const xy=terrain.world(p);mesh.position.set(xy[0],terrain.meshElevation(xy)!+24,-xy[1]);};point(route.segments[0][0],this.start);point(route.segments.at(-1)!.at(-1)!,this.finish);
