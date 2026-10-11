@@ -2,7 +2,9 @@
 
 ## Owner preset naming — 2026-10-11
 
-Marker correction81732ac pushed to existing PR10. Owner subsequently named the colorful rider `Шах`; display option is now `Шах · турист на моноколесе`, immutable value/asset/rendering remain traveler. No geographic/person-history claim is inferred from a preset name. UI/docs-only follow-up; exact current HEAD from Git. Full previous56browser/183unit and real20/30s proofs at81732ac remain applicable to video pixels; rerun smallest relevant UI/build checks, package exact final source before opening local preview. No merge/deploy. Continue separate Swiss pilot afterwards.
+Marker correction81732ac and naming checkpoint91916ce8cb0e1e14d1fc68bccd600d5e931c0a6b pushed to existing PR10. Owner corrected the exact display option to `Шах - вкрутанидзе`; immutable value/asset/rendering remain traveler. No geographic/person-history claim is inferred from a preset name. UI/docs-only follow-up; exact current HEAD from Git. Full previous56browser/183unit and real20/30s proofs at81732ac remain applicable to video pixels; rerun smallest relevant UI/build checks, package exact final source before opening local preview. No merge/deploy. Continue separate Swiss pilot afterwards.
+
+Exact-name follow-up validation: `npm.cmd test`183PASS/16files; `BUILD_IMAGERY_PACK=1 npm.cmd run build`PASS; `PLAYWRIGHT_CHANNEL=msedge npx.cmd playwright test tests/e2e/dynamics.spec.ts -g '2D Classic|custom local'`2PASS/8.5s (including actual MP4/cancel recovery). Branch codex/terrain-dynamics-markers, parent91916ce8; no renderer or asset pixel changes. Local4175 production preview is rebuilt for the corrected option.
 
 ## v1.3 Phase A / PR10 corrections — 2026-10-11
 
