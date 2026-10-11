@@ -5,9 +5,16 @@ const png=(width=32,height=16)=>{const b=new Uint8Array(58),v=new DataView(b.buf
 const webp=(width=32,height=16)=>{const b=new Uint8Array(26),v=new DataView(b.buffer);b.set(new TextEncoder().encode('RIFF'));v.setUint32(4,18,true);b.set(new TextEncoder().encode('WEBPVP8L'),8);v.setUint32(16,5,true);b[20]=47;v.setUint32(21,((height-1)<<14)|(width-1),true);return b;};
 describe('marker file admission before decode',()=>{
   it('accepts signed static PNG/WebP and exact bounded dimensions',()=>{expect(inspectMarker(png(1024,1024),'image/png')).toEqual({type:'image/png',width:1024,height:1024});expect(inspectMarker(webp(),'image/webp')).toEqual({type:'image/webp',width:32,height:16});});
-  it.each([0,1025,0xffffffff])('rejects dimensions %s before decode',width=>expect(()=>inspectMarker(png(width))).toThrow());
-  it('rejects SVG/JPEG, spoofed MIME, truncation and invalid RIFF sizes',()=>{
+  it.each([0,2049,0xffffffff])('rejects dimensions %s before decode',width=>expect(()=>inspectMarker(png(width))).toThrow());
+  it('rejects SVG, spoofed MIME, truncation and invalid RIFF sizes',()=>{
     expect(()=>inspectMarker(new TextEncoder().encode('<svg onload="alert(1)"></svg>'),'image/png')).toThrow();expect(()=>inspectMarker(png(),'image/webp')).toThrow();expect(()=>inspectMarker(png().slice(0,34))).toThrow();const b=webp();b[4]=1;expect(()=>inspectMarker(b)).toThrow();
+  });
+  it('enforces aggregate decoded pixels separately from side length',()=>{expect(()=>inspectMarker(png(2048,2048))).toThrow();expect(inspectMarker(png(2000,2000)).width).toBe(2000);});
+  it('admits bounded JPEG framing and rejects ambiguous/animated/truncated frames',()=>{
+    const jpeg=new Uint8Array([255,216,255,192,0,17,8,4,230,4,230,3,1,17,0,2,17,0,3,17,0,255,218,0,8,1,1,0,0,63,0,1,255,0,3,255,208,4,255,217]);
+    expect(inspectMarker(jpeg,'image/jpeg')).toEqual({type:'image/jpeg',width:1254,height:1254,orientation:1});
+    expect(()=>inspectMarker(jpeg,'image/png')).toThrow();expect(()=>inspectMarker(jpeg.slice(0,-1))).toThrow();const huge=jpeg.slice();huge[7]=8;huge[8]=1;expect(()=>inspectMarker(huge)).toThrow();
+    const multi=new Uint8Array(jpeg.length+8);multi.set(jpeg.subarray(0,2));multi.set([255,226,0,6,77,80,70,0],2);multi.set(jpeg.subarray(2),10);expect(()=>inspectMarker(multi)).toThrow();
   });
   it('rejects oversized and animated data',()=>{
     expect(()=>inspectMarker(new Uint8Array(MARKER_LIMITS.bytes+1))).toThrow();const b=png();b.set(new TextEncoder().encode('acTL'),37);expect(()=>inspectMarker(b)).toThrow();const w=webp();w.set(new TextEncoder().encode('ANIM'),12);expect(()=>inspectMarker(w)).toThrow();

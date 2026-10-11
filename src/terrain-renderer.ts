@@ -9,6 +9,7 @@ import type { StoryConfig } from './story';
 import {imageryUV,imageryCoversTerrain,imageryDetailWeight,type PreparedImagery} from './imagery';
 import { RouteDynamics, GRADE_STYLES } from './route-dynamics';
 import { prepareMarker, type MarkerAsset } from './marker';
+import { annotationAt, drawAnnotation, intersectsMarker, markerSize, type MarkerRect } from './marker-annotation';
 
 /** Bounded genuine DEM mesh; one WebGL surface, synchronously captured into the
  * existing Canvas/WebCodecs pipeline. Optional resident regional photo texture;
@@ -23,6 +24,7 @@ export class TerrainRenderer {
   readonly terrainGeometry:T.BufferGeometry;
   private readonly disposables:{dispose:()=>void}[]=[];
   private readonly marker:T.Mesh|T.Sprite;
+  private readonly markerAsset?:MarkerAsset;
   private readonly direction?:T.ArrowHelper;
   private readonly start:T.Mesh;
   private readonly finish:T.Mesh;
@@ -105,7 +107,7 @@ export class TerrainRenderer {
       for(let i=0;i<distances.length;i+=2){for(let axis=0;axis<3;axis++){centres[i/2*3+axis]=(vertices[i*3+axis]+vertices[(i+1)*3+axis])/2;if(graded)centreColors[i/2*3+axis]=gradeColors[i*3+axis];}centreDistances[i/2]=distances[i];}
       const centreGeometry=new T.BufferGeometry();centreGeometry.setAttribute('position',new T.BufferAttribute(centres,3));centreGeometry.setAttribute('routeDistance',new T.BufferAttribute(centreDistances,1));if(graded)centreGeometry.setAttribute('gradeColor',new T.BufferAttribute(centreColors,3));this.disposables.push(centreGeometry);this.scene.add(new T.LineSegments(centreGeometry,this.routeMaterial));
       const sphere=new T.SphereGeometry(1,20,12),markerMaterial=new T.MeshBasicMaterial({color:night?'#ffe1a0':'#fff7d8'}),endpointMaterial=new T.MeshBasicMaterial({color:night?'#84d4dc':'#124d54'});this.disposables.push(sphere,markerMaterial,endpointMaterial);
-      const markerAsset=prepareMarker(this.config.marker,customMarker);
+      const markerAsset=prepareMarker(this.config.marker,customMarker);this.markerAsset=markerAsset;
       if(markerAsset){this.disposables.push(markerAsset);const texture=new T.CanvasTexture(markerAsset.canvas);texture.colorSpace=T.SRGBColorSpace;texture.minFilter=T.LinearMipmapLinearFilter;const material=new T.SpriteMaterial({map:texture,depthTest:true,depthWrite:false,alphaTest:.05});this.disposables.push(texture,material);this.marker=new T.Sprite(material);this.marker.center.set(.5,0);}
       else this.marker=new T.Mesh(sphere,markerMaterial);
       this.start=new T.Mesh(sphere,endpointMaterial);this.finish=new T.Mesh(sphere,markerMaterial);this.scene.add(this.marker,this.start,this.finish);
@@ -131,14 +133,24 @@ export class TerrainRenderer {
     const xy=this.terrain.world(state.point);this.marker.position.set(xy[0],this.terrain.meshElevation(xy)!+24,-xy[1]);this.routeMaterial.uniforms.progress.value=state.travelledKm;
     for(const mesh of [this.marker,this.start,this.finish])mesh.scale.setScalar(this.camera.position.distanceTo(mesh.position)*.009);
     if(this.marker instanceof T.Sprite){const depth=new T.Vector3().copy(this.marker.position).applyMatrix4(this.camera.matrixWorldInverse).z;this.marker.scale.setScalar(Math.abs(depth)*2*Math.tan(this.camera.fov*Math.PI/360)/this.height*Math.min(this.width,this.height)*.11);}
-    this.marker.visible=state.markerOpacity>.1;this.finish.visible=state.phase==='OUTRO'||state.routeProgress>.9;
+    const annotation=!!this.markerAsset&&this.config.markerPresentation!=='occluded';
+    this.marker.visible=state.markerOpacity>.1&&!annotation;this.finish.visible=state.phase==='OUTRO'||state.routeProgress>.9;
     if(this.direction){const next=this.timeline.route.segments[state.segment][Math.max(1,state.index)],target=next?this.terrain.world(next):xy,endHeight=this.terrain.meshElevation(target),vector=new T.Vector3(target[0]-xy[0],(endHeight??this.marker.position.y-24)+24-this.marker.position.y,-target[1]+xy[1]),remaining=vector.length();this.direction.visible=state.phase==='ROUTE_REPLAY'&&state.markerOpacity>.1&&remaining>1e-4;if(this.direction.visible){const length=Math.min(remaining,100,this.camera.position.distanceTo(this.marker.position)*.03);this.direction.position.copy(this.marker.position);this.direction.position.y+=8;this.direction.setDirection(vector.normalize());this.direction.setLength(length,Math.min(25,length*.4),Math.min(15,length*.25));}}
+    if(annotation&&this.direction)this.direction.visible=false;
     this.gpu.render(this.scene,this.camera);
     const gl=this.gpu.getContext();if(gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)throw Error('3D-кадр не готов.');
     const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx)throw Error('Canvas 2D недоступен.');
     if(canvas.width!==this.width||canvas.height!==this.height){canvas.width=this.width;canvas.height=this.height;}
     ctx.resetTransform();ctx.globalAlpha=1;ctx.drawImage(this.gpu.domElement,0,0);
     const w=this.width,h=this.height,u=Math.min(w,h),p=u*.075,ink=night?'#fff3d6':'#fff9ed';
+    const projected=this.marker.position.clone().project(this.camera),anchor=[(projected.x+1)*w/2,(1-projected.y)*h/2] as const,size=markerSize(this.config,u);
+    const layout=annotation&&state.markerOpacity>.1?annotationAt(...anchor,projected.z,w,h,size,[p,u*.24,w-p,h-u*.29]):undefined;
+    const markerBox:MarkerRect|undefined=layout?[layout.box[0]-size*.07,layout.box[1]-size*.07,layout.box[2]+size*.07,layout.box[3]+size*.24]:undefined;
+    if(layout&&this.markerAsset){
+      const target=this.timeline.route.segments[state.segment][Math.max(1,state.index)],next=target?this.terrain.world(target):xy,nextHeight=this.terrain.meshElevation(next),v=new T.Vector3(next[0],(nextHeight??this.marker.position.y-24)+24,-next[1]).project(this.camera);
+      const occluded=requiredVisibleAltitude(this.terrain,pose.position,[xy[0],xy[1],this.marker.position.y])>pose.position[2]+.01;
+      ctx.save();ctx.globalAlpha=state.markerOpacity;drawAnnotation(ctx,this.markerAsset,anchor,layout,size,occluded,state.phase==='ROUTE_REPLAY'?[((v.x+1)*w/2)-anchor[0],((1-v.y)*h/2)-anchor[1]]:undefined);ctx.restore();
+    }
     const gradient=ctx.createLinearGradient(0,0,0,h*.35);gradient.addColorStop(0,night?'#06111fea':'#173d4be6');gradient.addColorStop(1,'#173d4b00');ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h*.35);
     ctx.fillStyle=ink;ctx.font=`650 ${u*.023}px system-ui`;ctx.fillText('ROUTE STORY  /  TERRAIN',p,p);
     ctx.font=`650 ${u*(state.phase==='INTRO'?.059:.043)}px ${night?'system-ui':'Georgia'}`;ctx.fillText(this.title,p,p+u*.071);
@@ -147,6 +159,7 @@ export class TerrainRenderer {
       if(!mesh.visible)continue;const v=mesh.position.clone().project(this.camera),x=(v.x+1)*w/2,y=(1-v.y)*h/2;
       if(v.z>1||x<p||x>w-p||y<u*.25||y>h-u*.28||requiredVisibleAltitude(this.terrain,pose.position,[mesh.position.x,-mesh.position.z,mesh.position.y])>pose.position[2]+.01)continue;
       ctx.font=`650 ${u*.022}px system-ui`;const tw=ctx.measureText(text).width,lx=Math.max(p,Math.min(w-p-tw-12,x+u*.023)),ly=y-u*.018;
+      if(markerBox&&intersectsMarker(markerBox,[lx-5,ly-u*.026,lx+tw+5,ly+u*.009]))continue;
       ctx.fillStyle=night?'#071521d9':'#173d4bd9';ctx.fillRect(lx-5,ly-u*.026,tw+10,u*.035);ctx.fillStyle=ink;ctx.fillText(text,lx,ly);
     }
     const bottom=ctx.createLinearGradient(0,h-u*.3,0,h);bottom.addColorStop(0,'#07152100');bottom.addColorStop(1,'#071521ed');ctx.fillStyle=bottom;ctx.fillRect(0,h-u*.3,w,u*.3);

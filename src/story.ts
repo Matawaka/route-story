@@ -17,7 +17,9 @@ export interface StoryConfig {
   readonly terrainFlight?: 'conservative' | 'corridor';
   readonly routeColor?: 'plain' | 'grade';
   readonly replayPacing?: 'distance' | 'terrain';
-  readonly marker?: 'point' | 'unicycle' | 'bicycle' | 'pedestrian' | 'custom';
+  readonly marker?: 'point' | 'traveler' | 'unicycle' | 'bicycle' | 'pedestrian' | 'custom';
+  readonly markerPresentation?: 'annotation' | 'occluded';
+  readonly markerSize?: 'small' | 'medium' | 'large';
 }
 export const TITLE_LIMIT = 200;
 export const FPS = 24;
@@ -36,8 +38,10 @@ export function validateStoryConfig(input: StoryConfig, allowRegression = true):
   if(input.terrainFlight!==undefined&&!['conservative','corridor'].includes(input.terrainFlight))throw Error('Неизвестный режим 3D-пролёта.');
   if(input.routeColor!==undefined&&!['plain','grade'].includes(input.routeColor))throw Error('Неизвестный цвет пути.');
   if(input.replayPacing!==undefined&&!['distance','terrain'].includes(input.replayPacing))throw Error('Неизвестный темп анимации.');
-  if(input.marker!==undefined&&!['point','unicycle','bicycle','pedestrian','custom'].includes(input.marker))throw Error('Неизвестный маркер.');
-  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset, cameraMode: input.cameraMode ?? 'classic',terrainSurface:input.terrainSurface??'dem',terrainFlight:input.terrainFlight??'conservative',routeColor:input.routeColor??'plain',replayPacing:input.replayPacing??'distance',marker:input.marker??'point' });
+  if(input.marker!==undefined&&!['point','traveler','unicycle','bicycle','pedestrian','custom'].includes(input.marker))throw Error('Неизвестный маркер.');
+  if(input.markerPresentation!==undefined&&!['annotation','occluded'].includes(input.markerPresentation))throw Error('Неизвестная видимость маркера.');
+  if(input.markerSize!==undefined&&!['small','medium','large'].includes(input.markerSize))throw Error('Неизвестный размер маркера.');
+  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset, cameraMode: input.cameraMode ?? 'classic',terrainSurface:input.terrainSurface??'dem',terrainFlight:input.terrainFlight??'conservative',routeColor:input.routeColor??'plain',replayPacing:input.replayPacing??'distance',marker:input.marker??'point',markerPresentation:input.markerPresentation??'annotation',markerSize:input.markerSize??'medium' });
 }
 export function defaultStoryConfig(title = 'Мой маршрут'): Readonly<StoryConfig> {
   return validateStoryConfig({ durationSeconds: 20, introSeconds: 2, outroSeconds: 2, title, visualStyle: 'atlas', aspectRatio: 'landscape', qualityPreset: 'compatibility', cameraMode: 'cinematic' });

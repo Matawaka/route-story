@@ -1,5 +1,17 @@
 # Terrain dynamics and local markers
 
+## 2026-10-11: colorful rider / JPEG / readable annotation
+
+This correction supersedes the historical silhouette/depth-sprite-only description below. Built-in traveler uses the owner-approved76427B PNG eb39e771… (39873fully transparent pixels), with mandatory fixed first-party hash/decode readiness. The3D demo selects it; point/scheme presets remain. Exact requested256asset differed from the attachment; owner approved the faithful downsample, provenance in RIDER_ASSET.json.
+
+Icons now use the same projected route/DEM anchor after terrain rendering. A pure caption-safe layout keeps the illustration fully visible; displacement has a connector. Exact DEM triangle LOS identifies hidden anchors: dashed connector and За рельефом. Off-screen anchors are hidden. Optional occluded mode preserves Sprite depth; all actual world geometry retains depth. Endpoint labels avoid icons. Three bounded sizes and upright art. Both2D fallbacks use the same prepared raster and safe placement.
+
+Static PNG/WebP/JPG≤2MiB/2048side/4million pixels is byte/header/chunk/animation/MIME/EXIF checked BEFORE decode. JPEG orientation is honored and decoder dimensions checked; only one256²raster survives. JPEG retains its original black background; no keying. Uploaded files/metadata/URLs are not stored/uploaded. Bitmap closes on failure/success, raster clones are disposed on replacement/failure/unload. Fixed CPU source/clones remove a discovered first-frame/seek copy difference; zero-pixel equality assertions remain.
+
+Clean npm.cmd ci:76packages/0vulnerabilities. PLAYWRIGHT_CHANNEL=msedge OWNER_JPEG_PATH=<local owner JPG> FULL_EXPORT_ACCEPTANCE=1 npm.cmd run check:183unit/16files, build,56browser PASS/1external-data skip,2.6min. Original1254²JPEG successfully imported and independently decoded10s240frames after cancel/retry; no owner image committed. New Atlas20s1280×720480frames/Night30s720×1280720frames are H.264/24fps, exact timestamp/full decode/nonblank/preview-export equality. Actual proof/hashes/decoded contact sheets in RIDER_EVIDENCE.json; old DYNAMICS_EVIDENCE.json preserved. Synthetic STATIC ridge fixture proves fully readable annotated hidden anchor and world depth; it is not a new accepted camera trajectory. Eight2D style/aspect/camera checks have zero different initial/seek pixels. Native/GPU peak NOT MEASURED.
+
+Benchmark: scripts/acceptance/rider-performance.mjs, archive07313b5 src into artifacts/sprint11/baseline first; same route/grade/pacing/camera/quality, one warm-up+3steady. CDP JS heap is distinct from native/VRAM and test-only GC never affects production. Private JPEG test is opt-in; routine CI explicitly skips it. No merge/tag/deploy/physical-device revalidation. Swiss is a separate developer-only branch.
+
 New branch `codex/terrain-dynamics-markers`, based on actual merged main126dd98805594a1547b858c02922dfa565c24b81. No PR5/PR8 documentation/version changes included. Photo Pages38010896357 already succeeded with owner environment approval and public HTTPS smoke; this candidate is **not merged or deployed**. Renderer/encoder/source assets,24FPS,360p/720p,10/20/30s and output/file/package bounds remain.
 
 ## One precomputed profile, one timeline

@@ -1,5 +1,11 @@
 # Decisions
 
+## 2026-10-11: owner-reported marker corrections
+
+Continue PR10 on07313b5, base main126dd988. Preferred icon annotation is separate from depth-tested DEM/ribbon. Exact timeline/world anchor plus a pure safe layout; off-screen anchors stay hidden, occluded anchors have a dashed connector and explicit caption. Endpoint labels avoid the raster. Optional occluded Sprite remains available. Three bounded sizes, upright art, same-edge direction cue, no false segment traversal.
+
+Requested exact256PNG was absent; owner explicitly approved a faithful256² downsample of the attached1254²alpha image. Source/derived hashes and actual pixels are recorded in RIDER_ASSET.json. No substituted stock/code image, cropping or background removal. LOCAL image bounds change to2MiB/2048side/4million decoded pixels; static JPEG with bounded EXIF orientation joins PNG/WebP. Fixed CPU marker rasters/clones are needed for exact initial/backward seek pixels; preserve equality assertions. Existing public5/6MiB/export/source/workflow bounds remain. Swiss developer pilot stays separate and excluded from production pending its own evidence/size approval.
+
 ## 2026-10-11: independent terrain dynamics and local markers
 
 Resume actual merged main126dd988 after successful protected photo deployment38010896357; do not absorb independent PR5/PR8 or modify stable tags. PartsA–C belong in `codex/terrain-dynamics-markers`, with owner review before merge/publication. Existing24fps/720p/duration/32MiB export and5/6MiB package limits, source licenses, two photographic textures and protected workflow remain unchanged.

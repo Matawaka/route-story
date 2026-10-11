@@ -46,10 +46,14 @@
         <select id="replay-pacing"><option value="distance">Равномерно по расстоянию</option><option value="terrain">По уклону · стилизованный</option></select>
         <p id="dynamics-note" class="route-info">Уклон: красный ↑≥10%, оранжевый ↑≥3%, нейтральный ±3%, светло-зелёный ↓≥3%, зелёный ↓≥10%. Темп анимации не является реальной скоростью. В 2D путь сохраняет одноцветное оформление.</p>
         <label class="field-label" for="marker">Маркер путешественника</label>
-        <select id="marker"><option value="point">Точка</option><option value="unicycle">Моноколесо</option><option value="bicycle">Велосипед</option><option value="pedestrian">Пешеход</option><option value="custom">Своя картинка</option></select>
+        <select id="marker"><option value="point">Точка</option><option value="traveler">Путешественник на моноколесе</option><option value="unicycle">Моноколесо · схема</option><option value="bicycle">Велосипед</option><option value="pedestrian">Пешеход</option><option value="custom">Своя картинка</option></select>
         <label class="field-label" for="marker-file">Картинка маркера · необязательно</label>
-        <input id="marker-file" type="file" accept="image/png,image/webp" aria-describedby="marker-note">
-        <p id="marker-note" class="route-info">Прозрачный PNG/WebP до 1 МиБ, 1024 × 1024. Только в памяти; уменьшается до 256 × 256. Анимированные картинки не принимаются.</p>
+        <label class="field-label" for="marker-size">Размер маркера</label>
+        <select id="marker-size"><option value="small">Компактный</option><option value="medium" selected>Обычный</option><option value="large">Крупный</option></select>
+        <label class="field-label" for="marker-presentation">Видимость в 3D</label>
+        <select id="marker-presentation"><option value="annotation">Читаемая аннотация</option><option value="occluded">Скрывается за рельефом</option></select>
+        <input id="marker-file" type="file" accept="image/png,image/webp,image/jpeg" aria-describedby="marker-note">
+        <p id="marker-note" class="route-info">PNG/WebP/JPG до 2 МиБ, 2048 × 2048 и 4 млн пикселей. Только в памяти; уменьшается до 256 × 256. PNG/WebP сохраняют прозрачность; JPG — свой фон. Без анимации.</p>
         <label class="field-label" for="duration">Длительность видео</label>
         <select id="duration"><option value="10">10 секунд</option><option value="20" selected>20 секунд</option><option value="30">30 секунд</option></select>
         <label class="field-label" for="quality">Качество видео</label>

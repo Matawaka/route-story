@@ -9,6 +9,8 @@ if(imageryPack)assert.equal(process.env.BUILD_IMAGERY_PACK,'1','photo package re
 function walk(dir,prefix=''){for(const name of readdirSync(dir)){const file=join(dir,name),relative=prefix+name,stat=lstatSync(file);assert.ok(!stat.isSymbolicLink(),`No links in release package: ${relative}`);if(stat.isDirectory())walk(file,relative+'/');else files.push(relative);}}
 walk(root);
 const fixed=['index.html','LICENSE','THIRD_PARTY_NOTICES.md','licenses/MEDIABUNNY-MPL-2.0.txt','licenses/TRAVEL_ANIMATION.txt','licenses/THREE-MIT.txt','maps/ne_110m_land.geojson','maps/world-50m.json','maps/fjords-10m.json','samples/cinematic-fjords.gpx','samples/terrain-sogne.gpx','samples/synthetic.gpx','samples/synthetic-antimeridian.gpx','terrain/sogne.json','terrain/sogne-50m.i16','terrain/sogne-100m.i16'];
+fixed.push('markers/traveler-euc-256.png');
+const rider=readFileSync('public/markers/traveler-euc-256.png');assert.equal(rider.length,76427);assert.equal(createHash('sha256').update(rider).digest('hex'),'eb39e771f2fab21c7607b9d863c3d4a2b8b8275e2f5df772e7036e7d15e01fd6');
 if(imageryPack){
  fixed.push('imagery/sogne-sentinel.json','imagery/sogne-sentinel-40m.jpg','imagery/sogne-sentinel-10m.jpg');
  const metadata=JSON.parse(readFileSync('public/imagery/sogne-sentinel.json','utf8'));let pixels=0,bytes=0;

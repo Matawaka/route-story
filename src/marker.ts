@@ -1,12 +1,12 @@
 import type { StoryConfig } from './story';
-export const MARKER_LIMITS = Object.freeze({ bytes: 1024 * 1024, inputSide: 1024, textureSide: 256 });
-const invalid = () => Error('Маркер: статический PNG или WebP до 1 МиБ и 1024 × 1024. SVG и анимация не принимаются.');
+export const MARKER_LIMITS = Object.freeze({ bytes: 2 * 1024 * 1024, inputSide: 2048, pixels: 4_000_000, textureSide: 256 });
+const invalid = () => Error('Маркер: статический PNG, WebP или JPG до 2 МиБ, 2048 × 2048 и 4 млн пикселей. SVG и анимация не принимаются.');
 /** Check signature AND declared dimensions before invoking any image decoder. */
-export function inspectMarker(bytes: Uint8Array, mime = ''): { type: string; width: number; height: number } {
+export function inspectMarker(bytes: Uint8Array, mime = ''): { type: string; width: number; height: number; orientation?: number } {
   if (!bytes.length || bytes.length > MARKER_LIMITS.bytes) throw invalid();
   const v = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   const ascii = (at: number, n: number) => String.fromCharCode(...bytes.subarray(at, at + n));
-  let type = '', width = 0, height = 0, image = false, ended = false;
+  let type = '', width = 0, height = 0, image = false, ended = false, orientation: number | undefined;
   if (bytes.length >= 33 && [137,80,78,71,13,10,26,10].every((b,i)=>bytes[i]===b)) {
     type='image/png'; if(ascii(12,4)!=='IHDR'||v.getUint32(8)!==13)throw invalid();
     width=v.getUint32(16);height=v.getUint32(20);
@@ -20,15 +20,39 @@ export function inspectMarker(bytes: Uint8Array, mime = ''): { type: string; wid
       if(width>MARKER_LIMITS.inputSide||height>MARKER_LIMITS.inputSide)throw invalid();
       at=data+n+(n%2);ended=at===bytes.length;
     }
+  } else if(bytes.length>=4&&bytes[0]===255&&bytes[1]===216){
+    type='image/jpeg';orientation=1;let at=2,frame=false,exif=false;
+    while(at<bytes.length){
+      if(bytes[at++]!==255)throw invalid();while(bytes[at]===255)at++;const kind=bytes[at++];
+      if(kind===217){ended=at===bytes.length;break;}
+      if(kind===0||kind===216||kind===undefined||at+2>bytes.length)throw invalid();
+      const n=v.getUint16(at),data=at+2,end=at+n;if(n<2||end>bytes.length)throw invalid();
+      if([192,193,194].includes(kind)){
+        if(frame||n<8||bytes[data]!==8)throw invalid();height=v.getUint16(data+1);width=v.getUint16(data+3);const components=bytes[data+5];if(![1,3].includes(components)||n!==8+3*components)throw invalid();frame=true;
+      }else if(kind>=192&&kind<=207&&![196,200,204].includes(kind))throw invalid();
+      if(kind===225&&ascii(data,6)==='Exif\0\0'){
+        if(exif)throw invalid();exif=true;const t=data+6,le=ascii(t,2)==='II';if((!le&&ascii(t,2)!=='MM')||t+8>end||v.getUint16(t+2,le)!==42)throw invalid();
+        const offset=v.getUint32(t+4,le),ifd=t+offset;if(offset<8||ifd+2>end)throw invalid();const count=v.getUint16(ifd,le);if(count>256||ifd+2+count*12+4>end)throw invalid();
+        let found=false;for(let i=0;i<count;i++){const entry=ifd+2+i*12;if(v.getUint16(entry,le)===274){if(found||v.getUint16(entry+2,le)!==3||v.getUint32(entry+4,le)!==1)throw invalid();orientation=v.getUint16(entry+8,le);if(orientation<1||orientation>8)throw invalid();found=true;}}
+      }
+      if(kind===226&&ascii(data,4)==='MPF\0')throw invalid(); // Multi-picture JPEG is outside the static-image contract.
+      at=end;
+      if(kind===218){
+        if(!frame||n<6)throw invalid();image=true;
+        // Traverse bounded entropy data without decoding; stuffed FF00 and
+        // restart markers stay in the scan. All other markers are parsed above.
+        while(at<bytes.length){if(bytes[at]!==255){at++;continue;}let next=at+1;while(bytes[next]===255)next++;const k=bytes[next];if(k===0||(k>=208&&k<=215)){at=next+1;continue;}break;}
+      }
+    }
   }
-  if(!type||!image||!ended||(mime&&mime!==type)||width<1||height<1||width>MARKER_LIMITS.inputSide||height>MARKER_LIMITS.inputSide)throw invalid();
-  return {type,width,height};
+  if(!type||!image||!ended||(mime&&mime!==type)||width<1||height<1||width>MARKER_LIMITS.inputSide||height>MARKER_LIMITS.inputSide||width*height>MARKER_LIMITS.pixels)throw invalid();
+  return {type,width,height,...(orientation===undefined?{}:{orientation})};
 }
 /** Only the sanitized 256² raster survives. No URLs, raw file or metadata retained. */
 export class MarkerAsset {
   private disposed=false;
-  constructor(readonly canvas: HTMLCanvasElement) {}
-  clone(): MarkerAsset { if(this.disposed)throw Error('Картинка маркера освобождена.');const c=document.createElement('canvas');c.width=c.height=MARKER_LIMITS.textureSide;c.getContext('2d')!.drawImage(this.canvas,0,0);return new MarkerAsset(c); }
+  constructor(readonly canvas: HTMLCanvasElement,readonly type='image/png') {}
+  clone(): MarkerAsset { if(this.disposed)throw Error('Картинка маркера освобождена.');const c=document.createElement('canvas');c.width=c.height=MARKER_LIMITS.textureSide;c.getContext('2d',{willReadFrequently:true})!.drawImage(this.canvas,0,0);return new MarkerAsset(c,this.type); }
   dispose(): void { if(this.disposed)return;this.disposed=true;this.canvas.width=this.canvas.height=0; }
 }
 export async function prepareCustomMarker(file: File): Promise<MarkerAsset> {
@@ -36,19 +60,21 @@ export async function prepareCustomMarker(file: File): Promise<MarkerAsset> {
   const bytes=new Uint8Array(await file.arrayBuffer()),info=inspectMarker(bytes,file.type);
   let bitmap:ImageBitmap|undefined;
   try{
-    bitmap=await createImageBitmap(new Blob([bytes],{type:info.type}),{imageOrientation:'none'});
-    if(bitmap.width!==info.width||bitmap.height!==info.height)throw invalid();
+    bitmap=await createImageBitmap(new Blob([bytes],{type:info.type}),{imageOrientation:info.type==='image/jpeg'?'from-image':'none'});
+    const swap=(info.orientation??1)>=5;
+    if(bitmap.width!==(swap?info.height:info.width)||bitmap.height!==(swap?info.width:info.height))throw invalid();
     const canvas=document.createElement('canvas');canvas.width=canvas.height=MARKER_LIMITS.textureSide;
     const scale=Math.min(1,MARKER_LIMITS.textureSide/Math.max(bitmap.width,bitmap.height)),w=bitmap.width*scale,h=bitmap.height*scale;
-    canvas.getContext('2d')!.drawImage(bitmap,(canvas.width-w)/2,(canvas.height-h)/2,w,h);
-    return new MarkerAsset(canvas);
+    canvas.getContext('2d',{willReadFrequently:true})!.drawImage(bitmap,(canvas.width-w)/2,(canvas.height-h)/2,w,h);
+    return new MarkerAsset(canvas,info.type);
   }catch{throw invalid();}finally{bitmap?.close();}
 }
 /** Original MIT code-native silhouettes; fixed raster shared by 2D and GPU. */
 export function prepareMarker(kind: StoryConfig['marker'], custom?: MarkerAsset): MarkerAsset | undefined {
   if(!kind||kind==='point')return;
-  if(kind==='custom'){if(!custom)throw Error('Выберите PNG/WebP для своего маркера.');return custom.clone();}
-  const canvas=document.createElement('canvas');canvas.width=canvas.height=256;const c=canvas.getContext('2d')!;
+  if(kind==='custom'){if(!custom)throw Error('Выберите PNG/WebP/JPG для своего маркера.');return custom.clone();}
+  if(kind==='traveler'){if(!custom)throw Error('Сначала подготовьте встроенного путешественника.');return custom.clone();}
+  const canvas=document.createElement('canvas');canvas.width=canvas.height=256;const c=canvas.getContext('2d',{willReadFrequently:true})!;
   c.lineCap=c.lineJoin='round';c.strokeStyle='#102c37';c.fillStyle='#fff1ce';c.lineWidth=18;
   const line=(points:number[][])=>{for(const color of ['#102c37','#fff1ce']){c.strokeStyle=color;c.lineWidth=color==='#102c37'?30:15;c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.stroke();}};
   const circle=(x:number,y:number,r:number)=>{c.strokeStyle='#102c37';c.fillStyle='#fff1ce';c.lineWidth=10;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();c.stroke();};

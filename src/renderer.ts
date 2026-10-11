@@ -5,6 +5,7 @@ import { CinematicRenderer } from './cinematic';
 import type { CinematicGeography } from './geography';
 import { regressionStoryConfig, type StoryConfig, type VisualStyle } from './story';
 import { prepareMarker, drawMarker, type MarkerAsset } from './marker';
+import { annotationAt, drawAnnotation, intersectsMarker, markerSize } from './marker-annotation';
 export type { VisualStyle } from './story';
 export type Land = { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[];geography?:CinematicGeography };
 export const palette = {
@@ -167,7 +168,7 @@ export class RouteRenderer {
       }
     }
     const marker = (point: RoutePoint, solid = false) => {
-      if(solid&&this.markerAsset){const [x,y]=this.projection.project(point),next=this.route.segments[state.segment][Math.max(1,state.index)],target=next?this.projection.project(next):[x,y];drawMarker(ctx,this.markerAsset,x,y,unit*.11,state.phase==='ROUTE_REPLAY'?[target[0]-x,target[1]-y]:undefined);return;}
+      if(solid&&this.markerAsset){const [x,y]=this.projection.project(point),next=this.route.segments[state.segment][Math.max(1,state.index)],target=next?this.projection.project(next):[x,y],size=markerSize(this.config,unit),layout=annotationAt(x,y,0,w,h,size,[pad,h*.23,w-pad,h*.78]);if(layout)drawAnnotation(ctx,this.markerAsset,[x,y],layout,size,false,state.phase==='ROUTE_REPLAY'?[target[0]-x,target[1]-y]:undefined);return;}
       const [x, y] = this.projection.project(point);
       ctx.beginPath(); ctx.arc(x, y, unit / 65, 0, Math.PI * 2); ctx.fillStyle = solid ? colors.line : colors.water; ctx.fill();
       ctx.strokeStyle = colors.ink; ctx.lineWidth = 1.5; ctx.stroke();
@@ -179,6 +180,7 @@ export class RouteRenderer {
     ctx.font = `600 ${unit * .032}px system-ui`; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
     for (const label of this.endpointLabels) {
       const padding = unit * .009;
+      if(this.markerAsset&&state.markerOpacity>.1){const [x,y]=this.projection.project(state.point),size=markerSize(this.config,unit),layout=annotationAt(x,y,0,w,h,size,[pad,h*.23,w-pad,h*.78]);if(layout&&intersectsMarker([layout.box[0]-size*.1,layout.box[1]-size*.1,layout.box[2]+size*.1,layout.box[3]+size*.1],[label.x-padding,label.y-unit*.025,label.x+label.width+padding,label.y+unit*.025]))continue;}
       ctx.fillStyle = colors.water; ctx.fillRect(label.x - padding, label.y - unit * .025, label.width + 2 * padding, unit * .05);
       ctx.fillStyle = colors.ink; ctx.fillText(label.text, label.x, label.y);
     }

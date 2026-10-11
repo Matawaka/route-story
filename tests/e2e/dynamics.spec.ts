@@ -13,7 +13,7 @@ test('local marker admission, alpha/orientation, replacement and decoder cleanup
    const pixels=(x:number,y:number)=>Array.from(bitmap.slice((y*256+x)*4,(y*256+x)*4+4));const checks={size:[a.canvas.width,a.canvas.height],top:pixels(20,75),bottom:pixels(200,175),transparent:pixels(200,75)};
    a.dispose();a.dispose();const independent=copy.canvas.width;copy.dispose();let rejected=false;try{await prepareCustomMarker(new File(['<svg/>'],'unsafe.png',{type:'image/png'}));}catch{rejected=true;}
    const webp=await new Promise<Blob>(resolve=>c.toBlob(b=>resolve(b!),'image/webp')),w=await prepareCustomMarker(new File([webp],'image.webp',{type:'image/webp'}));w.dispose();
-   c.width=1025;const large=await new Promise<Blob>(resolve=>c.toBlob(b=>resolve(b!),'image/png'));let largeRejected=false;try{await prepareCustomMarker(new File([large],'large.png',{type:'image/png'}));}catch{largeRejected=true;}
+   c.width=2049;const large=await new Promise<Blob>(resolve=>c.toBlob(b=>resolve(b!),'image/png'));let largeRejected=false;try{await prepareCustomMarker(new File([large],'large.png',{type:'image/png'}));}catch{largeRejected=true;}
    let unavailable=false;try{prepareMarker('custom');}catch{unavailable=true;}
    const [{RouteRenderer},{parseGpx},{defaultStoryConfig}]=await Promise.all(['/src/renderer.ts','/src/gpx.ts','/src/story.ts'].map(p=>import(p))),route=parseGpx(await(await fetch('/samples/synthetic.gpx')).text()),failedCloneReleased=[];
    for(const cameraMode of ['classic','cinematic']){const source=prepareMarker('unicycle')!,clone=source.clone.bind(source);let held:ReturnType<typeof prepareMarker>;source.clone=()=>held=clone();let failed=false;
@@ -71,7 +71,7 @@ for(const aspect of ['landscape','portrait'])test(`real graded unicycle MP4, fra
    r.draw(canvas,duration/2);const image=canvas.getContext('2d')!.getImageData(0,0,width,height).data,preview=[];for(let i=0;i<image.length;i+=64)preview.push(image[i],image[i+1],image[i+2]);
    return{equivalent,cancelled,ms,frames,preview,textures:r.gpu.info.memory.textures,duration};
   }finally{r.dispose();}
- },{duration,width,height,aspect,full});expect(proof.equivalent).toBe(true);expect(proof.cancelled).toBe(true);expect(proof.textures).toBe(3);
+ },{duration,width,height,aspect,full});expect(proof.equivalent).toBe(true);expect(proof.cancelled).toBe(true);expect(proof.textures).toBe(2); // Annotation is Canvas-only; both photographic textures remain resident.
  const pending=page.waitForEvent('download');await page.evaluate(()=>{const url=URL.createObjectURL((window as any).dynamicsVideo),a=document.createElement('a');a.href=url;a.download='proof.mp4';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
  const dir=`artifacts/sprint10/${full?'full':'routine'}`,path=`${dir}/${aspect}-unicycle-${duration}s.mp4`;mkdirSync(dir,{recursive:true});await(await pending).saveAs(path);const report=validateVideo(path,width,height,duration);expect(report.decodedFrames).toBe(duration*24);
  const decoded=execFileSync(ffmpeg!,['-v','error','-ss',String(duration/2),'-i',path,'-frames:v','1','-f','rawvideo','-pix_fmt','rgba','-'],{windowsHide:true,maxBuffer:8*1024*1024});let error=0,sample=0;for(let i=0;i<decoded.length;i+=64)for(let channel=0;channel<3;channel++)error+=Math.abs(decoded[i+channel]-proof.preview[sample++]);const decodedPixelError=error/sample;expect(decodedPixelError).toBeLessThan(15);
