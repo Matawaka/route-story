@@ -33,3 +33,15 @@ test('custom PNG upload stays local, rejects SVG and preserves chosen marker',as
   await expect(page.locator('#marker-style')).toHaveValue('custom');
   expect(requests).toEqual([]);
 });
+
+
+test('3D icon is rendered as a local depth-tested sprite without breaking export readiness',async({page})=>{
+  await page.goto('/');
+  await page.locator('#terrain-demo').click();
+  await expect(page.locator('#export')).toBeEnabled({timeout:30000});
+  const before=await page.locator('#preview').evaluate(e=>(e as HTMLCanvasElement).toDataURL());
+  await page.locator('#marker-style').selectOption('unicycle');
+  await expect(page.locator('#export')).toBeEnabled({timeout:30000});
+  const after=await page.locator('#preview').evaluate(e=>(e as HTMLCanvasElement).toDataURL());
+  expect(after).not.toEqual(before);
+});
