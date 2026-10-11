@@ -67,4 +67,6 @@ Four browser pilot cases explicitly skip in routine CI without prepared sources.
 
 ## Pending gates
 
+Source-matched production regression at `724d118ab87b496c84c49fa1e510ea37853da7b7`: [package/acceptance evidence](SWISS_PILOT_PACKAGE_EVIDENCE.json). Baseline complete4905918B≤5MiB; existing Sogne photo complete5911344B≤6MiB. Neither includes Swiss crops/page/manifest. Two actual10s Compatibility Sogne videos independently decode after cancellation/retry with all23manifest hashes and first-party privacy/CSP checks. This is local production acceptance, not a new public deployment.
+
 Human visual review; native GSD class confirmation before public map-pack claims; ordinary-laptop/physical-mobile acceptance; native/GPU peak memory; wider geographic surroundings/size/hosting approval. Previous Sogne device results do not verify this226k-vertex Swiss scene. No merge, tag, deployment, release or contest repost.

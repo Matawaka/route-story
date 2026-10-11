@@ -1,5 +1,13 @@
 # Implementation state
 
+## Swiss source-matched production gate — 2026-10-11
+
+Review checkpoint `724d118ab87b496c84c49fa1e510ea37853da7b7`, branch codex/swiss-alps-pilot; actual source-matched baseline4902561B+3357manifest=4905918B/20files≤5MiB and photo5907296B+4048manifest=5911344B/23files≤6MiB. Swiss page/manifest/COGs/crops do not enter either allowlist. Production dependencies/pins, existing imagery/DEM binaries and protected workflow unchanged. Updated notice was rebuilt before package validation (stale-dist provenance guard initially rejected the old copied notice as intended).
+
+`PLAYWRIGHT_CHANNEL=msedge ACCEPTANCE_DIR=artifacts/sprint11/swiss/production node scripts/acceptance/imagery.mjs --production --smoke`:VERIFIED against exact724d118, clean tree, local anonymous /route-story/ production only, Edge155.0.4283.45/Windows10.0.26200, version1.2.0-rc.1, all23manifest hashes/accessible licenses/restrictive metaCSP. Response-header CSP absent on this local server; no public HTTPS/device claim. Atlas10s640×3602073477B/export531.7ms and Night10s360×6402098799B/export530.4ms,240H.264/24fps frames each/full independent decode/nonblank; cancel/retry, reversible seek, zero external requests/errors/bad responses/storage. Source/package/acceptance facts preserved in SWISS_PILOT_PACKAGE_EVIDENCE.json, distinct from Swiss20/30s and historical rider evidence.
+
+PR10 exact3113 CI38158425650 SUCCESS; its description updated for actual colorful rider/JPEG/annotation/name/evidence. Next: push separate Swiss candidate and create stacked PR targeting codex/terrain-dynamics-markers; owner reviews decoded comparisons and local videos before any merge/Swiss hosting/public size decision. Final source SHA is read from git, not inferred from this journal's parent. No merge/tag/deploy/contest repost.
+
 ## Swiss full local acceptance / review preparation — 2026-10-11
 
 Actual branch `codex/swiss-alps-pilot`, current parent `b6050458d23f7745d530d73364e0b14f7a4c2265`: Swiss runtime milestone `6bcea35` plus non-destructive local dependency merge of PR10 `3113f4367171fed21907a53ccd4c5b0fd5c83cf1`. PR10 OPEN against unchanged main `126dd98805594a1547b858c02922dfa565c24b81`; exact-head CI https://github.com/Matawaka/route-story/actions/runs/38158425650 SUCCESS:183unit/build/53routine browser passed,5explicit opt-in/external skips. No GitHub merge, new deployment, tag or contest repost. Independent PR5/PR8 stay excluded.
