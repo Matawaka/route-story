@@ -7,6 +7,7 @@ import './style.css';
 import { loadGeography } from './geography';
 import { loadTerrain } from './terrain';
 import {loadImagery,type PreparedImagery} from './imagery';
+import {loadMarker,createUnicycleMarker} from './marker';
 import type { TerrainRenderer } from './terrain-renderer';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const canvas = el<HTMLCanvasElement>('preview'), file = el<HTMLInputElement>('file'), demo = el<HTMLButtonElement>('demo');
@@ -19,6 +20,11 @@ const terrainDemo=el<HTMLButtonElement>('terrain-demo');
 const terrainSurface=el<HTMLSelectElement>('terrain-surface');
 const terrainFlight=el<HTMLSelectElement>('terrain-flight');
 const terrainDynamics=el<HTMLSelectElement>('terrain-dynamics');
+const markerStyle=el<HTMLSelectElement>('marker-style'),markerFile=el<HTMLInputElement>('marker-file');
+const unicycleMarker=createUnicycleMarker();
+let customMarker:ImageBitmap|undefined,markerRequestId=0;
+let activeMarkerImage:CanvasImageSource|undefined;
+const markerImage=():CanvasImageSource|undefined=>markerStyle.value==='unicycle'?unicycleMarker:markerStyle.value==='custom'?customMarker:undefined;
 declare const __IMAGERY_ENABLED__:boolean;
 if(!__IMAGERY_ENABLED__){terrainSurface.hidden=true;el('terrain-surface-label').hidden=true;terrainFlight.hidden=true;el('terrain-flight-label').hidden=true;}
 const title = el<HTMLInputElement>('story-title');
@@ -45,7 +51,8 @@ async function configure(): Promise<void> {
   imageryController?.abort();imageryController=new AbortController();const imagerySignal=imageryController.signal;
   const currentProbe = ++probeId; button.disabled = true; if (!route) return;
   try {
-    story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'],cameraMode:cameraMode.value as StoryConfig['cameraMode'],terrainSurface:terrainSurface.value as StoryConfig['terrainSurface'],terrainFlight:terrainFlight.value as StoryConfig['terrainFlight'],terrainDynamics:terrainDynamics.value==='grade' }, false);
+    story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'],cameraMode:cameraMode.value as StoryConfig['cameraMode'],terrainSurface:terrainSurface.value as StoryConfig['terrainSurface'],terrainFlight:terrainFlight.value as StoryConfig['terrainFlight'],terrainDynamics:terrainDynamics.value==='grade',markerStyle:markerStyle.value as StoryConfig['markerStyle'] }, false);
+    if(story.markerStyle==='custom'&&!customMarker)throw Error('Сначала загрузите PNG или WebP для своего значка.');
     title.removeAttribute('aria-invalid');
   } catch (error) { title.setAttribute('aria-invalid', 'true'); stop(); message((error as Error).message, true); return; }
   let config=story,terrain:Awaited<ReturnType<typeof loadTerrain>>|undefined,terrainNote='';
@@ -63,10 +70,11 @@ async function configure(): Promise<void> {
   canvas.classList.toggle('portrait', portrait); el('preview-format').textContent = portrait ? '9:16' : '16:9';
   if(terrain){const {TerrainRenderer}=await import('./terrain-renderer');if(currentProbe!==probeId)return;
     let imagery:PreparedImagery|undefined;
-    try{if(config.terrainSurface==='photo')imagery=await loadImagery(imagerySignal);if(currentProbe!==probeId){imagery?.dispose();return;}renderer=new TerrainRenderer(route,terrain,canvas.width,canvas.height,config,imagery);}
-    catch(error){imagery?.dispose();if(currentProbe!==probeId)return;if(story.cameraMode!=='auto')throw error;terrain=undefined;terrainNote=`Авто: ${(error as Error).message} Используется 2D.`;config=validateStoryConfig({...config,cameraMode:'cinematic'});land={...landBase,geography:await loadGeography()};if(currentProbe!==probeId)return;renderer=new RouteRenderer(route,land,canvas.width,canvas.height,style,config);}
+    try{if(config.terrainSurface==='photo')imagery=await loadImagery(imagerySignal);if(currentProbe!==probeId){imagery?.dispose();return;}renderer=new TerrainRenderer(route,terrain,canvas.width,canvas.height,config,imagery,markerImage());}
+    catch(error){imagery?.dispose();if(currentProbe!==probeId)return;if(story.cameraMode!=='auto')throw error;terrain=undefined;terrainNote=`Авто: ${(error as Error).message} Используется 2D.`;config=validateStoryConfig({...config,cameraMode:'cinematic'});land={...landBase,geography:await loadGeography()};if(currentProbe!==probeId)return;renderer=new RouteRenderer(route,land,canvas.width,canvas.height,style,config,markerImage());}
   }
-  else renderer = new RouteRenderer(route, land, canvas.width, canvas.height, style, config);
+  else renderer = new RouteRenderer(route, land, canvas.width, canvas.height, style, config, markerImage());
+  activeMarkerImage=markerImage();
   draw();
   const region=land.geography?.region.extent,covered=region&&route.segments.every(s=>s.every(p=>p.lon>=region[0]&&p.lon<=region[2]&&p.lat>=region[1]&&p.lat<=region[3]));
   el('map-detail-note').textContent=terrain?`Рельеф: © Kartverket · CC BY 4.0 · DEM ${terrain.level.spacingMeters} м · без преувеличения высот. Локальный пакет Согне-фьорда; высоты GPX сохранены. Вертикальный датум источника не указан. Не для навигации.`:`${terrainNote} Карта: Natural Earth · ${covered?'фьорды, острова и подписи 1:10m':'обзорная география '+(config.cameraMode==='cinematic'?'1:50m':'1:110m')} · без улиц. Время видео не является длительностью поездки.`;
@@ -100,6 +108,34 @@ async function importRoute(read: () => Promise<Route>, synthetic = false) {
   } finally { if (currentLoad === loadId) loading = false; }
 }
 file.addEventListener('change', () => { const selected = file.files?.[0]; if (selected) void importRoute(() => readGpx(selected)); file.value = ''; });
+markerFile.addEventListener('change',()=>{
+  const selected=markerFile.files?.[0];markerFile.value='';
+  if(!selected||exporting||loading)return;
+  const request=++markerRequestId;
+  void (async()=>{
+    let next:ImageBitmap|undefined;
+    try{
+      next=await loadMarker(selected);
+      if(request!==markerRequestId||exporting||loading){next.close();return;}
+      const previous=customMarker,previousStyle=markerStyle.value;
+      customMarker=next;
+      const option=markerStyle.querySelector<HTMLOptionElement>('option[value="custom"]')!;
+      option.disabled=false;markerStyle.value='custom';
+      try{
+        await configure();
+        if(previous&&activeMarkerImage!==previous)previous.close();
+        message('Пользовательский значок загружен только в память браузера.');
+      }catch(error){
+        renderer?.dispose();renderer=undefined;activeMarkerImage=undefined;
+        customMarker=previous;markerStyle.value=previousStyle;
+        if(!previous)option.disabled=true;
+        next.close();
+        try{await configure();}catch{ /* UI shows original preparation error */ }
+        throw error;
+      }
+    }catch(error){message((error as Error).message,true);}
+  })();
+});
 demo.addEventListener('click', () => void importRoute(async () => { const response = await fetch(`${import.meta.env.BASE_URL}samples/synthetic.gpx`); if (!response.ok) throw new Error('Учебный GPX недоступен.'); return parseGpx(await response.text()); }, true));
 cinematicDemo.addEventListener('click',()=>{
   if(exporting)return;
@@ -122,6 +158,7 @@ cameraMode.addEventListener('change',()=>void configure().catch(error=>message(e
 terrainSurface.addEventListener('change',()=>void configure().catch(error=>message(error.message,true)));
 terrainFlight.addEventListener('change',()=>void configure().catch(error=>message(error.message,true)));
 terrainDynamics.addEventListener('change',()=>void configure().catch(error=>message(error.message,true)));
+markerStyle.addEventListener('change',()=>void configure().catch(error=>message(error.message,true)));
 title.addEventListener('input', () => void configure().catch(error => message(error.message, true)));
 scrub.addEventListener('input', () => { stop(); draw(); });
 play.addEventListener('click', () => {
@@ -135,7 +172,7 @@ cancel.addEventListener('click', () => controller?.abort());
 button.addEventListener('click', async () => {
   if (!renderer || exporting || loading) return;
   exporting = true; stop(); controller = new AbortController(); cancel.hidden = false;
-  const controls = [button, file, demo, cinematicDemo, terrainDemo, ratio, duration, quality, title, cameraMode, terrainSurface, terrainFlight, terrainDynamics, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
+  const controls = [button, file, demo, cinematicDemo, terrainDemo, ratio, duration, quality, title, cameraMode, terrainSurface, terrainFlight, terrainDynamics, markerStyle, markerFile, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
   const active = renderer;
   try {
     performance.clearMarks('route-story-export-start'); performance.clearMarks('route-story-export-end'); performance.clearMeasures('route-story-export');
@@ -146,4 +183,4 @@ button.addEventListener('click', async () => {
   } catch (error) { message((error as Error).name === 'AbortError' ? 'Экспорт отменён.' : `Не удалось создать MP4: ${(error as Error).message}`, (error as Error).name !== 'AbortError'); }
   finally { exporting = false; controller = undefined; cancel.hidden = true; controls.forEach(control => control.disabled = false); }
 });
-window.addEventListener('pagehide', () => { ++probeId;++loadId;imageryController?.abort();controller?.abort(); stop(); renderer?.dispose(); });
+window.addEventListener('pagehide', () => { ++probeId;++loadId;++markerRequestId;imageryController?.abort();controller?.abort(); stop(); renderer?.dispose();customMarker?.close();unicycleMarker.width=unicycleMarker.height=0; });
