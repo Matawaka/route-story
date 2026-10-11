@@ -1,0 +1,335 @@
+{
+  "schema": 1,
+  "developerOnly": true,
+  "license": "swisstopo OGD terms",
+  "licenseUrl": "https://www.swisstopo.admin.ch/en/terms-of-use-free-geodata-and-geoservices",
+  "sourceBoundsLV95": [
+    2670000,
+    1157000,
+    2671000,
+    1158000
+  ],
+  "sources": [
+    {
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "item": "swissimage-dop10_2023_2670-1157",
+      "asset": "swissimage-dop10_2023_2670-1157_0.1_2056.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissimage-dop10/swissimage-dop10_2023_2670-1157/swissimage-dop10_2023_2670-1157_0.1_2056.tif",
+      "bytes": 45009298,
+      "sha256": "5e324e639876a227f397f0dd45de7413a563a8702acd58e5e97b5591e81d8031"
+    },
+    {
+      "collection": "ch.swisstopo.swissalti3d",
+      "item": "swissalti3d_2024_2670-1157",
+      "asset": "swissalti3d_2024_2670-1157_2_2056_5728.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissalti3d/swissalti3d_2024_2670-1157/swissalti3d_2024_2670-1157_2_2056_5728.tif",
+      "bytes": 1186083,
+      "sha256": "df2126dc6e28098a0127fa099367471638422d07be386732bd82e38380d2eecb"
+    }
+  ],
+  "terrain": {
+    "id": "furka-swisstopo-pilot",
+    "origin": [
+      8.358145865332382,
+      46.56506663713058
+    ],
+    "westMeters": -475,
+    "southMeters": -475,
+    "eastMeters": 475,
+    "northMeters": 475,
+    "lods": [
+      {
+        "file": "furka-2m.i16",
+        "bytes": 453152,
+        "sha256": "fec0c758d1f11f69931f92051448b3d87257ccb4cfbaf633dc4f7e483db29487",
+        "spacingMeters": 2,
+        "width": 476,
+        "height": 476,
+        "noDataCount": 0
+      },
+      {
+        "file": "furka-50m.i16",
+        "bytes": 800,
+        "sha256": "32b6f763862db2a1be1768c3d9d05a26e521077ffd252f4625faf70fa2e302a9",
+        "spacingMeters": 50,
+        "width": 20,
+        "height": 20,
+        "noDataCount": 0
+      }
+    ],
+    "noData": -32768,
+    "minElevation": 1752,
+    "maxElevation": 2472,
+    "verticalScale": 1,
+    "units": "metres",
+    "verticalDatum": "LN02",
+    "sourceCrs": "EPSG:2056",
+    "sourceResolutionMeters": 2,
+    "attribution": "© swisstopo",
+    "regionalProjection": {
+      "crs": "EPSG:2056",
+      "verticalDatum": "LN02",
+      "originLV95": [
+        2670500,
+        1157500
+      ],
+      "originWgs84": [
+        8.358145865332382,
+        46.56506663713058
+      ],
+      "domainMeters": [
+        -500,
+        -500,
+        500,
+        500
+      ],
+      "forwardCoefficients": [
+        [
+          0.0006342738330060439,
+          766.6801035273204,
+          -13.023924451887492,
+          -0.0005770399618540978,
+          -0.14177256311238062,
+          4.972907788669545e-06,
+          -2.091523290893545e-06,
+          2.030737924797743e-07,
+          3.918988213978745e-08,
+          -1.3166485849421677e-07
+        ],
+        [
+          0.00110871430102784,
+          8.982869521000971,
+          1111.5806010157376,
+          0.048891732826920276,
+          -0.0016732614474875768,
+          0.0003286918372626957,
+          -4.7090743520243324e-08,
+          -9.099519678747045e-06,
+          1.4022867953663678e-07,
+          5.614371904444934e-06
+        ]
+      ],
+      "inverseCoefficients": [
+        [
+          8.393863062645686e-16,
+          0.013041459362339254,
+          0.00015280131475038013,
+          -2.532281611657139e-08,
+          2.168928834490316e-06,
+          2.5322768729130196e-08,
+          -1.1982076749840676e-10,
+          -1.4471887338669831e-11,
+          3.5946473304442123e-10,
+          4.824052284948192e-12
+        ],
+        [
+          -2.0710355900173568e-14,
+          -0.00010539022589201423,
+          0.008994963928778358,
+          -7.480805414464238e-07,
+          -1.7345383431649486e-08,
+          -2.492913304158093e-09,
+          1.824059835072417e-12,
+          -1.2314731634606446e-10,
+          -2.8733054775510664e-12,
+          -3.684601582123307e-11
+        ]
+      ],
+      "normalizationDegrees": 0.01,
+      "normalizationMeters": 1000,
+      "maximumFitErrorMeters": 1.0022541158846991e-08,
+      "operation": "axis order change (2D) + Inverse of CH1903+ to WGS 84 (1) + Swiss Oblique Mercator 1995",
+      "operationAccuracyMeters": 1.0
+    }
+  },
+  "imagery": {
+    "high": {
+      "schema": 1,
+      "id": "furka-swissimage-2023",
+      "origin": [
+        8.358145865332382,
+        46.56506663713058
+      ],
+      "bounds": [
+        -500,
+        -500,
+        500,
+        500
+      ],
+      "width": 1000,
+      "height": 1000,
+      "spacingMeters": 1.0,
+      "file": "furka-high-overview.jpg",
+      "bytes": 430656,
+      "sha256": "8e6c9a0309a0ed8df4e5e4218dcc2848003f5877a25c54b25918fcd3ccea3a2f",
+      "attribution": "© swisstopo · SWISSIMAGE 2023",
+      "acquiredDate": "2023 (acquisition year; exact day not verified)",
+      "sourceResolutionMeters": 0.25,
+      "effectiveDetailMeters": 1.0,
+      "nativeResolutionStatus": "10cm or25cm acquisition; selected tile not independently classified",
+      "boundaryFeatherMeters": 40,
+      "detail": {
+        "schema": 1,
+        "id": "furka-swissimage-2023",
+        "origin": [
+          8.358145865332382,
+          46.56506663713058
+        ],
+        "bounds": [
+          -475,
+          -475,
+          225,
+          225
+        ],
+        "width": 1400,
+        "height": 1400,
+        "spacingMeters": 0.5,
+        "file": "furka-high-detail.jpg",
+        "bytes": 802453,
+        "sha256": "888f85b9c355fc7c9f08334dbf424211012091e5d6c791e4b79cda8c85d51c4d",
+        "attribution": "© swisstopo · SWISSIMAGE 2023",
+        "acquiredDate": "2023 (acquisition year; exact day not verified)",
+        "sourceResolutionMeters": 0.25,
+        "effectiveDetailMeters": 0.5,
+        "nativeResolutionStatus": "10cm or25cm acquisition; selected tile not independently classified",
+        "boundaryFeatherMeters": 40
+      }
+    },
+    "low": {
+      "schema": 1,
+      "id": "furka-swissimage-2023",
+      "origin": [
+        8.358145865332382,
+        46.56506663713058
+      ],
+      "bounds": [
+        -500,
+        -500,
+        500,
+        500
+      ],
+      "width": 1000,
+      "height": 1000,
+      "spacingMeters": 1.0,
+      "file": "furka-low-overview.jpg",
+      "bytes": 116569,
+      "sha256": "16870f3df6e7ecf7e9d49188aae72c9327900bc2161c9beb0f1a209b3cc023ac",
+      "attribution": "© swisstopo · SWISSIMAGE 2023",
+      "acquiredDate": "2023 (acquisition year; exact day not verified)",
+      "sourceResolutionMeters": 0.25,
+      "effectiveDetailMeters": 10,
+      "nativeResolutionStatus": "10cm or25cm acquisition; selected tile not independently classified",
+      "boundaryFeatherMeters": 40,
+      "detail": {
+        "schema": 1,
+        "id": "furka-swissimage-2023",
+        "origin": [
+          8.358145865332382,
+          46.56506663713058
+        ],
+        "bounds": [
+          -475,
+          -475,
+          225,
+          225
+        ],
+        "width": 1400,
+        "height": 1400,
+        "spacingMeters": 0.5,
+        "file": "furka-low-detail.jpg",
+        "bytes": 166587,
+        "sha256": "a09590b4a764358bafb0ccd73e01c44251d7799f98d596da680aeeb0f10a16a7",
+        "attribution": "© swisstopo · SWISSIMAGE 2023",
+        "acquiredDate": "2023 (acquisition year; exact day not verified)",
+        "sourceResolutionMeters": 0.25,
+        "effectiveDetailMeters": 10,
+        "nativeResolutionStatus": "10cm or25cm acquisition; selected tile not independently classified",
+        "boundaryFeatherMeters": 40
+      }
+    }
+  },
+  "route": {
+    "file": "furka-synthetic.gpx",
+    "bytes": 1730,
+    "sha256": "c04ccf8e1ae91720a67e4df11f80429fc99dc36a3922b9c22913d61e8ead6cea"
+  },
+  "projectionProof": {
+    "forwardMaximumMeters": 6.111778308805912e-09,
+    "inverseMaximumMeters": 1.0022541158846991e-08,
+    "projRoundTripMaximumMeters": 0.0012775229162313084,
+    "independentCheckCount": 7743,
+    "referencePoints": [
+      {
+        "lon": 8.351879080850672,
+        "lat": 46.56084391637724,
+        "world": [
+          -475,
+          -475
+        ]
+      },
+      {
+        "lon": 8.364413628543206,
+        "lat": 46.569289011360475,
+        "world": [
+          475,
+          475
+        ]
+      },
+      {
+        "lon": 8.35202326336848,
+        "lat": 46.569389139902405,
+        "world": [
+          -475,
+          475
+        ]
+      },
+      {
+        "lon": 8.364267488567126,
+        "lat": 46.56074380348953,
+        "world": [
+          475,
+          -475
+        ]
+      },
+      {
+        "lon": 8.358145865332382,
+        "lat": 46.56506663713058,
+        "world": [
+          0,
+          0
+        ]
+      },
+      {
+        "lon": 8.36008294323135,
+        "lat": 46.56392644156047,
+        "world": [
+          150,
+          -125
+        ]
+      },
+      {
+        "lon": 8.354005098897938,
+        "lat": 46.56316584229175,
+        "world": [
+          -315,
+          -215
+        ]
+      }
+    ]
+  },
+  "transformations": [
+    "Native0.1m COG pixels do not establish native acquisition GSD",
+    "RGB average to1m overview and0.5m detail; JPEG90",
+    "Comparison10m average then bilinear to identical texture dimensions, no sharpening",
+    "DEM source2m centre grid cropped12:488; reversed rows to south-up i16; rounded±0.5m vertical quantization",
+    "Coarse comparison subsamples25: same extent,50m mesh",
+    "Local degree3 forward/inverse fit of pinned PROJ EPSG4326/2056 operation; bounded1km domain"
+  ],
+  "budgets": {
+    "imageryPixels": 2960000,
+    "decodedRGBABytes": 11840000,
+    "heightGridBytes": 453152,
+    "meshVertices": 226576
+  },
+  "generatedRouteStatus": "synthetic approximate road-centre digitization; no real journey"
+}

@@ -5,6 +5,8 @@ export interface ImageryManifest {
   width:number; height:number; spacingMeters:number; file:string; bytes:number; sha256:string;
   attribution:string; acquiredDate:string; sourceResolutionMeters:number;
   detail?:ImageryManifest;
+  /** Bounded developer regional pack, never accepted by the Sogne loader. */
+  boundaryFeatherMeters?:number;
 }
 export const MAX_IMAGE_BYTES=2*1024*1024,MAX_IMAGE_PIXELS=3_000_000,MAX_TEXTURE_SIDE=2048;
 export function validateImagery(m:ImageryManifest):Readonly<ImageryManifest>{

@@ -1,11 +1,13 @@
 import type { Route, RoutePoint } from './route';
 import { wrapDelta } from './geo';
+import {regionalWorld,regionalGeographic,validateRegionalProjection,type RegionalProjection} from './regional-projection';
 export type TerrainXY = readonly [number, number];
 export interface TerrainLevel { file:string; spacingMeters:number; width:number; height:number; bytes:number; sha256:string; noDataCount:number }
 export interface TerrainManifest {
   id:string; origin:[number,number]; westMeters:number; southMeters:number; eastMeters:number; northMeters:number;
   lods:TerrainLevel[]; noData:number; minElevation:number; maxElevation:number; verticalScale:number;
   units:string; verticalDatum:string; sourceCrs:string; sourceResolutionMeters:number; attribution:string;
+  regionalProjection?:RegionalProjection;
 }
 const R=6371008.8, rad=Math.PI/180;
 /** A bounded, local tangent scene in metres. GPX distance is never calculated here. */
@@ -14,14 +16,16 @@ export class TerrainDataset {
   readonly min:number;
   readonly max:number;
   constructor(readonly manifest:TerrainManifest,readonly level:TerrainLevel,readonly heights:Int16Array){
-    if(!manifest||!manifest.origin.every(Number.isFinite)||Math.abs(manifest.origin[1])>=89||manifest.units!=='metres'||manifest.verticalScale!==1||manifest.noData!==-32768||!Number.isFinite(level.spacingMeters)||level.spacingMeters<10||level.spacingMeters>500||!Number.isInteger(level.width)||!Number.isInteger(level.height)||level.width<2||level.height<2||level.width*level.height>500000||heights.length!==level.width*level.height)throw Error('Некорректный или слишком большой DEM.');
+    if(manifest?.regionalProjection){validateRegionalProjection(manifest.regionalProjection,manifest.origin);if(manifest.sourceCrs!=='EPSG:2056'||manifest.verticalDatum!=='LN02')throw Error('Несогласованный CRS или вертикальный датум DEM.');}
+    if(!manifest||!manifest.origin.every(Number.isFinite)||Math.abs(manifest.origin[1])>=89||manifest.units!=='metres'||manifest.verticalScale!==1||manifest.noData!==-32768||!Number.isFinite(level.spacingMeters)||level.spacingMeters<(manifest.regionalProjection?2:10)||level.spacingMeters>500||!Number.isInteger(level.width)||!Number.isInteger(level.height)||level.width<2||level.height<2||level.width*level.height>500000||heights.length!==level.width*level.height||heights.byteLength>1000000)throw Error('Некорректный или слишком большой DEM.');
     if(![manifest.westMeters,manifest.southMeters,manifest.eastMeters,manifest.northMeters].every(Number.isFinite)||Math.abs((manifest.eastMeters-manifest.westMeters)-(level.width-1)*level.spacingMeters)>.001||Math.abs((manifest.northMeters-manifest.southMeters)-(level.height-1)*level.spacingMeters)>.001)throw Error('Размеры DEM не соответствуют сетке.');
+    if(manifest.regionalProjection){const b=manifest.regionalProjection.domainMeters;if(manifest.westMeters<b[0]||manifest.southMeters<b[1]||manifest.eastMeters>b[2]||manifest.northMeters>b[3])throw Error('DEM вне проверенного регионального преобразования.');}
     this.cos=Math.cos(manifest.origin[1]*rad);let min=Infinity,max=-Infinity;
     for(const value of heights)if(value!==manifest.noData){if(value < -500||value>9000)throw Error('Высоты DEM вне поддерживаемого диапазона.');min=Math.min(min,value);max=Math.max(max,value);}
     if(!Number.isFinite(min))throw Error('DEM не содержит высот.');this.min=min;this.max=max;
   }
-  world(p:RoutePoint):TerrainXY{return [R*rad*wrapDelta(p.lon-this.manifest.origin[0])*this.cos,R*rad*(p.lat-this.manifest.origin[1])];}
-  geographic([x,y]:TerrainXY):RoutePoint{return {lon:wrapDelta(this.manifest.origin[0]+x/(R*rad*this.cos)),lat:this.manifest.origin[1]+y/(R*rad)};}
+  world(p:RoutePoint):TerrainXY{return this.manifest.regionalProjection?regionalWorld(this.manifest.regionalProjection,p):[R*rad*wrapDelta(p.lon-this.manifest.origin[0])*this.cos,R*rad*(p.lat-this.manifest.origin[1])];}
+  geographic([x,y]:TerrainXY):RoutePoint{return this.manifest.regionalProjection?regionalGeographic(this.manifest.regionalProjection,[x,y]):{lon:wrapDelta(this.manifest.origin[0]+x/(R*rad*this.cos)),lat:this.manifest.origin[1]+y/(R*rad)};}
   contains([x,y]:TerrainXY,margin=0):boolean{const m=this.manifest;return Number.isFinite(x)&&Number.isFinite(y)&&x>=m.westMeters+margin&&x<=m.eastMeters-margin&&y>=m.southMeters+margin&&y<=m.northMeters-margin;}
   /** No interpolation through missing corners, no invented sea-level fill. */
   sampleXY([x,y]:TerrainXY):number|undefined{
@@ -58,7 +62,7 @@ export class TerrainDataset {
       if(Number.isFinite(low))relief=Math.max(relief,high-low);
     }return relief;
   }
-  routeCoverage(route:Route,margin=2000):boolean{
+  routeCoverage(route:Route,margin=this.manifest.regionalProjection?40:2000):boolean{
     let samples=0;
     for(const segment of route.segments){for(let i=0;i<segment.length;i++){
       const xy=this.world(segment[i]);if(!this.contains(xy,margin)||this.sampleXY(xy)===undefined)return false;

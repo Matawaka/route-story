@@ -61,8 +61,9 @@ export function createTerrainCameraPlan(timeline:StoryTimeline,terrain:TerrainDa
   let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;for(const [x,y] of all){minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);}
   const flight=timeline.config.terrainFlight??'conservative';
   const center:TerrainXY=[(minX+maxX)/2,(minY+maxY)/2],minimumAltitude=flight==='conservative'?terrain.max+350:0,aspect=width/height;
-  const radius=Math.max(800,Math.hypot(maxX-minX,maxY-minY,terrain.max-terrain.min)/2),fov=46*Math.PI/180,hfov=2*Math.atan(Math.tan(fov/2)*aspect),distance=radius/Math.sin(Math.min(fov,hfov)/2)*1.35;
-  const limits=terrain.getTerrainBounds(),bound=(xy:TerrainXY):TerrainXY=>[clamp(xy[0],limits[0]+300,limits[2]-300),clamp(xy[1],limits[1]+300,limits[3]-300)];
+  const regional=!!terrain.manifest.regionalProjection;
+  const radius=Math.max(regional?100:800,Math.hypot(maxX-minX,maxY-minY,terrain.max-terrain.min)/2),fov=46*Math.PI/180,hfov=2*Math.atan(Math.tan(fov/2)*aspect),distance=radius/Math.sin(Math.min(fov,hfov)/2)*1.35;
+  const limits=terrain.getTerrainBounds(),margin=regional?20:300,bound=(xy:TerrainXY):TerrainXY=>[clamp(xy[0],limits[0]+margin,limits[2]-margin),clamp(xy[1],limits[1]+margin,limits[3]-margin)];
   const target:TerrainPosePoint=[...center,terrain.sampleXY(center)!+100],overviewXY=bound([center[0],center[1]-distance*.38]);
   const overview:Shot={progress:0,segment:0,target,position:[...overviewXY,Math.max(minimumAltitude,distance*.94+target[2])],relief:terrain.max-terrain.min};
   // Fit the actual elevated route into caption-safe perspective space. A
@@ -79,10 +80,11 @@ export function createTerrainCameraPlan(timeline:StoryTimeline,terrain:TerrainDa
     const a=near.segment===at.segment?terrain.world(near.point):xy,b=ahead.segment===at.segment?terrain.world(ahead.point):xy;
     let dx=b[0]-a[0],dy=b[1]-a[1],length=Math.hypot(dx,dy);if(length<1){dx=0;dy=1;length=1;}
     let localMin=Infinity,localMax=-Infinity;
-    for(let yy=-2;yy<=2;yy++)for(let xx=-2;xx<=2;xx++){const h=terrain.sampleXY([xy[0]+xx*500,xy[1]+yy*500]);if(h!==undefined){localMin=Math.min(localMin,h);localMax=Math.max(localMax,h);}}
-    const relief=localMax-localMin,back=flight==='corridor'?Math.min(2400,1200+relief*.35):Math.min(3200,1900+relief*.65),side=back*.25,positionXY=bound([xy[0]-dx/length*back+dy/length*side,xy[1]-dy/length*back-dx/length*side]);
+    const sampleStep=regional?100:500;
+    for(let yy=-2;yy<=2;yy++)for(let xx=-2;xx<=2;xx++){const h=terrain.sampleXY([xy[0]+xx*sampleStep,xy[1]+yy*sampleStep]);if(h!==undefined){localMin=Math.min(localMin,h);localMax=Math.max(localMax,h);}}
+    const relief=localMax-localMin,back=regional?Math.min(350,180+relief*.15):flight==='corridor'?Math.min(2400,1200+relief*.35):Math.min(3200,1900+relief*.65),side=back*.25,positionXY=bound([xy[0]-dx/length*back+dy/length*side,xy[1]-dy/length*back-dx/length*side]);
     const routeHeight=terrain.meshElevation(xy)!;
-    const target:TerrainPosePoint=[...xy,routeHeight+24],base:TerrainPosePoint=[...positionXY,Math.max(minimumAltitude,terrain.ceiling(positionXY)!+350,routeHeight+(flight==='corridor'?750+relief*.25:1550+relief*.4))];
+    const target:TerrainPosePoint=[...xy,routeHeight+24],base:TerrainPosePoint=[...positionXY,Math.max(minimumAltitude,terrain.ceiling(positionXY)!+350,routeHeight+(regional?350+relief*.15:flight==='corridor'?750+relief*.25:1550+relief*.4))];
     shots.push({progress,segment:at.segment,position:[base[0],base[1],requiredVisibleAltitude(terrain,base,target)+80],target,relief});
   }
   const unsmoothed=shots.map(s=>s.position);
