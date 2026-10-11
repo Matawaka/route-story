@@ -5,6 +5,7 @@ import { haversine, wrapDelta } from './geo';
 import { clipRing,clipLine } from './map-geometry';
 import type { GeographyPack } from './geography';
 import { formatDistance, metricLabel, type Land } from './renderer';
+import { drawMarker, type MarkerAsset } from './marker';
 
 type Shape={path:Path2D;bounds:Bounds};
 type Chunk=Shape&{segment:number;startIndex:number;endIndex:number};
@@ -29,7 +30,7 @@ export class CinematicRenderer {
   private readonly title:string;
   private readonly metric:string;
   private readonly titleFamily:string;
-  constructor(readonly timeline:StoryTimeline,readonly land:Land,readonly width:number,readonly height:number){
+  constructor(readonly timeline:StoryTimeline,readonly land:Land,readonly width:number,readonly height:number,readonly markerAsset?:MarkerAsset){
     this.plan=createCameraPlan(timeline,width,height);
     this.points=timeline.route.segments.map(s=>s.map(this.plan.world));
     const routeBounds=boundsOf(this.points.flat()),dx=width/this.plan.overviewScale,dy=height/this.plan.overviewScale;
@@ -144,7 +145,8 @@ export class CinematicRenderer {
       ctx.save();ctx.globalAlpha=leading?state.markerOpacity:1;
       if(leading){ctx.strokeStyle=colors.line;ctx.lineWidth=unit*.002;ctx.beginPath();ctx.arc(x,y,radius*(1.9+.25*Math.sin(state.timeSeconds*Math.PI*2)),0,Math.PI*2);ctx.globalAlpha*=.45;ctx.stroke();ctx.globalAlpha=state.markerOpacity;}
       if(label==='Финиш'&&state.phase==='OUTRO'){ctx.strokeStyle=colors.line;ctx.lineWidth=unit*.003;ctx.beginPath();ctx.arc(x,y,radius*(1.5+ease(state.outroProgress)),0,Math.PI*2);ctx.stroke();}
-      ctx.fillStyle=leading?colors.line:colors.panel;ctx.strokeStyle=colors.ink;ctx.lineWidth=unit*.0025;ctx.beginPath();ctx.arc(x,y,radius,0,Math.PI*2);ctx.fill();ctx.stroke();
+      if(leading&&this.markerAsset){const next=this.timeline.route.segments[state.segment][Math.max(1,state.index)],target=next?cameraProject(this.plan.world(next),camera,this.plan):[x,y];drawMarker(ctx,this.markerAsset,x,y,unit*.11,state.phase==='ROUTE_REPLAY'?[target[0]-x,target[1]-y]:undefined);}
+      else{ctx.fillStyle=leading?colors.line:colors.panel;ctx.strokeStyle=colors.ink;ctx.lineWidth=unit*.0025;ctx.beginPath();ctx.arc(x,y,radius,0,Math.PI*2);ctx.fill();ctx.stroke();}
       if(label){ctx.font=`600 ${unit*.026}px system-ui`;ctx.textAlign='left';ctx.textBaseline='middle';const tw=ctx.measureText(label).width,lx=Math.min(w-pad-tw,Math.max(pad,x+unit*.025));let ly=Math.max(h*.20+unit*.025,Math.min(h*.85-unit*.025,y+(label==='Старт'?unit*.04:-unit*.04))),box:Bounds=[lx-unit*.008,ly-unit*.022,lx+tw+unit*.008,ly+unit*.022];
         if(occupied.some(b=>intersects(box,b))){ly=Math.max(h*.20+unit*.025,Math.min(h*.85-unit*.025,ly+unit*.07));box=[box[0],ly-unit*.022,box[2],ly+unit*.022];}
         occupied.push(box);ctx.fillStyle=colors.panel;ctx.fillRect(box[0],box[1],box[2]-box[0],box[3]-box[1]);ctx.fillStyle=colors.ink;ctx.fillText(label,lx,ly);}

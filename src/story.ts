@@ -15,6 +15,9 @@ export interface StoryConfig {
   readonly cameraMode?: CameraMode;
   readonly terrainSurface?: 'dem' | 'photo';
   readonly terrainFlight?: 'conservative' | 'corridor';
+  readonly routeColor?: 'plain' | 'grade';
+  readonly replayPacing?: 'distance' | 'terrain';
+  readonly marker?: 'point' | 'unicycle' | 'bicycle' | 'pedestrian' | 'custom';
 }
 export const TITLE_LIMIT = 200;
 export const FPS = 24;
@@ -31,7 +34,10 @@ export function validateStoryConfig(input: StoryConfig, allowRegression = true):
   if (input.cameraMode !== undefined && !['cinematic', 'classic', 'terrain', 'auto'].includes(input.cameraMode)) throw new Error('Неизвестный режим камеры.');
   if(input.terrainSurface!==undefined&&!['dem','photo'].includes(input.terrainSurface))throw Error('Неизвестная поверхность рельефа.');
   if(input.terrainFlight!==undefined&&!['conservative','corridor'].includes(input.terrainFlight))throw Error('Неизвестный режим 3D-пролёта.');
-  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset, cameraMode: input.cameraMode ?? 'classic',terrainSurface:input.terrainSurface??'dem',terrainFlight:input.terrainFlight??'conservative' });
+  if(input.routeColor!==undefined&&!['plain','grade'].includes(input.routeColor))throw Error('Неизвестный цвет пути.');
+  if(input.replayPacing!==undefined&&!['distance','terrain'].includes(input.replayPacing))throw Error('Неизвестный темп анимации.');
+  if(input.marker!==undefined&&!['point','unicycle','bicycle','pedestrian','custom'].includes(input.marker))throw Error('Неизвестный маркер.');
+  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset, cameraMode: input.cameraMode ?? 'classic',terrainSurface:input.terrainSurface??'dem',terrainFlight:input.terrainFlight??'conservative',routeColor:input.routeColor??'plain',replayPacing:input.replayPacing??'distance',marker:input.marker??'point' });
 }
 export function defaultStoryConfig(title = 'Мой маршрут'): Readonly<StoryConfig> {
   return validateStoryConfig({ durationSeconds: 20, introSeconds: 2, outroSeconds: 2, title, visualStyle: 'atlas', aspectRatio: 'landscape', qualityPreset: 'compatibility', cameraMode: 'cinematic' });

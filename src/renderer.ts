@@ -4,6 +4,7 @@ import { StoryTimeline } from './timeline';
 import { CinematicRenderer } from './cinematic';
 import type { CinematicGeography } from './geography';
 import { regressionStoryConfig, type StoryConfig, type VisualStyle } from './story';
+import { prepareMarker, drawMarker, type MarkerAsset } from './marker';
 export type { VisualStyle } from './story';
 export type Land = { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[];geography?:CinematicGeography };
 export const palette = {
@@ -32,14 +33,16 @@ export class RouteRenderer {
   private readonly metricFont!: number;
   private readonly endpointLabels!: { text: string; x: number; y: number; width: number }[];
   private paintedEdges = 0;
-  constructor(readonly route: Route, readonly land: Land, readonly width: number, readonly height: number, readonly style: VisualStyle, config?: StoryConfig) {
+  private readonly markerAsset?: MarkerAsset;
+  constructor(readonly route: Route, readonly land: Land, readonly width: number, readonly height: number, readonly style: VisualStyle, config?: StoryConfig, customMarker?: MarkerAsset) {
     this.base = document.createElement('canvas'); this.base.width = width; this.base.height = height;
     this.highlight = document.createElement('canvas'); this.highlight.width = width; this.highlight.height = height;
     this.timeline = new StoryTimeline(route, config ?? { ...regressionStoryConfig(route.name), visualStyle: style, aspectRatio: height > width ? 'portrait' : 'landscape' });
     this.config = this.timeline.config;
+    this.markerAsset=prepareMarker(this.config.marker,customMarker);
     if(this.config.cameraMode==='cinematic') {
       this.base.width=this.base.height=this.highlight.width=this.highlight.height=0;
-      this.cinematic=new CinematicRenderer(this.timeline,land,width,height);return;
+      this.cinematic=new CinematicRenderer(this.timeline,land,width,height,this.markerAsset);return;
     }
     this.projection = fitProjection(route.segments, width, height);
     this.projected = route.segments.map(points => points.map(this.projection.project));
@@ -160,6 +163,7 @@ export class RouteRenderer {
       }
     }
     const marker = (point: RoutePoint, solid = false) => {
+      if(solid&&this.markerAsset){const [x,y]=this.projection.project(point),next=this.route.segments[state.segment][Math.max(1,state.index)],target=next?this.projection.project(next):[x,y];drawMarker(ctx,this.markerAsset,x,y,unit*.11,state.phase==='ROUTE_REPLAY'?[target[0]-x,target[1]-y]:undefined);return;}
       const [x, y] = this.projection.project(point);
       ctx.beginPath(); ctx.arc(x, y, unit / 65, 0, Math.PI * 2); ctx.fillStyle = solid ? colors.line : colors.water; ctx.fill();
       ctx.strokeStyle = colors.ink; ctx.lineWidth = 1.5; ctx.stroke();
@@ -200,5 +204,5 @@ export class RouteRenderer {
     ctx.font = `${this.metricFont}px system-ui`; ctx.fillStyle = colors.quiet; ctx.fillText(this.metric, pad, h * .902);
     ctx.fillStyle = colors.line; ctx.fillRect(pad, h * .963, (w - 2 * pad) * state.timelineProgress, Math.max(2, unit * .005));
   }
-  dispose(): void { this.cinematic?.dispose();this.base.width = this.base.height = this.highlight.width = this.highlight.height = 0; }
+  dispose(): void { this.cinematic?.dispose();this.markerAsset?.dispose();this.base.width = this.base.height = this.highlight.width = this.highlight.height = 0; }
 }

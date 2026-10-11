@@ -40,6 +40,16 @@
         <select id="terrain-surface"><option value="dem">DEM · цвет по высоте</option><option value="photo">Спутник · Согне-фьорд 2025</option></select>
         <label class="field-label" id="terrain-flight-label" for="terrain-flight">Пролёт 3D</label>
         <select id="terrain-flight"><option value="conservative">Обзорный · безопасная высота</option><option value="corridor">Ближе к рельефу · проверенный коридор</option></select>
+        <label class="field-label" for="route-color">Цвет пройденного пути · 3D</label>
+        <select id="route-color"><option value="plain">Одноцветный</option><option value="grade">По уклону · подъём / спуск</option></select>
+        <label class="field-label" for="replay-pacing">Темп анимации</label>
+        <select id="replay-pacing"><option value="distance">Равномерно по расстоянию</option><option value="terrain">По уклону · стилизованный</option></select>
+        <p id="dynamics-note" class="route-info">Уклон: красный ↑≥10%, оранжевый ↑≥3%, нейтральный ±3%, светло-зелёный ↓≥3%, зелёный ↓≥10%. Темп анимации не является реальной скоростью. В 2D путь сохраняет одноцветное оформление.</p>
+        <label class="field-label" for="marker">Маркер путешественника</label>
+        <select id="marker"><option value="point">Точка</option><option value="unicycle">Моноколесо</option><option value="bicycle">Велосипед</option><option value="pedestrian">Пешеход</option><option value="custom">Своя картинка</option></select>
+        <label class="field-label" for="marker-file">Картинка маркера · необязательно</label>
+        <input id="marker-file" type="file" accept="image/png,image/webp" aria-describedby="marker-note">
+        <p id="marker-note" class="route-info">Прозрачный PNG/WebP до 1 МиБ, 1024 × 1024. Только в памяти; уменьшается до 256 × 256. Анимированные картинки не принимаются.</p>
         <label class="field-label" for="duration">Длительность видео</label>
         <select id="duration"><option value="10">10 секунд</option><option value="20" selected>20 секунд</option><option value="30">30 секунд</option></select>
         <label class="field-label" for="quality">Качество видео</label>
