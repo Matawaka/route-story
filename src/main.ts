@@ -21,10 +21,10 @@ const terrainSurface=el<HTMLSelectElement>('terrain-surface');
 const terrainFlight=el<HTMLSelectElement>('terrain-flight');
 const terrainDynamics=el<HTMLSelectElement>('terrain-dynamics');
 const markerStyle=el<HTMLSelectElement>('marker-style'),markerFile=el<HTMLInputElement>('marker-file');
-const unicycleMarker=createUnicycleMarker();
+let unicycleMarker:HTMLCanvasElement|undefined;
 let customMarker:ImageBitmap|undefined,markerRequestId=0;
 let activeMarkerImage:CanvasImageSource|undefined;
-const markerImage=():CanvasImageSource|undefined=>markerStyle.value==='unicycle'?unicycleMarker:markerStyle.value==='custom'?customMarker:undefined;
+const markerImage=():CanvasImageSource|undefined=>markerStyle.value==='unicycle'?(unicycleMarker??=createUnicycleMarker()):markerStyle.value==='custom'?customMarker:undefined;
 declare const __IMAGERY_ENABLED__:boolean;
 if(!__IMAGERY_ENABLED__){terrainSurface.hidden=true;el('terrain-surface-label').hidden=true;terrainFlight.hidden=true;el('terrain-flight-label').hidden=true;}
 const title = el<HTMLInputElement>('story-title');
@@ -183,4 +183,4 @@ button.addEventListener('click', async () => {
   } catch (error) { message((error as Error).name === 'AbortError' ? 'Экспорт отменён.' : `Не удалось создать MP4: ${(error as Error).message}`, (error as Error).name !== 'AbortError'); }
   finally { exporting = false; controller = undefined; cancel.hidden = true; controls.forEach(control => control.disabled = false); }
 });
-window.addEventListener('pagehide', () => { ++probeId;++loadId;++markerRequestId;imageryController?.abort();controller?.abort(); stop(); renderer?.dispose();customMarker?.close();unicycleMarker.width=unicycleMarker.height=0; });
+window.addEventListener('pagehide', () => { ++probeId;++loadId;++markerRequestId;imageryController?.abort();controller?.abort(); stop(); renderer?.dispose();customMarker?.close();if(unicycleMarker)unicycleMarker.width=unicycleMarker.height=0; });
