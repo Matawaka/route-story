@@ -39,6 +39,7 @@ export class RouteRenderer {
     this.highlight = document.createElement('canvas'); this.highlight.width = width; this.highlight.height = height;
     this.timeline = new StoryTimeline(route, config ?? { ...regressionStoryConfig(route.name), visualStyle: style, aspectRatio: height > width ? 'portrait' : 'landscape' });
     this.config = this.timeline.config;
+    try {
     this.markerAsset=prepareMarker(this.config.marker,customMarker);
     if(this.config.cameraMode==='cinematic') {
       this.base.width=this.base.height=this.highlight.width=this.highlight.height=0;
@@ -88,6 +89,9 @@ export class RouteRenderer {
       }
     }
     this.drawBase();
+    } catch(error) {
+      this.markerAsset?.dispose();this.base.width=this.base.height=this.highlight.width=this.highlight.height=0;throw error;
+    }
   }
   private distanceText(travelled: number, outro: boolean): string {
     const total = this.timeline.path.total;

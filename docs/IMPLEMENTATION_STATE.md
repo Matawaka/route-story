@@ -1,5 +1,11 @@
 # Implementation state
 
+## Marker admission/disposal hardening — 2026-10-11
+
+Runtime milestone db47d5ecbbfccbd4b344f52bc0bdd85a35e75bfb on `codex/terrain-dynamics-markers`, parentmain126dd988 unchanged remotely. Final admission review additionally rejects duplicate PNG/IHDR/WebP size/image headers before decode and checks every declared WebP size immediately; no ambiguous decoder size can override the input cap. `PLAYWRIGHT_CHANNEL=msedge FULL_EXPORT_ACCEPTANCE=1 npm.cmd run check` after admission fix:178unit/15files/build PASS,50browser PASS/1intentional external-data skip,3.6min. Actual full MP4 bytes/pixels/hashes unchanged; this rerun's export times2624.3msAtlas20s/3927.6msNight30s (single run, distinct from repeated benchmark).
+
+Concrete additional cleanup path:2D Classic/Cinematic constructor preparation errors now dispose their cloned custom marker and temporary visible buffers. After this small failure-only change, `npm.cmd run build` PASS and `PLAYWRIGHT_CHANNEL=msedge npx.cmd playwright test tests/e2e/dynamics.spec.ts -g 'local marker admission|2D Classic'`:2PASS/9.8s, including both forced constructor failures, retained original alpha/downscale/disposal/privacy/exact-seek assertions. No successful-frame rendering change. Next evidence/package checkpoint records this follow-up commit; no merge/deploy or new public acceptance.
+
 ## Terrain dynamics / local markers acceptance — 2026-10-11
 
 Actual remote main and branch parent126dd98805594a1547b858c02922dfa565c24b81, PR9 MERGED; new branch `codex/terrain-dynamics-markers`. Main-push CI38010552547 SUCCESS. Protected photo Pages38010896357 build/deploy/HTTPS SUCCESS after owner review, actual URL https://matawaka.github.io/route-story/; public reports source126dd988/version1.2.0-rc.1/22hashes, metaCSP present/response-header CSP absent, both10s360p photographic smoke videos decoded. These reconcile earlier pending journal entries; no new publication or physical-device test is claimed here. Separate PR5(e684719) and PR8(6d750fff) remain unabsorbed; v1.0 tag/assets unchanged.

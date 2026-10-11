@@ -10,13 +10,14 @@ export function inspectMarker(bytes: Uint8Array, mime = ''): { type: string; wid
   if (bytes.length >= 33 && [137,80,78,71,13,10,26,10].every((b,i)=>bytes[i]===b)) {
     type='image/png'; if(ascii(12,4)!=='IHDR'||v.getUint32(8)!==13)throw invalid();
     width=v.getUint32(16);height=v.getUint32(20);
-    for(let at=8;at+12<=bytes.length;){const n=v.getUint32(at),kind=ascii(at+4,4);if(n>bytes.length-at-12||kind==='acTL')throw invalid();if(kind==='IDAT')image=true;at+=n+12;if(kind==='IEND'){ended=at===bytes.length;break;}}
+    for(let at=8;at+12<=bytes.length;){const n=v.getUint32(at),kind=ascii(at+4,4);if(n>bytes.length-at-12||['acTL','fcTL','fdAT'].includes(kind)||(kind==='IHDR'&&at!==8)||(kind==='IEND'&&n!==0))throw invalid();if(kind==='IDAT')image=true;at+=n+12;if(kind==='IEND'){ended=at===bytes.length;break;}}
   } else if(bytes.length>=20&&ascii(0,4)==='RIFF'&&ascii(8,4)==='WEBP') {
     type='image/webp';if(v.getUint32(4,true)+8!==bytes.length)throw invalid();
     for(let at=12;at+8<=bytes.length;){const kind=ascii(at,4),n=v.getUint32(at+4,true),data=at+8;if(n>bytes.length-data||kind==='ANIM'||kind==='ANMF')throw invalid();
-      if(kind==='VP8X'){if(n!==10||bytes[data]&2)throw invalid();width=1+bytes[data+4]+(bytes[data+5]<<8)+(bytes[data+6]<<16);height=1+bytes[data+7]+(bytes[data+8]<<8)+(bytes[data+9]<<16);}
-      if(kind==='VP8 '){if(n<10||ascii(data+3,3)!=='\x9d\x01\x2a')throw invalid();const w=v.getUint16(data+6,true)&16383,h=v.getUint16(data+8,true)&16383;if(width&&(width!==w||height!==h))throw invalid();width=w;height=h;image=true;}
-      if(kind==='VP8L'){if(n<5||bytes[data]!==47)throw invalid();const bits=v.getUint32(data+1,true),w=(bits&16383)+1,h=((bits>>>14)&16383)+1;if(width&&(width!==w||height!==h))throw invalid();width=w;height=h;image=true;}
+      if(kind==='VP8X'){if(at!==12||width||image||n!==10||bytes[data]&2)throw invalid();width=1+bytes[data+4]+(bytes[data+5]<<8)+(bytes[data+6]<<16);height=1+bytes[data+7]+(bytes[data+8]<<8)+(bytes[data+9]<<16);}
+      if(kind==='VP8 '){if(image||n<10||ascii(data+3,3)!=='\x9d\x01\x2a')throw invalid();const w=v.getUint16(data+6,true)&16383,h=v.getUint16(data+8,true)&16383;if(width&&(width!==w||height!==h))throw invalid();width=w;height=h;image=true;}
+      if(kind==='VP8L'){if(image||n<5||bytes[data]!==47)throw invalid();const bits=v.getUint32(data+1,true),w=(bits&16383)+1,h=((bits>>>14)&16383)+1;if(width&&(width!==w||height!==h))throw invalid();width=w;height=h;image=true;}
+      if(width>MARKER_LIMITS.inputSide||height>MARKER_LIMITS.inputSide)throw invalid();
       at=data+n+(n%2);ended=at===bytes.length;
     }
   }

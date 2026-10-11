@@ -15,9 +15,13 @@ test('local marker admission, alpha/orientation, replacement and decoder cleanup
    const webp=await new Promise<Blob>(resolve=>c.toBlob(b=>resolve(b!),'image/webp')),w=await prepareCustomMarker(new File([webp],'image.webp',{type:'image/webp'}));w.dispose();
    c.width=1025;const large=await new Promise<Blob>(resolve=>c.toBlob(b=>resolve(b!),'image/png'));let largeRejected=false;try{await prepareCustomMarker(new File([large],'large.png',{type:'image/png'}));}catch{largeRejected=true;}
    let unavailable=false;try{prepareMarker('custom');}catch{unavailable=true;}
-   return{...checks,independent,disposed:[a.canvas.width,copy.canvas.width,w.canvas.width],closes,rejected,largeRejected,unavailable};
+   const [{RouteRenderer},{parseGpx},{defaultStoryConfig}]=await Promise.all(['/src/renderer.ts','/src/gpx.ts','/src/story.ts'].map(p=>import(p))),route=parseGpx(await(await fetch('/samples/synthetic.gpx')).text()),failedCloneReleased=[];
+   for(const cameraMode of ['classic','cinematic']){const source=prepareMarker('unicycle')!,clone=source.clone.bind(source);let held:ReturnType<typeof prepareMarker>;source.clone=()=>held=clone();let failed=false;
+    try{new RouteRenderer(route,{get features(){throw Error('Synthetic renderer preparation failure');},get geography(){throw Error('Synthetic renderer preparation failure');}},640,360,'atlas',{...defaultStoryConfig(),cameraMode,marker:'custom'},source);}catch{failed=true;}finally{source.dispose();}failedCloneReleased.push(failed&&held?.canvas.width===0);
+   }
+   return{...checks,independent,disposed:[a.canvas.width,copy.canvas.width,w.canvas.width],closes,rejected,largeRejected,unavailable,failedCloneReleased};
   }finally{ImageBitmap.prototype.close=close;}
- });expect(result).toMatchObject({size:[256,256],top:[255,0,0,255],bottom:[0,255,0,255],transparent:[0,0,0,0],independent:256,disposed:[0,0,0],closes:2,rejected:true,largeRejected:true,unavailable:true});
+ });expect(result).toMatchObject({size:[256,256],top:[255,0,0,255],bottom:[0,255,0,255],transparent:[0,0,0,0],independent:256,disposed:[0,0,0],closes:2,rejected:true,largeRejected:true,unavailable:true,failedCloneReleased:[true,true]});
 });
 
 test('graded true ribbon and all icon modes retain occlusion, alignment and deterministic frames',async({page})=>{

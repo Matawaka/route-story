@@ -12,6 +12,12 @@ describe('marker file admission before decode',()=>{
   it('rejects oversized and animated data',()=>{
     expect(()=>inspectMarker(new Uint8Array(MARKER_LIMITS.bytes+1))).toThrow();const b=png();b.set(new TextEncoder().encode('acTL'),37);expect(()=>inspectMarker(b)).toThrow();const w=webp();w.set(new TextEncoder().encode('ANIM'),12);expect(()=>inspectMarker(w)).toThrow();
   });
+  it('rejects duplicate headers/images that could disagree with decoder dimensions',()=>{
+    const p=png(),duplicate=new Uint8Array(p.length+25);duplicate.set(p.subarray(0,33));duplicate.set(p.subarray(8,33),33);duplicate.set(p.subarray(33),58);expect(()=>inspectMarker(duplicate)).toThrow();
+    const w=webp(),extra=new Uint8Array(w.length+14);extra.set(w);extra.set(w.subarray(12),26);new DataView(extra.buffer).setUint32(4,extra.length-8,true);expect(()=>inspectMarker(extra)).toThrow();
+    const header=new Uint8Array(18);header.set(new TextEncoder().encode('VP8X'));new DataView(header.buffer).setUint32(4,10,true);header[12]=31;header[15]=15;
+    const extended=new Uint8Array(w.length+36);extended.set(w.subarray(0,12));extended.set(header,12);extended.set(header,30);extended.set(w.subarray(12),48);new DataView(extended.buffer).setUint32(4,extended.length-8,true);expect(()=>inspectMarker(extended)).toThrow();
+  });
   it('validates opt-in immutable configuration and retains regression defaults',()=>{
     const c=validateStoryConfig({...defaultStoryConfig(),marker:'unicycle',routeColor:'grade',replayPacing:'terrain'});expect(Object.isFrozen(c)).toBe(true);expect(c.marker).toBe('unicycle');
     for(const key of ['marker','routeColor','replayPacing'])expect(()=>validateStoryConfig({...c,[key]:'https://untrusted.invalid'})).toThrow();expect(defaultStoryConfig()).toMatchObject({marker:'point',routeColor:'plain',replayPacing:'distance'});
