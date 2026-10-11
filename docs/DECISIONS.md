@@ -1,5 +1,15 @@
 # Decisions
 
+## 2026-10-11: independent terrain dynamics and local markers
+
+Resume actual merged main126dd988 after successful protected photo deployment38010896357; do not absorb independent PR5/PR8 or modify stable tags. PartsA–C belong in `codex/terrain-dynamics-markers`, with owner review before merge/publication. Existing24fps/720p/duration/32MiB export and5/6MiB package limits, source licenses, two photographic textures and protected workflow remain unchanged.
+
+Use one precomputed RouteDynamics profile and the existing StoryTimeline. Prefer complete finite GPX elevations, otherwise one covering DEM; never mix vertical datums.100m segment-local secant smoothing and bounded isolated GPX-spike correction preserve source data and genuine DEM cliffs. Five grade bands encode uphill/downhill with color plus arrow/percentage legend; missing/unreliable heights neutralize both grade and pacing. Time allocation distance/relativeSpeed normalizes to the existing replay interval. This is stylized pacing, not recorded vehicle speed. Default distance/plain/point path remains available: all independently decoded frames match measured baseline MP4s (container bytes are separate); grade GPU attributes exist only when selected.
+
+Use original Canvas silhouettes and one sanitized256² local raster for custom static PNG/WebP. Admission bounds file bytes/signature/chunks/declared dimensions/animation before decode, verifies decoded dimensions, closes ImageBitmap and never stores raw file/metadata or creates a user-image URL. Clone ownership prevents UI replacement from invalidating a renderer/export. A bottom-anchored pixel-sized depth-tested Sprite gives legibility; upright artwork plus a separate same-edge direction cue avoids sideways rider/custom art and fictitious segment bearings. This is an annotation, not a life-size3D vehicle.
+
+Source-detail guard stays developer-only: actual10m footprint~7.75portrait pixels at close flight, reducing it to~2 requires lifting the camera from1663m to7906m. The40m guard loses too much close-flight composition. Safety/LOS remain proved, but no automatic camera/default change or invented detail. Recommend a separate short Swiss Alpine source crop after selected native-resolution/coverage/license checks; ordinary swisstopo OGD permits reuse with credit, product-page sample ZIPs do not. No new Swiss/PDOK/NAIP/LINZ data bundled or private GPX relocated. Record estimates separately from actual performance/asset measurements.
+
 ## 2026-10-09: owner-approved bounded photo publication
 
 Owner explicitly approved the actual Atlas20s/Night30s videos, public deployment and increased local package size. Supersedes the earlier pending photo publication/budget gate below. Limit the COMPLETE adaptive package to6MiB including release.json, baseline≤5MiB and unchanged image runtime bounds (two textures,≤2MiB JPEG/3million pixels/2048 sides). Measured prior candidate5792186B excluding its small manifest; no nationwide pack or unbounded asset approval.

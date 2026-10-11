@@ -1,5 +1,13 @@
 # Adaptive photographic terrain — v1.2 review candidate
 
+## 2026-10-11: measured source footprint, no new geography
+
+Main126dd988 and protected photo deployment38010896357 are now verified; earlier pending statements below are historical checkpoints. New independent `codex/terrain-dynamics-markers` candidate retains the same assets, alignment, terrain camera and two-image residency/readiness. Optional256² marker is a third small GPU texture, not a third geographic level. Grade colors are attributes on the existing depth-tested route geometry; terrain phototexture is unchanged.
+
+`scripts/acceptance/imagery-detail-study.mjs` projects actual10m east/north source-sized ground edges at representative marker points. Mid-replay720p landscape/portrait footprints are4.36/7.75output pixels; original source cannot supply finer geography. A developer-only10m target-slant guard reaches~2px by raising middle camera altitude1663→4485/7906m, retaining all crossed-cell350m clearance/intro/outro and exact LOS checks. The40m guard requires~17–31km altitude and undermines close-flight composition. These local footprint samples are not whole-frame sharpness guarantees; the10m guard also cannot sharpen40m coverage. Compare actual decoded videos/contact sheet in TERRAIN_DYNAMICS.md/DYNAMICS_EVIDENCE.json. Neither guard is wired into production, and no image/GPU/package limit or release permission changes.
+
+High-resolution Swiss/PDOK/NAIP/LINZ feasibility is separately documented in HIGH_RESOLUTION_REGION_STUDY.md. Only public source metadata was investigated; no new image/DEM crop is bundled. Any subsequent regional pack still needs selected native coverage, crop/UV/provenance/license/size/device/export acceptance and owner approval.
+
 ## Owner-approved publication policy — 2026-10-09
 
 Owner approved final20/30s photographic videos, public deployment and package increase. Earlier no-publication/budget statements below are historical checkpoints. The complete approved regional package is now bounded to6MiB including release.json (baseline still≤5MiB; no texture/GPU/export-limit increase). Only the three fixed adaptive files are shipped; the old20m developer fixture stays excluded. Build with BUILD_IMAGERY_PACK=1 and validate with --imagery-release; manifest publicationApproved=true means owner's package authorization, not proof of deployment. Local --imagery-candidate remains available with publicationApproved=false.

@@ -1,0 +1,653 @@
+{
+  "baselineCommit": "126dd98805594a1547b858c02922dfa565c24b81",
+  "runtimeCommit": "226cdc4444c5647bd493626f4f2cc309edcc758e",
+  "date": "2026-10-11",
+  "candidate": "Local review candidate; final documentation commit recorded in implementation journal",
+  "published": false,
+  "source": "Existing721-point explicitly synthetic Sogne GPX; true local Kartverket DEM and reviewed Copernicus imagery; not a historical ride.",
+  "assets": [
+    {
+      "file": "full/landscape-unicycle-20s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 1280,
+      "height": 720,
+      "duration": 20,
+      "decodedFrames": 480,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 480,
+      "firstFrameHash": "f0739a9056b1b56f0b852d7a13066a3e",
+      "lastFrameHash": "75888733191f887fb298c25efb0fca8b",
+      "bytes": 13460006,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "exportMs": 2620,
+      "previewExportEqual": true,
+      "decodedPixelError": 1.8084490740740742,
+      "allFramesNonblank": true,
+      "cancelledThenRetried": true,
+      "source": "synthetic",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "sha256": "aab645fcae6d584d4bbbb5b12de12d796e28bedd216b06223a25bff64868f3c8"
+    },
+    {
+      "file": "full/portrait-unicycle-30s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 720,
+      "height": 1280,
+      "duration": 30,
+      "decodedFrames": 720,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 720,
+      "firstFrameHash": "2e8e8c60303c839444f6fcfdd17766e3",
+      "lastFrameHash": "33709f3daaf53d106adde3af80e9a1e5",
+      "bytes": 19382211,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "exportMs": 3777.2000000178814,
+      "previewExportEqual": true,
+      "decodedPixelError": 1.478431712962963,
+      "allFramesNonblank": true,
+      "cancelledThenRetried": true,
+      "source": "synthetic",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "sha256": "3b8a74e4af77c08fef006c347f77f057cb214a7715de8d6758be856109a6469e"
+    }
+  ],
+  "performance": {
+    "sourceCommit": "226cdc4444c5647bd493626f4f2cc309edcc758e",
+    "uncommitted": true,
+    "baseline": "126dd98805594a1547b858c02922dfa565c24b81",
+    "os": "Windows_NT 10.0.26200 x64",
+    "browser": "155.0.4283.45",
+    "method": "Isolated Edge per mode; one warm-up, three steady repeats. Same synthetic721-point GPX/resident imagery. Draw wall-time includes submission/copy; not a GPU timer. CDP JS heap separate from native memory. Test-only GC never in production.",
+    "nativeMemory": "NOT MEASURED: policy-bypassing legacy sampler rejected; no policy override used.",
+    "gpuMemory": "NOT MEASURED; geometry byte lengths and texture counts are bounded resource accounting, not VRAM measurement.",
+    "reports": [
+      {
+        "mode": "baseline",
+        "quality": "compatibility",
+        "aspect": "landscape",
+        "duration": 10,
+        "visualStyle": "atlas",
+        "summary": {
+          "prepareMs": {
+            "median": 137.10000002384186,
+            "min": 133.7000000178814,
+            "max": 160.90000000596046
+          },
+          "frameMs": {
+            "median": 0.699999988079071,
+            "min": 0.29999998211860657,
+            "max": 3.9000000059604645
+          },
+          "exportMs": {
+            "median": 777,
+            "min": 691.8000000119209,
+            "max": 791.2999999821186
+          },
+          "bytes": {
+            "median": 2095253,
+            "min": 2095253,
+            "max": 2095253
+          }
+        }
+      },
+      {
+        "mode": "baseline",
+        "quality": "standard",
+        "aspect": "landscape",
+        "duration": 10,
+        "visualStyle": "atlas",
+        "summary": {
+          "prepareMs": {
+            "median": 418,
+            "min": 399.2000000178814,
+            "max": 432.90000000596046
+          },
+          "frameMs": {
+            "median": 0.699999988079071,
+            "min": 0.3999999761581421,
+            "max": 9.899999976158142
+          },
+          "exportMs": {
+            "median": 1506.5,
+            "min": 1501,
+            "max": 1534.5
+          },
+          "bytes": {
+            "median": 7081253,
+            "min": 7081253,
+            "max": 7081253
+          }
+        }
+      },
+      {
+        "mode": "baseline",
+        "quality": "standard",
+        "aspect": "portrait",
+        "duration": 30,
+        "visualStyle": "night",
+        "summary": {
+          "prepareMs": {
+            "median": 408.10000002384186,
+            "min": 358.59999999403954,
+            "max": 414.19999998807907
+          },
+          "frameMs": {
+            "median": 0.5999999940395355,
+            "min": 0.29999998211860657,
+            "max": 11.400000005960464
+          },
+          "exportMs": {
+            "median": 3979.0999999940395,
+            "min": 3827.4000000059605,
+            "max": 4039.699999988079
+          },
+          "bytes": {
+            "median": 19392071,
+            "min": 19392071,
+            "max": 19392071
+          }
+        }
+      },
+      {
+        "mode": "current-default",
+        "quality": "compatibility",
+        "aspect": "landscape",
+        "duration": 10,
+        "visualStyle": "atlas",
+        "summary": {
+          "prepareMs": {
+            "median": 154.40000000596046,
+            "min": 152.80000001192093,
+            "max": 216.30000001192093
+          },
+          "frameMs": {
+            "median": 0.6000000238418579,
+            "min": 0.29999998211860657,
+            "max": 4.399999976158142
+          },
+          "exportMs": {
+            "median": 1036.800000011921,
+            "min": 834.3999999761581,
+            "max": 1154.300000011921
+          },
+          "bytes": {
+            "median": 2095253,
+            "min": 2095253,
+            "max": 2095253
+          }
+        }
+      },
+      {
+        "mode": "current-default",
+        "quality": "standard",
+        "aspect": "landscape",
+        "duration": 10,
+        "visualStyle": "atlas",
+        "summary": {
+          "prepareMs": {
+            "median": 395.19999998807907,
+            "min": 380.10000002384186,
+            "max": 407.5
+          },
+          "frameMs": {
+            "median": 0.5999999940395355,
+            "min": 0.29999998211860657,
+            "max": 10.699999988079071
+          },
+          "exportMs": {
+            "median": 1628.4000000059605,
+            "min": 1453.4000000059605,
+            "max": 1678.699999988079
+          },
+          "bytes": {
+            "median": 7081253,
+            "min": 7081253,
+            "max": 7081253
+          }
+        }
+      },
+      {
+        "mode": "current-default",
+        "quality": "standard",
+        "aspect": "portrait",
+        "duration": 30,
+        "visualStyle": "night",
+        "summary": {
+          "prepareMs": {
+            "median": 372.2000000178814,
+            "min": 333.19999998807907,
+            "max": 423.69999998807907
+          },
+          "frameMs": {
+            "median": 0.5999999940395355,
+            "min": 0.30000001192092896,
+            "max": 10.699999988079071
+          },
+          "exportMs": {
+            "median": 3881.4000000059605,
+            "min": 3813.300000011921,
+            "max": 4078.5999999940395
+          },
+          "bytes": {
+            "median": 19392071,
+            "min": 19392071,
+            "max": 19392071
+          }
+        }
+      },
+      {
+        "mode": "dynamics",
+        "quality": "compatibility",
+        "aspect": "landscape",
+        "duration": 10,
+        "visualStyle": "atlas",
+        "summary": {
+          "prepareMs": {
+            "median": 169.2999999821186,
+            "min": 166.90000000596046,
+            "max": 218.5
+          },
+          "frameMs": {
+            "median": 0.800000011920929,
+            "min": 0.4000000059604645,
+            "max": 6.0999999940395355
+          },
+          "exportMs": {
+            "median": 1176.3999999761581,
+            "min": 983.7000000178814,
+            "max": 1186.800000011921
+          },
+          "bytes": {
+            "median": 2090951,
+            "min": 2090951,
+            "max": 2090951
+          }
+        }
+      },
+      {
+        "mode": "dynamics",
+        "quality": "standard",
+        "aspect": "landscape",
+        "duration": 10,
+        "visualStyle": "atlas",
+        "summary": {
+          "prepareMs": {
+            "median": 393.80000001192093,
+            "min": 388.5,
+            "max": 413.2999999821186
+          },
+          "frameMs": {
+            "median": 0.6000000238418579,
+            "min": 0.3999999761581421,
+            "max": 5.199999988079071
+          },
+          "exportMs": {
+            "median": 1233.4000000059605,
+            "min": 1152.6000000238419,
+            "max": 1311.5999999940395
+          },
+          "bytes": {
+            "median": 7081802,
+            "min": 7081802,
+            "max": 7081802
+          }
+        }
+      },
+      {
+        "mode": "dynamics",
+        "quality": "standard",
+        "aspect": "portrait",
+        "duration": 30,
+        "visualStyle": "night",
+        "summary": {
+          "prepareMs": {
+            "median": 398.40000000596046,
+            "min": 364.90000000596046,
+            "max": 458.89999997615814
+          },
+          "frameMs": {
+            "median": 0.6000000238418579,
+            "min": 0.3999999761581421,
+            "max": 4.9000000059604645
+          },
+          "exportMs": {
+            "median": 3388.5999999940395,
+            "min": 3195.7999999821186,
+            "max": 3935.7999999821186
+          },
+          "bytes": {
+            "median": 19383518,
+            "min": 19383518,
+            "max": 19383518
+          }
+        }
+      }
+    ],
+    "heaps": [
+      {
+        "mode": "baseline",
+        "beforeHeap": 6885352,
+        "retainedHeap": 16402752,
+        "afterTestGC": 14459932,
+        "unloadHeap": 14825096
+      },
+      {
+        "mode": "current-default",
+        "beforeHeap": 6885352,
+        "retainedHeap": 16432176,
+        "afterTestGC": 14395888,
+        "unloadHeap": 14761052
+      },
+      {
+        "mode": "dynamics",
+        "beforeHeap": 6631236,
+        "retainedHeap": 17175548,
+        "afterTestGC": 14549828,
+        "unloadHeap": 14914992
+      }
+    ],
+    "profile50k": {
+      "warmup": {
+        "ms": 76.60000002384186,
+        "points": 50000,
+        "edges": 49999
+      },
+      "steady": [
+        {
+          "ms": 85.5,
+          "points": 50000,
+          "edges": 49999
+        },
+        {
+          "ms": 60.900000005960464,
+          "points": 50000,
+          "edges": 49999
+        },
+        {
+          "ms": 66.7000000178814,
+          "points": 50000,
+          "edges": 49999
+        }
+      ],
+      "ms": {
+        "median": 66.7000000178814,
+        "min": 60.900000005960464,
+        "max": 85.5
+      }
+    }
+  },
+  "defaultFrameEquality": [
+    {
+      "case": "compatibility-landscape",
+      "allDecodedFramesIdentical": true,
+      "encodedContainerBytesIdentical": false,
+      "method": "Independent full FFmpeg framemd5 comparison; container byte equality is separate from frame determinism."
+    },
+    {
+      "case": "standard-landscape",
+      "allDecodedFramesIdentical": true,
+      "encodedContainerBytesIdentical": false,
+      "method": "Independent full FFmpeg framemd5 comparison; container byte equality is separate from frame determinism."
+    },
+    {
+      "case": "standard-portrait",
+      "allDecodedFramesIdentical": true,
+      "encodedContainerBytesIdentical": false,
+      "method": "Independent full FFmpeg framemd5 comparison; container byte equality is separate from frame determinism."
+    }
+  ],
+  "detailStudy": {
+    "method": "Same721-point synthetic route, resident10/40m assets, DEM50m, fixed24FPS and720p. Target slant metres/output pixel proxy plus actual projected source-sized east/north surface edges at the route marker. These local samples do not bound every ground pixel. Developer-only guard raises altitude, never reduces350m clearance or changes XY/source coordinates; exact crossed-cell leg proof retained. Not enabled in product.",
+    "reports": [
+      {
+        "name": "landscape-original",
+        "width": 1280,
+        "height": 720,
+        "proven": true,
+        "minimum": 501.35536119209564,
+        "scenes": [
+          {
+            "time": 0.5,
+            "gsd": 10,
+            "metresPerPixel": 2.269404267148508,
+            "sourceTexelPixelsProxy": 4.4064427589029505,
+            "measuredGroundTexelPixels": 4.387043395788776,
+            "altitude": 1916.7619930840124
+          },
+          {
+            "time": 1,
+            "gsd": 10,
+            "metresPerPixel": 2.2269155460397196,
+            "sourceTexelPixelsProxy": 4.490516049332766,
+            "measuredGroundTexelPixels": 3.9875928023128866,
+            "altitude": 2146.4298447199344
+          },
+          {
+            "time": 2,
+            "gsd": 10,
+            "metresPerPixel": 2.2249780395894123,
+            "sourceTexelPixelsProxy": 4.494426381774697,
+            "measuredGroundTexelPixels": 4.361414821728043,
+            "altitude": 1662.5800200259548
+          },
+          {
+            "time": 3.5,
+            "gsd": 10,
+            "metresPerPixel": 2.341822158558748,
+            "sourceTexelPixelsProxy": 4.270179084031899,
+            "measuredGroundTexelPixels": 4.02045780508993,
+            "altitude": 2185.2497733562395
+          }
+        ],
+        "validation": {
+          "file": "artifacts/sprint10/detail-study/landscape-original.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 4,
+          "decodedFrames": 96,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 96,
+          "firstFrameHash": "40b8a781c749de3ff4c7f860d904319f",
+          "lastFrameHash": "9e90323d0d4b2be9f8cf937a49f33ad4",
+          "bytes": 3090671,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "name": "landscape-guard",
+        "width": 1280,
+        "height": 720,
+        "proven": true,
+        "minimum": 3376.117487999625,
+        "scenes": [
+          {
+            "time": 0.5,
+            "gsd": 10,
+            "metresPerPixel": 5.0006137019521475,
+            "sourceTexelPixelsProxy": 1.9997545493458502,
+            "measuredGroundTexelPixels": 1.9482003844326554,
+            "altitude": 4741.6531995311425
+          },
+          {
+            "time": 1,
+            "gsd": 10,
+            "metresPerPixel": 4.997797888192846,
+            "sourceTexelPixelsProxy": 2.000881232837509,
+            "measuredGroundTexelPixels": 1.9678567638371787,
+            "altitude": 5003.173494399698
+          },
+          {
+            "time": 2,
+            "gsd": 10,
+            "metresPerPixel": 4.999723300987133,
+            "sourceTexelPixelsProxy": 2.000110685730473,
+            "measuredGroundTexelPixels": 1.9946887614620405,
+            "altitude": 4484.6214177822485
+          },
+          {
+            "time": 3.5,
+            "gsd": 10,
+            "metresPerPixel": 5.000000000000001,
+            "sourceTexelPixelsProxy": 1.9999999999999996,
+            "measuredGroundTexelPixels": 1.9488512814276282,
+            "altitude": 5071.804885123975
+          }
+        ],
+        "validation": {
+          "file": "artifacts/sprint10/detail-study/landscape-guard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 4,
+          "decodedFrames": 96,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 96,
+          "firstFrameHash": "40b8a781c749de3ff4c7f860d904319f",
+          "lastFrameHash": "0fde9f913284a9ab8c7c4e43f4af2ba8",
+          "bytes": 3022323,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "name": "portrait-original",
+        "width": 720,
+        "height": 1280,
+        "proven": true,
+        "minimum": 501.35536119209564,
+        "scenes": [
+          {
+            "time": 0.5,
+            "gsd": 10,
+            "metresPerPixel": 1.2765399002710356,
+            "sourceTexelPixelsProxy": 7.833676015827469,
+            "measuredGroundTexelPixels": 7.799188259179941,
+            "altitude": 1916.7619930840124
+          },
+          {
+            "time": 1,
+            "gsd": 10,
+            "metresPerPixel": 1.2526399946473423,
+            "sourceTexelPixelsProxy": 7.98313964325825,
+            "measuredGroundTexelPixels": 7.089053870778302,
+            "altitude": 2146.4298447199344
+          },
+          {
+            "time": 2,
+            "gsd": 10,
+            "metresPerPixel": 1.2515501472690445,
+            "sourceTexelPixelsProxy": 7.990091345377238,
+            "measuredGroundTexelPixels": 7.753626349738842,
+            "altitude": 1662.5800200259548
+          },
+          {
+            "time": 3.5,
+            "gsd": 10,
+            "metresPerPixel": 1.3172749641892956,
+            "sourceTexelPixelsProxy": 7.5914294827233775,
+            "measuredGroundTexelPixels": 7.147480542382068,
+            "altitude": 2185.2497733562395
+          }
+        ],
+        "validation": {
+          "file": "artifacts/sprint10/detail-study/portrait-original.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 4,
+          "decodedFrames": 96,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 96,
+          "firstFrameHash": "082945e4c68b31f488fed83058302735",
+          "lastFrameHash": "7db6108cbe0ede45f7c308af4eb484cb",
+          "bytes": 3092590,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      },
+      {
+        "name": "portrait-guard",
+        "width": 720,
+        "height": 1280,
+        "proven": true,
+        "minimum": 6773.134115364901,
+        "scenes": [
+          {
+            "time": 0.5,
+            "gsd": 10,
+            "metresPerPixel": 5.000362912960973,
+            "sourceTexelPixelsProxy": 1.9998548453513116,
+            "measuredGroundTexelPixels": 1.9642592704652093,
+            "altitude": 8175.617131671588
+          },
+          {
+            "time": 1,
+            "gsd": 10,
+            "metresPerPixel": 4.998697413725304,
+            "sourceTexelPixelsProxy": 2.00052117028373,
+            "measuredGroundTexelPixels": 1.9938257569580622,
+            "altitude": 8432.107191597308
+          },
+          {
+            "time": 2,
+            "gsd": 10,
+            "metresPerPixel": 4.999843305445437,
+            "sourceTexelPixelsProxy": 2.0000626797861414,
+            "measuredGroundTexelPixels": 2.0007870354333934,
+            "altitude": 7906.404594213131
+          },
+          {
+            "time": 3.5,
+            "gsd": 10,
+            "metresPerPixel": 5.000000000000001,
+            "sourceTexelPixelsProxy": 1.9999999999999996,
+            "measuredGroundTexelPixels": 2.0074214310158376,
+            "altitude": 8536.23662327895
+          }
+        ],
+        "validation": {
+          "file": "artifacts/sprint10/detail-study/portrait-guard.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 4,
+          "decodedFrames": 96,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 96,
+          "firstFrameHash": "082945e4c68b31f488fed83058302735",
+          "lastFrameHash": "4285ce52e36d6d2a41ca5fc96d1ab384",
+          "bytes": 3044072,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        }
+      }
+    ]
+  },
+  "images": [
+    "docs/images/dynamics-atlas-comparison.jpg",
+    "docs/images/dynamics-night-comparison.jpg",
+    "docs/images/imagery-detail-study.jpg"
+  ]
+}
