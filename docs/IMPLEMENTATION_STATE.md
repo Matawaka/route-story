@@ -1,5 +1,13 @@
 # Implementation state
 
+## PR10 / source-matched production gate — 2026-10-11
+
+Pushed reviewed candidate22546bee306e3c573acd749f0855b3bdfc532611 on `codex/terrain-dynamics-markers`; PR https://github.com/Matawaka/route-story/pull/10 OPEN targeting actual main126dd988, attached to this task. Three meaningful implementation/security/evidence commits preserve history; independent PR5/PR8 remain unchanged. No merge/tag/deploy. This journal-only follow-up changes no runtime/public files; actual final branch SHA is authoritative in git/PR head.
+
+Source-matched committed candidate22546be: `BUILD_IMAGERY_PACK=1 node scripts/package-release.mjs --imagery-candidate` reports5819596B+3884Bmanifest=5823480B/22hashes, publicationApproved=false≤6MiB; baseline4814861B+3193Bmanifest≤5MiB. `PLAYWRIGHT_CHANNEL=msedge ACCEPTANCE_DIR=artifacts/sprint10/production-final-source node scripts/acceptance/imagery.mjs --production --smoke`:VERIFIED, exact22546be source/version1.2.0-rc.1/allhashes/licenses/restrictive metaCSP/local repository subpath, anonymous local production only. Atlas10s640×3602084945B/935.5ms and Night10s360×6402087850B/1301.9ms,240H.264 frames each/24fps/full independent decode/nonblank, cancel→retry/reversible seek/zero errors/external requests/storage. New actual20/30s grade/marker videos and repeated measurements remain documented separately, not replaced by this default-mode smoke. No public acceptance of this candidate or fresh physical-device/native-memory result.
+
+First PR CI38141269077 was IN_PROGRESS on22546be at this checkpoint; this documentation follow-up requires inspection of the new exact-head run. Do not infer remote success from local acceptance or a superseded run. Follow PR10 checks for actual current result; no additional code changes are planned. Remaining gate is owner visual review/new merge-and-deploy approval, with honest2D single-color fallback, coarse DEM/10m imagery and developer-only detail guard/new-region research limitations. No new pack publishing or competition submission is requested.
+
 ## Dynamics evidence / review handover — 2026-10-11
 
 Branch `codex/terrain-dynamics-markers`; rendering/elevation/marker checkpoint226cdc4444c5647bd493626f4f2cc309edcc758e; actual remote main126dd988 unchanged, independent PR5/PR8 OPEN and not absorbed. No new publication. The small final UI disclaimer correctly distinguishes disabled profile/plain3D from enabled grades; build and focused `PLAYWRIGHT_CHANNEL=msedge npx.cmd playwright test tests/e2e/dynamics.spec.ts -g '2D Classic|custom local'`:2PASS/16.3s, including real customPNG10s MP4. No video-frame change from that UI-only edit.
