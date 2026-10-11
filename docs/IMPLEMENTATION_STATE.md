@@ -1,5 +1,14 @@
 # Implementation state
 
+## In-progress features — 2026-10-11 (unmerged, do not deploy)
+
+- Public/main source at feature start: `126dd98805594a1547b858c02922dfa565c24b81` (reviewed photographic 3D package); public Pages photo redeploy must still use guarded manual `workflow_dispatch`, exact successful main SHA, include_imagery=true and human environment approval. No such deployment was performed from this session.
+- PR #12 / `feature/terrain-grade-pacing`: adds opt-in DEM grade colors and normalized artistic uphill/downhill pacing, original GPX untouched. Initial two CI runs failed due reserved GLSL names (`flat`, `active`); both identifiers were corrected and new CI was requested. Never claim acceptance without current exact-head green run.
+- PR #13 / `feature/custom-route-marker`, stacked on #12: local transparent rider-on-unicycle silhouette (backpack, rack), PNG/WebP upload with bounded decoding, 2D/3D render integration and tests. Default remains dot. No external marker URLs or image persistence.
+- Checks have been initiated by GitHub pull requests. Local clone, full browser tests, decoded MP4 and production HTTPS acceptance could not be executed in this tool environment; GitHub run logs should be consulted for the final result.
+- Next gates: pass PR #12 and #13 exact-head CI, separately decode real gradient/icon MP4 in both aspects, review resource usage, obtain owner merge approval, then only use the existing protected Pages release workflow. See `docs/TERRAIN_DYNAMICS_AND_MARKERS.md`.
+
+
 ## Owner-approved photo deployment preparation — 2026-10-10
 
 Reconciled clean feature/phototextured-terrain-v1.2 HEADc2aebeac34404434010e954d5557f635f0194f67 against remote main8f4d0f665d3f6df7f9fdef0d356a33310d2800ab. PR9 open/mergeable, exact-head CI37973101196 SUCCESS; separate PR8 head6d750fff79d23cd39dbfc75ed22888c5f43e6a7e/CI37972841785 SUCCESS, PR5 open. No pending duplicate deployment; latest Pages37962492130 succeeded on accepted DEM-only main. v1.0 immutable; no new tag/public release.
