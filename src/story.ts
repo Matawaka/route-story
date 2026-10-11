@@ -17,6 +17,8 @@ export interface StoryConfig {
   readonly terrainFlight?: 'conservative' | 'corridor';
   /** Optional DEM-based artistic timing and gradient; never recorded speed. */
   readonly terrainDynamics?: boolean;
+  /** Route marker is local-only; custom image data never enters StoryConfig. */
+  readonly markerStyle?: 'dot' | 'unicycle' | 'custom';
 }
 export const TITLE_LIMIT = 200;
 export const FPS = 24;
@@ -34,7 +36,8 @@ export function validateStoryConfig(input: StoryConfig, allowRegression = true):
   if(input.terrainSurface!==undefined&&!['dem','photo'].includes(input.terrainSurface))throw Error('Неизвестная поверхность рельефа.');
   if(input.terrainFlight!==undefined&&!['conservative','corridor'].includes(input.terrainFlight))throw Error('Неизвестный режим 3D-пролёта.');
   if(input.terrainDynamics!==undefined&&typeof input.terrainDynamics!=='boolean')throw Error('Неизвестный режим динамики рельефа.');
-  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset, cameraMode: input.cameraMode ?? 'classic',terrainSurface:input.terrainSurface??'dem',terrainFlight:input.terrainFlight??'conservative',terrainDynamics:input.terrainDynamics??false });
+  if(input.markerStyle!==undefined&&!['dot','unicycle','custom'].includes(input.markerStyle))throw Error('Неизвестный стиль значка маршрута.');
+  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset, cameraMode: input.cameraMode ?? 'classic',terrainSurface:input.terrainSurface??'dem',terrainFlight:input.terrainFlight??'conservative',terrainDynamics:input.terrainDynamics??false,markerStyle:input.markerStyle??'dot' });
 }
 export function defaultStoryConfig(title = 'Мой маршрут'): Readonly<StoryConfig> {
   return validateStoryConfig({ durationSeconds: 20, introSeconds: 2, outroSeconds: 2, title, visualStyle: 'atlas', aspectRatio: 'landscape', qualityPreset: 'compatibility', cameraMode: 'cinematic' });
