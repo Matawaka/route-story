@@ -15,6 +15,8 @@ export interface StoryConfig {
   readonly cameraMode?: CameraMode;
   readonly terrainSurface?: 'dem' | 'photo';
   readonly terrainFlight?: 'conservative' | 'corridor';
+  /** Optional DEM-based artistic timing and gradient; never recorded speed. */
+  readonly terrainDynamics?: boolean;
 }
 export const TITLE_LIMIT = 200;
 export const FPS = 24;
@@ -31,7 +33,8 @@ export function validateStoryConfig(input: StoryConfig, allowRegression = true):
   if (input.cameraMode !== undefined && !['cinematic', 'classic', 'terrain', 'auto'].includes(input.cameraMode)) throw new Error('Неизвестный режим камеры.');
   if(input.terrainSurface!==undefined&&!['dem','photo'].includes(input.terrainSurface))throw Error('Неизвестная поверхность рельефа.');
   if(input.terrainFlight!==undefined&&!['conservative','corridor'].includes(input.terrainFlight))throw Error('Неизвестный режим 3D-пролёта.');
-  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset, cameraMode: input.cameraMode ?? 'classic',terrainSurface:input.terrainSurface??'dem',terrainFlight:input.terrainFlight??'conservative' });
+  if(input.terrainDynamics!==undefined&&typeof input.terrainDynamics!=='boolean')throw Error('Неизвестный режим динамики рельефа.');
+  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset, cameraMode: input.cameraMode ?? 'classic',terrainSurface:input.terrainSurface??'dem',terrainFlight:input.terrainFlight??'conservative',terrainDynamics:input.terrainDynamics??false });
 }
 export function defaultStoryConfig(title = 'Мой маршрут'): Readonly<StoryConfig> {
   return validateStoryConfig({ durationSeconds: 20, introSeconds: 2, outroSeconds: 2, title, visualStyle: 'atlas', aspectRatio: 'landscape', qualityPreset: 'compatibility', cameraMode: 'cinematic' });
