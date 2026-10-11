@@ -22,6 +22,7 @@ const terrainSurface=el<HTMLSelectElement>('terrain-surface');
 const terrainFlight=el<HTMLSelectElement>('terrain-flight');
 const routeColor=el<HTMLSelectElement>('route-color'),replayPacing=el<HTMLSelectElement>('replay-pacing'),marker=el<HTMLSelectElement>('marker'),markerFile=el<HTMLInputElement>('marker-file');
 const markerSizeControl=el<HTMLSelectElement>('marker-size'),markerPresentation=el<HTMLSelectElement>('marker-presentation');
+const markerNote=el('marker-note'),markerNoteBase=markerNote.textContent??'';
 let customMarker:MarkerAsset|undefined,markerLoadId=0,markerPreparing=false;
 declare const __IMAGERY_ENABLED__:boolean;
 if(!__IMAGERY_ENABLED__){terrainSurface.hidden=true;el('terrain-surface-label').hidden=true;terrainFlight.hidden=true;el('terrain-flight-label').hidden=true;}
@@ -136,7 +137,7 @@ markerPresentation.addEventListener('change',()=>void configure().catch(error=>m
 markerFile.addEventListener('change',async()=>{
   if(exporting)return;const selected=markerFile.files?.[0];markerFile.value='';if(!selected)return;
   const current=++markerLoadId;markerPreparing=true;button.disabled=true;stop();message('Подготавливаем картинку маркера локально…');
-  try{const prepared=await prepareCustomMarker(selected);if(current!==markerLoadId){prepared.dispose();return;}customMarker?.dispose();customMarker=prepared;marker.value='custom';markerPreparing=false;await configure();if(prepared.type==='image/jpeg')message('JPG загружен. Для прозрачного фона используйте PNG/WebP.');}
+  try{const prepared=await prepareCustomMarker(selected);if(current!==markerLoadId){prepared.dispose();return;}customMarker?.dispose();customMarker=prepared;marker.value='custom';markerPreparing=false;await configure();const notice='JPG загружен. Для прозрачного фона используйте PNG/WebP.';markerNote.textContent=markerNoteBase+(prepared.type==='image/jpeg'?` ${notice}`:'');if(prepared.type==='image/jpeg'&&!button.disabled)message(notice);}
   catch(error){if(current===markerLoadId){markerPreparing=false;await configure().catch(()=>{});message((error as Error).message,true);}}
   finally{if(current===markerLoadId)markerPreparing=false;}
 });

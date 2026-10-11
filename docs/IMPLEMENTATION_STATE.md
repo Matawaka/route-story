@@ -1,5 +1,11 @@
 # Implementation state
 
+## PR10 JPEG diagnostic correction — 2026-10-11
+
+Parent/head before this fix e6dd3659a77c8a5f4db2568f581dcfeded057ed5 on codex/terrain-dynamics-markers; exact-head CI38148739739 SUCCESS. Uploading a valid JPG used to overwrite the unavailable-encoder explanation with the transparency notice. Notice now remains beside the upload control; status is replaced only when export is enabled, so unsupported browsers retain their useful error and preview. Added concrete browser regression with VideoEncoder absent and a valid1254²localJPEG. No video pixels, PNG, grade, camera, limits, source data or public deployment changes. Separate Swiss prototype remains committed on codex/swiss-alps-pilot at6bcea35, not included in this fix.
+
+`BUILD_IMAGERY_PACK=1 npm.cmd run build`PASS; `PLAYWRIGHT_CHANNEL=msedge OWNER_JPEG_PATH=<local file> npx.cmd playwright test tests/e2e/rider.spec.ts -g 'unsupported encoder explanation|owner original JPEG'`2PASS/8.6s. Actual owner JPEG remains accepted and exports240 independently decoded H.264 frames after cancellation; unsupported encoder retains its WebCodecs explanation and seekable preview.
+
 ## Owner preset naming — 2026-10-11
 
 Marker correction81732ac and naming checkpoint91916ce8cb0e1e14d1fc68bccd600d5e931c0a6b pushed to existing PR10. Owner corrected the exact display option to `Шах - вкрутанидзе`; immutable value/asset/rendering remain traveler. No geographic/person-history claim is inferred from a preset name. UI/docs-only follow-up; exact current HEAD from Git. Full previous56browser/183unit and real20/30s proofs at81732ac remain applicable to video pixels; rerun smallest relevant UI/build checks, package exact final source before opening local preview. No merge/deploy. Continue separate Swiss pilot afterwards.
