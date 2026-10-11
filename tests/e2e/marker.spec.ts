@@ -6,7 +6,7 @@ test('unicycle marker opt-in renders in Classic and remains reversible',async({p
   await expect(page.locator('#export')).toBeEnabled();
   await page.locator('#camera-mode').selectOption('classic');
   await expect(page.locator('#export')).toBeEnabled();
-  await page.locator('#scrub').fill('10');
+  await page.locator('#scrub').evaluate((element)=>{const input=element as HTMLInputElement;input.value='10';input.dispatchEvent(new Event('input',{bubbles:true}));});
   const original=await page.locator('#preview').evaluate((e)=> (e as HTMLCanvasElement).toDataURL());
   await page.locator('#marker-style').selectOption('unicycle');
   await expect(page.locator('#export')).toBeEnabled();
