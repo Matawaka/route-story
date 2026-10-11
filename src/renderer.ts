@@ -1,3 +1,4 @@
+import { drawRouteMarker } from './marker';
 import type { Route, RoutePoint } from './route';
 import { fitProjection } from './geo';
 import { StoryTimeline } from './timeline';
@@ -32,14 +33,14 @@ export class RouteRenderer {
   private readonly metricFont!: number;
   private readonly endpointLabels!: { text: string; x: number; y: number; width: number }[];
   private paintedEdges = 0;
-  constructor(readonly route: Route, readonly land: Land, readonly width: number, readonly height: number, readonly style: VisualStyle, config?: StoryConfig) {
+  constructor(readonly route: Route, readonly land: Land, readonly width: number, readonly height: number, readonly style: VisualStyle, config?: StoryConfig, readonly markerImage?: CanvasImageSource) {
     this.base = document.createElement('canvas'); this.base.width = width; this.base.height = height;
     this.highlight = document.createElement('canvas'); this.highlight.width = width; this.highlight.height = height;
     this.timeline = new StoryTimeline(route, config ?? { ...regressionStoryConfig(route.name), visualStyle: style, aspectRatio: height > width ? 'portrait' : 'landscape' });
     this.config = this.timeline.config;
     if(this.config.cameraMode==='cinematic') {
       this.base.width=this.base.height=this.highlight.width=this.highlight.height=0;
-      this.cinematic=new CinematicRenderer(this.timeline,land,width,height);return;
+      this.cinematic=new CinematicRenderer(this.timeline,land,width,height,markerImage);return;
     }
     this.projection = fitProjection(route.segments, width, height);
     this.projected = route.segments.map(points => points.map(this.projection.project));
@@ -167,7 +168,10 @@ export class RouteRenderer {
     const start = this.route.segments[0][0], finish = this.route.segments.at(-1)!.at(-1)!;
     if (state.showStart) marker(start);
     if (state.showFinish && this.endpointLabels.length === 2) marker(finish);
-    ctx.save(); ctx.globalAlpha = state.markerOpacity; marker(state.point, true); ctx.restore();
+    ctx.save(); ctx.globalAlpha = state.markerOpacity;
+    if(this.markerImage){const [mx,my]=this.projection.project(state.point);drawRouteMarker(ctx,this.markerImage,mx,my,unit*.095);}
+    else marker(state.point,true);
+    ctx.restore();
     ctx.font = `600 ${unit * .032}px system-ui`; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
     for (const label of this.endpointLabels) {
       const padding = unit * .009;
