@@ -1,5 +1,11 @@
 # Implementation state
 
+## Swiss review PR created — 2026-10-11
+
+Pushed `c22397c891fe4208a075d2e02bb8a93006ff9390` on codex/swiss-alps-pilot; actual review PR https://github.com/Matawaka/route-story/pull/11 OPEN, attached to this task, targeting PR10 branch codex/terrain-dynamics-markers at3113f4367171fed21907a53ccd4c5b0fd5c83cf1. Main126dd988 unchanged; independent PR5/PR8 untouched. Review PR10 first, then retarget/revalidate Swiss PR11 after approved dependency merge. No duplicate implementation diff against main.
+
+First exact-head CI https://github.com/Matawaka/route-story/actions/runs/38160571231 was IN_PROGRESS at this checkpoint; not reported as passed. Full189unit/61browser+1skip/real Swiss20/30s/source-matched production evidence remains in the preceding checkpoints and machine-readable reports. This handover-only update changes no public/runtime file; inspect the new exact HEAD/checks after push rather than assuming the earlier run applies. Owner visual review and separate Swiss hosting/size/device gates remain pending. No automatic merge/tag/deploy/competition update.
+
 ## Swiss source-matched production gate — 2026-10-11
 
 Review checkpoint `724d118ab87b496c84c49fa1e510ea37853da7b7`, branch codex/swiss-alps-pilot; actual source-matched baseline4902561B+3357manifest=4905918B/20files≤5MiB and photo5907296B+4048manifest=5911344B/23files≤6MiB. Swiss page/manifest/COGs/crops do not enter either allowlist. Production dependencies/pins, existing imagery/DEM binaries and protected workflow unchanged. Updated notice was rebuilt before package validation (stale-dist provenance guard initially rejected the old copied notice as intended).
