@@ -1,5 +1,11 @@
 # Implementation state
 
+## Swiss publication committed package acceptance — 2026-10-12
+
+Candidate75b4c84d0aa3562081d93cd3f8a8baaa28f2d769 on codex/swiss-public-pack, parentmainc12a3a7. Source-matched combined build/package7973161B+6068Bmanifest=7979229B/35hashes≤9MiB; optionalFurka2018852B, baseline/Sogne caps and runtime bounds retained. `PLAYWRIGHT_CHANNEL=msedge ACCEPTANCE_DIR=artifacts/swiss-public/committed node scripts/acceptance/swiss-public.mjs --full`:VERIFIED on clean committed source75b4c84, Edge155/Windows, local repository subpath; no public HTTPS claim. Main lazy region downloads/local imported GPX/seek/cancelretry10s360×640240frames2089560B, separate approved-scene Atlas20s1280×720480frames13186352B and Night30s720×1280720frames19354064B,24FPS/H.264/error-free independent full decode, all35manifest hashes, zero remote/upload/storage/errors,375viewport no horizontal overflow, unsupported encoder retains preview. Full prior201unit/build/66browser+1skip retained; audit0.
+
+Small follow-up fixes cross-platform LF byte stability for the hash-checked regionalGPX/source manifest; no rendering/geographic change. Exact final HEAD from Git after this commit. Next: focused public-pack PR and exact-head CI, merge under explicit owner merge/deploy authorization, exact-main-push acceptance, one manual include_imagery/include_swiss deployment. Environment human approval remains required. PublicSwiss URL/results remain PENDING, physicalSwiss devices NOT TESTED. No tag/release/newcontest submission.
+
 ## Owner-approved Swiss publication preparation — 2026-10-12
 
 Owner explicitly approved visual videos, merging/deployment and necessary package-size increase; allowed geographically appropriate map loading. PR11 merged with history as b1c9ea8bbfb2d800c3f2d8108d6e09641e3c1015, PR14 retargeted to main, narrowed41file diff/rechecked exact unchanged synthetic merge tree/CI, merged as c12a3a7a764a8a734c4edd51a37b283bec1968d7. Exact main-push CI38213253405 SUCCESS. No PR5/8/12/13 work absorbed; no tag/release/competition repost. Current short-lived branch codex/swiss-public-pack from c12a3a7, publication changes currently uncommitted before this journal checkpoint.
