@@ -1,5 +1,13 @@
 # Decisions
 
+## 2026-10-12 — approved Swiss publication and optional regional resources
+
+Owner approved actual Phase C videos and explicitly authorized merge/deploy/necessary package increase. PR11 merged as b1c9ea8bbfb2d800c3f2d8108d6e09641e3c1015; PR14 retargeted to main, diff and unchanged synthetic merge tree revalidated, merged as c12a3a7a764a8a734c4edd51a37b283bec1968d7. Main CI38213253405 SUCCESS. No closed alternative implementations or unrelated documentation PR absorbed.
+
+Publish only the approved 5m DEM/high3m overview/unchanged0.5m detail/syntheticGPX plus provenance, about2.02MB, as an optional fixed first-party pack. Reference2m/control50m/low10m/rawCOGs/native2m9MB remain local. Combined release cap9MiB is explicit under owner size authorization; existing baseline5MiB/Sogne6MiB and runtime/image/GPX/frame bounds remain. Existing manual protected workflow gets include_swiss opt-in with no permissions/reviewer/branch-policy change. Protected human approval cannot be performed by the agent.
+
+Main discovers the fixed Furka camera corridor from GPX coordinates locally, fetches its assets only after appropriate 3D/Auto selection, then performs exact projection/coverage/camera/resource checks. Outside prepared regions retain the existing2D worldwide overview, including Eurasia; no claim of continent-wide photographic or street-level mapping. First-party regional requests can reveal which public pack was selected but never contain route coordinates/content; no analytics/persistence. Arbitrary private GPX uses rendered5m safety proof, while extra native2m proof is specifically the approved demo. Device Swiss support remains NOT TESTED/experimental; explicit publication approval supersedes earlier requirement to wait for those unavailable checks. No tag/GitHub Release or competition re-submission authorization inferred.
+
 ## 2026-10-12: extend Swiss context without a second renderer or bigger public pack
 
 Reconcile merged PR10/main64fcf293, PR11 head02b498a retargeted to main, closed PR12/13 excluded. Separate phase-C branch from PR11 retains original1km2m data/evidence. Source-selected9+9ordinary OGD2023/2024 tiles give3km context with only~12MBraw download, using provider2m overview variants instead of nationwide0.1m photography.

@@ -5,11 +5,13 @@ import {parseGpx} from './gpx';
 import {TerrainRenderer} from './terrain-renderer';
 import {defaultStoryConfig,exportSettings,type StoryConfig} from './story';
 import {detectEncoder,exportVideo} from './exporter';
+declare const __SWISS_PUBLIC__:boolean;
 const element=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const c=element<HTMLCanvasElement>('preview'),seek=element<HTMLInputElement>('seek'),status=element('status'),button=element<HTMLButtonElement>('export'),cancel=element<HTMLButtonElement>('cancel'),file=element<HTMLInputElement>('marker-file');
 let renderer:TerrainRenderer|undefined,abort:AbortController|undefined,preparation:AbortController|undefined,custom:MarkerAsset|undefined,playing=false,last=0,serial=0,markerSerial=0,unloaded=false;
 const controls=Array.from(document.querySelectorAll<HTMLSelectElement|HTMLButtonElement|HTMLInputElement>('select,button,input'));
 const seconds=()=>Number(element<HTMLSelectElement>('duration').value);
+if(__SWISS_PUBLIC__){for(const id of ['coverage','detail','dem','composition'])element(id).closest('label')!.hidden=true;element('scope-note').textContent='Синтетический участок 842,6 м, не запись поездки. © swisstopo. Экспериментальный региональный пакет: физические устройства для этой сцены ещё не проверены. При проблемах доступны Sogne и «Кино · 2D».';document.querySelector<HTMLAnchorElement>('a')!.href=import.meta.env.BASE_URL;}else document.querySelector<HTMLAnchorElement>('a')!.setAttribute('href','/');
 function failure(error:unknown){playing=false;button.disabled=true;status.textContent=`${(error as Error).message} Предпросмотр/экспорт Sogne и 2D доступны по ссылке ниже.`;}
 async function configure(){
   if(abort||unloaded)return;

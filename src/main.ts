@@ -10,6 +10,7 @@ import {loadImagery,type PreparedImagery} from './imagery';
 import type { TerrainRenderer } from './terrain-renderer';
 import { prepareCustomMarker, type MarkerAsset } from './marker';
 import { loadTraveler, disposeTraveler } from './traveler';
+import {regionalPackForRoute} from './region-selection';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const canvas = el<HTMLCanvasElement>('preview'), file = el<HTMLInputElement>('file'), demo = el<HTMLButtonElement>('demo');
 const button = el<HTMLButtonElement>('export'), cancel = el<HTMLButtonElement>('cancel');
@@ -18,6 +19,7 @@ const duration = el<HTMLSelectElement>('duration'), quality = el<HTMLSelectEleme
 const cameraMode=el<HTMLSelectElement>('camera-mode');
 const cinematicDemo=el<HTMLButtonElement>('cinematic-demo');
 const terrainDemo=el<HTMLButtonElement>('terrain-demo');
+const swissDemo=el<HTMLButtonElement>('swiss-demo');
 const terrainSurface=el<HTMLSelectElement>('terrain-surface');
 const terrainFlight=el<HTMLSelectElement>('terrain-flight');
 const routeColor=el<HTMLSelectElement>('route-color'),replayPacing=el<HTMLSelectElement>('replay-pacing'),marker=el<HTMLSelectElement>('marker'),markerFile=el<HTMLInputElement>('marker-file');
@@ -25,6 +27,8 @@ const markerSizeControl=el<HTMLSelectElement>('marker-size'),markerPresentation=
 const markerNote=el('marker-note'),markerNoteBase=markerNote.textContent??'';
 let customMarker:MarkerAsset|undefined,markerLoadId=0,markerPreparing=false;
 declare const __IMAGERY_ENABLED__:boolean;
+declare const __SWISS_ENABLED__:boolean;
+swissDemo.hidden=!__SWISS_ENABLED__;el('swiss-link').hidden=!__SWISS_ENABLED__;
 if(!__IMAGERY_ENABLED__){terrainSurface.hidden=true;el('terrain-surface-label').hidden=true;terrainFlight.hidden=true;el('terrain-flight-label').hidden=true;}
 const title = el<HTMLInputElement>('story-title');
 let story: Readonly<StoryConfig> = defaultStoryConfig();
@@ -53,9 +57,9 @@ async function configure(): Promise<void> {
     story = validateStoryConfig({ ...story, title: title.value, durationSeconds: Number(duration.value) as StoryConfig['durationSeconds'], visualStyle: style, aspectRatio: ratio.value as StoryConfig['aspectRatio'], qualityPreset: quality.value as StoryConfig['qualityPreset'],cameraMode:cameraMode.value as StoryConfig['cameraMode'],terrainSurface:terrainSurface.value as StoryConfig['terrainSurface'],terrainFlight:terrainFlight.value as StoryConfig['terrainFlight'],routeColor:routeColor.value as StoryConfig['routeColor'],replayPacing:replayPacing.value as StoryConfig['replayPacing'],marker:marker.value as StoryConfig['marker'],markerSize:markerSizeControl.value as StoryConfig['markerSize'],markerPresentation:markerPresentation.value as StoryConfig['markerPresentation'] }, false);
     title.removeAttribute('aria-invalid');
   } catch (error) { title.setAttribute('aria-invalid', 'true'); stop(); message((error as Error).message, true); return; }
-  let config=story,terrain:Awaited<ReturnType<typeof loadTerrain>>|undefined,terrainNote='';
+  let config=story,terrain:Awaited<ReturnType<typeof loadTerrain>>|undefined,terrainNote='',swiss:typeof import('./swiss-pilot')|undefined;
   if(config.cameraMode==='terrain'||config.cameraMode==='auto'){
-    try{terrain=await loadTerrain(config.qualityPreset);if(!terrain.routeCoverage(route)||(config.cameraMode==='auto'&&terrain.routeReliefMeters(route)<100))throw Error('Маршрут вне полного DEM-пакета или вокруг пути нет выразительного рельефа.');}
+    try{if(__SWISS_ENABLED__&&regionalPackForRoute(route)==='furka'){swiss=await import('./swiss-pilot');terrain=await swiss.loadSwissTerrain(false,imagerySignal,'extended');}else terrain=await loadTerrain(config.qualityPreset);if(!terrain.routeCoverage(route)||(config.cameraMode==='auto'&&terrain.routeReliefMeters(route)<100))throw Error('Маршрут вне полного DEM-пакета или вокруг пути нет выразительного рельефа.');}
     catch(error){terrain=undefined;if(config.cameraMode==='terrain')throw Error(`${(error as Error).message} Выберите «Кино · 2D».`);terrainNote=`Авто: ${(error as Error).message} Используется 2D.`;}
     config=validateStoryConfig({...config,cameraMode:terrain?'terrain':'cinematic'});
   }
@@ -63,13 +67,13 @@ async function configure(): Promise<void> {
   let land=config.cameraMode==='cinematic'?{...landBase,geography:await loadGeography()}:landBase;
   const readyMarker=config.marker==='traveler'?await loadTraveler():customMarker;
   if (currentProbe !== probeId) return;
-  stop(); renderer?.dispose();renderer=undefined; const portrait = ratio.value === 'portrait';
+  stop(); renderer?.dispose();renderer=undefined;delete canvas.dataset.region; const portrait = ratio.value === 'portrait';
   const settings = exportSettings(story); canvas.width = settings.width; canvas.height = settings.height;
   scrub.max = String(story.durationSeconds); scrub.value = String(Math.min(Number(scrub.value), story.durationSeconds));
   canvas.classList.toggle('portrait', portrait); el('preview-format').textContent = portrait ? '9:16' : '16:9';
   if(terrain){const {TerrainRenderer}=await import('./terrain-renderer');if(currentProbe!==probeId)return;
     let imagery:PreparedImagery|undefined;
-    try{if(config.terrainSurface==='photo')imagery=await loadImagery(imagerySignal);if(currentProbe!==probeId){imagery?.dispose();return;}renderer=new TerrainRenderer(route,terrain,canvas.width,canvas.height,config,imagery,readyMarker);}
+    try{if(config.terrainSurface==='photo')imagery=swiss?await swiss.loadSwissImagery(false,imagerySignal,'extended'):await loadImagery(imagerySignal);if(currentProbe!==probeId){imagery?.dispose();return;}const next=new TerrainRenderer(route,terrain,canvas.width,canvas.height,config,imagery,readyMarker,swiss?.swissCameraOptions('route'));try{swiss?.validateSwissFrames(next);}catch(e){next.dispose();throw e;}renderer=next;canvas.dataset.region=swiss?'furka':'sogne';}
     catch(error){imagery?.dispose();if(currentProbe!==probeId)return;if(story.cameraMode!=='auto')throw error;terrain=undefined;terrainNote=`Авто: ${(error as Error).message} Используется 2D.`;config=validateStoryConfig({...config,cameraMode:'cinematic'});land={...landBase,geography:await loadGeography()};if(currentProbe!==probeId)return;renderer=new RouteRenderer(route,land,canvas.width,canvas.height,style,config,readyMarker);}
   }
   else renderer = new RouteRenderer(route, land, canvas.width, canvas.height, style, config,readyMarker);
@@ -78,6 +82,7 @@ async function configure(): Promise<void> {
   const region=land.geography?.region.extent,covered=region&&route.segments.every(s=>s.every(p=>p.lon>=region[0]&&p.lon<=region[2]&&p.lat>=region[1]&&p.lat<=region[3]));
   el('map-detail-note').textContent=terrain?`Рельеф: © Kartverket · CC BY 4.0 · DEM ${terrain.level.spacingMeters} м · без преувеличения высот. Локальный пакет Согне-фьорда; высоты GPX сохранены. Вертикальный датум источника не указан. Не для навигации.`:`${terrainNote} Карта: Natural Earth · ${covered?'фьорды, острова и подписи 1:10m':'обзорная география '+(config.cameraMode==='cinematic'?'1:50m':'1:110m')} · без улиц. Время видео не является длительностью поездки.`;
   if(terrain&&config.terrainSurface==='photo')el('map-detail-note').textContent+=' Contains modified Copernicus Sentinel data 2025 · снимок 27.09.2025 · общий слой 40 м, участок 10 м. Детальный снимок доступен вокруг демо; вне него — общий слой. Свет — художественный, не время поездки. Не уличная карта.';
+  if(terrain&&swiss)el('map-detail-note').textContent='© swisstopo · Фурка · DEM 5 м из источника 2 м · LV95/LN02 · высоты 1:1. Фото: обзор 3 м / участок 0,5 м; нативный класс 10/25 см не установлен. Ресурсы загружены с этого сайта до экспорта. Свет и темп — художественные; это не навигация. Физические устройства для этого пакета ещё не проверены.';
   canvas.setAttribute('aria-label', `История «${story.title}»: карта маршрута со стартом и финишем`);
   el('export-note').textContent = `${story.durationSeconds} секунд · ${canvas.width} × ${canvas.height} · 24 кадра/с · H.264`;
   try { await detectEncoder(canvas.width, canvas.height, settings.bitrate, settings.fps); if (currentProbe === probeId) { button.disabled = exporting || loading || markerPreparing; message('Маршрут готов. Можно сохранить видео.'); } }
@@ -118,6 +123,10 @@ terrainDemo.addEventListener('click',()=>{
   marker.value='traveler';customMarker?.dispose();customMarker=undefined;++markerLoadId;
   void importRoute(async()=>{const r=await fetch(`${import.meta.env.BASE_URL}samples/terrain-sogne.gpx`);if(!r.ok)throw Error('3D-демо недоступно.');return parseGpx(await r.text());},true).then(()=>{scrub.value='0';draw();});
 });
+swissDemo.addEventListener('click',()=>{
+  if(exporting||!__SWISS_ENABLED__)return;cameraMode.value='terrain';terrainSurface.value='photo';terrainFlight.value='corridor';ratio.value='portrait';quality.value='standard';duration.value='20';routeColor.value='grade';replayPacing.value='terrain';marker.value='traveler';
+  void importRoute(async()=>{const {loadSwissRoute}=await import('./swiss-pilot');return parseGpx(await loadSwissRoute());},true).then(()=>{scrub.value='0';draw();});
+});
 document.querySelectorAll<HTMLButtonElement>('[data-style]').forEach(card => card.addEventListener('click', () => {
   if (exporting) return; style = card.dataset.style as VisualStyle;
   document.querySelectorAll<HTMLButtonElement>('[data-style]').forEach(item => { item.classList.toggle('active', item === card); item.setAttribute('aria-pressed', String(item === card)); });
@@ -154,7 +163,7 @@ cancel.addEventListener('click', () => controller?.abort());
 button.addEventListener('click', async () => {
   if (!renderer || exporting || loading || markerPreparing) return;
   exporting = true; stop(); controller = new AbortController(); cancel.hidden = false;
-  const controls = [button, file, demo, cinematicDemo, terrainDemo, ratio, duration, quality, title, cameraMode, terrainSurface, terrainFlight, routeColor,replayPacing,marker,markerFile,markerSizeControl,markerPresentation, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
+  const controls = [button, file, demo, cinematicDemo, terrainDemo, swissDemo, ratio, duration, quality, title, cameraMode, terrainSurface, terrainFlight, routeColor,replayPacing,marker,markerFile,markerSizeControl,markerPresentation, play, scrub, ...document.querySelectorAll<HTMLButtonElement>('[data-style]')]; controls.forEach(control => control.disabled = true);
   const active = renderer;
   try {
     performance.clearMarks('route-story-export-start'); performance.clearMarks('route-story-export-end'); performance.clearMeasures('route-story-export');
