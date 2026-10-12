@@ -40,16 +40,23 @@ test('offline and stalled loads end safely, can switch to local 2D and retry',as
   await page.addInitScript(()=>{const native=setTimeout;window.setTimeout=((fn:any,ms?:number,...args:any[])=>native(fn,ms===30000?150:ms,...args)) as typeof setTimeout;});
   let release:()=>void=()=>{};const gate=new Promise<void>(r=>release=r);await page.route('**/furka-context-5m.i16',async r=>{await gate;try{await r.continue();}catch{}});
   await page.goto('/');await expect(page.locator('body')).toHaveAttribute('data-state','ERROR');await expect(page.locator('#status')).toContainText('слишком много времени');await expect(page.locator('#error-code')).toHaveText('terrain/timeout');release();await page.unroute('**/furka-context-5m.i16');await page.locator('#retry').click();await ready(page);
-  await cacheClear(page);await context.setOffline(true);await page.locator('#route-choice').selectOption('furka');await expect(page.locator('#status')).toContainText('Нет интернет-соединения');await context.setOffline(false);await page.locator('#retry').click();await ready(page);
+  // Keep the already parsed route, fail its texture preparation while offline,
+  // then prove the explicit fallback works without a previously loaded map.
+  await cacheClear(page);await context.setOffline(true);await page.locator('#terrain-surface').selectOption('dem');await expect(page.locator('#status')).toContainText('Нет интернет-соединения');await page.locator('#simplify').click();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#source-credit')).toContainText('без географической подложки');await expect(page.locator('#preview')).toHaveAttribute('data-mode','classic');await expect(page.locator('#route-info')).toContainText('26');
+  await context.setOffline(false);await page.locator('#route-choice').selectOption('furka');await ready(page);
   await page.locator('#simplify').count();await page.locator('#camera-mode').selectOption('cinematic');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#preview')).toHaveAttribute('data-mode','cinematic');
 });
 test('WebGL unavailable and context loss permit explicit 2D recovery; unsupported encoder preserves 3D preview',async({page})=>{
   await page.addInitScript(()=>{const native=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type:string,...args:any[]){if(type==='webgl2')return null;return native.call(this,type,...args);} as typeof native;});
-  await page.goto('/');await expect(page.locator('#status')).toContainText('WebGL 2');await expect(page.locator('#route-info')).toContainText('26');await page.locator('#simplify').click();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#preview')).toHaveAttribute('data-mode','cinematic');
+  await page.goto('/');await expect(page.locator('#status')).toContainText('WebGL 2');await expect(page.locator('#route-info')).toContainText('26');await page.locator('#simplify').click();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#preview')).toHaveAttribute('data-mode','classic');
 });
 test('actual context loss while paused is detected immediately and retry releases old GPU',async({page})=>{
   await page.addInitScript(()=>{const native=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type:string,...args:any[]){const result=native.call(this,type,...args);if(type==='webgl2')(window as any).lastGpu=result;return result;} as typeof native;});
   await page.goto('/');await ready(page);await seek(page,7);await page.evaluate(()=>(window as any).lastGpu.getExtension('WEBGL_lose_context').loseContext());await expect(page.locator('body')).toHaveAttribute('data-state','ERROR');await expect(page.locator('#status')).toContainText('3D-контекст');await expect(page.locator('#export')).toBeDisabled();await page.locator('#retry').click();await ready(page);
+});
+test('missing built-in rider asset does not prevent explicit plain 2D recovery',async({page})=>{
+  await page.route('**/markers/traveler-euc-256.png',r=>r.fulfill({status:503,body:'Unavailable'}));await page.goto('/');await expect(page.locator('body')).toHaveAttribute('data-state','ERROR');await expect(page.locator('#error-code')).toHaveText('marker/unavailable');await expect(page.locator('#route-info')).toContainText('26');
+  await page.locator('#simplify').click();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#marker')).toHaveValue('point');await expect(page.locator('#preview')).toHaveAttribute('data-mode','classic');
 });
 test('unsupported codec, marker replacement, own GPX and switching Sogne remain usable',async({page})=>{
   await page.addInitScript(()=>Object.defineProperty(window,'VideoEncoder',{configurable:true,value:undefined}));await page.goto('/');await expect(page.locator('#status')).toContainText('WebCodecs',{timeout:60000});await expect(page.locator('#preview')).toHaveAttribute('data-region','furka');await seek(page,5);await expect(page.locator('#export')).toBeDisabled();

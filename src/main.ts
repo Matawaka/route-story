@@ -149,7 +149,11 @@ for(const [id,name] of [['demo','sample'],['cinematic-demo','fjords'],['terrain-
 el('clear-route').addEventListener('click',clearRoute);el('empty-file').addEventListener('click',()=>file.click());el('empty-other').addEventListener('click',showSettings);el('change-route').addEventListener('click',showSettings);
 el('explanations').addEventListener('click',()=>setView(view==='normal'?'compact':'normal'));el('video-only').addEventListener('click',()=>setView(view==='video'?'normal':'video'));
 el('show-settings').addEventListener('click',()=>{const open=document.body.dataset.settings!=='open';document.body.dataset.settings=open?'open':'closed';el('show-settings').setAttribute('aria-expanded',String(open));if(open)choice.focus();});
-el('retry').addEventListener('click',()=>retryAction?.());el('simplify').addEventListener('click',()=>{control('camera-mode').value='cinematic';void configure();});el('compatibility').addEventListener('click',()=>{control('quality').value='compatibility';void configure();});
+el('retry').addEventListener('click',()=>retryAction?.());el('simplify').addEventListener('click',()=>{
+  if(busyExport())return;
+  if(state.phase==='ERROR'&&state.error.code.startsWith('marker/'))control('marker').value='point';
+  control('camera-mode').value='classic';void configure();
+});el('compatibility').addEventListener('click',()=>{control('quality').value='compatibility';void configure();});
 el('cancel-load').addEventListener('click',()=>{operation?.abort();operation=undefined;releaseRenderer();setState({phase:'CANCELLED',notice:'Подготовка отменена. Можно повторить или выбрать другой маршрут.'});});
 for(const id of selects)control(id).addEventListener('change',()=>{if(busyExport())return;if(id==='marker'&&control('marker').value!=='custom'){customMarker?.dispose();customMarker=undefined;}void configure();});
 title.addEventListener('input',()=>void configure());

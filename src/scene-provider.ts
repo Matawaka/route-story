@@ -11,7 +11,7 @@ import {loadGeography} from './geography';
 import {regionalPackForRoute} from './region-selection';
 import {loadTraveler} from './traveler';
 import type {MarkerAsset} from './marker';
-import {localBytes,abortable} from './local-resource';
+import {localBytes,abortable,ResourceError} from './local-resource';
 declare const __SWISS_ENABLED__:boolean;
 export type SceneRenderer=RouteRenderer|TerrainRenderer;
 export interface PreparedScene {renderer:SceneRenderer; region:'furka'|'sogne'|'global'; credit:string; detail:string; notice?:string}
@@ -49,7 +49,15 @@ export async function prepareScene(route:Route,requested:Readonly<StoryConfig>,s
     }
   }
   stage('Подготавливаем локальную 2D-карту');
-  const base=await loadLand(signal),map=config.cameraMode==='cinematic'?{...base,geography:await loadGeography(signal)}:base;
+  let base:Land;
+  try{base=await loadLand(signal);}catch(error){
+    signal.throwIfAborted();
+    // Explicit Classic/2D recovery can draw truthful local GPX geometry even
+    // if the geographic background is unavailable. No fictitious map detail.
+    if(config.cameraMode!=='classic'||!(error instanceof ResourceError)||!['offline','timeout','unavailable'].includes(error.category))throw error;
+    return{renderer:new RouteRenderer(route,{features:[]},settings.width,settings.height,config.visualStyle,config,readyMarker),region:'global',credit:'Локальная геометрия GPX · без географической подложки',detail:'Базовая карта недоступна. Показана схема исходного GPX; координаты и расстояние сохранены.',notice:'Открыта упрощённая 2D-схема GPX без подложки. Повтор карты доступен при восстановлении соединения.'};
+  }
+  const map=config.cameraMode==='cinematic'?{...base,geography:await loadGeography(signal)}:base;
   signal.throwIfAborted();
   const bounds=map.geography?.region.extent,covered=bounds&&route.segments.every(s=>s.every(p=>p.lon>=bounds[0]&&p.lon<=bounds[2]&&p.lat>=bounds[1]&&p.lat<=bounds[3]));
   return{renderer:new RouteRenderer(route,map,settings.width,settings.height,config.visualStyle,config,readyMarker),region:'global',credit:'Natural Earth · public domain',detail:`${covered?'Фьорды, острова и подписи 1:10m':'Обзорная география '+(config.cameraMode==='classic'?'1:110m':'1:50m')}, без улиц. Время видео и темп анимации не являются длительностью поездки или реальной скоростью.`,notice};

@@ -1,5 +1,9 @@
 # Implementation state
 
+## PR20 last network-recovery edge — 2026-10-12
+
+Focused review PR https://github.com/Matawaka/route-story/pull/20 OPEN, branch codex/unified-route-story-ux. Evidence-head019ba9df740069b2a51f99f0150d2cf46afab666 was pushed and CI38286746831 pending when recording. Final code refinement provides explicit Classic/2D local-GPX diagram if the background cannot load (offline/timeout/unavailable only; never accepts corrupt imagery). The UI/source credit says no geographic background, never substitutes fake3D. Missing built-in rider bytes choose visible point only on the explicit recovery action. No new rendering pipeline, geographic source or license. New offline test proves recovery without a prior global map cache; unified12PASS after that refinement. Added missing-marker recovery case is next targeted verification. Update final source/evidence SHA after committing and rerun affected preparation/production checks; public deployment remains untouched and requires new approval.
+
 ## Final unified app owner-review candidate — 2026-10-12
 
 Branch codex/unified-route-story-ux; implementation source e40a071eba8e213cdf275acc2e59c976bed065e2, ancestor29545b79873aa9ee81eaed5657007852ce259161. Current HEAD after this evidence-only commit is authoritative via git rev-parse HEAD. Independent base main remains d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83; no unrelated PR5/8/18 content absorbed. No merge/deploy/tag/Release or competition action performed.
