@@ -2,8 +2,9 @@ import { defineConfig } from 'vite';
 import { copyFileSync, cpSync, mkdirSync, readdirSync, readFileSync } from 'node:fs';
 export default defineConfig(({command})=>({
   publicDir:command==='serve'?'public':false,
-  define:{__IMAGERY_ENABLED__:JSON.stringify(command==='serve'||process.env.BUILD_IMAGERY_PACK==='1')},
+  define:{__IMAGERY_ENABLED__:JSON.stringify(command==='serve'||process.env.BUILD_IMAGERY_PACK==='1'),__SWISS_ENABLED__:JSON.stringify(command==='serve'?process.env.SWISS_PILOT==='1':process.env.BUILD_SWISS_PACK==='1'),__SWISS_PUBLIC__:JSON.stringify(command==='build'&&process.env.BUILD_SWISS_PACK==='1')},
   base: './', server: { watch: { ignored: ['**/artifacts/**', '**/.reference/**', '**/test-results/**'] } },
+  build:process.env.BUILD_SWISS_PACK==='1'?{rolldownOptions:{input:{main:'index.html',swiss:'swiss-pilot.html'}}}:undefined,
   plugins: [
     {name:'developer-swiss-pilot',apply:'serve',configureServer(server){
       if(process.env.SWISS_PILOT!=='1')return;
@@ -20,7 +21,8 @@ export default defineConfig(({command})=>({
     { name: 'distribute-license-notices', apply: 'build', closeBundle() {
       // Baseline remains ≤5MiB. Photo pack is a local opt-in candidate; existing
       // protected Pages workflow does not enable it or bypass package checks.
-      for(const name of readdirSync('public'))if(name!=='imagery')cpSync(`public/${name}`,`dist/${name}`,{recursive:true});
+      for(const name of readdirSync('public'))if(name!=='imagery'&&name!=='regions')cpSync(`public/${name}`,`dist/${name}`,{recursive:true});
+      if(process.env.BUILD_SWISS_PACK==='1')cpSync('public/regions/furka','dist/regions/furka',{recursive:true});
       if(process.env.BUILD_IMAGERY_PACK==='1'){mkdirSync('dist/imagery',{recursive:true});for(const name of ['sogne-sentinel.json','sogne-sentinel-40m.jpg','sogne-sentinel-10m.jpg'])copyFileSync(`public/imagery/${name}`,`dist/imagery/${name}`);}
       mkdirSync('dist/licenses', { recursive: true });
       for (const name of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) copyFileSync(name, `dist/${name}`);
