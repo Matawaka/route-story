@@ -85,7 +85,8 @@ jobs:
   https-acceptance:
     needs: deploy
     runs-on: windows-latest
-    timeout-minutes: 10
+    # Manual acceptance retains both actual 720p Swiss exports on virtual graphics.
+    timeout-minutes: 15
     permissions:
       contents: read
     env:
