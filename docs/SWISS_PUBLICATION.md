@@ -1,5 +1,17 @@
 # Swiss publication — owner-approved regional candidate
 
+## Owner device check after the protected deployment
+
+Use the actual deployed application only after release.json identifies the reviewed deployment SHA. Physical Swiss tests are currently NOT TESTED; prior Sogne success does not establish Swiss support. Please record device, OS/browser version and result for Xiaomi14, XiaomiPad2 and MacBookM2:
+
+1. Open the main application and choose the Alps demo; check the synthetic-route label and ©swisstopo credit. Check the rider near start/finish and reverse seeking.
+2. Preview Atlas/Night in16:9/9:16; compare close and overview shots, road alignment and surrounding terrain.
+3. Export10sCompatibility, then10sStandard if the encoder supports it. Open the downloaded actual MP4 and verify it plays through the ending.
+4. Cancel export, retry successfully, then change theme/aspect and repeat. Replace a local PNG/WebP/JPEG marker and confirm visibility; private images and GPX stay local.
+5. If3D/context/codec preparation fails, record the actual message and verify Sogne or2D preview/recovery. Report reload/tab termination separately; the application cannot catch an OS-killed tab.
+
+These checks establish only the tested browser/device/settings. They do not establish universal mobile support or a native/GPU memory bound. No device fingerprint is collected or uploaded automatically.
+
 Owner approval2026-10-12 covers actual reviewed videos, merge/deploy and required size increase. PR11/14 are merged; publication packaging is a focused follow-up on actual mainc12a3a7. Version remains1.2.0-rc.1; stable tags/assets immutable. Main-push CI and protected human Pages approval still precede deployment.
 
 Furka high-detail pack:1995842B for2JPEGs+5m height grid+unchanged842.6m syntheticGPX, plus23010B source manifest. No raw COG,9MB native reference,2m/control meshes or low imagery enter the public build. Original comparisons stay available locally/recoverably. Two textures/2960000pixels/349281mesh vertices/698562Bheight remain unchanged. Complete optional combined build cap9MiB; baseline5MiB/Sogne6MiB are retained. Source hashes and ©swisstopo notices are kept.
