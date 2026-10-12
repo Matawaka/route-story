@@ -1,5 +1,6 @@
 :root { font-family: 'Segoe UI', system-ui, sans-serif; color: #233e33; background: #f6f5ef; font-synthesis: none; }
 * { box-sizing: border-box; }body { margin: 0; }button, select, input { font: inherit; }button { cursor: pointer; }button:disabled { opacity: .45; cursor: default; }[hidden] { display: none !important; }
+#marker-file { width:100%; max-width:100%; font-size:11px; }
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #7aab63; outline-offset: 4px; }
 .topbar { height: 84px; border-bottom: 1px solid #dfe2d6; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; }
 .brand { text-decoration: none; color: inherit; font-size: 22px; font-weight: 650; display: flex; align-items: center; gap: 12px; letter-spacing: -.6px; }.brand-mark { display: grid; place-items: center; width: 32px; height: 32px; background: #2c5140; color: #e7eed8; border-radius: 50%; font-size: 26px; }.local-badge { font-size: 12px; color: #5c705f; }

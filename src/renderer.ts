@@ -4,6 +4,8 @@ import { StoryTimeline } from './timeline';
 import { CinematicRenderer } from './cinematic';
 import type { CinematicGeography } from './geography';
 import { regressionStoryConfig, type StoryConfig, type VisualStyle } from './story';
+import { prepareMarker, drawMarker, type MarkerAsset } from './marker';
+import { annotationAt, drawAnnotation, intersectsMarker, markerSize } from './marker-annotation';
 export type { VisualStyle } from './story';
 export type Land = { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[];geography?:CinematicGeography };
 export const palette = {
@@ -32,14 +34,17 @@ export class RouteRenderer {
   private readonly metricFont!: number;
   private readonly endpointLabels!: { text: string; x: number; y: number; width: number }[];
   private paintedEdges = 0;
-  constructor(readonly route: Route, readonly land: Land, readonly width: number, readonly height: number, readonly style: VisualStyle, config?: StoryConfig) {
+  private readonly markerAsset?: MarkerAsset;
+  constructor(readonly route: Route, readonly land: Land, readonly width: number, readonly height: number, readonly style: VisualStyle, config?: StoryConfig, customMarker?: MarkerAsset) {
     this.base = document.createElement('canvas'); this.base.width = width; this.base.height = height;
     this.highlight = document.createElement('canvas'); this.highlight.width = width; this.highlight.height = height;
     this.timeline = new StoryTimeline(route, config ?? { ...regressionStoryConfig(route.name), visualStyle: style, aspectRatio: height > width ? 'portrait' : 'landscape' });
     this.config = this.timeline.config;
+    try {
+    this.markerAsset=prepareMarker(this.config.marker,customMarker);
     if(this.config.cameraMode==='cinematic') {
       this.base.width=this.base.height=this.highlight.width=this.highlight.height=0;
-      this.cinematic=new CinematicRenderer(this.timeline,land,width,height);return;
+      this.cinematic=new CinematicRenderer(this.timeline,land,width,height,this.markerAsset);return;
     }
     this.projection = fitProjection(route.segments, width, height);
     this.projected = route.segments.map(points => points.map(this.projection.project));
@@ -85,6 +90,9 @@ export class RouteRenderer {
       }
     }
     this.drawBase();
+    } catch(error) {
+      this.markerAsset?.dispose();this.base.width=this.base.height=this.highlight.width=this.highlight.height=0;throw error;
+    }
   }
   private distanceText(travelled: number, outro: boolean): string {
     const total = this.timeline.path.total;
@@ -160,6 +168,7 @@ export class RouteRenderer {
       }
     }
     const marker = (point: RoutePoint, solid = false) => {
+      if(solid&&this.markerAsset){const [x,y]=this.projection.project(point),next=this.route.segments[state.segment][Math.max(1,state.index)],target=next?this.projection.project(next):[x,y],size=markerSize(this.config,unit),layout=annotationAt(x,y,0,w,h,size,[pad,h*.23,w-pad,h*.78]);if(layout)drawAnnotation(ctx,this.markerAsset,[x,y],layout,size,false,state.phase==='ROUTE_REPLAY'?[target[0]-x,target[1]-y]:undefined);return;}
       const [x, y] = this.projection.project(point);
       ctx.beginPath(); ctx.arc(x, y, unit / 65, 0, Math.PI * 2); ctx.fillStyle = solid ? colors.line : colors.water; ctx.fill();
       ctx.strokeStyle = colors.ink; ctx.lineWidth = 1.5; ctx.stroke();
@@ -171,6 +180,7 @@ export class RouteRenderer {
     ctx.font = `600 ${unit * .032}px system-ui`; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
     for (const label of this.endpointLabels) {
       const padding = unit * .009;
+      if(this.markerAsset&&state.markerOpacity>.1){const [x,y]=this.projection.project(state.point),size=markerSize(this.config,unit),layout=annotationAt(x,y,0,w,h,size,[pad,h*.23,w-pad,h*.78]);if(layout&&intersectsMarker([layout.box[0]-size*.1,layout.box[1]-size*.1,layout.box[2]+size*.1,layout.box[3]+size*.1],[label.x-padding,label.y-unit*.025,label.x+label.width+padding,label.y+unit*.025]))continue;}
       ctx.fillStyle = colors.water; ctx.fillRect(label.x - padding, label.y - unit * .025, label.width + 2 * padding, unit * .05);
       ctx.fillStyle = colors.ink; ctx.fillText(label.text, label.x, label.y);
     }
@@ -200,5 +210,5 @@ export class RouteRenderer {
     ctx.font = `${this.metricFont}px system-ui`; ctx.fillStyle = colors.quiet; ctx.fillText(this.metric, pad, h * .902);
     ctx.fillStyle = colors.line; ctx.fillRect(pad, h * .963, (w - 2 * pad) * state.timelineProgress, Math.max(2, unit * .005));
   }
-  dispose(): void { this.cinematic?.dispose();this.base.width = this.base.height = this.highlight.width = this.highlight.height = 0; }
+  dispose(): void { this.cinematic?.dispose();this.markerAsset?.dispose();this.base.width = this.base.height = this.highlight.width = this.highlight.height = 0; }
 }

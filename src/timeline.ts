@@ -2,6 +2,7 @@ import { RoutePath } from './geo';
 import { progressAt } from './animation';
 import type { Route, RoutePoint } from './route';
 import { validateStoryConfig, type StoryConfig } from './story';
+import { RouteDynamics } from './route-dynamics';
 export type StoryPhase = 'INTRO' | 'ROUTE_REPLAY' | 'OUTRO';
 export interface StoryState {
   readonly phase: StoryPhase;
@@ -25,26 +26,30 @@ export interface StoryState {
 export class StoryTimeline {
   readonly config: Readonly<StoryConfig>;
   readonly path: RoutePath;
+  readonly dynamics: RouteDynamics;
   private readonly boundaries: number[];
-  constructor(readonly route: Route, config: StoryConfig) {
+  constructor(readonly route: Route, config: StoryConfig, dynamics?: RouteDynamics) {
     if (!route.segments.length || route.segments.some(segment => !segment.length)) throw new Error('Для таймлайна нужен непустой маршрут.');
     this.config = validateStoryConfig(config);
-    this.path = new RoutePath(route.segments);
+    this.dynamics = dynamics ?? new RouteDynamics(route);
+    if(this.dynamics.path.segments!==route.segments)throw Error('Профиль высот относится к другому маршруту.');
+    this.path = this.dynamics.path;
     let previous = 0;
-    this.boundaries = this.path.edges.filter(edge => { const changed = edge.segment !== previous; previous = edge.segment; return changed; }).map(edge => edge.start / this.path.total);
+    this.boundaries = this.path.edges.filter(edge => { const changed = edge.segment !== previous; previous = edge.segment; return changed; }).map(edge => this.config.replayPacing==='terrain'?this.dynamics.timeProgressAt(edge.start / this.path.total):edge.start / this.path.total);
   }
   at(seconds: number): StoryState {
     if (!Number.isFinite(seconds)) throw new Error('Некорректное время видео.');
     const c = this.config, time = Math.max(0, Math.min(c.durationSeconds, seconds));
     const replayEnd = c.durationSeconds - c.outroSeconds, replayLength = replayEnd - c.introSeconds;
     const phase: StoryPhase = time < c.introSeconds ? 'INTRO' : time >= replayEnd ? 'OUTRO' : 'ROUTE_REPLAY';
-    const routeProgress = c.durationSeconds === 4 ? progressAt(time, 4) : phase === 'INTRO' ? 0 : phase === 'OUTRO' ? 1 : (time - c.introSeconds) / replayLength;
+    const replayProgress = c.durationSeconds === 4 ? progressAt(time, 4) : phase === 'INTRO' ? 0 : phase === 'OUTRO' ? 1 : (time - c.introSeconds) / replayLength;
+    const routeProgress = c.replayPacing==='terrain'?this.dynamics.distanceProgressAt(replayProgress):replayProgress;
     const position = this.path.at(routeProgress);
     let markerOpacity = 1;
     if (c.durationSeconds !== 4 && phase === 'ROUTE_REPLAY' && this.boundaries.length) {
       let lo = 0, hi = this.boundaries.length;
-      while (lo < hi) { const mid = (lo + hi) >>> 1; if (this.boundaries[mid] < routeProgress) lo = mid + 1; else hi = mid; }
-      const nearest = Math.min(Math.abs(routeProgress - (this.boundaries[lo] ?? Infinity)), Math.abs(routeProgress - (this.boundaries[lo - 1] ?? Infinity)));
+      while (lo < hi) { const mid = (lo + hi) >>> 1; if (this.boundaries[mid] < replayProgress) lo = mid + 1; else hi = mid; }
+      const nearest = Math.min(Math.abs(replayProgress - (this.boundaries[lo] ?? Infinity)), Math.abs(replayProgress - (this.boundaries[lo - 1] ?? Infinity)));
       markerOpacity = Math.min(1, nearest * replayLength / 0.12);
     }
     return { phase, timeSeconds: time, timelineProgress: time / c.durationSeconds, routeProgress, point: position.point, segment: position.segment, index: position.index, travelledKm: position.distance, totalKm: this.path.total,

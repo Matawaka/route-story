@@ -1,0 +1,24 @@
+{
+  "source": {
+    "name": "Экстремальный райдер на моноколесе с багажом.png",
+    "sha256": "1ad57317b7fa2f7e3b6065d38615ab516c0a15972fb29eca5235ee7b9054d27c",
+    "width": 1254,
+    "height": 1254,
+    "transparent": 965826,
+    "orange": 89924,
+    "green": 78545
+  },
+  "derived": {
+    "file": "markers/traveler-euc-256.png",
+    "sha256": "eb39e771f2fab21c7607b9d863c3d4a2b8b8275e2f5df772e7036e7d15e01fd6",
+    "bytes": 76427,
+    "width": 256,
+    "height": 256,
+    "transparent": 39873,
+    "orange": 3649,
+    "green": 3281
+  },
+  "approval": "Owner explicitly approved a faithful 256×256 downsample on 2026-10-11; no background removal or invented pixels.",
+  "method": "Canvas high-quality downsample of the complete original RGBA image; no cropping/recoloring/generative editing.",
+  "rights": "Owner-supplied and owner-approved for versioned built-in use; no external stock asset."
+}
