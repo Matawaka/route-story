@@ -1,5 +1,11 @@
 # Implementation state
 
+## Swiss Phase C review PR — 2026-10-12
+
+Pushed checkpoint `2981dcf23cde9634528bd7c68051eef0d4bfca1f` on `codex/swiss-extended-coverage`. Created [PR14](https://github.com/Matawaka/route-story/pull/14), stacked onto `codex/swiss-alps-pilot` at `02b498a32242b3e1514529087c546fb4e253e62a` (PR11 remains OPEN/main). Actual remote main `64fcf2933f62f678808198d331775d7ceccc3d3d` rechecked before pushing; no alternate PR12/13 work, no unrelated PR5/8 changes. This journal-only follow-up records the real review link; final HEAD is the next Git commit. Exact final-head CI must be inspected before reporting remote success, local199unit/66browser proofs and source858a582 production acceptance remain above/below. Local developer preview is running at http://127.0.0.1:4176/swiss-pilot.html with the validated fixed crops, original pilot selector and approved rider preset. No merge/tag/deploy/release or public Swiss feature.
+
+Owner's next decision: visually review actual decoded20s16:9/30s9:16 artifacts and independent A/B, then arrange real-device Swiss acceptance before a separate size/hosting/publication decision. About1GBnative sampled peak,5m approximation and caption-safe-only coverage certificate remain explicit limitations; prior physical Sogne acceptance does not establish Swiss support.
+
 ## Swiss Phase C source-matched production gate — 2026-10-12
 
 Evidence/source checkpoint `858a582a4e64b069af6727a45fe2447fa3958fa8` on `codex/swiss-extended-coverage`; actual main64fcf293/PR11 baseline02b498a unchanged. `npm.cmd run build` + `node scripts/package-release.mjs`: baseline4906315B+3357Bmanifest=4909672B/20files≤5MiB. `BUILD_IMAGERY_PACK=1 npm.cmd run build` + `node scripts/package-release.mjs --imagery-candidate`: photo5911050B+4048Bmanifest=5915098B/23files≤6MiB, publicationApproved=false. Exact source, every allowlisted file hash and local acceptance are recorded separately in `docs/SWISS_PHASE_C_PACKAGE_EVIDENCE.json`; the historical PR11 package evidence is preserved. No Swiss page, source COG, height/texture crop, native2m reference or benchmark diagnostic enters either production package.

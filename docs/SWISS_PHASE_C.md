@@ -37,4 +37,4 @@ Actual developer UI [screenshot](images/swiss-context-ui.jpg) selects the approv
 
 Source-matched production gate at858a582: baseline4909672B≤5MiB, photo5915098B≤6MiB including release manifests, no Swiss files or page; photo publicationApproved=false. [Package evidence](SWISS_PHASE_C_PACKAGE_EVIDENCE.json) records every allowlisted hash and local production smoke:23manifest hashes/licenses/CSP/privacy/seek/cancelretry plus two independently decoded10s360p Sogne MP4s. Historical PR11 evidence remains unchanged.
 
-Pending: reviewable stacked PR targeting PR11, owner visual approval/device testing/new Swiss hosting decision. No publication claimed.
+Review: [PR14](https://github.com/Matawaka/route-story/pull/14), stacked onto [PR11](https://github.com/Matawaka/route-story/pull/11). Pending: exact final-head CI, owner visual approval/device testing/new Swiss hosting decision. No publication claimed.
