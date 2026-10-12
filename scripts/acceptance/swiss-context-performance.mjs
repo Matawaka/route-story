@@ -1,0 +1,21 @@
+/** Controlled machine/configuration observations; not a GPU timer. */
+import{chromium}from'@playwright/test';import{mkdirSync,writeFileSync}from'node:fs';import{withServer}from'./server.mjs';import{validateVideo}from'../validate-video.mjs';
+if(process.env.SWISS_PILOT!=='1')throw Error('Prepared developer sources required.');
+const folder='artifacts/swiss-phase-c/performance';mkdirSync(folder,{recursive:true});const reports=[];
+const spread=v=>{const a=[...v].sort((x,y)=>x-y);return{median:a[Math.floor(a.length/2)],min:a[0],max:a.at(-1)};};
+await withServer(async url=>{
+ const browser=await chromium.launch({channel:'msedge'}),page=await browser.newPage();try{await page.goto(url);
+ for(const mode of ['reference','extended-low10m','extended-high'])for(const[quality,aspect,duration]of[['compatibility','landscape',10],['standard','landscape',20],['standard','portrait',30]]){
+  const runs=[];for(let repeat=0;repeat<4;repeat++)runs.push(await page.evaluate(async({mode,quality,aspect,duration})=>{
+   const[{loadSwissTerrain,loadSwissImagery,loadSwissRoute,swissCameraOptions,validateSwissFrames},{TerrainRenderer},{loadTraveler},{parseGpx},{defaultStoryConfig,exportSettings},{exportVideo}]=await Promise.all(['/src/swiss-pilot.ts','/src/terrain-renderer.ts','/src/traveler.ts','/src/gpx.ts','/src/story.ts','/src/exporter.ts'].map(p=>import(p)));
+   const extended=mode!=='reference',start=performance.now(),terrain=await loadSwissTerrain(false,undefined,extended?'extended':'pilot'),image=await loadSwissImagery(mode==='extended-low10m',undefined,extended?'extended':'pilot'),rider=await loadTraveler(),route=parseGpx(await loadSwissRoute()),loadMs=performance.now()-start,config={...defaultStoryConfig('Синтетическое Swiss benchmark'),durationSeconds:duration,qualityPreset:quality,aspectRatio:aspect,visualStyle:aspect==='portrait'?'night':'atlas',terrainSurface:'photo',terrainFlight:'corridor',marker:'traveler',markerSize:'small',routeColor:'grade',replayPacing:'terrain'},s=exportSettings(config),r=new TerrainRenderer(route,terrain,s.width,s.height,config,image,rider,extended?swissCameraOptions('route'):undefined),c=document.createElement('canvas');
+   try{let begin=performance.now();validateSwissFrames(r);const resourcePlanMs=performance.now()-begin,frames=[],seeks=[];for(let i=0;i<30;i++){begin=performance.now();r.draw(c,duration*i/29);frames.push(performance.now()-begin);}for(const f of[.1,.9,.2,.8,.3,.7]){begin=performance.now();r.draw(c,duration*f);seeks.push(performance.now()-begin);}
+    begin=performance.now();window.swissPerfBlob=await exportVideo({config,draw:(c,t)=>r.draw(c,t)});return{loadMs,prepareMs:r.preparedMs,resourcePlanMs,frames,seeks,exportMs:performance.now()-begin,bytes:window.swissPerfBlob.size,vertices:r.terrainGeometry.attributes.position.count,textures:r.gpu.info.memory.textures,...s};
+   }finally{r.dispose();c.width=c.height=0;}
+  },{mode,quality,aspect,duration}));
+  const file=`${folder}/${mode}-${quality}-${aspect}-${duration}s.mp4`,pending=page.waitForEvent('download');await page.evaluate(()=>{const u=URL.createObjectURL(window.swissPerfBlob),a=document.createElement('a');a.href=u;a.download='benchmark.mp4';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});await(await pending).saveAs(file);const validation=validateVideo(file,runs[0].width,runs[0].height,duration);await page.evaluate(()=>delete window.swissPerfBlob);
+  const a=runs.slice(1),summary=Object.fromEntries(['loadMs','prepareMs','resourcePlanMs','exportMs','bytes'].map(k=>[k,spread(a.map(r=>r[k]))]));summary.frames=spread(a.flatMap(r=>r.frames));summary.seeks=spread(a.flatMap(r=>r.seeks));reports.push({mode,quality,aspect,duration,warmup:runs[0],runs:a,summary,validation});console.log(JSON.stringify({mode,quality,aspect,duration,summary}));
+ }
+ writeFileSync(`${folder}/report.json`,JSON.stringify({date:'2026-10-12',browser:browser.version(),method:'One warm-up excluded then3steady trials per mode/configuration, same26point geographic route and marker/grade/pacing settings. Original1km2m scene versus expanded5m scene includes camera/coverage changes. Extended low/high differ only photographic detail. CPU frame submission+destination copy is not GPU elapsed time. Native process memory measured separately.',reports},null,2)+'\n');
+ }finally{await browser.close();}
+});

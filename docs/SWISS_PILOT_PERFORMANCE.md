@@ -1,5 +1,28 @@
 # Swiss pilot performance — observed locally
 
+## Phase C measurements, 2026-10-12
+
+Offline asset preparation is measured separately: `node scripts/acceptance/swiss-offline-preparation.mjs` runs the exact pinned Python pipeline against cached independently hashed18COGs and the original detail crop, using isolated output/manifest directories. One warm-up excluded +3steady child processes, including Python/library startup/hash verification/CRS/mesh/JPEG/derived hashes, reproduce the same derived manifest: median1232.8ms[1198.4–1265.0]. Network/source-download latency and preprocessing-native peak are not included/measured. [Raw preparation evidence](SWISS_PHASE_C_PREPARATION_EVIDENCE.json) retains exact times; set PYTHON_EXECUTABLE if Python is not on PATH. This is not browser startup or frame preparation.
+
+Separate same-machine1warm+3steady runs, identical26point route/marker/grade/pacing, with original2m/1km versus extended5m/3km/camera composition. This overall comparison includes geometry/coverage/camera changes; separate extended10m/high detail rows isolate photography. Raw artifacts/swiss-phase-c/performance/report.json retain every sample and independent video decode.
+
+|Median[min–max]ms|Original10s360p|Extended10s360p|Original20s720p16:9|Extended20s720p16:9|Original30s720p9:16|Extended30s720p9:16|
+|---|---:|---:|---:|---:|---:|---:|
+|Load/hash/decode|52.9[50.4–54.3]|48.2[47.4–48.9]|48.0[46.4–52.1]|48.9[45.8–51.0]|47.2[45.4–47.7]|48.6[47.6–49.7]|
+|Renderer prepare|148.8[141.2–188.2]|155.2[153.7–156.7]|177.9[176.7–205.9]|161.4[159.4–169.5]|170.7[163.4–193.3]|186.7[172.9–223.7]|
+|Additional frame resource proof|0|10.1[8.1–10.5]|0|14.2[13.9–14.4]|0|19.9[19.8–20.0]|
+|Export|519.2[496.6–600.8]|509.2[504.1–550.5]|1223.2[1204.6–1288.2]|1262.8[1156.8–1279.5]|1655.3[1643.6–1703.6]|1752.0[1733.4–1880.6]|
+
+CPU frame medians0.8→0.9ms; submission+destination copy, not GPU elapsed. Full Standard exports show about40ms/97ms median extra cost; overlaps/session variation preclude a universal speed claim. Detailed extended files13178741B/19361126B in the benchmark; separately finalized acceptance files/hashes are recorded in Phase C evidence.
+
+Windows isolated Edge process-tree profiling now measures **native committed private bytes separately from JS heap**. Three cycles of360p10s/720p20s/720p30s, scrub/reverse seek, cancel/retry, JPEG/approved raster replacement and disposal. Reference/extended sampled private peaks1035673600B/990482432B; working-set sums1122942976B/1139912704B. Working sets double-count shared pages; private bytes are committed virtual memory, not physical RSS. This is a small sampled run, not proof of lower peak memory. Command lines are inspected only for role and never saved; samples cover only the fresh browser root and children.
+
+Reference/extended private baseline291.9/287.8MB; retained after cycles553.3/577.9MB; after test-onlyGC420.5/435.6MB. CDP JS retained17.01/16.30MB; afterGC14.67/14.70MB. All recorded Three textures/geometries disposed to0 and rendererWeakRefs0, storage/IndexedDB actually checked empty. Native retention is nonmonotonic; normal driver/browser caching is possible, no confirmed leak inferred. Never forceGC in production. **VRAM and dedicated encoder peaks remain NOT MEASURED. Physical mobile/ordinary laptop NOT TESTED.** A tab killed byOS memory pressure cannot be caught byJavaScript; clear fallback handles observable failures.
+
+Asset allocations remain bounded:11.84MBRGBA/~15.79MBmips unchanged, mesh arrays15.38→23.72MB (about8.34MBmore), runtime heights0.45→0.70MB, JPEG1.23→1.30MB. These are analytical buffers, not measured total VRAM. The original data remains a smaller geometric fallback. Native-source2m camera verification is separate from runtime5m rendering; geometric approximation and source surveying accuracy must not be confused.
+
+Historical PR11 observations follow unchanged.
+
 Windows10.0.26200/Edge155, the same RTX3090 development machine as earlier Sogne evidence. Ordinary laptop/mobile NOT TESTED. `SWISS_PILOT=1 node scripts/acceptance/swiss-performance.mjs`: isolated sessions, one warm-up excluded + three steady10s720p24fps runs/aspect/source mode, cancellation before every successful retry. No concurrent rendering benchmarks. CPU draw includes submission/Canvas copy, **not GPU timer**.
 
 |Median[min–max]ms|10m16:9|Detailed16:9|10m9:16|Detailed9:16|

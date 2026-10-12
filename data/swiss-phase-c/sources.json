@@ -1,0 +1,392 @@
+{
+  "schema": 1,
+  "developerOnly": true,
+  "attribution": "\u00a9 swisstopo",
+  "licenseUrl": "https://www.swisstopo.admin.ch/en/terms-of-use-free-geodata-and-geoservices",
+  "boundsLV95": [
+    2669000,
+    1156000,
+    2672000,
+    1159000
+  ],
+  "sources": [
+    {
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "item": "swissimage-dop10_2023_2669-1156",
+      "asset": "swissimage-dop10_2023_2669-1156_2_2056.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissimage-dop10/swissimage-dop10_2023_2669-1156/swissimage-dop10_2023_2669-1156_2_2056.tif",
+      "sha256": "d695e73cf1bb6f18330d8afaaa71db38eb7bffb90554b1ed7c8b9cd4e10fe02f",
+      "bytes": 180389,
+      "kind": "image",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": null,
+      "tileBoundsLV95": [
+        2669000,
+        1156000,
+        2670000,
+        1157000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": null,
+      "year": "2023",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "item": "swissimage-dop10_2023_2669-1157",
+      "asset": "swissimage-dop10_2023_2669-1157_2_2056.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissimage-dop10/swissimage-dop10_2023_2669-1157/swissimage-dop10_2023_2669-1157_2_2056.tif",
+      "sha256": "89a1c1a53c3829b6e6fc8ac1bc5c0a4a44adf45b63e3b0683685cc3c50cbc4fe",
+      "bytes": 186708,
+      "kind": "image",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": null,
+      "tileBoundsLV95": [
+        2669000,
+        1157000,
+        2670000,
+        1158000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": null,
+      "year": "2023",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "item": "swissimage-dop10_2023_2669-1158",
+      "asset": "swissimage-dop10_2023_2669-1158_2_2056.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissimage-dop10/swissimage-dop10_2023_2669-1158/swissimage-dop10_2023_2669-1158_2_2056.tif",
+      "sha256": "d3ace4a56e5ab6985cd151cec3af3636d3d3d41e6da6f14ddeef68efd0dd7591",
+      "bytes": 202188,
+      "kind": "image",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": null,
+      "tileBoundsLV95": [
+        2669000,
+        1158000,
+        2670000,
+        1159000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": null,
+      "year": "2023",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "item": "swissimage-dop10_2023_2670-1156",
+      "asset": "swissimage-dop10_2023_2670-1156_2_2056.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissimage-dop10/swissimage-dop10_2023_2670-1156/swissimage-dop10_2023_2670-1156_2_2056.tif",
+      "sha256": "a8f1c393344ee9e33c1edf9cf07185672a8d5925da673d52da0ed4fdfbc441bf",
+      "bytes": 193729,
+      "kind": "image",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": null,
+      "tileBoundsLV95": [
+        2670000,
+        1156000,
+        2671000,
+        1157000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": null,
+      "year": "2023",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "item": "swissimage-dop10_2023_2670-1157",
+      "asset": "swissimage-dop10_2023_2670-1157_2_2056.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissimage-dop10/swissimage-dop10_2023_2670-1157/swissimage-dop10_2023_2670-1157_2_2056.tif",
+      "sha256": "a4967b52d6bbfaa5a8ec742b51f817dd4c896be5c6b522db2b6bd7d90b9fb4d4",
+      "bytes": 179200,
+      "kind": "image",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": null,
+      "tileBoundsLV95": [
+        2670000,
+        1157000,
+        2671000,
+        1158000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": null,
+      "year": "2023",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "item": "swissimage-dop10_2023_2670-1158",
+      "asset": "swissimage-dop10_2023_2670-1158_2_2056.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissimage-dop10/swissimage-dop10_2023_2670-1158/swissimage-dop10_2023_2670-1158_2_2056.tif",
+      "sha256": "5a067c6b5422dc87dcacf55b433f7baa1072ecee47d2c640d4f85dbfefd4b06f",
+      "bytes": 188729,
+      "kind": "image",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": null,
+      "tileBoundsLV95": [
+        2670000,
+        1158000,
+        2671000,
+        1159000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": null,
+      "year": "2023",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "item": "swissimage-dop10_2023_2671-1156",
+      "asset": "swissimage-dop10_2023_2671-1156_2_2056.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissimage-dop10/swissimage-dop10_2023_2671-1156/swissimage-dop10_2023_2671-1156_2_2056.tif",
+      "sha256": "a40052ffb89c676f12a996b7d1b020269dd35b8a4478c8688fdae919e600e951",
+      "bytes": 173894,
+      "kind": "image",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": null,
+      "tileBoundsLV95": [
+        2671000,
+        1156000,
+        2672000,
+        1157000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": null,
+      "year": "2023",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "item": "swissimage-dop10_2023_2671-1157",
+      "asset": "swissimage-dop10_2023_2671-1157_2_2056.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissimage-dop10/swissimage-dop10_2023_2671-1157/swissimage-dop10_2023_2671-1157_2_2056.tif",
+      "sha256": "708ce44dc7159403f925ce9111e178b8615ea5ed9d9dd504b964c3de9f6ddea1",
+      "bytes": 185147,
+      "kind": "image",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": null,
+      "tileBoundsLV95": [
+        2671000,
+        1157000,
+        2672000,
+        1158000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": null,
+      "year": "2023",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "item": "swissimage-dop10_2023_2671-1158",
+      "asset": "swissimage-dop10_2023_2671-1158_2_2056.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissimage-dop10/swissimage-dop10_2023_2671-1158/swissimage-dop10_2023_2671-1158_2_2056.tif",
+      "sha256": "afa9f8e3dc5506e06848ed140e9d76c1110f685770ffaf9db7d8b9c8778b1ddf",
+      "bytes": 183328,
+      "kind": "image",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": null,
+      "tileBoundsLV95": [
+        2671000,
+        1158000,
+        2672000,
+        1159000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": null,
+      "year": "2023",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissalti3d",
+      "item": "swissalti3d_2024_2669-1156",
+      "asset": "swissalti3d_2024_2669-1156_2_2056_5728.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissalti3d/swissalti3d_2024_2669-1156/swissalti3d_2024_2669-1156_2_2056_5728.tif",
+      "sha256": "5b0cde1f521aea6aff2a455763e6461fe0597e7d1c459342383ca65dc11891df",
+      "bytes": 1050475,
+      "kind": "dem",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": "not applicable",
+      "tileBoundsLV95": [
+        2669000,
+        1156000,
+        2670000,
+        1157000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": "LN02",
+      "year": "2024",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissalti3d",
+      "item": "swissalti3d_2024_2669-1157",
+      "asset": "swissalti3d_2024_2669-1157_2_2056_5728.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissalti3d/swissalti3d_2024_2669-1157/swissalti3d_2024_2669-1157_2_2056_5728.tif",
+      "sha256": "2f4620c5dc0a0507587bc4d3d1350342cf52d8dfa5d9af783b8a9e14c02d923a",
+      "bytes": 1094979,
+      "kind": "dem",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": "not applicable",
+      "tileBoundsLV95": [
+        2669000,
+        1157000,
+        2670000,
+        1158000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": "LN02",
+      "year": "2024",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissalti3d",
+      "item": "swissalti3d_2024_2669-1158",
+      "asset": "swissalti3d_2024_2669-1158_2_2056_5728.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissalti3d/swissalti3d_2024_2669-1158/swissalti3d_2024_2669-1158_2_2056_5728.tif",
+      "sha256": "6a5db576aedeb7c4c9955d27bab150b4033f07c14d653ec5802bafb729838993",
+      "bytes": 1186911,
+      "kind": "dem",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": "not applicable",
+      "tileBoundsLV95": [
+        2669000,
+        1158000,
+        2670000,
+        1159000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": "LN02",
+      "year": "2024",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissalti3d",
+      "item": "swissalti3d_2024_2670-1156",
+      "asset": "swissalti3d_2024_2670-1156_2_2056_5728.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissalti3d/swissalti3d_2024_2670-1156/swissalti3d_2024_2670-1156_2_2056_5728.tif",
+      "sha256": "d313f0ccdec2437234e5e7ca16d343220700ff80898d92e3ae550a33efddd44b",
+      "bytes": 1246932,
+      "kind": "dem",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": "not applicable",
+      "tileBoundsLV95": [
+        2670000,
+        1156000,
+        2671000,
+        1157000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": "LN02",
+      "year": "2024",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissalti3d",
+      "item": "swissalti3d_2024_2670-1157",
+      "asset": "swissalti3d_2024_2670-1157_2_2056_5728.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissalti3d/swissalti3d_2024_2670-1157/swissalti3d_2024_2670-1157_2_2056_5728.tif",
+      "sha256": "df2126dc6e28098a0127fa099367471638422d07be386732bd82e38380d2eecb",
+      "bytes": 1186083,
+      "kind": "dem",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": "not applicable",
+      "tileBoundsLV95": [
+        2670000,
+        1157000,
+        2671000,
+        1158000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": "LN02",
+      "year": "2024",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissalti3d",
+      "item": "swissalti3d_2024_2670-1158",
+      "asset": "swissalti3d_2024_2670-1158_2_2056_5728.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissalti3d/swissalti3d_2024_2670-1158/swissalti3d_2024_2670-1158_2_2056_5728.tif",
+      "sha256": "b50fd46d3e323a4ffb006cb82098fff023c3e32b84beff07abd2f5061cdbbf5b",
+      "bytes": 1098182,
+      "kind": "dem",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": "not applicable",
+      "tileBoundsLV95": [
+        2670000,
+        1158000,
+        2671000,
+        1159000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": "LN02",
+      "year": "2024",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissalti3d",
+      "item": "swissalti3d_2024_2671-1156",
+      "asset": "swissalti3d_2024_2671-1156_2_2056_5728.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissalti3d/swissalti3d_2024_2671-1156/swissalti3d_2024_2671-1156_2_2056_5728.tif",
+      "sha256": "257fd5821d949f4334b075f0a2753da9c89fcad83190b42d4dc68e9b637f7599",
+      "bytes": 1140667,
+      "kind": "dem",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": "not applicable",
+      "tileBoundsLV95": [
+        2671000,
+        1156000,
+        2672000,
+        1157000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": "LN02",
+      "year": "2024",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissalti3d",
+      "item": "swissalti3d_2024_2671-1157",
+      "asset": "swissalti3d_2024_2671-1157_2_2056_5728.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissalti3d/swissalti3d_2024_2671-1157/swissalti3d_2024_2671-1157_2_2056_5728.tif",
+      "sha256": "cfe3c91978b9f79ccba25d4a0901f066580e3711b7b7ec3b966767b59212daf5",
+      "bytes": 1105360,
+      "kind": "dem",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": "not applicable",
+      "tileBoundsLV95": [
+        2671000,
+        1157000,
+        2672000,
+        1158000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": "LN02",
+      "year": "2024",
+      "exactAcquisitionDay": null
+    },
+    {
+      "collection": "ch.swisstopo.swissalti3d",
+      "item": "swissalti3d_2024_2671-1158",
+      "asset": "swissalti3d_2024_2671-1158_2_2056_5728.tif",
+      "url": "https://data.geo.admin.ch/ch.swisstopo.swissalti3d/swissalti3d_2024_2671-1158/swissalti3d_2024_2671-1158_2_2056_5728.tif",
+      "sha256": "38f00dcd6a84999ea42d8b3b07d5120db9071095be5006aad660f7c9ee23eb1b",
+      "bytes": 1169240,
+      "kind": "dem",
+      "rasterSpacingMeters": 2,
+      "nativeOpticalGsd": "not applicable",
+      "tileBoundsLV95": [
+        2671000,
+        1158000,
+        2672000,
+        1159000
+      ],
+      "crs": "EPSG:2056",
+      "verticalDatum": "LN02",
+      "year": "2024",
+      "exactAcquisitionDay": null
+    }
+  ]
+}

@@ -1,5 +1,27 @@
 # Swiss Alpine pilot — local review candidate
 
+## Phase C — extended scene (2026-10-12, separate candidate)
+
+The original PR11 head02b498a remains independently recoverable. PR10 was merged into main64fcf293; PR11 now targets main. New `codex/swiss-extended-coverage` extends this implementation, excluding closed alternative PR12/13. [Phase C source/architecture/measurements](SWISS_PHASE_C.md) and data/swiss-phase-c manifest describe the separate experiment. No Swiss deployment or public-package expansion.
+
+Nine ordinary2023 SWISSIMAGE2m overview COGs + nine2024 swissALTI3D2m COGs cover a3km scene;11952141B total source downloads. Original independently verified0.1m tile supplies the SAME0.5m detail JPEG, copied byte-identically. Output3m overview1000² +1400²detail,2960000pixels/1295550JPEGbytes; two textures, all resident before export. Runtime5m mesh591²/349281vertices/698562B is a declared generalization from2m source, with true1:1 heights/LN02 and the unchanged caps. Original2m1km mode remains available. Optical native GSD/exact capture days remain unverified; no trip/date/weather claim.
+
+The developer page now selects original/expanded scene, measured-detail control, camera composition, Atlas/Night, 10/20/30s, 360p/720p, real grade/stylized pacing and local PNG/WebP/JPEG markers. It freezes controls and immutable snapshots, aborts obsolete preparation, keeps oneGL scene, rejects missing resources and offers explicit Sogne/2D recovery on codec/GPU/memory errors. It is excluded from production. GPUOOM simulation is an error-path test, not a promise that an operating system can never kill a tab.
+
+Source-detail LOD uses actual projected0.5m ground edges at the timeline anchor, smooth0.30–0.67destination-pixel transitions and a bounded2pixel camera-detail guard. It measures derived detail, not acquisition precision. Existing350m/continuous-cell/triangleLOS checks remain; every encoded timestamp additionally proves the caption-safe map cone against complete terrain. A global-minimum plane or real boundary-height envelope proves intervening terrain; no unknown height is extrapolated. Full-frame corners outside this certified map region are not claimed universally covered.
+
+```powershell
+npm.cmd ci
+$env:PYTHONPATH = (Join-Path (Get-Location) '.reference/terrain/tools')
+# Install the existing pinned preprocessing requirements here if not already present.
+python scripts/terrain/prepare-swiss-pilot.py --download
+python scripts/terrain/prepare-swiss-context.py --download
+$env:SWISS_PILOT = '1'
+npm.cmd run dev -- --port 4176 --strictPort
+```
+
+The fixed reviewed source manifest makes the18context downloads reproducible; no runtime service is queried with a GPX. The developer-only9MBfloat2m source reference is never served/uploaded and is used for independent native-source camera acceptance. Choose "Базис1км" to retain the earlier scene. The historical PR11 evidence below is preserved, not overwritten with Phase C results.
+
 Real downloaded-and-rendered geography, separate from PR10's rider corrections. **Not deployed**, not a public Swiss pack, not a recorded journey. Production does not import the pilot page/loader/manifest. Sogne,5/6MiB package bounds and protected Pages workflow remain unchanged.
 
 ## Selected source and rights

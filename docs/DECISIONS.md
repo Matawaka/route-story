@@ -1,5 +1,15 @@
 # Decisions
 
+## 2026-10-12: extend Swiss context without a second renderer or bigger public pack
+
+Reconcile merged PR10/main64fcf293, PR11 head02b498a retargeted to main, closed PR12/13 excluded. Separate phase-C branch from PR11 retains original1km2m data/evidence. Source-selected9+9ordinary OGD2023/2024 tiles give3km context with only~12MBraw download, using provider2m overview variants instead of nationwide0.1m photography.
+
+Choose one3m overview+unchanged0.5m route detail and a declared5m mesh from verified2m source.349281vertices/698562B/2960000pixels/1295550JPEGbytes remain within existing caps. Fixed multiple patches can use fewer outer vertices but need stitched CPU/GPU/LOS topology or more samplers; not justified for this short route. No tile framework, workers, newdependency, external runtime data or public budget change. Native optical GSD/date/height accuracy remain distinct from output spacing.
+
+Only reviewed fixed3km EPSG2056/LN02 scope expands its fit domain; oldSogne/original validators remain strict. Pure measured projected-ground LOD and a2pixel detail guard, stronger route-volume overview, all350mcontinuous/LOS checks retained. Caption-safe frame coverage is proved from the complete grid using minimum-plane/real-edge bounds; no unknown terrain assumption. Whole-frame corners outside that rectangle have separate visual evidence, not a universal certificate.5m approximation is measured and source2m acceptance independently checks camera trajectories.
+
+Keep grade/pacing/rider architecture from merged PR10. Move grade legend away from counter only in the developer candidate; oldSogne pixels must match exactly. Native process memory measurement is permitted locally and reported separately from CDP/GPU/encoder allocations; no hardware fingerprint telemetry. Clear observable codec/GPU/memory failures offer Sogne/2D, without promising protection from OS tab termination. Native memory near1GB makes actual device testing mandatory before any Swiss public release. No merge/tag/deploy/contest update authority inferred.
+
 ## 2026-10-11: real Swiss source-data pilot with bounded regional coordinates
 
 Keep PR10 rider/JPEG corrections independent. A separate `codex/swiss-alps-pilot` branch depends on PR10 and adds only a local developer candidate. Use verified ordinary swisstopo OGD COGs from tile 2670-1157, after inspecting and rejecting the initially suggested roadless 2671-1159. No test-only ZIP, online tiles, private route relocation or fabricated historical journey. A labelled 842.6m synthetic road-centre approximation belongs to this actual Swiss image/DEM scene.

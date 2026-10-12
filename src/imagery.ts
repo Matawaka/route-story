@@ -7,9 +7,12 @@ export interface ImageryManifest {
   detail?:ImageryManifest;
   /** Bounded developer regional pack, never accepted by the Sogne loader. */
   boundaryFeatherMeters?:number;
+  /** Reviewed developer-only measured scale policy; Sogne rejects this extension. */
+  detailSelection?:Readonly<{policy:'projected-ground-texel';fullDetailPixels:number;coarsePixels:number;maximumDetailPixels:number}>;
 }
 export const MAX_IMAGE_BYTES=2*1024*1024,MAX_IMAGE_PIXELS=3_000_000,MAX_TEXTURE_SIDE=2048;
 export function validateImagery(m:ImageryManifest):Readonly<ImageryManifest>{
+  if(m?.detailSelection)throw Error('Непроверенная политика детализации Sogne.');
   if(!m||m.schema!==1||m.id!=='sogne-sentinel-20250927'||!['sogne-sentinel-20m.jpg','sogne-sentinel-40m.jpg','sogne-sentinel-10m.jpg'].includes(m.file)||m.acquiredDate!=='2025-09-27'||m.attribution!=='Contains modified Copernicus Sentinel data 2025')throw Error('Неизвестный источник снимка. Выберите поверхность DEM.');
   if(m.origin?.length!==2||m.bounds?.length!==4||![...m.origin,...m.bounds].every(Number.isFinite)||m.bounds[2]<=m.bounds[0]||m.bounds[3]<=m.bounds[1])throw Error('Некорректная привязка снимка.');
   if(![m.width,m.height,m.bytes].every(Number.isSafeInteger)||m.width<2||m.height<2||m.width>MAX_TEXTURE_SIDE||m.height>MAX_TEXTURE_SIDE||m.width*m.height>MAX_IMAGE_PIXELS||m.bytes<1||m.bytes>MAX_IMAGE_BYTES||!Number.isFinite(m.spacingMeters)||m.spacingMeters<10||m.spacingMeters>100||m.sourceResolutionMeters!==10||!/^[a-f0-9]{64}$/.test(m.sha256))throw Error('Снимок превышает лимиты или повреждён.');
@@ -28,6 +31,11 @@ export function imageryDetailWeight(m:ImageryManifest,distance:number,fov:number
   if(!m.detail||!visible)return 0;
   const metresPerPixel=distance*2*Math.tan(fov*Math.PI/360)/height,s=m.detail.spacingMeters,t=Math.min(1,Math.max(0,(metresPerPixel-s*1.5)/(s*3.5-s*1.5)));
   return 1-t*t*(3-2*t);
+}
+/** Destination-pixel footprint, not slant distance alone. No frame history. */
+export function projectedDetailWeight(m:ImageryManifest,texelPixels:number,visible=true):number{
+  const p=m.detailSelection;if(!p||p.policy!=='projected-ground-texel'||![texelPixels,p.coarsePixels,p.fullDetailPixels,p.maximumDetailPixels].every(Number.isFinite)||texelPixels<=0||p.coarsePixels<=0||p.fullDetailPixels<=p.coarsePixels||p.maximumDetailPixels<p.fullDetailPixels)throw Error('Некорректная проекция детализации.');
+  if(!m.detail||!visible)return 0;const t=Math.min(1,Math.max(0,(texelPixels-p.coarsePixels)/(p.fullDetailPixels-p.coarsePixels)));return t*t*(3-2*t);
 }
 /** North-up source pixels, Texture.flipY=false: north is v0, south is v1. */
 export function imageryUV(m:ImageryManifest,[east,north]:TerrainXY):readonly [number,number]{

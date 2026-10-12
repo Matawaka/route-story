@@ -8,10 +8,11 @@ export default defineConfig(({command})=>({
     {name:'developer-swiss-pilot',apply:'serve',configureServer(server){
       if(process.env.SWISS_PILOT!=='1')return;
       const allowed=new Set(['furka-2m.i16','furka-50m.i16','furka-high-overview.jpg','furka-high-detail.jpg','furka-low-overview.jpg','furka-low-detail.jpg','furka-synthetic.gpx']);
+      const contextFiles=new Set(['furka-context-5m.i16','furka-context-50m.i16','furka-context-high-overview.jpg','furka-context-high-detail.jpg','furka-context-low-overview.jpg','furka-context-low-detail.jpg']);
       server.middlewares.use((req,res,next)=>{
-        if(!req.url?.startsWith('/__swiss-pilot/'))return next();
-        const name=req.url.slice('/__swiss-pilot/'.length);if(req.method!=='GET'||!allowed.has(name)){res.statusCode=404;res.end();return;}
-        try{const bytes=readFileSync(`.reference/swiss/pilot/${name}`);if(bytes.length>2*1024*1024)throw Error('Bounded pilot resource');res.setHeader('Content-Type',name.endsWith('.jpg')?'image/jpeg':name.endsWith('.gpx')?'application/gpx+xml':'application/octet-stream');res.setHeader('Cache-Control','no-store');res.end(bytes);}
+        const extended=req.url?.startsWith('/__swiss-phase-c/');if(!extended&&!req.url?.startsWith('/__swiss-pilot/'))return next();
+        const name=req.url!.slice(extended?'/__swiss-phase-c/'.length:'/__swiss-pilot/'.length);if(req.method!=='GET'||!(extended?contextFiles:allowed).has(name)){res.statusCode=404;res.end();return;}
+        try{const bytes=readFileSync(`.reference/swiss/${extended?'phase-c':'pilot'}/${name}`);if(bytes.length>2*1024*1024)throw Error('Bounded pilot resource');res.setHeader('Content-Type',name.endsWith('.jpg')?'image/jpeg':name.endsWith('.gpx')?'application/gpx+xml':'application/octet-stream');res.setHeader('Cache-Control','no-store');res.end(bytes);}
         catch{res.statusCode=404;res.end('Prepare the developer-only Swiss pack first.');}
       });
     }},

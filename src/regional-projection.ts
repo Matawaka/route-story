@@ -1,12 +1,15 @@
 import type {RoutePoint} from './route';
 export interface RegionalProjection {
+  scope?:'furka-context-3km';
   crs:'EPSG:2056'; verticalDatum:'LN02'; originLV95:number[]; originWgs84:number[];
   domainMeters:number[]; forwardCoefficients:number[][]; inverseCoefficients:number[][];
   normalizationDegrees:number; normalizationMeters:number; maximumFitErrorMeters:number;
 }
 export function validateRegionalProjection(p:RegionalProjection,origin:readonly number[]):void {
   const pair=(a:number[],length:number)=>Array.isArray(a)&&a.length===length&&a.every(Number.isFinite);
-  if(!p||p.crs!=='EPSG:2056'||p.verticalDatum!=='LN02'||!pair(p.originLV95,2)||!pair(p.originWgs84,2)||!pair(p.domainMeters,4)||p.normalizationDegrees!==.01||p.normalizationMeters!==1000||!Number.isFinite(p.maximumFitErrorMeters)||p.maximumFitErrorMeters<0||p.maximumFitErrorMeters>.001||p.originWgs84.some((v,i)=>v!==origin[i])||p.originLV95[0]<2400000||p.originLV95[0]>2900000||p.originLV95[1]<1000000||p.originLV95[1]>1400000||p.domainMeters[2]-p.domainMeters[0]>2000||p.domainMeters[3]-p.domainMeters[1]>2000||p.domainMeters[2]<=p.domainMeters[0]||p.domainMeters[3]<=p.domainMeters[1]||p.domainMeters.some(v=>Math.abs(v)>2000))throw Error('Непроверенная региональная проекция LV95.');
+  const extended=p?.scope==='furka-context-3km';
+  if(!p||p.scope!==undefined&&!extended||p.crs!=='EPSG:2056'||p.verticalDatum!=='LN02'||!pair(p.originLV95,2)||!pair(p.originWgs84,2)||!pair(p.domainMeters,4)||p.normalizationDegrees!==(extended?.02:.01)||p.normalizationMeters!==1000||!Number.isFinite(p.maximumFitErrorMeters)||p.maximumFitErrorMeters<0||p.maximumFitErrorMeters>.001||p.originWgs84.some((v,i)=>v!==origin[i])||p.originLV95[0]<2400000||p.originLV95[0]>2900000||p.originLV95[1]<1000000||p.originLV95[1]>1400000||p.domainMeters[2]-p.domainMeters[0]>(extended?3000:2000)||p.domainMeters[3]-p.domainMeters[1]>(extended?3000:2000)||p.domainMeters[2]<=p.domainMeters[0]||p.domainMeters[3]<=p.domainMeters[1]||p.domainMeters.some(v=>Math.abs(v)>2000))throw Error('Непроверенная региональная проекция LV95.');
+  if(extended&&(p.originLV95[0]!==2670500||p.originLV95[1]!==1157500||p.originWgs84[0]!==8.358145865332382||p.originWgs84[1]!==46.56506663713058||p.domainMeters.some((v,i)=>v!==[-1500,-1500,1500,1500][i])))throw Error('Непроверенное расширение координат Swiss Phase C.');
   for(const [c,limit] of [[p.forwardCoefficients,5000],[p.inverseCoefficients,1]] as const)if(!Array.isArray(c)||c.length!==2||c.some(row=>!pair(row,10)||row.some(v=>Math.abs(v)>limit)))throw Error('Некорректные коэффициенты региональной проекции.');
 }
 const basis=(x:number,y:number)=>[1,x,y,x*x,x*y,y*y,x*x*x,x*x*y,x*y*y,y*y*y];
@@ -15,7 +18,7 @@ const evaluate=(c:number[][],x:number,y:number):[number,number]=>{const b=basis(
  * numerical error is distinct from PROJ's 1m stated geodetic accuracy. */
 export function regionalWorld(p:RegionalProjection,point:RoutePoint):[number,number]{
   if(!Number.isFinite(point.lon)||!Number.isFinite(point.lat))throw Error('Некорректные координаты GPX.');
-  const x=(point.lon-p.originWgs84[0])/.01,y=(point.lat-p.originWgs84[1])/.01;
+  const x=(point.lon-p.originWgs84[0])/p.normalizationDegrees,y=(point.lat-p.originWgs84[1])/p.normalizationDegrees;
   if(Math.abs(x)>1||Math.abs(y)>1)throw Error('GPX вне ограниченной региональной проекции.');
   const result=evaluate(p.forwardCoefficients,x,y),b=p.domainMeters;
   // Millimetre allowance covers the declared PROJ forward/inverse round trip,

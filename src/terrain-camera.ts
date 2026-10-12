@@ -6,8 +6,13 @@ export interface TerrainCameraState {
   position:TerrainPosePoint; target:TerrainPosePoint; bearing:number; pitch:number; roll:0;
   fov:number; near:number; far:number; phase:StoryPhase; segment:number; clearance:number; visibilityLift:number;
 }
+export interface TerrainCameraOptions {
+  /** Reviewed developer composition; original callers leave this undefined. */
+  framingBounds:readonly number[]; framingReliefMeters:number;
+  overview:'reference'|'route'; detailSpacingMeters:.5; maximumTexelPixels:2;
+}
 interface Shot { progress:number; segment:number; position:TerrainPosePoint; target:TerrainPosePoint; relief:number }
-export interface TerrainCameraPlan { terrain:TerrainDataset; timeline:StoryTimeline; shots:Shot[]; overview:Shot; minimumAltitude:number; aspect:number; flight:'conservative'|'corridor'; }
+export interface TerrainCameraPlan { terrain:TerrainDataset; timeline:StoryTimeline; shots:Shot[]; overview:Shot; minimumAltitude:number; aspect:number; flight:'conservative'|'corridor'; width:number;height:number;options?:Readonly<TerrainCameraOptions>; }
 const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 const pointMix=(a:TerrainPosePoint,b:TerrainPosePoint,t:number):TerrainPosePoint=>t===0?a:t===1?b:[mix(a[0],b[0],t),mix(a[1],b[1],t),mix(a[2],b[2],t)];
 const clamp=(n:number,a:number,b:number)=>Math.min(b,Math.max(a,n));
@@ -54,16 +59,19 @@ export function terrainCorridorDeficit(terrain:TerrainDataset,a:TerrainPosePoint
   for(const p of [a,b]){const ceiling=terrain.ceiling([p[0],p[1]]);if(ceiling===undefined)throw Error('Положение камеры вне DEM.');deficit=Math.max(deficit,ceiling+350-p[2]);}
   return Math.max(0,deficit);
 }
-export function createTerrainCameraPlan(timeline:StoryTimeline,terrain:TerrainDataset,width:number,height:number):TerrainCameraPlan{
+export function createTerrainCameraPlan(timeline:StoryTimeline,terrain:TerrainDataset,width:number,height:number,options?:TerrainCameraOptions):TerrainCameraPlan{
   if(timeline.route.segments.length>128)throw Error('Для 3D допускается до 128 независимых сегментов. Выберите 2D; GPX не сокращается.');
   if(!terrain.routeCoverage(timeline.route))throw Error('Для этого маршрута нет полного локального DEM с безопасным полем камеры или превышен лимит геометрии. Выберите «Кино · 2D».');
   const all=timeline.route.segments.flat().map(p=>terrain.world(p));
+  if(options){const b=options.framingBounds,m=terrain.getTerrainBounds();if(terrain.manifest.regionalProjection?.scope!=='furka-context-3km'||b.length!==4||!b.every(Number.isFinite)||b[0]<m[0]||b[1]<m[1]||b[2]>m[2]||b[3]>m[3]||b[2]<=b[0]||b[3]<=b[1]||all.some(p=>p[0]<b[0]+20||p[1]<b[1]+20||p[0]>b[2]-20||p[1]>b[3]-20)||!Number.isFinite(options.framingReliefMeters)||options.framingReliefMeters<0||options.framingReliefMeters>9500||!['reference','route'].includes(options.overview)||options.detailSpacingMeters!==.5||options.maximumTexelPixels!==2)throw Error('Непроверенный ракурс Swiss Phase C.');options=Object.freeze({...options,framingBounds:Object.freeze([...b])});}
   let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;for(const [x,y] of all){minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);}
   const flight=timeline.config.terrainFlight??'conservative';
   const center:TerrainXY=[(minX+maxX)/2,(minY+maxY)/2],minimumAltitude=flight==='conservative'?terrain.max+350:0,aspect=width/height;
   const regional=!!terrain.manifest.regionalProjection;
-  const radius=Math.max(regional?100:800,Math.hypot(maxX-minX,maxY-minY,terrain.max-terrain.min)/2),fov=46*Math.PI/180,hfov=2*Math.atan(Math.tan(fov/2)*aspect),distance=radius/Math.sin(Math.min(fov,hfov)/2)*1.35;
-  const limits=terrain.getTerrainBounds(),margin=regional?20:300,bound=(xy:TerrainXY):TerrainXY=>[clamp(xy[0],limits[0]+margin,limits[2]-margin),clamp(xy[1],limits[1]+margin,limits[3]-margin)];
+  let framingRelief=options?.framingReliefMeters??terrain.max-terrain.min;
+  if(options?.overview==='route'){let low=Infinity,high=-Infinity;for(const p of all){const h=terrain.meshElevation(p)!;low=Math.min(low,h);high=Math.max(high,h);}framingRelief=high-low;}
+  const radius=Math.max(regional?100:800,Math.hypot(maxX-minX,maxY-minY,framingRelief)/2),fov=46*Math.PI/180,hfov=2*Math.atan(Math.tan(fov/2)*aspect),distance=radius/Math.sin(Math.min(fov,hfov)/2)*1.35;
+  const limits=options?.framingBounds??terrain.getTerrainBounds(),margin=regional?20:300,bound=(xy:TerrainXY):TerrainXY=>[clamp(xy[0],limits[0]+margin,limits[2]-margin),clamp(xy[1],limits[1]+margin,limits[3]-margin)];
   const target:TerrainPosePoint=[...center,terrain.sampleXY(center)!+100],overviewXY=bound([center[0],center[1]-distance*.38]);
   const overview:Shot={progress:0,segment:0,target,position:[...overviewXY,Math.max(minimumAltitude,distance*.94+target[2])],relief:terrain.max-terrain.min};
   // Fit the actual elevated route into caption-safe perspective space. A
@@ -100,9 +108,43 @@ export function createTerrainCameraPlan(timeline:StoryTimeline,terrain:TerrainDa
     const pairs:[Shot,Shot][]=[[overview,shots[0]],[shots.at(-1)!,overview]];for(let i=1;i<shots.length;i++)if(shots[i-1].segment===shots[i].segment)pairs.push([shots[i-1],shots[i]]);
     for(const [a,b] of pairs)if(terrainCorridorDeficit(terrain,a.position,b.position)>1e-6)throw Error('Не удалось доказать безопасный коридор камеры.');
   }
-  return {terrain,timeline,shots,overview,minimumAltitude,aspect,flight};
+  return {terrain,timeline,shots,overview,minimumAltitude,aspect,flight,width,height,options};
+}
+/** Measured ground-edge projection at the real route anchor. Local, not an
+ * all-visible-pixels bound or native optical GSD measurement. */
+export function terrainTexelFootprint(terrain:TerrainDataset,position:TerrainPosePoint,target:TerrainPosePoint,xy:TerrainXY,width:number,height:number,spacing:number):number{
+  const h=terrain.meshElevation(xy),e:TerrainXY=[xy[0]+spacing,xy[1]],n:TerrainXY=[xy[0],xy[1]+spacing],eh=terrain.meshElevation(e),nh=terrain.meshElevation(n);if(h===undefined||eh===undefined||nh===undefined||!Number.isFinite(spacing)||spacing<=0)throw Error('Детализация вне полного DEM.');
+  const p=projectTerrainPoint([...xy,h],position,target,width,height),a=projectTerrainPoint([...e,eh],position,target,width,height),b=projectTerrainPoint([...n,nh],position,target,width,height),pixels=Math.max(Math.hypot(a[0]-p[0],a[1]-p[1]),Math.hypot(b[0]-p[0],b[1]-p[1]));if(!Number.isFinite(pixels)||pixels<=0)throw Error('Некорректный масштаб земли.');return pixels;
 }
 /** Pure timestamp function, no previous frame, wall clock or mutable UI reads. */
+export function terrainFrameCoverage(terrain:TerrainDataset,pose:TerrainCameraState,width:number,height:number,screen:readonly number[]=[.05,.24,.95,.72]):{complete:boolean;minimumMarginMeters:number;corners:TerrainXY[]}{
+  // All rays in the screen rectangle must reach the complete mesh before its
+  // minimum-height plane. Four plane corners bound its convex footprint.
+  if(screen.length!==4||!screen.every(Number.isFinite)||screen[0]<0||screen[1]<0||screen[2]>1||screen[3]>1||screen[0]>=screen[2]||screen[1]>=screen[3])throw Error('Некорректная область кадра.');
+  const delta=pose.target.map((v,i)=>v-pose.position[i]),length=Math.hypot(...delta),f=delta.map(v=>v/length),horizontal=Math.hypot(f[0],f[1]);if(horizontal<1e-9)return{complete:false,minimumMarginMeters:-Infinity,corners:[]};
+  const right=[f[1]/horizontal,-f[0]/horizontal,0],up=[f[2]*right[1],-f[2]*right[0],f[1]*right[0]-f[0]*right[1]],scale=height/2/Math.tan(pose.fov*Math.PI/360),bounds=terrain.getTerrainBounds(),corners:TerrainXY[]=[];let margin=Infinity;
+  for(const x of [screen[0],screen[2]])for(const y of [screen[1],screen[3]]){
+    const sx=(x*width-width/2)/scale,sy=(height/2-Math.min(width,height)*.04-y*height)/scale,ray=f.map((v,i)=>v+right[i]*sx+up[i]*sy);if(ray[2]>=-1e-9)return{complete:false,minimumMarginMeters:-Infinity,corners};
+    const t=(terrain.min-pose.position[2])/ray[2],xy:TerrainXY=[pose.position[0]+ray[0]*t,pose.position[1]+ray[1]*t];if(t<=0)return{complete:false,minimumMarginMeters:-Infinity,corners};corners.push(xy);margin=Math.min(margin,xy[0]-bounds[0],xy[1]-bounds[1],bounds[2]-xy[0],bounds[3]-xy[1]);
+  }
+  if(margin>=0)return{complete:true,minimumMarginMeters:margin,corners};
+  // The minimum plane can be too pessimistic where the boundary is a real
+  // mountain. Intersect the ray pyramid with each crossed DEM side. Its vertex
+  // heights bound every exiting ray; actual boundary-grid minima then prove
+  // an intervening surface intersection. No unseen height is extrapolated.
+  const vertices:TerrainPosePoint[]=[pose.position,...corners.map(p=>[p[0],p[1],terrain.min] as TerrainPosePoint)],edges=[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[2,4],[3,4]];
+  for(const [axis,value,isLower] of [[0,bounds[0],true],[0,bounds[2],false],[1,bounds[1],true],[1,bounds[3],false]] as const){
+    if(corners.every(p=>isLower?p[axis]>=value:p[axis]<=value))continue;
+    const hits:TerrainPosePoint[]=[];for(const [a,b] of edges){const from=vertices[a],to=vertices[b],d=to[axis]-from[axis];if(Math.abs(d)<1e-9)continue;const t=(value-from[axis])/d;if(t>=0&&t<=1)hits.push(pointMix(from,to,t));}
+    if(!hits.length)return{complete:false,minimumMarginMeters:margin,corners};
+    const other=1-axis,low=Math.max(bounds[other],Math.min(...hits.map(p=>p[other]))),high=Math.min(bounds[other+2],Math.max(...hits.map(p=>p[other]))),step=terrain.level.spacingMeters;let floor=Infinity;
+    const first=Math.max(0,Math.floor((low-bounds[other])/step)),last=Math.min((axis===0?terrain.level.height:terrain.level.width)-1,Math.ceil((high-bounds[other])/step));
+    if(high<low||last<first)return{complete:false,minimumMarginMeters:margin,corners};
+    for(let i=first;i<=last;i++){const index=axis===0?i*terrain.level.width+(isLower?0:terrain.level.width-1):(isLower?0:terrain.level.height-1)*terrain.level.width+i,h=terrain.heights[index];if(h===terrain.manifest.noData)return{complete:false,minimumMarginMeters:margin,corners};floor=Math.min(floor,h);}
+    if(Math.max(...hits.map(p=>p[2]))>floor-1e-6)return{complete:false,minimumMarginMeters:margin,corners};
+  }
+  return{complete:true,minimumMarginMeters:margin,corners};
+}
 export function getTerrainCameraStateAt(seconds:number,plan:TerrainCameraPlan):TerrainCameraState{
   const state=plan.timeline.at(seconds);let lo=0,hi=plan.shots.length-2;while(lo<hi){const middle=Math.ceil((lo+hi)/2);if(plan.shots[middle].progress<=state.routeProgress)lo=middle;else hi=middle-1;}const a=plan.shots[lo],b=plan.shots[lo+1];
   const at=plan.terrain.world(state.point),target:TerrainPosePoint=[...at,plan.terrain.meshElevation(at)!+24];
@@ -117,7 +159,8 @@ export function getTerrainCameraStateAt(seconds:number,plan:TerrainCameraPlan):T
   if(ground===undefined)throw Error('Переход камеры выходит за DEM. Выберите 2D.');
   look=[look[0],look[1],Math.max(look[2],ground+24)];
   const ceiling=plan.terrain.ceiling([position[0],position[1]]);if(ceiling===undefined)throw Error('Камера вне полного DEM.');
-  const lifted=requiredVisibleAltitude(plan.terrain,position,look),height=Math.max(plan.minimumAltitude,lifted,ceiling+350);
+  const lifted=requiredVisibleAltitude(plan.terrain,position,look);let height=Math.max(plan.minimumAltitude,lifted,ceiling+350);
+  if(plan.options){for(let i=0;i<8;i++){const pixels=terrainTexelFootprint(plan.terrain,[position[0],position[1],height],look,at,plan.width,plan.height,plan.options.detailSpacingMeters);if(pixels<=plan.options.maximumTexelPixels+1e-6)break;height+=Math.max(1,height-look[2])*(pixels/plan.options.maximumTexelPixels-1)*1.05;if(i===7)throw Error('Для этого ракурса недостаточно реальной детализации. Выберите обзорный вариант.');}}
   if(!Number.isFinite(height)||height>80000)throw Error('Безопасный 3D-ракурс недоступен. Выберите 2D.');
   position=[position[0],position[1],height];
   const dx=look[0]-position[0],dy=look[1]-position[1],distance=Math.hypot(dx,dy);
