@@ -1,5 +1,13 @@
 # Implementation state
 
+## Swiss Phase C reference reconciliation — 2026-10-12
+
+Actual main64fcf2933f62f678808198d331775d7ceccc3d3d, PR10 MERGED, main-push CI38194730545 SUCCESS. PR11 OPEN/retargeted to main, exact02b498a32242b3e1514529087c546fb4e253e62a CI38160641148 SUCCESS. PR12/13 CLOSED alternatives untouched; PR5/8 remain independent. Clean tree before new branch codex/swiss-extended-coverage from verified PR11 head. No merge/tag/deploy/release/size authorization inferred.
+
+Reference clean npm.cmd ci76packages/77audited/0vulnerabilities; npm.cmd test189PASS/17files/buildPASS; SWISS_PILOT=1 PLAYWRIGHT_CHANNEL=msedge FULL_EXPORT_ACCEPTANCE=1 npx.cmd playwright test tests/e2e/swiss.spec.ts4PASS/39.8s. Original COG and7derived hashes verified; full20/30s independent decode/reference frames preserved separately in ignored artifacts/swiss-phase-c/reference-02b and original source archive. Actual safe-screen terrain coverage opening35%landscape/52%portrait explains visible rectangular crop. Actual route-ground distance1479m/2424m opening,~578–607m replay; local metres/output-pixel1.73/1.60 opening and~.69–.75/.36–.41replay. Plane extent is an estimate, not final terrain-coverage proof.
+
+Initial bounded strategy comparison recorded in SWISS_PHASE_C.md. Next: source-selected adjacent official2m image overviews/2m DEM; precompute actual resource budgets; try two-resident-texture3km context/0.5m route detail with derived5m mesh within old caps. Retain original2m pilot, prove all350m/LOS/corridor/texture readiness, measure native process memory rather than substitute CDP heap. Expanded rendering/size/device approval not yet claimed.
+
 ## Swiss review PR created — 2026-10-11
 
 Pushed `c22397c891fe4208a075d2e02bb8a93006ff9390` on codex/swiss-alps-pilot; actual review PR https://github.com/Matawaka/route-story/pull/11 OPEN, attached to this task, targeting PR10 branch codex/terrain-dynamics-markers at3113f4367171fed21907a53ccd4c5b0fd5c83cf1. Main126dd988 unchanged; independent PR5/PR8 untouched. Review PR10 first, then retarget/revalidate Swiss PR11 after approved dependency merge. No duplicate implementation diff against main.
