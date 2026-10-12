@@ -4,6 +4,16 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      verify_swiss_public:
+        description: Read-only Swiss acceptance of the existing public site; no deployment
+        type: boolean
+        required: true
+        default: false
+      expected_deployed_sha:
+        description: Exact already-deployed sourceCommit for public acceptance
+        type: string
+        required: false
 permissions:
   contents: read
 jobs:
@@ -22,6 +32,14 @@ jobs:
       # Short 4s regression and bounded 20s Standard export run on every PR.
       # Full 30s/720p benchmarks are opt-in locally: FULL_EXPORT_ACCEPTANCE=1.
       - run: npm.cmd run check
+        if: ${{ github.event_name != 'workflow_dispatch' || !inputs.verify_swiss_public }}
+      - name: Verify existing Swiss HTTPS deployment without publishing
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.verify_swiss_public }}
+        env:
+          APP_URL: https://matawaka.github.io/route-story/
+          EXPECTED_COMMIT: ${{ inputs.expected_deployed_sha }}
+          ACCEPTANCE_DIR: artifacts/public-swiss
+        run: node scripts/acceptance/swiss-public.mjs
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: success()
         with:
