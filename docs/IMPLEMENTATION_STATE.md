@@ -1,5 +1,11 @@
 # Implementation state
 
+## Final keyboard/recovery verification before PR20 handoff — 2026-10-12
+
+PR20 https://github.com/Matawaka/route-story/pull/20 remains OPEN. Source b19f49e05e3fc50a24f4c6db90afb199380fd4b5 already passed committed full production/subpath acceptance,31hashes and10/20/30s MP4 independent decoding; complete caps4956285/5961668/7982975B≤5/6/9MiB. Prior evidence-head019ba9d exact GitHub CI38286746831 SUCCESS (not a claim about the upcoming head).
+
+Latest bounded UX correction keeps valid-route title input enabled during preparation, groups GPU rebuilds after180ms typing pause, blocks export until the last settings are committed, and cancels title timer on route replacement/load cancellation/pagehide. Loading displays its stage instead of stale canvas. Early operation-identity guard prevents obsolete delayed callbacks. Final UNIFIED_UX_ACCEPTANCE=1/SWISS_PILOT=1/SWISS_BASELINE=0/FULL_EXPORT_ACCEPTANCE=1/CI=1 Edge suite:14PASS/0FAIL (1.1m), including typing, offline/no-background2D, missing rider/point recovery and full20/30s exact preview/export/FFmpeg proof. Next: type/unit check, commit, final production manifest/package check and evidence-only handoff push. No merge/deploy/publicHTTPS for this UX; new owner approval is still required.
+
 ## PR20 last network-recovery edge — 2026-10-12
 
 Focused review PR https://github.com/Matawaka/route-story/pull/20 OPEN, branch codex/unified-route-story-ux. Evidence-head019ba9df740069b2a51f99f0150d2cf46afab666 was pushed and CI38286746831 pending when recording. Final code refinement provides explicit Classic/2D local-GPX diagram if the background cannot load (offline/timeout/unavailable only; never accepts corrupt imagery). The UI/source credit says no geographic background, never substitutes fake3D. Missing built-in rider bytes choose visible point only on the explicit recovery action. No new rendering pipeline, geographic source or license. New offline test proves recovery without a prior global map cache; unified12PASS after that refinement. Added missing-marker recovery case is next targeted verification. Update final source/evidence SHA after committing and rerun affected preparation/production checks; public deployment remains untouched and requires new approval.

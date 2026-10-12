@@ -22,7 +22,7 @@ const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let state:UiState={phase:'INITIALIZING'},view:ViewMode='normal';
 let route:Route|undefined,renderer:SceneRenderer|undefined,scene:PreparedScene|undefined;
 let story:Readonly<StoryConfig>=defaultStoryConfig(),customMarker:MarkerAsset|undefined;
-let style:StoryConfig['visualStyle']='atlas',animationId=0,contextCleanup:(()=>void)|undefined;
+let style:StoryConfig['visualStyle']='atlas',animationId=0,titleTimer:ReturnType<typeof setTimeout>|undefined,contextCleanup:(()=>void)|undefined;
 let operation:AbortController|undefined,exportController:AbortController|undefined;
 let encoder:{status:'checking'|'supported'|'unavailable';message?:string}={status:'checking'};
 type Source={name:string;synthetic:boolean;read:(signal:AbortSignal)=>Promise<Route>};
@@ -38,7 +38,7 @@ function setState(next:UiState):void{state=next;renderState();}
 function renderState():void{
   document.body.dataset.state=state.phase;
   const loading=busyLoad(),exporting=busyExport(),available=!!renderer;
-  el('loading').hidden=!loading;el('empty').hidden=available||loading;canvas.hidden=!available;
+  el('loading').hidden=!loading;el('empty').hidden=available||loading;canvas.hidden=!available||loading;
   el('loading').setAttribute('aria-busy',String(loading));
   if(state.phase==='LOADING'){el('loading-heading').textContent=state.heading;el('loading-stage').textContent=state.stage;}
   const status=el('status');status.classList.toggle('error',state.phase==='ERROR'||encoder.status==='unavailable');
@@ -54,7 +54,7 @@ function renderState():void{
   el('compatibility').hidden=!available||encoder.status!=='unavailable'||control('quality').value!=='standard';
   button.disabled=!available||loading||exporting||encoder.status!=='supported'||state.phase==='ERROR'&&state.blocking!==false;
   play.disabled=scrub.disabled=!available||loading||exporting;play.textContent=state.phase==='PLAYING'?'Ⅱ':'▶';play.setAttribute('aria-label',state.phase==='PLAYING'?'Пауза':'Воспроизвести');
-  title.disabled=!route||loading||exporting;for(const id of selects)control(id).disabled=exporting||loading&&!route;markerFile.disabled=exporting||loading;
+  title.disabled=!route||exporting;for(const id of selects)control(id).disabled=exporting||loading&&!route;markerFile.disabled=exporting||loading;
   for(const id of ['file','route-choice','demo','cinematic-demo','terrain-demo','swiss-demo','clear-route','empty-file','empty-swiss','empty-other'])el<HTMLInputElement>(id).disabled=exporting;
   for(const card of document.querySelectorAll<HTMLButtonElement>('[data-style]'))card.disabled=exporting||loading;el('facts').hidden=!route;
 }
@@ -72,7 +72,7 @@ function startPlay():void{
   const tick=(now:number)=>{if(state.phase!=='PLAYING')return;scrub.value=String(Math.min(story.durationSeconds,(now-started)/1000));if(!draw())return;if(Number(scrub.value)>=story.durationSeconds)setState({phase:'PAUSED'});else animationId=requestAnimationFrame(tick);};animationId=requestAnimationFrame(tick);
 }
 function begin(heading:string):AbortController{
-  operation?.abort();const next=new AbortController();operation=next;stop();encoder={status:'checking'};setState({phase:'LOADING',heading,stage:'Проверяем маршрут и необходимые ресурсы'});return next;
+  clearTimeout(titleTimer);operation?.abort();const next=new AbortController();operation=next;stop();encoder={status:'checking'};setState({phase:'LOADING',heading,stage:'Проверяем маршрут и необходимые ресурсы'});return next;
 }
 function stageFor(op:AbortController,heading:string):(stage:string)=>void{return stage=>{if(operation===op&&!op.signal.aborted)setState({phase:'LOADING',heading,stage});};}
 function configFromControls():Readonly<StoryConfig>{
@@ -86,7 +86,7 @@ async function probe(op:AbortController):Promise<void>{
   finally{clearTimeout(timer);op.signal.removeEventListener('abort',cancel);if(operation===op&&!op.signal.aborted)renderState();}
 }
 async function configure(op?:AbortController,autoplay=false):Promise<void>{
-  if(busyExport()||!route)return;const heading=source?.name==='furka'?swissHeading:'Подготавливаем маршрут',current=op??begin(heading),signal=current.signal;
+  if(busyExport()||!route||op&&(operation!==op||op.signal.aborted))return;const heading=source?.name==='furka'?swissHeading:'Подготавливаем маршрут',current=op??begin(heading),signal=current.signal;
   try{story=configFromControls();title.removeAttribute('aria-invalid');}catch(error){title.setAttribute('aria-invalid','true');if(operation===current)failure(error,'configuration');return;}
   // Old GPU resources leave before another pair of photo textures is decoded.
   releaseRenderer();renderState();
@@ -129,7 +129,7 @@ function selectDemo(name:'furka'|'sogne'|'fjords'|'sample',autoplay=false):void{
   void importSource({name,synthetic:true,read:async signal=>{if(name==='furka'){const swiss=await import('./swiss-pilot');signal.throwIfAborted();return parseGpx(await swiss.loadSwissRoute(signal));}return parseGpx(new TextDecoder('utf-8',{fatal:true}).decode(await localBytes(`${import.meta.env.BASE_URL}samples/${paths[name]}`,{signal,kind:'route',limit:10*1024*1024})));}},autoplay);
 }
 function clearRoute():void{
-  if(busyExport())return;operation?.abort();operation=undefined;stop();releaseRenderer();route=undefined;source=undefined;retryAction=undefined;customMarker?.dispose();customMarker=undefined;canvas.width=canvas.height=0;delete canvas.dataset.phase;delete canvas.dataset.mode;
+  if(busyExport())return;clearTimeout(titleTimer);operation?.abort();operation=undefined;stop();releaseRenderer();route=undefined;source=undefined;retryAction=undefined;customMarker?.dispose();customMarker=undefined;canvas.width=canvas.height=0;delete canvas.dataset.phase;delete canvas.dataset.mode;
   choice.value='empty';el('route-info').textContent='Маршрут не выбран.';el('scene-name').textContent='Route Story';el('source-credit').textContent='Источники карты: Natural Earth';setState({phase:'EMPTY'});
 }
 function setView(next:ViewMode):void{
@@ -154,9 +154,13 @@ el('retry').addEventListener('click',()=>retryAction?.());el('simplify').addEven
   if(state.phase==='ERROR'&&state.error.code.startsWith('marker/'))control('marker').value='point';
   control('camera-mode').value='classic';void configure();
 });el('compatibility').addEventListener('click',()=>{control('quality').value='compatibility';void configure();});
-el('cancel-load').addEventListener('click',()=>{operation?.abort();operation=undefined;releaseRenderer();setState({phase:'CANCELLED',notice:'Подготовка отменена. Можно повторить или выбрать другой маршрут.'});});
+el('cancel-load').addEventListener('click',()=>{clearTimeout(titleTimer);operation?.abort();operation=undefined;releaseRenderer();setState({phase:'CANCELLED',notice:'Подготовка отменена. Можно повторить или выбрать другой маршрут.'});});
 for(const id of selects)control(id).addEventListener('change',()=>{if(busyExport())return;if(id==='marker'&&control('marker').value!=='custom'){customMarker?.dispose();customMarker=undefined;}void configure();});
-title.addEventListener('input',()=>void configure());
+title.addEventListener('input',()=>{
+  if(busyExport()||!route)return;const op=begin('Обновляем название истории');
+  stageFor(op,'Обновляем название истории')('Название обновится после ввода · экспорт временно недоступен');
+  titleTimer=setTimeout(()=>void configure(op),180);
+});
 for(const card of document.querySelectorAll<HTMLButtonElement>('[data-style]'))card.addEventListener('click',()=>{if(busyExport())return;style=card.dataset.style as StoryConfig['visualStyle'];for(const item of document.querySelectorAll<HTMLButtonElement>('[data-style]')){item.classList.toggle('active',item===card);item.setAttribute('aria-pressed',String(item===card));}void configure();});
 markerFile.addEventListener('change',async()=>{
   const selected=markerFile.files?.[0];markerFile.value='';if(!selected||busyExport())return;const previousEncoder=encoder,op=begin('Подготавливаем картинку маркера локально');
@@ -171,7 +175,7 @@ button.addEventListener('click',async()=>{
   catch(error){if(controller.signal.aborted)setState({phase:'CANCELLED',notice:'Экспорт отменён.'});else{retryAction=()=>{if(renderer){setState({phase:'READY'});button.click();}else void configure();};setState({phase:'ERROR',error:uiError(error,'export'),blocking:!renderer});}}
   finally{exportController=undefined;renderState();}
 });
-window.addEventListener('pagehide',()=>{operation?.abort();exportController?.abort();cancelAnimationFrame(animationId);releaseRenderer();customMarker?.dispose();customMarker=undefined;disposeTraveler();clearResourceCache();route=undefined;source=undefined;});
+window.addEventListener('pagehide',()=>{clearTimeout(titleTimer);operation?.abort();exportController?.abort();cancelAnimationFrame(animationId);releaseRenderer();customMarker?.dispose();customMarker=undefined;disposeTraveler();clearResourceCache();route=undefined;source=undefined;});
 renderState();
 // Only initial startup selects Switzerland; no retry or timer restores it.
 if(__SWISS_ENABLED__)selectDemo('furka',true);else setState({phase:'EMPTY'});

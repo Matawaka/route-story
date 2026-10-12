@@ -25,6 +25,10 @@ test('reduced motion prepares static 3D and presentation modes never change vide
   await page.locator('#video-only').click();await expect(page.locator('.controls')).toBeHidden();await expect(page.locator('#export')).toBeVisible();await expect(page.locator('#source-credit')).toBeVisible();expect(await seek(page,7)).toBe(pixels);
   await page.locator('#show-settings').click();await expect(page.locator('.controls')).toBeVisible();await page.locator('#video-only').click();await expect(page.locator('body')).toHaveAttribute('data-view','normal');await page.locator('#play').click();await expect(page.locator('body')).toHaveAttribute('data-state','PLAYING');await page.locator('#play').click();
 });
+test('keyboard title editing stays responsive during preparation and exports only committed settings',async({page})=>{
+  await page.goto('/');await ready(page);await seek(page,5);await page.locator('#story-title').fill('');await page.locator('#story-title').pressSequentially('Новый маршрут',{delay:15});await expect(page.locator('#story-title')).toHaveValue('Новый маршрут');await ready(page);await expect(page.locator('#preview')).toHaveAttribute('aria-label',/Новый маршрут/);
+  await page.locator('#story-title').fill('Устаревшее название');await expect(page.locator('#export')).toBeDisabled();await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#story-title')).not.toHaveValue('Устаревшее название');await expect(page.locator('#preview')).toHaveAttribute('data-region','global');
+});
 test('loading cancel and rapid region replacement never restore stale Switzerland',async({page})=>{
   let release:()=>void=()=>{};const gate=new Promise<void>(r=>release=r);await page.route('**/furka-context-high-detail.jpg',async r=>{await gate;try{await r.continue();}catch{}});
   await page.goto('/');await expect(page.locator('#loading-stage')).toContainText('спутниковые');await page.locator('#cancel-load').click();await expect(page.locator('body')).toHaveAttribute('data-state','CANCELLED');await expect(page.locator('#empty')).toBeVisible();
