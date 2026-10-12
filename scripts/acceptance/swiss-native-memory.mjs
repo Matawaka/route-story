@@ -1,6 +1,7 @@
 /** Isolated Windows browser process observations, not VRAM or codec memory. */
 import {chromium} from '@playwright/test';
-import {spawn} from 'node:child_process';
+import {spawn,execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 import {mkdirSync,readFileSync,writeFileSync,existsSync} from 'node:fs';
 import {resolve} from 'node:path';
 import os from 'node:os';
@@ -46,6 +47,6 @@ await withServer(async url=>{
  }finally{writeFileSync(stop,'stop');await new Promise(resolve=>{const timer=setTimeout(()=>{sampler.kill();resolve();},5000);sampler.once('exit',()=>{clearTimeout(timer);resolve();});});await browser.close();await server.close();}
  if(samplerError)throw Error(samplerError);assert.ok(existsSync(file),'OS sampler unavailable');const samples=readFileSync(file,'utf8').trim().split('\n').map(l=>JSON.parse(l));assert.ok(samples.length>=20,'Not enough process samples');
  for(const s of stages){const a=samples.filter(r=>r.unixMs>=s.start&&r.unixMs<=s.end);s.sampleCount=a.length;s.privatePeakBytes=a.length?Math.max(...a.map(r=>r.privateSumBytes)):null;s.workingSetPeakBytes=a.length?Math.max(...a.map(r=>r.workingSetSumBytes)):null;s.lastNative=a.at(-1)||null;}
- const report={date:'2026-10-12',source:'reference runtime02b498a' ,extended,os:`${os.type()} ${os.release()}`,method:'Fresh isolated Edge root plus descendants; Windows PrivateMemorySize64 (committed private virtual bytes) and WorkingSet64 (shared pages can be double-counted). Sampled peak, not exact encoder peak. Command lines inspected only for process role and never saved. CDP heap separate; test-only GC never production. GPU driver/VRAM and dedicated codec allocations not measured.',nativeSamplerWithoutExecutionPolicyChange:true,gpuVramPeak:'NOT MEASURED',encoderPeak:'NOT MEASURED',stages,gpu,weak,samples};
+ const files=['src/terrain-renderer.ts','src/terrain-camera.ts','src/swiss-pilot.ts'];const report={date:'2026-10-12',sourceCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',windowsHide:true}).trim(),testedFileSha256:Object.fromEntries(files.map(f=>[f,createHash('sha256').update(readFileSync(f)).digest('hex')])),extended,os:`${os.type()} ${os.release()}`,method:'Fresh isolated Edge root plus descendants; Windows PrivateMemorySize64 (committed private virtual bytes) and WorkingSet64 (shared pages can be double-counted). Sampled peak, not exact encoder peak. Command lines inspected only for process role and never saved. CDP heap separate; test-only GC never production. GPU driver/VRAM and dedicated codec allocations not measured.',nativeSamplerWithoutExecutionPolicyChange:true,gpuVramPeak:'NOT MEASURED',encoderPeak:'NOT MEASURED',stages,gpu,weak,samples};
  writeFileSync(`${folder}/report.json`,JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({extended,samples:samples.length,privatePeakBytes:Math.max(...samples.map(s=>s.privateSumBytes)),workingSetPeakBytes:Math.max(...samples.map(s=>s.workingSetSumBytes)),weak}));
 });

@@ -1,5 +1,9 @@
 # High-resolution region feasibility — 2026-10-11
 
+## Phase C source collection completed, 2026-10-12
+
+Bounded Furka context now uses ordinary official2023 SWISSIMAGE2m overview tiles2669–2671 /1156–1158 and matching2024 swissALTI3D2m tiles: eighteen actual downloads,11952141B, independent provider-hash matches. [Manifest](../data/swiss-phase-c/manifest.json), [phase implementation](SWISS_PHASE_C.md). Same original0.1m source/detail retained; no native10cm claim, new private track or worldwide street coverage. Two resident3m/.5m textures and a declared5m generalized mesh stay within current caps. Fixed overview+route detail was chosen over stitched multiple meshes/atlases; future real routes should prepare bounded first-party regional packs offline, retaining explicit coverage and device gates.
+
 ## Subsequent real Swiss pilot: separate local candidate
 
 The research-only checkpoint below is historical. Matched `2670-1157` SWISSIMAGE2023/swissALTI3D2024 sources were downloaded, independently hashed, cropped and rendered. The original `2671-1159` tile lacks the needed road. See [actual pilot](SWISS_PILOT.md), [manifest](../data/swiss-pilot/manifest.json), [measurements](SWISS_PILOT_PERFORMANCE.md), decoded A/B images.2m DEM/0.5–1m output imagery; explicitly synthetic842.6m road. No public Swiss bundle, no confirmed native10cm acquisition claim, no Sogne replacement or private-coordinate relocation. Visual/device/hosting/budget gates remain pending.

@@ -1,6 +1,7 @@
 {
   "schema": 1,
   "date": "2026-10-11",
+  "subsequentPhaseC": "SWISS_PHASE_C_EVIDENCE.json (separate2026-10-12 candidate; historical values below unchanged)",
   "scope": "Local developer candidate only; no public Swiss deployment",
   "branch": "codex/swiss-alps-pilot",
   "testedParentCommit": "b6050458d23f7745d530d73364e0b14f7a4c2265",

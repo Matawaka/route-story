@@ -37,6 +37,9 @@ def main():
             else:
                 h=src.read(1);assert np.isfinite(h).all() and not (h==src.nodata).any();heights[row:row+500,col:col+500]=h
     assert len(coverage['image'])==len(coverage['dem'])==9 and np.isfinite(heights).all()
+    # Developer-only physical-source acceptance reference; never served to the
+    # browser or included in a runtime/production asset list.
+    native_reference=out/'source-2m.f32';heights[::-1].astype('<f4').tofile(native_reference)
     E,N=2670500,1157500;inv=Transformer.from_crs(2056,4326,always_xy=True);fwd=Transformer.from_crs(4326,2056,always_xy=True);lon,lat=original['terrain']['origin'];normal=.02
     ee,nn=np.meshgrid(np.linspace(E-1500,E+1500,31),np.linspace(N-1500,N+1500,31));lo,la=inv.transform(ee,nn);ae,an=fwd.transform(lo,la)
     fc=np.linalg.lstsq(basis(((lo-lon)/normal).ravel(),((la-lat)/normal).ravel()),np.stack([ae-E,an-N],axis=-1).reshape(-1,2),rcond=None)[0]
@@ -68,6 +71,7 @@ def main():
     for x,y in [(-1475,-1475),(1475,1475),(-1475,1475),(1475,-1475),(0,0),(150,-125),(-315,-215)]:
         lo,la=inv.transform(E+x,N+y);refs.append(dict(lon=lo,lat=la,world=[x,y]))
     record=dict(schema=1,developerOnly=True,sourceBoundsLV95=[2669000,1156000,2672000,1159000],sources=sources,route=original['route'],terrain=terrain,imagery=imagery,cameraReference=dict(bounds=[-475,-475,475,475],reliefMeters=original['terrain']['maxElevation']-original['terrain']['minElevation']),projectionProof=dict(forwardMaximumMeters=error_f,inverseMaximumMeters=error_i,independentCheckCount=97*101,referencePoints=refs),budgets=dict(meshVertices=grid.size,heightGridBytes=levels[0]['bytes'],imagePixels=2960000,decodedRGBABytes=11840000,estimatedMipBytes=15786667,meshArrayBytes=grid.size*44+(590*590)*6*4,highJpegBytes=imagery['high']['bytes']+imagery['high']['detail']['bytes']),processing=['9 ordinary verified2023 SWISSIMAGE2m overview COGs; original0.1m detail source remains unchanged','9 ordinary verified2024 swissALTI3D2m/LV95/LN02 COGs','Bilinear source2m to runtime5m, rounded≤0.5m; no missing data or height exaggeration','Two fully resident textures:3m overview/unchanged0.5m detail; JPEG90, no sharpening','Explicit10m average/bilinear control with same output grids','Pure3km bounded PROJ fit; old1km reference retained separately'],licenseUrl='https://www.swisstopo.admin.ch/en/terms-of-use-free-geodata-and-geoservices',attribution='© swisstopo',nativeOpticalGsd='NOT CLASSIFIED; provider/output raster spacing is separate')
+    record['nativeAcceptanceReference']={**file_record(native_reference),'spacingMeters':2,'width':1500,'height':1500,'westMeters':-1499,'southMeters':-1499,'developerOnly':True}
     (record_dir/'manifest.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     print(json.dumps(dict(sourceBytes=sum(s['bytes'] for s in sources),budgets=record['budgets'],projectionFit=[error_f,error_i],noData=0)))
 if __name__=='__main__':main()

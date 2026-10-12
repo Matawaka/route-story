@@ -52,6 +52,8 @@ The colorful electric-unicycle traveler PNG was supplied by the project owner. I
 
 ## Developer-only Swiss geographic pilot
 
+Phase C adds nine ordinary SWISSIMAGE2023/2m overview COGs and nine matching swissALTI3D2024/2m COGs, tiles2669–2671/1156–1158. Exact source URLs/SHA256 and derivative transformations are recorded in data/swiss-phase-c. Original high-detail source is unchanged; a3m overview/0.5m detail and5m display mesh are explicit resampling, not new native information. Source and output retain **© swisstopo** under the same OGD terms. Raw sources/float acceptance reference and prepared crops are developer-only, excluded from production.
+
 SWISSIMAGE 2023 and swissALTI3D 2024 tile 2670-1157, **© swisstopo**. Ordinary OGD downloads under [swisstopo's free-geodata terms](https://www.swisstopo.admin.ch/en/terms-of-use-free-geodata-and-geoservices), permitting processing/distribution with source acknowledgement; no CC license is invented and application MIT does not relicense source geography. Our rendered MP4 derivatives apply these general permissions and retain the source credit. Product-specific test-only sample ZIPs were not used.
 
 Full source hashes/URLs, CRS LV95/LN02, output resampling/cropping/DEM rounding and synthetic road-centre provenance are in data/swiss-pilot/manifest.json and docs/SWISS_PILOT.md. The selected native 10/25cm class/exact photo day remain unverified; 0.1m source pixels are not advertised as 10cm acquisition. Derived source crops stay outside Git/production; committed comparisons retain attribution. The regional pilot is not included in the public Sogne imagery package or its approved 6MiB budget.
