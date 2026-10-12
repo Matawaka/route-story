@@ -1,5 +1,13 @@
 # Implementation state
 
+## Unified UX committed production / technical comparison regression — 2026-10-12
+
+Implementation commit29545b79873aa9ee81eaed5657007852ce259161 on codex/unified-route-story-ux. Clean211unit/build PASS; final main-UX opt-in12PASS including complete20s/30s videos. Committed local production acceptance scripts/acceptance/swiss-public.mjs --full VERIFIED:31manifest hashes, initial true3D/defaults, one main interface/legacy redirect, cancellation/retry, imported privateGPX local matching, unsupported encoder preview,375viewport, no external/uploads/errors/storage. Generalrelease --smoke also VERIFIED, including restrictive metaCSP, native video playback and private route lost on reload (public demo returns). These are LOCAL production/subpath checks, not new publicHTTPS or physical-device results.
+
+Measured source29545b: baseline4951454+3693B manifest≤5MiB; Sogne5956181+4349≤6MiB; combined7976411+5426=7971837≤9MiB,31files. ProductionCompatibility10s640×360/240frames2109925B; Atlas20s1280×720/480frames13165241B,4945.6ms including save+independent validation; Night30s720×1280/720frames19349140B,7283.3ms same method. BrowserEdge155.0.4283.45/Windows10.0.26200. Dev export-through-download1577.5/2228.0ms has a different measurement boundary and is not a claimed speedup. Export source pixels exactly equal preview; decoded mean RGB error2.53/1.92, minimum sampled full-frame variance495.24/325.24 (all480/720 decoded frames). Rendered imagery/DEM/camera/source data are unchanged. Native/GPU/encoder peak memory NOTMEASURED.
+
+Historical Swiss1km/3km full A/B/geometry/composition tests:7PASS/2FAIL initially. Both failures were fresh corruption harness assumptions after adding verified public-byte reuse (and raw exception language), not accepted bad data or geometry failure. Corruption tests now explicitly clear the RAM cache before the intercepted fresh response, preserving byte/hash/failed-decode assertions. ResourceError messages localized for the developer comparison UI as well. Focused --last-failed:2PASS (5.7s), including codec/GPU/OOM recovery. No full geographical assertion was relaxed. Next: final source/regression/package verification, review evidence and focused PR. No merge/publication.
+
 ## Unified main UX implementation checkpoint — 2026-10-12
 
 Branch codex/unified-route-story-ux, from actual main d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83. Remote rechecked unchanged; main CI SUCCESS; open docsPR18/e99c4cc, oldPR8/PR5 remain separate. No other active geography implementation/worktree was found. Latest source is this working branch; exact HEAD must be inspected after committing. No merge/deploy/tag/Release/repost authorized for this new task.

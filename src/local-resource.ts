@@ -4,7 +4,7 @@ export type ResourceKind = 'terrain' | 'image' | 'map' | 'route' | 'marker';
 export type ResourceFailure = 'offline' | 'timeout' | 'unavailable' | 'integrity' | 'resources';
 export class ResourceError extends Error {
   constructor(readonly category: ResourceFailure, readonly kind: ResourceKind) {
-    super(`Local resource: ${category} (${kind})`); this.name = 'ResourceError';
+    super(category==='integrity'?'Региональный ресурс повреждён.':category==='timeout'?'Загрузка заняла слишком много времени.':category==='offline'?'Нет интернет-соединения.':category==='resources'?'Превышен безопасный размер ресурса.':'Локальный ресурс недоступен.'); this.name = 'ResourceError';
   }
 }
 export interface ResourceOptions {
