@@ -1,5 +1,11 @@
 # Decisions
 
+## 2026-10-12 — cross-platform source bytes and next regional priorities
+
+Authorized Swiss publication exposed a real Ubuntu source-checksum failure before deployment, despite passing Windows main CI. Preserve both reviewed GPX files as exact -text blobs and test Git-object bytes, not only OS-transformed working files. Keep original checksum and geometry. PR17 is the focused blocker fix; publication resumes only after exact PR/main CI and required human Pages review. The unsuccessful run does not establish public acceptance.
+
+Owner selected China and Georgia as next detailed-map priorities. Research can use official Sentinel2 and Copernicus GLO30 sources as bounded regional candidates; no selected crop or national high-resolution rights/coverage are yet validated. Country prioritization does not mean detailed assets already exist. Keep Sogne/Furka selection and truthful global2D fallback, local-only GPX matching, existing resource guards and per-pack provenance/export checks.
+
 ## 2026-10-12 — approved Swiss publication and optional regional resources
 
 Owner approved actual Phase C videos and explicitly authorized merge/deploy/necessary package increase. PR11 merged as b1c9ea8bbfb2d800c3f2d8108d6e09641e3c1015; PR14 retargeted to main, diff and unchanged synthetic merge tree revalidated, merged as c12a3a7a764a8a734c4edd51a37b283bec1968d7. Main CI38213253405 SUCCESS. No closed alternative implementations or unrelated documentation PR absorbed.
