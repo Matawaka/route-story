@@ -24,7 +24,7 @@ test('custom PNG upload stays local, rejects SVG and preserves chosen marker',as
   await page.goto('/');
   await page.locator('#demo').click();
   await expect(page.locator('#export')).toBeEnabled();
-  const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aGFEAAAAASUVORK5CYII=','base64');
+  const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=','base64');
   await page.locator('#marker-file').setInputFiles({name:'safe.png',mimeType:'image/png',buffer:png});
   await expect(page.locator('#marker-style')).toHaveValue('custom');
   await expect(page.locator('#export')).toBeEnabled();
