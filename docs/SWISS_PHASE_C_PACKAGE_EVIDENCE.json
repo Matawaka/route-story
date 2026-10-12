@@ -1,0 +1,613 @@
+{
+  "date": "2026-10-12",
+  "scope": "Source-matched local Sogne production regression only; Swiss assets and page excluded; no public deployment",
+  "baseline": {
+    "sourceCommit": "858a582a4e64b069af6727a45fe2447fa3958fa8",
+    "version": "1.2.0-rc.1",
+    "totalBytes": 4906315,
+    "manifestBytes": 3357,
+    "completeBytes": 4909672,
+    "publicFiles": 20,
+    "publicationApproved": false,
+    "files": [
+      {
+        "path": "LICENSE",
+        "bytes": 1095,
+        "sha256": "4aabaef5b4806626780237bcdc36441dd2a988027e4f44016a4f1312d71adb80"
+      },
+      {
+        "path": "THIRD_PARTY_NOTICES.md",
+        "bytes": 9078,
+        "sha256": "c53e60b25ee691997f9e467a0fd07127db4620a9c5ae5bfdc9c6faeb9a4cc428"
+      },
+      {
+        "path": "assets/index-CQP1_ctm.js",
+        "bytes": 268986,
+        "sha256": "98e44aeb33987e3d24e609dad595b1876fe2c1c97518033256a840c2031168ee"
+      },
+      {
+        "path": "assets/index-DfHcMwLb.css",
+        "bytes": 5972,
+        "sha256": "fa5c078e0f85651d264e1e4b6fef6b2fcc5904c7bacdb0092fc945bc1739cd0f"
+      },
+      {
+        "path": "assets/terrain-renderer-DWxPQwNU.js",
+        "bytes": 568850,
+        "sha256": "feeddde75cf06fe6e5080c4d018bb352d4ef650390c2feb6e5dc07c4ed640e36"
+      },
+      {
+        "path": "index.html",
+        "bytes": 9983,
+        "sha256": "32fab554768499ea477b3eb379dba8dcf9181d921be07852752833694aa41c1d"
+      },
+      {
+        "path": "licenses/MEDIABUNNY-MPL-2.0.txt",
+        "bytes": 17099,
+        "sha256": "9221c2f936159b8446d329249fb4c0f25be510f447383a0f13336ac7985668a3"
+      },
+      {
+        "path": "licenses/THREE-MIT.txt",
+        "bytes": 1102,
+        "sha256": "5d5dad8147523d59bc15cca838ae0bdaae7075230ec49132c551a1d18e7b3412"
+      },
+      {
+        "path": "licenses/TRAVEL_ANIMATION.txt",
+        "bytes": 1088,
+        "sha256": "1f5653a6056775103bb2cf00660de716b9897100030a3e3be2b0893444dd7e23"
+      },
+      {
+        "path": "maps/fjords-10m.json",
+        "bytes": 124200,
+        "sha256": "ba25eeee587b0823e6d0a3c64a8a6e06cd75e61154a055385a8d125d98498e97"
+      },
+      {
+        "path": "maps/ne_110m_land.geojson",
+        "bytes": 138161,
+        "sha256": "3d34c10cebfdba17f5f97180dd7c5100c8c5e05f2f583061aa8de2e9f942a904"
+      },
+      {
+        "path": "maps/world-50m.json",
+        "bytes": 2413275,
+        "sha256": "a01e11118a6f24c595e58f1b8e6261136abc15586aba3133258fd267428dc657"
+      },
+      {
+        "path": "markers/traveler-euc-256.png",
+        "bytes": 76427,
+        "sha256": "eb39e771f2fab21c7607b9d863c3d4a2b8b8275e2f5df772e7036e7d15e01fd6"
+      },
+      {
+        "path": "samples/cinematic-fjords.gpx",
+        "bytes": 27605,
+        "sha256": "e3f60504e0c3a6f08912d2fdd4cefecf9e4efb63395af996a167586845e14d22"
+      },
+      {
+        "path": "samples/synthetic-antimeridian.gpx",
+        "bytes": 5384,
+        "sha256": "89142ec62c5b85b0196f3bf0a6d35a406033d5efee67580afe4756cf5f650344"
+      },
+      {
+        "path": "samples/synthetic.gpx",
+        "bytes": 912,
+        "sha256": "bc2214fb9f0b96245cbb386af5b4185d75090da99f16f51486ee1fe69e17b730"
+      },
+      {
+        "path": "samples/terrain-sogne.gpx",
+        "bytes": 31609,
+        "sha256": "a54b2e6207cd701958df61e418973c3a4048471d7ffeb5b1389c4a6fc7415154"
+      },
+      {
+        "path": "terrain/sogne-100m.i16",
+        "bytes": 241402,
+        "sha256": "51350b3f83e533540a47ad35c87eea60b1a32c7dd5aea1d18c183b9b532c2d65"
+      },
+      {
+        "path": "terrain/sogne-50m.i16",
+        "bytes": 962802,
+        "sha256": "bf6ebc34cfe4420a416acbefa76b834e4d356f0389ea61caed42ef2e103b5159"
+      },
+      {
+        "path": "terrain/sogne.json",
+        "bytes": 1285,
+        "sha256": "73c3b478b21e2586762f3cb844868767101003ed599f087489fa1c7d929d72c2"
+      }
+    ]
+  },
+  "photo": {
+    "sourceCommit": "858a582a4e64b069af6727a45fe2447fa3958fa8",
+    "version": "1.2.0-rc.1",
+    "totalBytes": 5911050,
+    "manifestBytes": 4048,
+    "completeBytes": 5915098,
+    "publicFiles": 23,
+    "publicationApproved": false,
+    "files": [
+      {
+        "path": "LICENSE",
+        "bytes": 1095,
+        "sha256": "4aabaef5b4806626780237bcdc36441dd2a988027e4f44016a4f1312d71adb80"
+      },
+      {
+        "path": "THIRD_PARTY_NOTICES.md",
+        "bytes": 9078,
+        "sha256": "c53e60b25ee691997f9e467a0fd07127db4620a9c5ae5bfdc9c6faeb9a4cc428"
+      },
+      {
+        "path": "assets/index-CV-jMmFN.js",
+        "bytes": 268883,
+        "sha256": "b4b1904d7ba63d4b72b269114f9aca2e62a82e1f400f1b5762e0335000e4d3a6"
+      },
+      {
+        "path": "assets/index-DfHcMwLb.css",
+        "bytes": 5972,
+        "sha256": "fa5c078e0f85651d264e1e4b6fef6b2fcc5904c7bacdb0092fc945bc1739cd0f"
+      },
+      {
+        "path": "assets/terrain-renderer-Dwr_aA9O.js",
+        "bytes": 568850,
+        "sha256": "c177604b75442ab3340b452a5a9c7d1737f7cc954d169b5a5bf872202ab55e43"
+      },
+      {
+        "path": "imagery/sogne-sentinel-10m.jpg",
+        "bytes": 657525,
+        "sha256": "d74099be2da8bed8fbbbfafb7a5426ca21546adb7d300180869dfb23e5cea996"
+      },
+      {
+        "path": "imagery/sogne-sentinel-40m.jpg",
+        "bytes": 339524,
+        "sha256": "ad88bb13cc1e5fb62e9b5575d5ec43176bd61ae22aae9d0f7fbd8e5a1388a441"
+      },
+      {
+        "path": "imagery/sogne-sentinel.json",
+        "bytes": 7789,
+        "sha256": "80ee512e83ccbb595840bc7d2a14f7f16b410e8e5759588ff7682f10d5acbceb"
+      },
+      {
+        "path": "index.html",
+        "bytes": 9983,
+        "sha256": "d2620f0eed8e7a0dd03e2955b5537dd1eb2e8a4d48025f0872b195212fbe33bf"
+      },
+      {
+        "path": "licenses/MEDIABUNNY-MPL-2.0.txt",
+        "bytes": 17099,
+        "sha256": "9221c2f936159b8446d329249fb4c0f25be510f447383a0f13336ac7985668a3"
+      },
+      {
+        "path": "licenses/THREE-MIT.txt",
+        "bytes": 1102,
+        "sha256": "5d5dad8147523d59bc15cca838ae0bdaae7075230ec49132c551a1d18e7b3412"
+      },
+      {
+        "path": "licenses/TRAVEL_ANIMATION.txt",
+        "bytes": 1088,
+        "sha256": "1f5653a6056775103bb2cf00660de716b9897100030a3e3be2b0893444dd7e23"
+      },
+      {
+        "path": "maps/fjords-10m.json",
+        "bytes": 124200,
+        "sha256": "ba25eeee587b0823e6d0a3c64a8a6e06cd75e61154a055385a8d125d98498e97"
+      },
+      {
+        "path": "maps/ne_110m_land.geojson",
+        "bytes": 138161,
+        "sha256": "3d34c10cebfdba17f5f97180dd7c5100c8c5e05f2f583061aa8de2e9f942a904"
+      },
+      {
+        "path": "maps/world-50m.json",
+        "bytes": 2413275,
+        "sha256": "a01e11118a6f24c595e58f1b8e6261136abc15586aba3133258fd267428dc657"
+      },
+      {
+        "path": "markers/traveler-euc-256.png",
+        "bytes": 76427,
+        "sha256": "eb39e771f2fab21c7607b9d863c3d4a2b8b8275e2f5df772e7036e7d15e01fd6"
+      },
+      {
+        "path": "samples/cinematic-fjords.gpx",
+        "bytes": 27605,
+        "sha256": "e3f60504e0c3a6f08912d2fdd4cefecf9e4efb63395af996a167586845e14d22"
+      },
+      {
+        "path": "samples/synthetic-antimeridian.gpx",
+        "bytes": 5384,
+        "sha256": "89142ec62c5b85b0196f3bf0a6d35a406033d5efee67580afe4756cf5f650344"
+      },
+      {
+        "path": "samples/synthetic.gpx",
+        "bytes": 912,
+        "sha256": "bc2214fb9f0b96245cbb386af5b4185d75090da99f16f51486ee1fe69e17b730"
+      },
+      {
+        "path": "samples/terrain-sogne.gpx",
+        "bytes": 31609,
+        "sha256": "a54b2e6207cd701958df61e418973c3a4048471d7ffeb5b1389c4a6fc7415154"
+      },
+      {
+        "path": "terrain/sogne-100m.i16",
+        "bytes": 241402,
+        "sha256": "51350b3f83e533540a47ad35c87eea60b1a32c7dd5aea1d18c183b9b532c2d65"
+      },
+      {
+        "path": "terrain/sogne-50m.i16",
+        "bytes": 962802,
+        "sha256": "bf6ebc34cfe4420a416acbefa76b834e4d356f0389ea61caed42ef2e103b5159"
+      },
+      {
+        "path": "terrain/sogne.json",
+        "bytes": 1285,
+        "sha256": "73c3b478b21e2586762f3cb844868767101003ed599f087489fa1c7d929d72c2"
+      }
+    ]
+  },
+  "acceptance": {
+    "status": "VERIFIED",
+    "sourceCommit": "858a582a4e64b069af6727a45fe2447fa3958fa8",
+    "uncommitted": false,
+    "browser": {
+      "channel": "msedge",
+      "version": "155.0.4283.45"
+    },
+    "os": "Windows_NT 10.0.26200",
+    "physicalMobile": false,
+    "scope": "local production /route-story/ UI; not public HTTPS",
+    "url": "http://127.0.0.1:4185/route-story/",
+    "publicHttps": false,
+    "csp": {
+      "responseHeader": null,
+      "meta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    },
+    "version": "1.2.0-rc.1",
+    "manifestHashes": 23,
+    "packageBytes": 5911050,
+    "imagery": {
+      "schema": 1,
+      "id": "sogne-sentinel-20250927",
+      "origin": [
+        6.2,
+        61.28
+      ],
+      "bounds": [
+        -15000,
+        -20000,
+        15000,
+        20000
+      ],
+      "width": 750,
+      "height": 1000,
+      "spacingMeters": 40,
+      "file": "sogne-sentinel-40m.jpg",
+      "bytes": 339524,
+      "sha256": "ad88bb13cc1e5fb62e9b5575d5ec43176bd61ae22aae9d0f7fbd8e5a1388a441",
+      "attribution": "Contains modified Copernicus Sentinel data 2025",
+      "licenseUrl": "https://cds.climate.copernicus.eu/licences/ec-sentinel",
+      "acquiredDate": "2025-09-27",
+      "sourceResolutionMeters": 10,
+      "pixelOrientation": "north-up; row0 north; pixel centres; bounds are pixel edges",
+      "changes": [
+        "fixed regional crop",
+        "same local tangent coordinates as DEM",
+        "bilinear40m resampling of10m TCI",
+        "JPEG quality88 RGB compression"
+      ],
+      "sources": [
+        {
+          "id": "S2C_32VLN_20250927_0_L2A",
+          "acquired": "2025-09-27T11:14:21.781Z",
+          "sceneCloudPercent": 0.228456,
+          "product": "S2C_MSIL2A_20250927T110841_N0511_R137_T32VLN_20250927T144213.SAFE",
+          "assets": [
+            {
+              "kind": "scl",
+              "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LN/2025/9/S2C_32VLN_20250927_0_L2A/SCL.tif",
+              "cropBytes": 137894,
+              "cropSha256": "9b69d4d84910381c3eedc6a482f632ec0dee3a7d608945e6322389bf33e0f55d",
+              "cropBounds": [
+                333900,
+                6776520,
+                365760,
+                6800040
+              ],
+              "crs": "EPSG:32632",
+              "sourceSpacingMeters": 20
+            },
+            {
+              "kind": "visual",
+              "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LN/2025/9/S2C_32VLN_20250927_0_L2A/TCI.tif",
+              "cropBytes": 15084609,
+              "cropSha256": "b456872d34cf66a43244eeb4f5013bdd5d5afb19a5a4a9936cf085a9b20ff437",
+              "cropBounds": [
+                333910,
+                6776530,
+                365770,
+                6800040
+              ],
+              "crs": "EPSG:32632",
+              "sourceSpacingMeters": 10
+            }
+          ]
+        },
+        {
+          "id": "S2C_32VLP_20250927_0_L2A",
+          "acquired": "2025-09-27T11:14:08.408Z",
+          "sceneCloudPercent": 0.441697,
+          "product": "S2C_MSIL2A_20250927T110841_N0511_R137_T32VLP_20250927T144213.SAFE",
+          "assets": [
+            {
+              "kind": "scl",
+              "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LP/2025/9/S2C_32VLP_20250927_0_L2A/SCL.tif",
+              "cropBytes": 189065,
+              "cropSha256": "fe62334d502d5bb49f436566084b7a41f1ea3d52527de5c8dcbf80643fc6077a",
+              "cropBounds": [
+                333900,
+                6790200,
+                365760,
+                6817920
+              ],
+              "crs": "EPSG:32632",
+              "sourceSpacingMeters": 20
+            },
+            {
+              "kind": "visual",
+              "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LP/2025/9/S2C_32VLP_20250927_0_L2A/TCI.tif",
+              "cropBytes": 19362521,
+              "cropSha256": "e686e8928261007b629b9531d8659b3cc7d56cad76dd555dd6e14359ad5cd45f",
+              "cropBounds": [
+                333910,
+                6790200,
+                365770,
+                6817920
+              ],
+              "crs": "EPSG:32632",
+              "sourceSpacingMeters": 10
+            }
+          ]
+        }
+      ],
+      "coveragePixels": 750000,
+      "classificationCounts": {
+        "2": 118775,
+        "4": 383446,
+        "5": 128434,
+        "6": 115686,
+        "7": 19,
+        "9": 1,
+        "10": 192,
+        "11": 3447
+      },
+      "cloudPercent": 0.025733333333333334,
+      "snowPercent": 0.4596,
+      "cloudShadowPercent": 0,
+      "prepareMs": 1412.8728000068804,
+      "detail": {
+        "schema": 1,
+        "id": "sogne-sentinel-20250927",
+        "origin": [
+          6.2,
+          61.28
+        ],
+        "bounds": [
+          -8000,
+          -8000,
+          5000,
+          8000
+        ],
+        "width": 1300,
+        "height": 1600,
+        "spacingMeters": 10,
+        "file": "sogne-sentinel-10m.jpg",
+        "bytes": 657525,
+        "sha256": "d74099be2da8bed8fbbbfafb7a5426ca21546adb7d300180869dfb23e5cea996",
+        "attribution": "Contains modified Copernicus Sentinel data 2025",
+        "licenseUrl": "https://cds.climate.copernicus.eu/licences/ec-sentinel",
+        "acquiredDate": "2025-09-27",
+        "sourceResolutionMeters": 10,
+        "pixelOrientation": "north-up; row0 north; pixel centres; bounds are pixel edges",
+        "changes": [
+          "fixed regional crop",
+          "same local tangent coordinates as DEM",
+          "bilinear10m resampling of10m TCI",
+          "JPEG quality88 RGB compression"
+        ],
+        "sources": [
+          {
+            "id": "S2C_32VLN_20250927_0_L2A",
+            "acquired": "2025-09-27T11:14:21.781Z",
+            "sceneCloudPercent": 0.228456,
+            "product": "S2C_MSIL2A_20250927T110841_N0511_R137_T32VLN_20250927T144213.SAFE",
+            "assets": [
+              {
+                "kind": "scl",
+                "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LN/2025/9/S2C_32VLN_20250927_0_L2A/SCL.tif",
+                "cropBytes": 137894,
+                "cropSha256": "9b69d4d84910381c3eedc6a482f632ec0dee3a7d608945e6322389bf33e0f55d",
+                "cropBounds": [
+                  333900,
+                  6776520,
+                  365760,
+                  6800040
+                ],
+                "crs": "EPSG:32632",
+                "sourceSpacingMeters": 20
+              },
+              {
+                "kind": "visual",
+                "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LN/2025/9/S2C_32VLN_20250927_0_L2A/TCI.tif",
+                "cropBytes": 15084609,
+                "cropSha256": "b456872d34cf66a43244eeb4f5013bdd5d5afb19a5a4a9936cf085a9b20ff437",
+                "cropBounds": [
+                  333910,
+                  6776530,
+                  365770,
+                  6800040
+                ],
+                "crs": "EPSG:32632",
+                "sourceSpacingMeters": 10
+              }
+            ]
+          },
+          {
+            "id": "S2C_32VLP_20250927_0_L2A",
+            "acquired": "2025-09-27T11:14:08.408Z",
+            "sceneCloudPercent": 0.441697,
+            "product": "S2C_MSIL2A_20250927T110841_N0511_R137_T32VLP_20250927T144213.SAFE",
+            "assets": [
+              {
+                "kind": "scl",
+                "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LP/2025/9/S2C_32VLP_20250927_0_L2A/SCL.tif",
+                "cropBytes": 189065,
+                "cropSha256": "fe62334d502d5bb49f436566084b7a41f1ea3d52527de5c8dcbf80643fc6077a",
+                "cropBounds": [
+                  333900,
+                  6790200,
+                  365760,
+                  6817920
+                ],
+                "crs": "EPSG:32632",
+                "sourceSpacingMeters": 20
+              },
+              {
+                "kind": "visual",
+                "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/V/LP/2025/9/S2C_32VLP_20250927_0_L2A/TCI.tif",
+                "cropBytes": 19362521,
+                "cropSha256": "e686e8928261007b629b9531d8659b3cc7d56cad76dd555dd6e14359ad5cd45f",
+                "cropBounds": [
+                  333910,
+                  6790200,
+                  365770,
+                  6817920
+                ],
+                "crs": "EPSG:32632",
+                "sourceSpacingMeters": 10
+              }
+            ]
+          }
+        ],
+        "coveragePixels": 2080000,
+        "classificationCounts": {
+          "2": 443043,
+          "4": 1095576,
+          "5": 417145,
+          "6": 123689,
+          "10": 316,
+          "11": 231
+        },
+        "cloudPercent": 0.015192307692307692,
+        "snowPercent": 0.011105769230769232,
+        "cloudShadowPercent": 0,
+        "prepareMs": 2396.867099989322
+      }
+    },
+    "cancelAndRecovery": "VERIFIED",
+    "external": [],
+    "errors": [],
+    "badResponses": [],
+    "storage": {
+      "local": 0,
+      "session": 0,
+      "db": []
+    },
+    "reports": [
+      {
+        "id": "atlas-landscape-compatibility-photo",
+        "surface": "photo",
+        "quality": "compatibility",
+        "aspect": "landscape",
+        "style": "atlas",
+        "validation": {
+          "file": "artifacts/swiss-phase-c/production/atlas-landscape-compatibility-photo-10s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "86d29f5fdb824eac356a6223f6efdad1",
+          "lastFrameHash": "5fba6dd2419ed390ba3662e8d4071568",
+          "bytes": 2073477,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "minimumMapLumaSpread": 191,
+        "sha256": "284d471a9001f13e0e4da979e297de2f8711810e61851bd11935cad18d1bf8ef",
+        "exportMs": 603.8000000119209,
+        "encoder": {
+          "codec": "avc1.42001f",
+          "width": 640,
+          "height": 360,
+          "displayWidth": 640,
+          "displayHeight": 360,
+          "bitrate": 1500000,
+          "bitrateMode": "variable",
+          "alpha": "discard",
+          "framerate": 24,
+          "avc": {
+            "format": "avc"
+          }
+        },
+        "frames": [
+          "artifacts/swiss-phase-c/production/atlas-landscape-compatibility-photo-0.00s.png",
+          "artifacts/swiss-phase-c/production/atlas-landscape-compatibility-photo-1.00s.png",
+          "artifacts/swiss-phase-c/production/atlas-landscape-compatibility-photo-2.00s.png",
+          "artifacts/swiss-phase-c/production/atlas-landscape-compatibility-photo-2.50s.png",
+          "artifacts/swiss-phase-c/production/atlas-landscape-compatibility-photo-5.00s.png",
+          "artifacts/swiss-phase-c/production/atlas-landscape-compatibility-photo-8.00s.png",
+          "artifacts/swiss-phase-c/production/atlas-landscape-compatibility-photo-9.96s.png"
+        ]
+      },
+      {
+        "id": "night-portrait-compatibility-corridor",
+        "surface": "corridor",
+        "quality": "compatibility",
+        "aspect": "portrait",
+        "style": "night",
+        "validation": {
+          "file": "artifacts/swiss-phase-c/production/night-portrait-compatibility-corridor-10s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 360,
+          "height": 640,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "7d84dca7bb1f6e750c5f28c64839e681",
+          "lastFrameHash": "72a8c923d8a8f4d9fb304c74fa9994e0",
+          "bytes": 2098799,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "minimumMapLumaSpread": 209,
+        "sha256": "92f9b358297638d42ed15ee5ee30abaed3660e51c1cd3eb6d5da798018736804",
+        "exportMs": 605.1000000238419,
+        "encoder": {
+          "codec": "avc1.42001f",
+          "width": 360,
+          "height": 640,
+          "displayWidth": 360,
+          "displayHeight": 640,
+          "bitrate": 1500000,
+          "bitrateMode": "variable",
+          "alpha": "discard",
+          "framerate": 24,
+          "avc": {
+            "format": "avc"
+          }
+        },
+        "frames": [
+          "artifacts/swiss-phase-c/production/night-portrait-compatibility-corridor-0.00s.png",
+          "artifacts/swiss-phase-c/production/night-portrait-compatibility-corridor-1.00s.png",
+          "artifacts/swiss-phase-c/production/night-portrait-compatibility-corridor-2.00s.png",
+          "artifacts/swiss-phase-c/production/night-portrait-compatibility-corridor-2.50s.png",
+          "artifacts/swiss-phase-c/production/night-portrait-compatibility-corridor-5.00s.png",
+          "artifacts/swiss-phase-c/production/night-portrait-compatibility-corridor-8.00s.png",
+          "artifacts/swiss-phase-c/production/night-portrait-compatibility-corridor-9.96s.png"
+        ]
+      }
+    ]
+  }
+}

@@ -1,5 +1,13 @@
 # Implementation state
 
+## Swiss Phase C source-matched production gate — 2026-10-12
+
+Evidence/source checkpoint `858a582a4e64b069af6727a45fe2447fa3958fa8` on `codex/swiss-extended-coverage`; actual main64fcf293/PR11 baseline02b498a unchanged. `npm.cmd run build` + `node scripts/package-release.mjs`: baseline4906315B+3357Bmanifest=4909672B/20files≤5MiB. `BUILD_IMAGERY_PACK=1 npm.cmd run build` + `node scripts/package-release.mjs --imagery-candidate`: photo5911050B+4048Bmanifest=5915098B/23files≤6MiB, publicationApproved=false. Exact source, every allowlisted file hash and local acceptance are recorded separately in `docs/SWISS_PHASE_C_PACKAGE_EVIDENCE.json`; the historical PR11 package evidence is preserved. No Swiss page, source COG, height/texture crop, native2m reference or benchmark diagnostic enters either production package.
+
+`PLAYWRIGHT_CHANNEL=msedge ACCEPTANCE_DIR=artifacts/swiss-phase-c/production node scripts/acceptance/imagery.mjs --production --smoke`:VERIFIED, source858a582/clean tree/version1.2.0-rc.1,23manifest hashes/notices/restrictive metaCSP/subpath/privacy/cancelretry/reversible seek. Actual Atlas10s640×3602073477B/603.8ms and Night10s360×6402098799B/605.1ms,240H.264frames/24fps/full independent decoding/nonblank. Scope is local production, not HTTPS/public Swiss acceptance. Build retains the known large Three chunk warning; no unnecessary refactor/cap/dependency change.
+
+This follow-up changes documentation only, including package proof. Next: push branch, create a focused stacked PR targeting codex/swiss-alps-pilot, inspect exact new HEAD CI; keep local4176 developer preview available for owner review. No automatic merge/deploy/tag/release.
+
 ## Swiss Phase C final local acceptance — 2026-10-12
 
 Branch `codex/swiss-extended-coverage`, source parent `8cddc95879665566a85908db99cfffdf0e611fd6`; original PR11 baseline `02b498a32242b3e1514529087c546fb4e253e62a` remains independently recoverable. Actual main `64fcf2933f62f678808198d331775d7ceccc3d3d`, PR10 merged; PR11 OPEN/main, PR12/13 closed and excluded. No new PR/push/merge/publication at this checkpoint. Final source-file hashes, source records, raw-run summaries and video hashes are consolidated in `docs/SWISS_PHASE_C_EVIDENCE.json`; actual next commit SHA is authoritative in Git.

@@ -35,4 +35,6 @@ Chosen future plan: a fixed first-party regional overview plus one bounded route
 
 Actual developer UI [screenshot](images/swiss-context-ui.jpg) selects the approved `Шах - вкрутанидзе` by default. Desktop Edge375pixel viewport has document width375/no horizontal overflow, no page errors or external requests; this is layout emulation, not physical mobile verification. Both decoded before/after sheets and the portrait same-camera detail study were visually inspected after the final full run.
 
-Pending: source-matched5/6MiBproduction package/smoke gate, reviewable stacked PR targeting PR11, owner visual approval/device testing/new Swiss hosting decision. No publication claimed.
+Source-matched production gate at858a582: baseline4909672B≤5MiB, photo5915098B≤6MiB including release manifests, no Swiss files or page; photo publicationApproved=false. [Package evidence](SWISS_PHASE_C_PACKAGE_EVIDENCE.json) records every allowlisted hash and local production smoke:23manifest hashes/licenses/CSP/privacy/seek/cancelretry plus two independently decoded10s360p Sogne MP4s. Historical PR11 evidence remains unchanged.
+
+Pending: reviewable stacked PR targeting PR11, owner visual approval/device testing/new Swiss hosting decision. No publication claimed.
