@@ -1,5 +1,9 @@
 # High-resolution region feasibility — 2026-10-11
 
+## Subsequent real Swiss pilot: separate local candidate
+
+The research-only checkpoint below is historical. Matched `2670-1157` SWISSIMAGE2023/swissALTI3D2024 sources were downloaded, independently hashed, cropped and rendered. The original `2671-1159` tile lacks the needed road. See [actual pilot](SWISS_PILOT.md), [manifest](../data/swiss-pilot/manifest.json), [measurements](SWISS_PILOT_PERFORMANCE.md), decoded A/B images.2m DEM/0.5–1m output imagery; explicitly synthetic842.6m road. No public Swiss bundle, no confirmed native10cm acquisition claim, no Sogne replacement or private-coordinate relocation. Visual/device/hosting/budget gates remain pending.
+
 Research only. No new geography is bundled, fetched by the application or published. Current main baseline126dd988; approved Sogne10/40m source/6MiB COMPLETE package, two textures/2MiB JPEG/3million pixels/2048 sides and50/100m DEM remain unchanged. Candidate locations below are proposed separate demonstrations, not a relocation of anyone's GPX or evidence of a human journey.
 
 ## Recommendation: Swiss Alpine road corridor

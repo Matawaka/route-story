@@ -1,5 +1,7 @@
 # Terrain dynamics and local markers
 
+Separate [Swiss pilot](SWISS_PILOT.md) uses the same prepared "Шах - вкрутанидзе" annotation, depth-tested route/timeline/export; its synthetic orthophoto-digitized26points are not a completed electric-unicycle ride. Existing Sogne grade/pacing/marker output is preserved by48 exact720p pixel comparisons. Swiss source/crop is not included in the public package.
+
 ## 2026-10-11: colorful rider / JPEG / readable annotation
 
 This correction supersedes the historical silhouette/depth-sprite-only description below. Built-in traveler uses the owner-approved76427B PNG eb39e771… (39873fully transparent pixels), with mandatory fixed first-party hash/decode readiness. The3D demo selects it; point/scheme presets remain. Exact requested256asset differed from the attachment; owner approved the faithful downsample, provenance in RIDER_ASSET.json.

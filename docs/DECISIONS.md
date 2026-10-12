@@ -1,5 +1,13 @@
 # Decisions
 
+## 2026-10-11: real Swiss source-data pilot with bounded regional coordinates
+
+Keep PR10 rider/JPEG corrections independent. A separate `codex/swiss-alps-pilot` branch depends on PR10 and adds only a local developer candidate. Use verified ordinary swisstopo OGD COGs from tile 2670-1157, after inspecting and rejecting the initially suggested roadless 2671-1159. No test-only ZIP, online tiles, private route relocation or fabricated historical journey. A labelled 842.6m synthetic road-centre approximation belongs to this actual Swiss image/DEM scene.
+
+Introduce a validated bounded EPSG2056/LN02 projection descriptor with pinned PROJ-derived fits and independent numeric checks. Permit 2m DEM only through this regional contract, retaining mesh/ribbon/height caps and the original Sogne 10m rule. Source optical GSD remains null/unknown despite 0.1m COG pixels; 0.5/1m output and 2m source grid are engineering spacing, not new information/height-accuracy claims. True 1:1 terrain and 350m/LOS/corridor safety remain mandatory.
+
+Reuse two resident images with existing texture bounds, not a new tile stack. Keep the small pack/crops out of production and raw files out of Git; reproducible fixed-name developer serving only. Same-camera 10m/downsample versus high-detail full MP4s isolate source detail; separately labelled 50m/2m captures isolate mesh detail. Preserve Sogne pixels, package limits, workflow and stable releases. Human visual review, surrounding coverage, native-memory/device evidence and explicit hosting/budget approval precede any Swiss release. No merge/deploy/tag/repost authority is inferred.
+
 ## 2026-10-11: owner-reported marker corrections
 
 Continue PR10 on07313b5, base main126dd988. Preferred icon annotation is separate from depth-tested DEM/ribbon. Exact timeline/world anchor plus a pure safe layout; off-screen anchors stay hidden, occluded anchors have a dashed connector and explicit caption. Endpoint labels avoid the raster. Optional occluded Sprite remains available. Three bounded sizes, upright art, same-edge direction cue, no false segment traversal.

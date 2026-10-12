@@ -38,7 +38,7 @@ export class TerrainRenderer {
   private readonly frustum=new T.Frustum();
   private readonly viewProjection=new T.Matrix4();
   constructor(route:Route,readonly terrain:TerrainDataset,readonly width:number,readonly height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset){
-    const begin=performance.now(),needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';this.timeline=new StoryTimeline(route,config,needsDynamics?new RouteDynamics(route,{name:`DEM Kartverket (${terrain.level.spacingMeters} м)`,spacingMeters:terrain.level.spacingMeters,covers:r=>terrain.routeCoverage(r),elevation:p=>terrain.sampleElevation(p.lat,p.lon)}):undefined);this.config=this.timeline.config;
+    const begin=performance.now(),regional=!!terrain.manifest.regionalProjection,needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';this.timeline=new StoryTimeline(route,config,needsDynamics?new RouteDynamics(route,{name:`DEM ${regional?'swisstopo':'Kartverket'} (${terrain.level.spacingMeters} м)`,spacingMeters:terrain.level.spacingMeters,covers:r=>terrain.routeCoverage(r),elevation:p=>terrain.sampleElevation(p.lat,p.lon)}):undefined);this.config=this.timeline.config;
     try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height);}catch(error){imagery?.dispose();throw error;}
     const canvas=document.createElement('canvas');
     try{this.gpu=new T.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:true,powerPreference:'default'});}
@@ -76,8 +76,8 @@ export class TerrainRenderer {
         shader.vertexShader='varying vec3 demPosition;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ndemPosition=position;');
         shader.fragmentShader='varying vec3 demPosition;uniform vec4 bounds;uniform vec3 edgeColor;\n'+shader.fragmentShader
           .replace('#include <color_fragment>',photo?'#include <color_fragment>':`#include <color_fragment>\nfloat contour=abs(fract(demPosition.y/100.0+0.5)-0.5);float aa=max(fwidth(demPosition.y/100.0),0.006);float line=1.0-smoothstep(0.0,aa*1.1,contour);if(demPosition.y>15.0)diffuseColor.rgb=mix(diffuseColor.rgb,${night?'vec3(0.19,0.29,0.33)':'vec3(0.10,0.16,0.12)'},line*${night?'0.23':'0.17'});`)
-          .replace('#include <opaque_fragment>','#include <opaque_fragment>\nfloat boundary=min(min(demPosition.x-bounds.x,bounds.z-demPosition.x),min(-demPosition.z-bounds.y,bounds.w+demPosition.z));gl_FragColor.rgb=mix(edgeColor,gl_FragColor.rgb,smoothstep(0.0,1800.0,boundary));');
-        if(detail){shader.fragmentShader='uniform sampler2D detailMap;uniform vec4 detailBounds;uniform float detailWeight;\n'+shader.fragmentShader.replace('#include <map_fragment>',`vec4 photograph=texture2D(map,vMapUv);vec2 geographic=vec2(demPosition.x,-demPosition.z);vec2 fineUv=vec2((geographic.x-detailBounds.x)/(detailBounds.z-detailBounds.x),(detailBounds.w-geographic.y)/(detailBounds.w-detailBounds.y));float edge=min(min(geographic.x-detailBounds.x,detailBounds.z-geographic.x),min(geographic.y-detailBounds.y,detailBounds.w-geographic.y));float blend=detailWeight*smoothstep(0.0,450.0,edge);if(blend>0.0)photograph=mix(photograph,texture2D(detailMap,fineUv),blend);diffuseColor*=photograph;`);}
+          .replace('#include <opaque_fragment>',`#include <opaque_fragment>\nfloat boundary=min(min(demPosition.x-bounds.x,bounds.z-demPosition.x),min(-demPosition.z-bounds.y,bounds.w+demPosition.z));gl_FragColor.rgb=mix(edgeColor,gl_FragColor.rgb,smoothstep(0.0,${regional?'40.0':'1800.0'},boundary));`);
+        if(detail){shader.fragmentShader='uniform sampler2D detailMap;uniform vec4 detailBounds;uniform float detailWeight;\n'+shader.fragmentShader.replace('#include <map_fragment>',`vec4 photograph=texture2D(map,vMapUv);vec2 geographic=vec2(demPosition.x,-demPosition.z);vec2 fineUv=vec2((geographic.x-detailBounds.x)/(detailBounds.z-detailBounds.x),(detailBounds.w-geographic.y)/(detailBounds.w-detailBounds.y));float edge=min(min(geographic.x-detailBounds.x,detailBounds.z-geographic.x),min(geographic.y-detailBounds.y,detailBounds.w-geographic.y));float blend=detailWeight*smoothstep(0.0,${regional?'40.0':'450.0'},edge);if(blend>0.0)photograph=mix(photograph,texture2D(detailMap,fineUv),blend);diffuseColor*=photograph;`);}
       };
       this.disposables.push(terrainMaterial);this.scene.add(new T.Mesh(this.terrainGeometry,terrainMaterial));
       this.scene.add(new T.HemisphereLight(night?0x9bbdda:0xf8f4db,night?0x03151f:0x344337,night?.8:1));
@@ -86,8 +86,8 @@ export class TerrainRenderer {
       const bandColors=Object.fromEntries(Object.entries(GRADE_STYLES).map(([band,style])=>[band,new T.Color(style.color)]));
       const ribbon=(a:TerrainXY,b:TerrainXY,da:number,db:number,color:T.Color)=>{
         const dx=b[0]-a[0],dy=b[1]-a[1],length=Math.hypot(dx,dy);if(length===0)return;
-        const offset=9,ox=-dy/length*offset,oy=dx/length*offset,base=vertices.length/3;
-        for(const [point,d,sign] of [[a,da,-1],[a,da,1],[b,db,-1],[b,db,1]] as const){const xy:TerrainXY=[point[0]+ox*sign,point[1]+oy*sign],h=terrain.meshElevation(xy);if(h===undefined)throw Error('Высоты пути неполны. Выберите 2D.');vertices.push(xy[0],h+10,-xy[1]);distances.push(d);if(graded)gradeColors.push(color.r,color.g,color.b);}
+        const offset=regional?2:9,ox=-dy/length*offset,oy=dx/length*offset,base=vertices.length/3;
+        for(const [point,d,sign] of [[a,da,-1],[a,da,1],[b,db,-1],[b,db,1]] as const){const xy:TerrainXY=[point[0]+ox*sign,point[1]+oy*sign],h=terrain.meshElevation(xy);if(h===undefined)throw Error('Высоты пути неполны. Выберите 2D.');vertices.push(xy[0],h+(regional?1:10),-xy[1]);distances.push(d);if(graded)gradeColors.push(color.r,color.g,color.b);}
         triangles.push(base,base+1,base+2,base+1,base+3,base+2);
       };
       for(const segment of route.segments)for(let i=1;i<segment.length;i++){
@@ -170,7 +170,7 @@ export class TerrainRenderer {
       if(this.timeline.dynamics.status==='usable'){const bands=['steepUp','up','flat','down','steepDown'] as const;const labels=['↑ ≥10%','↑ ≥3%','±3%','↓ ≥3%','↓ ≥10%'];bands.forEach((band,i)=>{const x=p+i*(w-p*2)/5;ctx.fillStyle=GRADE_STYLES[band].color;ctx.fillRect(x,h-u*.215,u*.012,u*.025);ctx.fillStyle=ink;ctx.fillText(labels[i],x+u*.02,h-u*.193);});}
       else{ctx.fillStyle=ink;ctx.fillText('Уклон не определён · нейтральный путь',p,h-u*.193);}
     }
-    ctx.font=`500 ${u*.019}px system-ui`;ctx.fillText(`© Kartverket · CC BY 4.0 · DEM ${this.terrain.level.spacingMeters} м · масштаб 1:1`,p,h-u*.063);
+    ctx.font=`500 ${u*.019}px system-ui`;ctx.fillText(`${this.terrain.manifest.regionalProjection?'© swisstopo · LN02':'© Kartverket · CC BY 4.0'} · DEM ${this.terrain.level.spacingMeters} м · масштаб 1:1`,p,h-u*.063);
     if(this.imagery){ctx.font=`500 ${u*.017}px system-ui`;ctx.fillText(this.imagery.manifest.attribution,p,h-u*.085);}
     ctx.fillStyle=night?'#ffd477':'#ed9a67';ctx.fillRect(p,h-u*.035,(w-p*2)*state.timelineProgress,u*.004);ctx.font=`500 ${u*.017}px system-ui`;ctx.textAlign='right';ctx.fillStyle=ink;ctx.fillText('Matawaka',w-p,h-u*.063);ctx.textAlign='left';
     if(state.markerOpacity<.4&&state.phase==='ROUTE_REPLAY'){ctx.fillStyle=`rgba(7,21,33,${(.4-state.markerOpacity)*2})`;ctx.fillRect(0,0,w,h);}
