@@ -1,12 +1,12 @@
 import * as T from 'three';
 import { StoryTimeline } from './timeline';
-import { createTerrainCameraPlan,getTerrainCameraStateAt,requiredVisibleAltitude } from './terrain-camera';
+import { createTerrainCameraPlan,getTerrainCameraStateAt,requiredVisibleAltitude,terrainTexelFootprint,type TerrainCameraOptions } from './terrain-camera';
 import { TerrainDataset,type TerrainXY } from './terrain';
 import { haversine,wrapDelta } from './geo';
 import { metricLabel,formatDistance } from './renderer';
 import type { Route } from './route';
 import type { StoryConfig } from './story';
-import {imageryUV,imageryCoversTerrain,imageryDetailWeight,type PreparedImagery} from './imagery';
+import {imageryUV,imageryCoversTerrain,imageryDetailWeight,projectedDetailWeight,type PreparedImagery} from './imagery';
 import { RouteDynamics, GRADE_STYLES } from './route-dynamics';
 import { prepareMarker, type MarkerAsset } from './marker';
 import { annotationAt, drawAnnotation, intersectsMarker, markerSize, type MarkerRect } from './marker-annotation';
@@ -37,9 +37,9 @@ export class TerrainRenderer {
   private detailBox?:T.Box3;
   private readonly frustum=new T.Frustum();
   private readonly viewProjection=new T.Matrix4();
-  constructor(route:Route,readonly terrain:TerrainDataset,readonly width:number,readonly height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset){
+  constructor(route:Route,readonly terrain:TerrainDataset,readonly width:number,readonly height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset,cameraOptions?:TerrainCameraOptions){
     const begin=performance.now(),regional=!!terrain.manifest.regionalProjection,needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';this.timeline=new StoryTimeline(route,config,needsDynamics?new RouteDynamics(route,{name:`DEM ${regional?'swisstopo':'Kartverket'} (${terrain.level.spacingMeters} м)`,spacingMeters:terrain.level.spacingMeters,covers:r=>terrain.routeCoverage(r),elevation:p=>terrain.sampleElevation(p.lat,p.lon)}):undefined);this.config=this.timeline.config;
-    try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height);}catch(error){imagery?.dispose();throw error;}
+    try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height,cameraOptions);}catch(error){imagery?.dispose();throw error;}
     const canvas=document.createElement('canvas');
     try{this.gpu=new T.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:true,powerPreference:'default'});}
     catch{imagery?.dispose();throw Error('На этом устройстве недоступен WebGL 2 для рельефа. Выберите «Кино · 2D».');}
@@ -129,7 +129,7 @@ export class TerrainRenderer {
     const state=this.timeline.at(seconds),pose=getTerrainCameraStateAt(seconds,this.plan),night=this.config.visualStyle==='night';
     this.camera.position.set(pose.position[0],pose.position[2],-pose.position[1]);this.camera.up.set(0,1,0);this.camera.lookAt(pose.target[0],pose.target[2],-pose.target[1]);
     this.camera.updateMatrixWorld();
-    if(this.imagery){this.camera.updateMatrixWorld();this.viewProjection.multiplyMatrices(this.camera.projectionMatrix,this.camera.matrixWorldInverse);this.frustum.setFromProjectionMatrix(this.viewProjection);this.detailWeight.value=imageryDetailWeight(this.imagery.manifest,Math.hypot(...pose.position.map((v,i)=>v-pose.target[i])),pose.fov,this.height,!!this.detailBox&&this.frustum.intersectsBox(this.detailBox));}
+    if(this.imagery){this.camera.updateMatrixWorld();this.viewProjection.multiplyMatrices(this.camera.projectionMatrix,this.camera.matrixWorldInverse);this.frustum.setFromProjectionMatrix(this.viewProjection);const visible=!!this.detailBox&&this.frustum.intersectsBox(this.detailBox);this.detailWeight.value=this.imagery.manifest.detailSelection?projectedDetailWeight(this.imagery.manifest,terrainTexelFootprint(this.terrain,pose.position,pose.target,this.terrain.world(state.point),this.width,this.height,this.imagery.manifest.detail!.spacingMeters),visible):imageryDetailWeight(this.imagery.manifest,Math.hypot(...pose.position.map((v,i)=>v-pose.target[i])),pose.fov,this.height,visible);}
     const xy=this.terrain.world(state.point);this.marker.position.set(xy[0],this.terrain.meshElevation(xy)!+24,-xy[1]);this.routeMaterial.uniforms.progress.value=state.travelledKm;
     for(const mesh of [this.marker,this.start,this.finish])mesh.scale.setScalar(this.camera.position.distanceTo(mesh.position)*.009);
     if(this.marker instanceof T.Sprite){const depth=new T.Vector3().copy(this.marker.position).applyMatrix4(this.camera.matrixWorldInverse).z;this.marker.scale.setScalar(Math.abs(depth)*2*Math.tan(this.camera.fov*Math.PI/360)/this.height*Math.min(this.width,this.height)*.11);}
@@ -139,12 +139,13 @@ export class TerrainRenderer {
     if(annotation&&this.direction)this.direction.visible=false;
     this.gpu.render(this.scene,this.camera);
     const gl=this.gpu.getContext();if(gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)throw Error('3D-кадр не готов.');
+    if(this.plan.options&&gl.getError()===gl.OUT_OF_MEMORY)throw Error('GPU не хватает памяти для Swiss-сцены. Вернитесь к Sogne или «Кино · 2D».');
     const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx)throw Error('Canvas 2D недоступен.');
     if(canvas.width!==this.width||canvas.height!==this.height){canvas.width=this.width;canvas.height=this.height;}
     ctx.resetTransform();ctx.globalAlpha=1;ctx.drawImage(this.gpu.domElement,0,0);
     const w=this.width,h=this.height,u=Math.min(w,h),p=u*.075,ink=night?'#fff3d6':'#fff9ed';
     const projected=this.marker.position.clone().project(this.camera),anchor=[(projected.x+1)*w/2,(1-projected.y)*h/2] as const,size=markerSize(this.config,u);
-    const layout=annotation&&state.markerOpacity>.1?annotationAt(...anchor,projected.z,w,h,size,[p,u*.24,w-p,h-u*.29]):undefined;
+    const layout=annotation&&state.markerOpacity>.1?annotationAt(...anchor,projected.z,w,h,size,[p,u*.24,w-p,h-u*(this.plan.options?.overview!==undefined ? .31 : .29)]):undefined;
     const markerBox:MarkerRect|undefined=layout?[layout.box[0]-size*.07,layout.box[1]-size*.07,layout.box[2]+size*.07,layout.box[3]+size*.24]:undefined;
     if(layout&&this.markerAsset){
       const target=this.timeline.route.segments[state.segment][Math.max(1,state.index)],next=target?this.terrain.world(target):xy,nextHeight=this.terrain.meshElevation(next),v=new T.Vector3(next[0],(nextHeight??this.marker.position.y-24)+24,-next[1]).project(this.camera);
@@ -167,7 +168,7 @@ export class TerrainRenderer {
     ctx.font=`500 ${u*.025}px system-ui`;ctx.fillText(metricLabel(this.timeline.route),p,h-u*.111);
     if(this.config.routeColor==='grade'){
       ctx.font=`600 ${u*.022}px system-ui`;
-      if(this.timeline.dynamics.status==='usable'){const bands=['steepUp','up','flat','down','steepDown'] as const;const labels=['↑ ≥10%','↑ ≥3%','±3%','↓ ≥3%','↓ ≥10%'];bands.forEach((band,i)=>{const x=p+i*(w-p*2)/5;ctx.fillStyle=GRADE_STYLES[band].color;ctx.fillRect(x,h-u*.215,u*.012,u*.025);ctx.fillStyle=ink;ctx.fillText(labels[i],x+u*.02,h-u*.193);});}
+      if(this.timeline.dynamics.status==='usable'){const bands=['steepUp','up','flat','down','steepDown'] as const;const labels=['↑ ≥10%','↑ ≥3%','±3%','↓ ≥3%','↓ ≥10%'];const row=this.plan.options ? .25 : .215;bands.forEach((band,i)=>{const x=p+i*(w-p*2)/5;ctx.fillStyle=GRADE_STYLES[band].color;ctx.fillRect(x,h-u*row,u*.012,u*.025);ctx.fillStyle=ink;ctx.fillText(labels[i],x+u*.02,h-u*(row-.022));});}
       else{ctx.fillStyle=ink;ctx.fillText('Уклон не определён · нейтральный путь',p,h-u*.193);}
     }
     ctx.font=`500 ${u*.019}px system-ui`;ctx.fillText(`${this.terrain.manifest.regionalProjection?'© swisstopo · LN02':'© Kartverket · CC BY 4.0'} · DEM ${this.terrain.level.spacingMeters} м · масштаб 1:1`,p,h-u*.063);
