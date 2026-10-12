@@ -61,5 +61,14 @@
     "evidence": "SWISS_CLOUD_HTTPS_EVIDENCE.json",
     "prStatus": "MERGED",
     "mergedMainCommit": "d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83"
+  },
+  "repositoryMain": {
+    "commit": "d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83",
+    "ci": "https://github.com/Matawaka/route-story/actions/runs/38269804903",
+    "ciStatus": "SUCCESS",
+    "unitPassed": 203,
+    "browserPassed": 53,
+    "browserSkipped": 14,
+    "applicationCodeUnchangedSinceDeployment": true
   }
 }
