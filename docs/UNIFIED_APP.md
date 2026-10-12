@@ -48,6 +48,30 @@ node scripts/acceptance/swiss-public.mjs --full
 
 Все тестовые кадры/MP4 синтетические. Независимые FFmpeg/ffprobe отчёты находятся рядом с видео. Финальные цифры и exact HEAD записываются в IMPLEMENTATION_STATE после проверки коммита. Исторические публичные результаты не заменяются этими локальными.
 
+## Проверенная реализация и экраны
+
+Код `e40a071eba8e213cdf275acc2e59c976bed065e2` прошёл clean install/audit0,211unit/20files, TypeScript/Vite,54browser+25explicit skips (команда с FULL_EXPORT_ACCEPTANCE=0 дополнительно включила одну старую truthiness-gated Standard-проверку). Отдельный unified suite:12PASS с полными20/30s. Старые Swiss full/detail/geometry/composition:7PASS и2фокусных успешных перезапуска исправленных fresh-corruption тестов. [Машинные результаты](UNIFIED_APP_EVIDENCE.json) сохраняют разные границы измерений и источник каждого доказательства.
+
+Локальная production/subpath приёмка exact e40a071:31хеш, startup3D, redirect, приватный GPX, отмена/повтор, unsupported encoder,375px/mobile и отсутствие внешних запросов/постоянного хранения PASS. Пакеты с manifest:4955484B baseline,5960867B Sogne,7982174B combined — все в прежних5/6/9MiB. Generalrelease smoke также прошёл native video playback, CSP и отсутствие private route после reload.
+
+Atlas20s:1280×720/480frames/13165241B. Night30s:720×1280/720frames/19349140B. H.264/24fps/все timestamps/FFmpeg decoding PASS. Предкодированные кадры совпадают с preview, decoded RGB MAE2.53/1.92, минимум variance по всем кадрам495.24/325.24. Это не новое измерение памяти или физическая мобильная проверка.
+
+Обычный интерфейс:
+
+![Обычный main с Furka](images/unified-normal.png)
+
+Без пояснений:
+
+![Компактный main](images/unified-compact.png)
+
+Только видео — Play/Seek/Export и обязательный source credit остаются:
+
+![Режим видео](images/unified-video.png)
+
+Мобильный viewport390×844 (эмуляция desktop Edge, не physical phone):
+
+![Мобильная компоновка](images/unified-mobile.png)
+
 ## Требуется перед выпуском
 
 Визуальное одобрение владельца, отдельное разрешение на merge/deploy, успешный exact-main push CI, тот же защищённый manual Pages с личным review, новый реальный HTTPS acceptance. Physical Swiss mobile/laptop acceptance для этого UX — NOT TESTED. Размеры/память старой среды не доказывают поддержку всех устройств. Нативная/GPU/encoder память новой версии пока NOT MEASURED.
