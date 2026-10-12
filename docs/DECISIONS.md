@@ -1,5 +1,11 @@
 # Decisions
 
+## 2026-10-12 — actual public Swiss acceptance and virtual-runner deadlines
+
+Owner environment approval completed, protected Pages deployedd592de2. Anonymous exact-source/35hash checks and full20/30sStandard independent MP4 decoding passed on the actual HTTPS site in Edge155/Windows; all decoded480/720frames equal the reviewed local movies. Preserve this separate public evidence and historical local results. PhysicalSwiss devices remainNOTTESTED; metaCSP does not imply response-header CSP.
+
+Original cloudSwiss acceptance failed at default30s Playwright deadlines; the same virtual runner's existing10sSogne exports need35–40s. One failed-job-only retry changed the failure from cancelclick to download, proving the second gate needs a measured bounded wait. PR19 retains both720p checks and every format/duration/privacy assertion, uses180s downloads/60s clicks and diagnostics, extends only manual acceptance job time, and adds read-only public verification to existing check.yml. No second deployment workflow, production change or permission expansion. The original failed job remains historical failure; only an actual successful corrected cloud run can complete that gate.
+
 ## 2026-10-12 — cross-platform source bytes and next regional priorities
 
 Authorized Swiss publication exposed a real Ubuntu source-checksum failure before deployment, despite passing Windows main CI. Preserve both reviewed GPX files as exact -text blobs and test Git-object bytes, not only OS-transformed working files. Keep original checksum and geometry. PR17 is the focused blocker fix; publication resumes only after exact PR/main CI and required human Pages review. The unsuccessful run does not establish public acceptance.

@@ -30,20 +30,36 @@
     "environment": "github-pages",
     "requiredReviewer": "Matawaka",
     "allowedBranch": "main",
-    "deploy": "WAITING HUMAN REVIEW",
-    "httpsAcceptance": "NOT RUN",
-    "returnedPageUrl": null
+    "deploy": "SUCCESS",
+    "httpsAcceptance": "General/Sogne PASS; historical Swiss job FAILED at 30s test deadlines",
+    "returnedPageUrl": "https://matawaka.github.io/route-story/"
   },
   "lastObservedPublic": {
     "applicationUrl": "https://matawaka.github.io/route-story/",
-    "manifestSourceCommit": "64fcf2933f62f678808198d331775d7ceccc3d3d",
+    "manifestSourceCommit": "d592de2efd144e784079e7c6d6fc85c971bc8678",
     "manifestHttpStatus": 200,
-    "newSwissHttpsAcceptance": "PENDING"
+    "newSwissHttpsAcceptance": "VERIFIED on desktop Edge155/Windows; physical devices NOT TESTED",
+    "previousSourceCommit": "64fcf2933f62f678808198d331775d7ceccc3d3d"
   },
   "historicalLocalEvidence": "SWISS_PUBLICATION_EVIDENCE.json",
   "physicalSwissDevices": "NOT TESTED",
-  "nextRegionalPriorities": ["China", "Georgia"],
+  "nextRegionalPriorities": [
+    "China",
+    "Georgia"
+  ],
   "nextRegionalPacks": "NOT IMPLEMENTED",
   "newTagOrGitHubReleaseCreated": false,
-  "competitionMaterialsResubmitted": false
+  "competitionMaterialsResubmitted": false,
+  "publicFullEvidence": "SWISS_PUBLIC_HTTPS_EVIDENCE.json",
+  "correctedCloudAcceptance": {
+    "pr": "https://github.com/Matawaka/route-story/pull/19",
+    "scriptCommit": "76d2bfc3a446df02cbb9fe593d896b1f7d841a86",
+    "run": "https://github.com/Matawaka/route-story/actions/runs/38268718029",
+    "status": "SUCCESS",
+    "readOnly": true,
+    "deployedSourceUnchanged": true,
+    "evidence": "SWISS_CLOUD_HTTPS_EVIDENCE.json",
+    "prStatus": "MERGED",
+    "mergedMainCommit": "d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83"
+  }
 }
