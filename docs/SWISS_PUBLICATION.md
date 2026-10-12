@@ -1,5 +1,17 @@
 # Swiss publication — owner-approved regional candidate
 
+## Owner device check after the protected deployment
+
+Use the actual deployed application only after release.json identifies the reviewed deployment SHA. Physical Swiss tests are currently NOT TESTED; prior Sogne success does not establish Swiss support. Please record device, OS/browser version and result for Xiaomi14, XiaomiPad2 and MacBookM2:
+
+1. Open the main application and choose the Alps demo; check the synthetic-route label and ©swisstopo credit. Check the rider near start/finish and reverse seeking.
+2. Preview Atlas/Night in16:9/9:16; compare close and overview shots, road alignment and surrounding terrain.
+3. Export10sCompatibility, then10sStandard if the encoder supports it. Open the downloaded actual MP4 and verify it plays through the ending.
+4. Cancel export, retry successfully, then change theme/aspect and repeat. Replace a local PNG/WebP/JPEG marker and confirm visibility; private images and GPX stay local.
+5. If3D/context/codec preparation fails, record the actual message and verify Sogne or2D preview/recovery. Report reload/tab termination separately; the application cannot catch an OS-killed tab.
+
+These checks establish only the tested browser/device/settings. They do not establish universal mobile support or a native/GPU memory bound. No device fingerprint is collected or uploaded automatically.
+
 Owner approval2026-10-12 covers actual reviewed videos, merge/deploy and required size increase. PR11/14 are merged; publication packaging is a focused follow-up on actual mainc12a3a7. Version remains1.2.0-rc.1; stable tags/assets immutable. Main-push CI and protected human Pages approval still precede deployment.
 
 Furka high-detail pack:1995842B for2JPEGs+5m height grid+unchanged842.6m syntheticGPX, plus23010B source manifest. No raw COG,9MB native reference,2m/control meshes or low imagery enter the public build. Original comparisons stay available locally/recoverably. Two textures/2960000pixels/349281mesh vertices/698562Bheight remain unchanged. Complete optional combined build cap9MiB; baseline5MiB/Sogne6MiB are retained. Source hashes and ©swisstopo notices are kept.
@@ -20,7 +32,9 @@ Eurasia/global overview uses existing local Natural Earth; detailed photo/DEM co
 
 Extra native2m camera proof remains specific to the approved synthetic route. Uploaded GPX is checked against the actual rendered5m geometry/350m/LOS/frame cone; no universal source surveying/device guarantee. Physical Swiss Xiaomi/MacBook/ordinary laptop tests remain NOT TESTED, sampled desktop browser private peak~1GB. Observable GPU/codec/readiness failures preserve explicit2D recovery; OS tab termination cannot be caught. Package-size authorization does not raise those memory bounds.
 
-Deployment/public acceptance URL and exact SHA: PENDING final publication workflow and human environment review. Do not interpret local production acceptance as public HTTPS success.
+Actual protected deployment: [Pages38257622013](https://github.com/Matawaka/route-story/actions/runs/38257622013), SHA `d592de2efd144e784079e7c6d6fc85c971bc8678`, owner environment review completed, deploy SUCCESS. The returned [application URL](https://matawaka.github.io/route-story/) and [Swiss page](https://matawaka.github.io/route-story/swiss-pilot.html) are anonymously verified; release.json source and all35asset hashes match. [Separate real public acceptance](SWISS_PUBLIC_HTTPS_EVIDENCE.json) is VERIFIED on Edge155/Windows: actual20s1280×720/480frames and30s720×1280/720frames, H.264/24FPS/full independent decode, all decoded frame pixels equal reviewed local movies, cancellation/retry/privateGPX matching/seek/no external/upload/storage/errors/375viewport/unsupported encoder preview. PhysicalSwiss devices remain NOT TESTED. MetaCSP is present; response-header CSP is absent.
+
+Historical Pages HTTPS job is FAILED on the Swiss test's30s click/download deadlines. General/Sogne checks passed; failed-job-only retry reached cancellation and then download timeout. [PR19](https://github.com/Matawaka/route-story/pull/19) is merged asd1c2b85; it corrects bounded waits without reducing720p/duration/frame/hash/privacy assertions. Separate [read-only check38268718029](https://github.com/Matawaka/route-story/actions/runs/38268718029) is SUCCESS on the same already-deployedSHA: Windows10.0.26100/Edge153,10s360×640 retry plus1280×720/720×1280Standard,240H.264frames each/full independent decode/all35hashes/privacy/seek/unsupported preview. Actual Standard timings118755.7/101228.8ms include save and independent validation; no real-device performance claim. [Cloud evidence](SWISS_CLOUD_HTTPS_EVIDENCE.json), [machine status](SWISS_PUBLIC_DEPLOYMENT.json). No duplicate publication occurred; do not label the historical failed job green or substitute the newer repository's test-onlySHA for the actual deployedd592de2.
 
 2026-10-12 publication attempt38219324249 stopped on Ubuntu source-GPX byte validation before deployment. PR17 preserves both source and published Git blobs and adds an OS-independent regression. Source36550b9 has203unit PASS and full local20/30s decoded acceptance; [saved evidence](SWISS_PUBLICATION_EVIDENCE.json). Exact future merged main, protected deployment and actual HTTPS acceptance remain PENDING; never report the failed run as a public update.
 

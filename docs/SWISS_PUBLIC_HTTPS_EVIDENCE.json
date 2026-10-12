@@ -1,0 +1,98 @@
+{
+  "status": "VERIFIED",
+  "sourceCommit": "d592de2efd144e784079e7c6d6fc85c971bc8678",
+  "url": "https://matawaka.github.io/route-story/",
+  "publicHttps": true,
+  "browser": "155.0.4283.45",
+  "os": "Windows_NT 10.0.26200",
+  "physicalDevice": false,
+  "manifestHashes": 35,
+  "packageBytes": 7971578,
+  "regionLoadsAfterSelection": true,
+  "privateGpxNotUploaded": true,
+  "external": [],
+  "errors": [],
+  "bad": [],
+  "outputs": [
+    {
+      "file": "artifacts/swiss-public/https-original-full/main-furka-10s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 360,
+      "height": 640,
+      "duration": 10,
+      "decodedFrames": 240,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 240,
+      "firstFrameHash": "c2b31119cd26018bbfb25f269de0e922",
+      "lastFrameHash": "1d9c6ba00eb89a8b4b01475d1d8f297b",
+      "bytes": 2089560,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sha256": "c149a902563ba90c4a86bbf8dd39a366707c6bbe5f79201e3ed8c04119f0e1a3"
+    },
+    {
+      "file": "artifacts/swiss-public/https-original-full/atlas-20s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 1280,
+      "height": 720,
+      "duration": 20,
+      "decodedFrames": 480,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 480,
+      "firstFrameHash": "1aa207ece10eaaff58c2faef23979ed5",
+      "lastFrameHash": "8b26b17c5bc14b388c05683b1e5c893f",
+      "bytes": 13186352,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "exportMilliseconds": 5047.141,
+      "sha256": "245b7e0d7c07ed42e2ac3f93c6e13ac3a29a7707eaf1c5cfede9611f8c50cfd6"
+    },
+    {
+      "file": "artifacts/swiss-public/https-original-full/night-30s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 720,
+      "height": 1280,
+      "duration": 30,
+      "decodedFrames": 720,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 720,
+      "firstFrameHash": "7d35561346c0de0a8a00d5fd4f443ce6",
+      "lastFrameHash": "a2dafaf4ba653b80bf0d5d7daa72d102",
+      "bytes": 19354064,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "exportMilliseconds": 7141.0740000000005,
+      "sha256": "24dfd516c1252ee081646560cf35f40fea8410bb311f00cb761d63d445e512ad"
+    }
+  ],
+  "checkedDate": "2026-10-12",
+  "deploymentRun": "https://github.com/Matawaka/route-story/actions/runs/38257622013",
+  "scope": "Actual public HTTPS; desktop Edge. Physical devices not tested",
+  "exportTimingScope": "Click through saved download and independent validation; not GPU elapsed time",
+  "decodedComparison": {
+    "method": "Complete independent FFmpeg framemd5",
+    "reference": "artifacts/swiss-public/source-integrity-fix",
+    "atlas": {
+      "frames": 480,
+      "allDecodedFramePixelsEqual": true
+    },
+    "night": {
+      "frames": 720,
+      "allDecodedFramePixelsEqual": true
+    },
+    "containerHashesMayDiffer": true
+  },
+  "csp": {
+    "responseHeader": null,
+    "meta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+  }
+}
