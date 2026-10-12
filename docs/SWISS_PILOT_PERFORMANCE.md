@@ -2,6 +2,8 @@
 
 ## Phase C measurements, 2026-10-12
 
+Offline asset preparation is measured separately: `node scripts/acceptance/swiss-offline-preparation.mjs` runs the exact pinned Python pipeline against cached independently hashed18COGs and the original detail crop, using isolated output/manifest directories. One warm-up excluded +3steady child processes, including Python/library startup/hash verification/CRS/mesh/JPEG/derived hashes, reproduce the same derived manifest: median1232.8ms[1198.4–1265.0]. Network/source-download latency and preprocessing-native peak are not included/measured. [Raw preparation evidence](SWISS_PHASE_C_PREPARATION_EVIDENCE.json) retains exact times; set PYTHON_EXECUTABLE if Python is not on PATH. This is not browser startup or frame preparation.
+
 Separate same-machine1warm+3steady runs, identical26point route/marker/grade/pacing, with original2m/1km versus extended5m/3km/camera composition. This overall comparison includes geometry/coverage/camera changes; separate extended10m/high detail rows isolate photography. Raw artifacts/swiss-phase-c/performance/report.json retain every sample and independent video decode.
 
 |Median[min–max]ms|Original10s360p|Extended10s360p|Original20s720p16:9|Extended20s720p16:9|Original30s720p9:16|Extended30s720p9:16|

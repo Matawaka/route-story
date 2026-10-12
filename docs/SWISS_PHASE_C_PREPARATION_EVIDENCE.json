@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-12",
+  "method": "Exact preprocessing pipeline in isolated output/record directories; existing independently hashed18source COGs+original detail crop reused read-only. One warm-up excluded, three steady child processes including Python/pinned-library startup, source hash verification/CRS/reprojection/mesh preparation/JPEG generation/derived hashes. No network/download time; native peak during preprocessing NOT MEASURED.",
+  "sourceScriptSha256": "6d8309a5dc547bac044ae9a4a8c315b9ee12ff9507bd091dc2e470a622ef0bd8",
+  "runs": [
+    {
+      "warmup": true,
+      "elapsedMs": 1219.2576000000001,
+      "result": {
+        "sourceBytes": 11952141,
+        "budgets": {
+          "meshVertices": 349281,
+          "heightGridBytes": 698562,
+          "imagePixels": 2960000,
+          "decodedRGBABytes": 11840000,
+          "estimatedMipBytes": 15786667,
+          "meshArrayBytes": 23722764,
+          "highJpegBytes": 1295550
+        },
+        "projectionFit": [
+          6.402954081123659e-9,
+          1.3673721682304538e-8
+        ],
+        "noData": 0
+      }
+    },
+    {
+      "warmup": false,
+      "elapsedMs": 1232.7642999999998,
+      "result": {
+        "sourceBytes": 11952141,
+        "budgets": {
+          "meshVertices": 349281,
+          "heightGridBytes": 698562,
+          "imagePixels": 2960000,
+          "decodedRGBABytes": 11840000,
+          "estimatedMipBytes": 15786667,
+          "meshArrayBytes": 23722764,
+          "highJpegBytes": 1295550
+        },
+        "projectionFit": [
+          6.402954081123659e-9,
+          1.3673721682304538e-8
+        ],
+        "noData": 0
+      }
+    },
+    {
+      "warmup": false,
+      "elapsedMs": 1198.3600999999999,
+      "result": {
+        "sourceBytes": 11952141,
+        "budgets": {
+          "meshVertices": 349281,
+          "heightGridBytes": 698562,
+          "imagePixels": 2960000,
+          "decodedRGBABytes": 11840000,
+          "estimatedMipBytes": 15786667,
+          "meshArrayBytes": 23722764,
+          "highJpegBytes": 1295550
+        },
+        "projectionFit": [
+          6.402954081123659e-9,
+          1.3673721682304538e-8
+        ],
+        "noData": 0
+      }
+    },
+    {
+      "warmup": false,
+      "elapsedMs": 1265.0165000000002,
+      "result": {
+        "sourceBytes": 11952141,
+        "budgets": {
+          "meshVertices": 349281,
+          "heightGridBytes": 698562,
+          "imagePixels": 2960000,
+          "decodedRGBABytes": 11840000,
+          "estimatedMipBytes": 15786667,
+          "meshArrayBytes": 23722764,
+          "highJpegBytes": 1295550
+        },
+        "projectionFit": [
+          6.402954081123659e-9,
+          1.3673721682304538e-8
+        ],
+        "noData": 0
+      }
+    }
+  ],
+  "steady": {
+    "medianMs": 1232.7642999999998,
+    "minimumMs": 1198.3600999999999,
+    "maximumMs": 1265.0165000000002
+  },
+  "identicalDerivedManifest": true
+}

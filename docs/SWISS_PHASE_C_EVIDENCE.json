@@ -3,7 +3,7 @@
   "date": "2026-10-12",
   "scope": "Developer-only Swiss Phase C, not deployed",
   "branch": "codex/swiss-extended-coverage",
-  "recordedParentCommit": "8cddc95879665566a85908db99cfffdf0e611fd6",
+  "recordedParentCommit": "540de11bac65971d30c35079f5f3599e090b8986",
   "testedFileSha256": {
     "src/terrain-camera.ts": "6302930449c7ac59d88f5ab5ef8fbf72f475a26b79a24f8abfe413d8df7e9e86",
     "src/terrain-renderer.ts": "5b47a18072e119f4743a198b19f191f23b00159ec56d12e2672945f677dbba5b",
@@ -5680,6 +5680,103 @@
     "No Swiss assets/page in production, no merge/tag/deploy/release or package enlargement"
   ],
   "approvalGate": "Owner visual review + actual-device acceptance + separate Swiss hosting/package decision before public release",
+  "offlinePreparation": {
+    "date": "2026-10-12",
+    "method": "Exact preprocessing pipeline in isolated output/record directories; existing independently hashed18source COGs+original detail crop reused read-only. One warm-up excluded, three steady child processes including Python/pinned-library startup, source hash verification/CRS/reprojection/mesh preparation/JPEG generation/derived hashes. No network/download time; native peak during preprocessing NOT MEASURED.",
+    "sourceScriptSha256": "6d8309a5dc547bac044ae9a4a8c315b9ee12ff9507bd091dc2e470a622ef0bd8",
+    "runs": [
+      {
+        "warmup": true,
+        "elapsedMs": 1219.2576000000001,
+        "result": {
+          "sourceBytes": 11952141,
+          "budgets": {
+            "meshVertices": 349281,
+            "heightGridBytes": 698562,
+            "imagePixels": 2960000,
+            "decodedRGBABytes": 11840000,
+            "estimatedMipBytes": 15786667,
+            "meshArrayBytes": 23722764,
+            "highJpegBytes": 1295550
+          },
+          "projectionFit": [
+            6.402954081123659e-9,
+            1.3673721682304538e-8
+          ],
+          "noData": 0
+        }
+      },
+      {
+        "warmup": false,
+        "elapsedMs": 1232.7642999999998,
+        "result": {
+          "sourceBytes": 11952141,
+          "budgets": {
+            "meshVertices": 349281,
+            "heightGridBytes": 698562,
+            "imagePixels": 2960000,
+            "decodedRGBABytes": 11840000,
+            "estimatedMipBytes": 15786667,
+            "meshArrayBytes": 23722764,
+            "highJpegBytes": 1295550
+          },
+          "projectionFit": [
+            6.402954081123659e-9,
+            1.3673721682304538e-8
+          ],
+          "noData": 0
+        }
+      },
+      {
+        "warmup": false,
+        "elapsedMs": 1198.3600999999999,
+        "result": {
+          "sourceBytes": 11952141,
+          "budgets": {
+            "meshVertices": 349281,
+            "heightGridBytes": 698562,
+            "imagePixels": 2960000,
+            "decodedRGBABytes": 11840000,
+            "estimatedMipBytes": 15786667,
+            "meshArrayBytes": 23722764,
+            "highJpegBytes": 1295550
+          },
+          "projectionFit": [
+            6.402954081123659e-9,
+            1.3673721682304538e-8
+          ],
+          "noData": 0
+        }
+      },
+      {
+        "warmup": false,
+        "elapsedMs": 1265.0165000000002,
+        "result": {
+          "sourceBytes": 11952141,
+          "budgets": {
+            "meshVertices": 349281,
+            "heightGridBytes": 698562,
+            "imagePixels": 2960000,
+            "decodedRGBABytes": 11840000,
+            "estimatedMipBytes": 15786667,
+            "meshArrayBytes": 23722764,
+            "highJpegBytes": 1295550
+          },
+          "projectionFit": [
+            6.402954081123659e-9,
+            1.3673721682304538e-8
+          ],
+          "noData": 0
+        }
+      }
+    ],
+    "steady": {
+      "medianMs": 1232.7642999999998,
+      "minimumMs": 1198.3600999999999,
+      "maximumMs": 1265.0165000000002
+    },
+    "identicalDerivedManifest": true
+  },
   "developerUi": {
     "browser": "155.0.4283.45",
     "os": "win32",
