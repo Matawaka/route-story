@@ -88,7 +88,12 @@ async function accept(url){
   const unsupported=await context.newPage();await unsupported.addInitScript(()=>{Object.defineProperty(window,'VideoEncoder',{value:undefined,configurable:true});});await unsupported.goto(url);await unsupported.locator('#demo').click();await expect(unsupported.locator('#preview')).toBeVisible();await expect(unsupported.locator('#export')).toBeDisabled();await expect(unsupported.locator('#status')).toContainText('WebCodecs');await unsupported.close();report.unsupportedEncoder='VERIFIED simulated unavailable API';
   const storage=await page.evaluate(async()=>({local:localStorage.length,session:sessionStorage.length,databases:await indexedDB.databases(),caches:await caches.keys(),cookies:document.cookie}));
   assert.deepEqual(storage,{local:0,session:0,databases:[],caches:[],cookies:''});assert.deepEqual(await context.cookies(),[]);
-  await page.reload();await expect(page.locator('#empty')).toBeVisible();await expect(page.locator('#export')).toBeDisabled();
+  await page.reload();
+  if(manifest.regionalPacks?.includes('furka')){
+   // A fresh session intentionally restores the public demo, never the last
+   // private GPX. Keep the original empty assertion for the baseline build.
+   await expect(page.locator('#preview')).toHaveAttribute('data-region','furka',{timeout:60000});await expect(page.locator('#route-choice')).toHaveValue('furka');await expect(page.locator('#route-info')).toContainText('синтетический');await expect(page.locator('#route-info')).not.toContainText(examples.at(-1).title);
+  }else{await expect(page.locator('#empty')).toBeVisible();await expect(page.locator('#export')).toBeDisabled();}
   assert.deepEqual(unexpected,[]);assert.deepEqual(badResponses,[]);assert.deepEqual(errors,[]);assert.ok(requests.some(r=>r.path.endsWith('/maps/ne_110m_land.geojson')));
   report.privacy={storage,unexpectedRequests:unexpected,badResponses,pageErrors:errors,firstPartyBrowserRequests:requests.length,routeLostOnReload:true};report.status='VERIFIED';
  }finally{await browser.close();}

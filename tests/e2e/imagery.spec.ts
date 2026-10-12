@@ -35,7 +35,11 @@ test('photo readiness blocks export; corrupted/missing assets retain GPX and exp
  let release:()=>void=()=>{};const pending=new Promise<void>(resolve=>release=resolve);await page.route('**/imagery/sogne-sentinel-10m.jpg',async r=>{await pending;await r.continue();});
  await page.locator('#terrain-surface').selectOption('photo');await expect(page.locator('#export')).toBeDisabled();release();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#map-detail-note')).toContainText('Copernicus');
  await page.unroute('**/imagery/sogne-sentinel-10m.jpg');await page.route('**/imagery/sogne-sentinel-10m.jpg',r=>r.fulfill({body:'corrupt',contentType:'image/jpeg'}));
- await page.locator('#terrain-surface').selectOption('dem');await expect(page.locator('#export')).toBeEnabled();await page.locator('#terrain-surface').selectOption('photo');await expect(page.locator('#status')).toContainText('Контрольная сумма');await expect(page.locator('#export')).toBeDisabled();await expect(page.locator('#route-info')).toContainText('721');await page.locator('#terrain-surface').selectOption('dem');await expect(page.locator('#export')).toBeEnabled();
+ await page.locator('#terrain-surface').selectOption('dem');await expect(page.locator('#export')).toBeEnabled();
+ // Validated public bytes are now reused on retry. Evict them explicitly to
+ // exercise a fresh corrupted download, retaining all admission assertions.
+ await page.evaluate(async()=>{const path='/src/local-resource.ts';(await import(path)).clearResourceCache();});
+ await page.locator('#terrain-surface').selectOption('photo');await expect(page.locator('#status')).toContainText('Контрольная сумма');await expect(page.locator('#export')).toBeDisabled();await expect(page.locator('#route-info')).toContainText('721');await page.locator('#terrain-surface').selectOption('dem');await expect(page.locator('#export')).toBeEnabled();
  await page.locator('#camera-mode').selectOption('cinematic');await expect(page.locator('#export')).toBeEnabled();
 });
 

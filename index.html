@@ -7,29 +7,33 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>Route Story · Matawaka</title>
 </head>
-<body>
+<body data-view="normal" data-state="INITIALIZING" data-settings="closed">
   <header class="topbar"><a class="brand" href="./"><span class="brand-mark" aria-hidden="true">↗</span> Route Story</a><span class="local-badge">● Всё на вашем устройстве</span></header>
   <main class="workspace">
     <aside class="controls">
-      <div class="eyebrow">ИЗ ТРЕКА В ИСТОРИЮ</div>
+      <div class="eyebrow auxiliary">ИЗ ТРЕКА В ИСТОРИЮ</div>
       <h1>Ваш маршрут.<br>В движении.</h1>
-      <p class="intro">Загрузите GPX и сохраните короткое видео. Геометрия вашего пути — без выдуманных километров.</p>
+      <p class="intro auxiliary">Анимируйте маршрут и скачайте MP4. Ваш GPX остаётся на устройстве.</p>
       <section class="control-section">
         <h2><span class="step">01</span> Маршрут</h2>
+        <label class="field-label" for="route-choice">Пример или ваш маршрут</label>
+        <select id="route-choice"><option value="empty">Выберите маршрут</option><option value="furka" hidden>Швейцария · Furka · синтетическое 3D-демо</option><option value="sogne">Норвегия · Sogne · 3D-демо</option><option value="fjords">Норвегия · фьорды · 2D</option><option value="sample">Учебный пример · 2D</option><option value="custom">Загрузить свой GPX</option></select>
         <label class="upload-zone" for="file"><span class="upload-symbol" aria-hidden="true">↑</span><strong>Выбрать GPX-файл</strong><span>До 10 МиБ · до 50 000 точек</span></label>
         <input id="file" type="file" accept=".gpx,application/gpx+xml,application/xml,text/xml" aria-label="Выбрать GPX-файл">
-        <button id="cinematic-demo" class="text-button">Попробовать кино-демо · фьорды ↗</button>
-        <button id="terrain-demo" class="text-button">Попробовать 3D · горный рельеф ↗</button>
-        <button id="swiss-demo" class="text-button" hidden>Швейцарские Альпы · фото 3D ↗</button>
-        <a id="swiss-link" class="text-button" href="./swiss-pilot.html" hidden>Открыть отдельную сцену Фурки ↗</a>
-        <button id="demo" class="text-button">Открыть учебный пример ↗</button>
+        <div class="demo-shortcuts auxiliary">
+          <button id="swiss-demo" class="text-button" hidden>Швейцарские Альпы · фото 3D ↗</button>
+          <button id="cinematic-demo" class="text-button">Попробовать кино-демо · фьорды ↗</button>
+          <button id="terrain-demo" class="text-button">Попробовать 3D · горный рельеф ↗</button>
+          <button id="demo" class="text-button">Открыть учебный пример ↗</button>
+        </div>
+        <button id="clear-route" class="text-button">Убрать маршрут</button>
         <p id="route-info" class="route-info">Пример содержит синтетические точки.</p>
       </section>
       <section class="control-section">
         <h2><span class="step">02</span> Оформление</h2>
         <label class="field-label" for="story-title">Название истории</label>
         <input id="story-title" type="text" maxlength="200" value="Мой маршрут" aria-describedby="title-note" autocomplete="off" disabled>
-        <p id="title-note" class="route-info">До 200 символов · только текст.</p>
+        <p id="title-note" class="route-info auxiliary">До 200 символов · только текст.</p>
         <div class="styles" role="group" aria-label="Стиль карты">
           <button class="style-card atlas active" data-style="atlas" aria-pressed="true"><span class="swatch" aria-hidden="true">╱</span><span>Атлас</span></button>
           <button class="style-card night" data-style="night" aria-pressed="false"><span class="swatch" aria-hidden="true">╱</span><span>Ночной</span></button>
@@ -39,14 +43,14 @@
         <label class="field-label" for="camera-mode">Камера</label>
         <select id="camera-mode"><option value="cinematic">Кино · 2D</option><option value="auto">Авто · 3D при наличии DEM</option><option value="terrain">Рельеф · 3D</option><option value="classic">Классическая · без движения</option></select>
         <label class="field-label" id="terrain-surface-label" for="terrain-surface">Поверхность 3D</label>
-        <select id="terrain-surface"><option value="dem">DEM · цвет по высоте</option><option value="photo">Спутник · Согне-фьорд 2025</option></select>
+        <select id="terrain-surface"><option value="dem">DEM · цвет по высоте</option><option value="photo">Настоящая фототекстура региона</option></select>
         <label class="field-label" id="terrain-flight-label" for="terrain-flight">Пролёт 3D</label>
         <select id="terrain-flight"><option value="conservative">Обзорный · безопасная высота</option><option value="corridor">Ближе к рельефу · проверенный коридор</option></select>
         <label class="field-label" for="route-color">Цвет пройденного пути · 3D</label>
         <select id="route-color"><option value="plain">Одноцветный</option><option value="grade">По уклону · подъём / спуск</option></select>
         <label class="field-label" for="replay-pacing">Темп анимации</label>
         <select id="replay-pacing"><option value="distance">Равномерно по расстоянию</option><option value="terrain">По уклону · стилизованный</option></select>
-        <p id="dynamics-note" class="route-info">Уклон: красный ↑≥10%, оранжевый ↑≥3%, нейтральный ±3%, светло-зелёный ↓≥3%, зелёный ↓≥10%. Темп анимации не является реальной скоростью. В 2D путь сохраняет одноцветное оформление.</p>
+        <p id="dynamics-note" class="route-info auxiliary">Уклон: красный ↑≥10%, оранжевый ↑≥3%, нейтральный ±3%, светло-зелёный ↓≥3%, зелёный ↓≥10%. Темп анимации не является реальной скоростью. В 2D путь сохраняет одноцветное оформление.</p>
         <label class="field-label" for="marker">Маркер путешественника</label>
         <select id="marker"><option value="point">Точка</option><option value="traveler">Шах - вкрутанидзе</option><option value="unicycle">Моноколесо · схема</option><option value="bicycle">Велосипед</option><option value="pedestrian">Пешеход</option><option value="custom">Своя картинка</option></select>
         <label class="field-label" for="marker-file">Картинка маркера · необязательно</label>
@@ -55,30 +59,37 @@
         <label class="field-label" for="marker-presentation">Видимость в 3D</label>
         <select id="marker-presentation"><option value="annotation">Читаемая аннотация</option><option value="occluded">Скрывается за рельефом</option></select>
         <input id="marker-file" type="file" accept="image/png,image/webp,image/jpeg" aria-describedby="marker-note">
-        <p id="marker-note" class="route-info">PNG/WebP/JPG до 2 МиБ, 2048 × 2048 и 4 млн пикселей. Только в памяти; уменьшается до 256 × 256. PNG/WebP сохраняют прозрачность; JPG — свой фон. Без анимации.</p>
+        <p id="marker-note" class="route-info auxiliary">PNG/WebP/JPG до 2 МиБ, 2048 × 2048 и 4 млн пикселей. Только в памяти; уменьшается до 256 × 256. PNG/WebP сохраняют прозрачность; JPG — свой фон. Без анимации.</p>
         <label class="field-label" for="duration">Длительность видео</label>
         <select id="duration"><option value="10">10 секунд</option><option value="20" selected>20 секунд</option><option value="30">30 секунд</option></select>
         <label class="field-label" for="quality">Качество видео</label>
         <select id="quality"><option value="compatibility">Совместимое · 360p</option><option value="standard">Стандартное · 720p</option></select>
       </section>
-      <section class="export-section">
-        <button id="export" class="primary-button" disabled>Скачать MP4 ↓</button>
-        <button id="cancel" class="text-button" hidden>Отменить экспорт</button>
-        <p class="export-note" id="export-note">20 секунд · 640 × 360 · 24 кадра/с · H.264</p>
-        <p id="status" class="status" role="status" aria-live="polite">Загрузите GPX, чтобы начать.</p>
-      </section>
-      <p class="privacy">Файл обрабатывается в памяти браузера. Без отправки на сервер и сохранения ваших маршрутов.</p>
+      <p class="privacy auxiliary">Файл обрабатывается в памяти браузера. Без отправки на сервер и сохранения ваших маршрутов.</p>
     </aside>
     <section class="preview-area" aria-labelledby="preview-title">
       <div class="preview-heading"><h2 id="preview-title">Предпросмотр</h2><span id="preview-format">16:9</span></div>
+      <div class="view-toolbar"><button id="explanations" class="text-button" aria-pressed="false">Скрыть пояснения</button><button id="video-only" class="text-button" aria-pressed="false">Только видео</button><button id="show-settings" class="text-button" hidden aria-expanded="false">Настройки и маршрут</button><span id="scene-name">Route Story</span></div>
       <div class="canvas-stage">
-        <div id="empty" class="empty-state"><div class="empty-path" aria-hidden="true">⌁</div><h3>Здесь появится ваш путь</h3><p>Выберите GPX или откройте учебный пример.</p></div>
+        <div id="empty" class="empty-state"><div class="empty-path" aria-hidden="true">⌁</div><h3>Здесь появится ваш маршрут</h3><p>Выберите демонстрацию или загрузите GPX.</p><button id="empty-swiss" class="text-button" hidden>Открыть демонстрацию Швейцарии</button><button id="empty-file" class="text-button">Загрузить GPX</button><button id="empty-other" class="text-button">Выбрать другое демо</button></div>
+        <div id="loading" class="loading-state" hidden><span class="loading-symbol" aria-hidden="true">⌁</span><h3 id="loading-heading"></h3><p id="loading-stage" role="status" aria-live="polite"></p><button id="cancel-load" class="text-button">Отменить подготовку</button></div>
         <canvas id="preview" width="640" height="360" hidden aria-label="Карта маршрута со стартом и финишем"></canvas>
       </div>
       <div class="playback"><button id="play" class="play-button" disabled aria-label="Воспроизвести">▶</button><input id="scrub" type="range" min="0" max="20" step="0.01" value="20" disabled aria-label="Время анимации"><span id="time">0:20 / 0:20</span></div>
-      <p class="map-note" id="preview-phase"></p>
-      <div class="facts" id="facts" hidden><div><span>Расстояние по GPX</span><strong id="distance"></strong></div><div><span id="metric-name"></span><strong id="metric-value"></strong></div><div><span>Сегменты</span><strong id="segments"></strong></div></div>
-      <p class="map-note" id="map-detail-note">Карта: Natural Earth · обзорная география, без улиц. Время видео не является длительностью поездки.</p>
+      <section class="export-section">
+        <div class="export-actions"><button id="export" class="primary-button" disabled>Скачать MP4 ↓</button><button id="cancel" class="text-button" hidden>Отменить экспорт</button></div>
+        <p class="export-note" id="export-note">20 секунд · 640 × 360 · 24 кадра/с · H.264</p>
+        <progress id="export-progress" max="100" hidden aria-label="Создание видео"></progress>
+        <p id="status" class="status" role="status" aria-live="polite">Подготавливаем Route Story…</p>
+        <p id="encoder-note" class="status" hidden></p>
+        <div id="recovery-actions" hidden><button id="retry" class="text-button">Повторить</button><button id="simplify" class="text-button">Открыть упрощённую карту · 2D</button><button id="change-route" class="text-button">Выбрать другой маршрут</button></div>
+        <button id="compatibility" class="text-button" hidden>Попробовать совместимое качество · 360p</button>
+        <details id="error-details" hidden><summary>Техническая категория</summary><code id="error-code"></code></details>
+      </section>
+      <p class="map-note auxiliary" id="preview-phase"></p>
+      <div class="facts auxiliary" id="facts" hidden><div><span>Расстояние по GPX</span><strong id="distance"></strong></div><div><span id="metric-name"></span><strong id="metric-value"></strong></div><div><span>Сегменты</span><strong id="segments"></strong></div></div>
+      <p class="map-note auxiliary" id="map-detail-note">Карта: Natural Earth · обзорная география, без улиц. Время видео не является длительностью поездки.</p>
+      <p class="source-credit" id="source-credit">Источники карты: Natural Earth</p>
     </section>
   </main>
   <footer><span>Сделано в Matawaka</span><a href="./THIRD_PARTY_NOTICES.md">Лицензии и источники</a><span>Версия 1.2 · RC · фото-прототип</span></footer>

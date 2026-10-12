@@ -1,5 +1,6 @@
 import type { Route, RoutePoint } from './route';
 import { wrapDelta } from './geo';
+import {localBytes} from './local-resource';
 import {regionalWorld,regionalGeographic,validateRegionalProjection,type RegionalProjection} from './regional-projection';
 export type TerrainXY = readonly [number, number];
 export interface TerrainLevel { file:string; spacingMeters:number; width:number; height:number; bytes:number; sha256:string; noDataCount:number }
@@ -73,14 +74,12 @@ export class TerrainDataset {
     }}return true;
   }
 }
-const cache=new Map<string,Promise<TerrainDataset>>();
-export function loadTerrain(quality:'compatibility'|'standard'):Promise<TerrainDataset>{
-  const key=quality==='standard'?'50':'100';if(cache.has(key))return cache.get(key)!;
-  const promise=(async()=>{
-    const root=`${import.meta.env.BASE_URL}terrain/`,response=await fetch(root+'sogne.json');if(!response.ok)throw Error('Локальный DEM недоступен. Выберите 2D.');
-    const manifest:TerrainManifest=await response.json(),level=manifest.lods.find(l=>l.file===`sogne-${key}m.i16`);if(!level||level.bytes>1000000)throw Error('Неизвестный размер DEM.');
-    const r=await fetch(root+level.file);if(!r.ok)throw Error('Не удалось загрузить высоты. Выберите 2D.');const buffer=await r.arrayBuffer();
-    if(buffer.byteLength!==level.bytes)throw Error('DEM повреждён.');const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buffer)),b=>b.toString(16).padStart(2,'0')).join('');if(hash!==level.sha256)throw Error('Контрольная сумма DEM не совпадает.');
-    return new TerrainDataset(manifest,level,new Int16Array(buffer));
-  })();cache.set(key,promise);promise.catch(()=>cache.delete(key));return promise;
+const cache=new Map<string,TerrainDataset>();
+export async function loadTerrain(quality:'compatibility'|'standard',signal?:AbortSignal):Promise<TerrainDataset>{
+  signal?.throwIfAborted();const key=quality==='standard'?'50':'100';if(cache.has(key))return cache.get(key)!;
+  const root=`${import.meta.env.BASE_URL}terrain/`;
+  const manifest:TerrainManifest=JSON.parse(new TextDecoder().decode(await localBytes(root+'sogne.json',{limit:16384,kind:'terrain',signal})));
+  const level=manifest.lods.find(l=>l.file===`sogne-${key}m.i16`);if(!level||level.bytes>1000000)throw Error('Неизвестный размер DEM.');
+  const bytes=await localBytes(root+level.file,{limit:1000000,bytes:level.bytes,sha256:level.sha256,kind:'terrain',signal});
+  const terrain=new TerrainDataset(manifest,level,new Int16Array(bytes.buffer));cache.set(key,terrain);return terrain;
 }

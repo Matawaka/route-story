@@ -85,7 +85,7 @@ test('Standard capability failure offers explicit Compatibility recovery',async(
 test('UI restores a valid state after renderer failure and can export again',async({page})=>{
   await page.goto('/');await page.locator('#demo').click();await page.getByLabel('Длительность видео').selectOption('10');await expect(page.locator('#export')).toBeEnabled();
   await page.evaluate(async()=>{const path='/src/renderer.ts';const {RouteRenderer}=await import(path),native=RouteRenderer.prototype.draw;RouteRenderer.prototype.draw=function(...args:any[]){RouteRenderer.prototype.draw=native;throw new Error('Deliberate export failure');};});
-  await page.locator('#export').click();await expect(page.locator('#status')).toContainText('Не удалось создать MP4: Deliberate export failure');await expect(page.locator('#cancel')).toBeHidden();
+  await page.locator('#export').click();await expect(page.locator('#status')).toContainText('Не удалось создать MP4');await expect(page.locator('#status')).not.toContainText('Deliberate export failure');await expect(page.locator('#error-code')).toHaveText('export/export');await expect(page.locator('#cancel')).toBeHidden();
   for(const id of ['export','duration','quality','ratio','file','demo','scrub','story-title'])await expect(page.locator(`#${id}`)).toBeEnabled();
   const pending=page.waitForEvent('download');await page.locator('#export').click();await pending;await expect(page.locator('#status')).toContainText('MP4 создан');
 });

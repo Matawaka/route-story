@@ -1,5 +1,15 @@
 # Decisions
 
+## 2026-10-12 — One public controller / Swiss startup / bounded UX recovery
+
+Base actual main d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83; independent codex/unified-route-story-ux, not docsPR18. Main's StoryConfig/StoryTimeline/export pipeline remain authoritative. A small scene-provider reuses existing local regionalPackForRoute and verified Swiss/Sogne loaders, rather than a parallel geography selector. Main owns a discriminated UX state, one preparation AbortController and a separate encoder capability result. Initial Swiss autoplay runs only once; reduced motion prepares static genuine3D, not a silent2D substitution. Imports leaving a regional demo choose the visible existing Auto policy with explicit effective-mode/fallback information.
+
+Normal dev uses the already reviewed first-party public Furka pack; developer comparison sources remain opt-in SWISS_PILOT=1. Production build remains opt-in BUILD_SWISS_PACK=1 to retain the baseline5MiB/Sogne6MiB/combined9MiB gates. The legacy public Swiss URL redirects to the single main UI. No extra controller/workflow/hosting or map data was introduced. Camera/350m/LOS/UV/grade/attribution/source-coordinate proof is unchanged.
+
+Every local download has a30s deadline including stalled streams, strict byte/hash admission and user cancellation. SHA-verified public-byte LRU≤2MiB supports retry; no private GPX/marker cache or persistence. CPU cache is additional bounded RAM, not a claim about total native/GPU memory. Initial progress reports truthful stages, not artificial overall percentages. Encoder probing has a10s deadline; preview remains available when unsupported. UI view modes are outside StoryConfig and preserve exported pixels. Errors expose authored recovery advice/categories, not raw native/private diagnostics. Rejected marker replacements retain the prior valid renderer/encoder; video failure restores controls and supports retry.
+
+Existing tests intentionally updated only for this behaviour: fresh corruption tests evict the verified byte cache, native export errors assert the safe public message/category rather than a raw exception, and production reload restores the public demo rather than an empty page when Swiss is enabled. Geometry/hash/MP4/network/privacy assertions remain intact. New UI stays pending owner visual approval/merge/publication; previous broader release permission does not publish this new task.
+
 ## 2026-10-12 — cross-platform source bytes and next regional priorities
 
 Authorized Swiss publication exposed a real Ubuntu source-checksum failure before deployment, despite passing Windows main CI. Preserve both reviewed GPX files as exact -text blobs and test Git-object bytes, not only OS-transformed working files. Keep original checksum and geometry. PR17 is the focused blocker fix; publication resumes only after exact PR/main CI and required human Pages review. The unsuccessful run does not establish public acceptance.

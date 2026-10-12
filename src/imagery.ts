@@ -1,4 +1,5 @@
 import type {TerrainDataset,TerrainXY} from './terrain';
+import {localBytes} from './local-resource';
 
 export interface ImageryManifest {
   schema:1; id:string; origin:readonly number[]; bounds:readonly number[];
@@ -45,25 +46,16 @@ export function imageryUV(m:ImageryManifest,[east,north]:TerrainXY):readonly [nu
 export function imageryCoversTerrain(m:ImageryManifest,t:TerrainDataset):boolean{
   const d=t.manifest;return m.origin[0]===d.origin[0]&&m.origin[1]===d.origin[1]&&m.bounds[0]<=d.westMeters&&m.bounds[1]<=d.southMeters&&m.bounds[2]>=d.eastMeters&&m.bounds[3]>=d.northMeters;
 }
-async function boundedResponse(response:Response,limit:number):Promise<Uint8Array<ArrayBuffer>>{
-  if(!response.ok||!response.body)throw Error('Локальный снимок недоступен. Выберите поверхность DEM.');
-  const reader=response.body.getReader(),chunks:Uint8Array[]= [];let bytes=0;
-  try{for(;;){const {value,done}=await reader.read();if(done)break;bytes+=value.byteLength;if(bytes>limit)throw Error('Снимок превышает допустимый размер.');chunks.push(value);}}
-  catch(error){await reader.cancel();throw error;}finally{reader.releaseLock();}
-  const result=new Uint8Array(bytes);let offset=0;for(const chunk of chunks){result.set(chunk,offset);offset+=chunk.length;}return result;
-}
 export interface PreparedImagery { readonly manifest:Readonly<ImageryManifest>; readonly bitmap:ImageBitmap; readonly detailBitmap?:ImageBitmap; dispose():void }
 /** No route coordinates or dynamic URLs. No decoded-image cache: renderer owns
  * one resident bitmap and releases it after replacement/error/page disposal. */
 export async function loadImagery(signal?:AbortSignal,comparisonOnly=false):Promise<PreparedImagery>{
   signal?.throwIfAborted();
   const root=`${import.meta.env.BASE_URL}imagery/`;
-  const manifest=validateImagery(JSON.parse(new TextDecoder().decode(await boundedResponse(await fetch(root+(comparisonOnly?'sogne-sentinel-20m.json':'sogne-sentinel.json'),{signal}),16384))));
+  const manifest=validateImagery(JSON.parse(new TextDecoder().decode(await localBytes(root+(comparisonOnly?'sogne-sentinel-20m.json':'sogne-sentinel.json'),{signal,limit:16384,kind:'image'}))));
   signal?.throwIfAborted();
   const decode=async(m:ImageryManifest)=>{
-  const bytes=await boundedResponse(await fetch(root+m.file,{signal}),MAX_IMAGE_BYTES);
-  const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
-  if(bytes.length!==m.bytes||hash!==m.sha256)throw Error('Контрольная сумма снимка не совпадает. Выберите поверхность DEM.');
+  const bytes=await localBytes(root+m.file,{signal,limit:MAX_IMAGE_BYTES,bytes:m.bytes,sha256:m.sha256,kind:'image'});
   signal?.throwIfAborted();
   const bitmap=await createImageBitmap(new Blob([bytes],{type:'image/jpeg'}),{imageOrientation:'none',colorSpaceConversion:'none'});
   if(bitmap.width!==m.width||bitmap.height!==m.height){bitmap.close();throw Error('Размер декодированного снимка не совпадает.');}

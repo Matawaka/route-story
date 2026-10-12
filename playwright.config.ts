@@ -5,7 +5,7 @@ export default defineConfig({
   workers: 1,
   use: { baseURL: 'http://127.0.0.1:4173', channel: process.env.PLAYWRIGHT_CHANNEL || undefined, headless: true },
   webServer: [
-    { command: 'npm run dev -- --port 4173 --strictPort', url: 'http://127.0.0.1:4173', reuseExistingServer: !process.env.CI, timeout: 30_000 },
+    { command: 'npm run dev -- --port 4173 --strictPort', url: 'http://127.0.0.1:4173', env:{SWISS_BASELINE:process.env.SWISS_BASELINE??(process.env.UNIFIED_UX_ACCEPTANCE==='1'||process.env.SWISS_PILOT==='1'?'0':'1')}, reuseExistingServer: !process.env.CI, timeout: 30_000 },
     { command: 'npm run preview -- --port 4174 --strictPort', url: 'http://127.0.0.1:4174', reuseExistingServer: !process.env.CI, timeout: 30_000 }
   ]
 });
