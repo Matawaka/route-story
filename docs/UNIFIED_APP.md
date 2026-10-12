@@ -78,4 +78,8 @@ Atlas20s:1280×720/480frames/13165241B. Night30s:720×1280/720frames/19349140B. 
 
 ## Требуется перед выпуском
 
+Окончательный runtime SHA `f93edb1b3a6394c3f85c87c03da0aff28fa4c47f`:14новых UI-тестов PASS; affected legacy Story8PASS+2skip;211unit/build PASS. Последний committed production/subpath full запуск и31hash PASS. Complete пакеты4956669/5962052/7983359B. Машинный итог обновлён на этот источник; предыдущие блоки документа и journal сохраняют реальную хронологию. Проверка нового exact-head CI и публичная приёмка остаются отдельными действиями.
+
+Финальный код `f93edb1b3a6394c3f85c87c03da0aff28fa4c47f`:211unit/build PASS,14unified browser PASS (включая keyboard/offline/missing-marker),8affected legacy Story PASS+2opt-in skips. Повторная committed production/subpath приёмка этого SHA VERIFIED:31хеш и настоящие10/20/30s H.264. Полные данные последнего запуска обновлены в UNIFIED_APP_EVIDENCE.json; более ранние значения выше сохранены как история. Последние complete размеры4956669/5962052/7983359B≤5/6/9MiB. [PR20](https://github.com/Matawaka/route-story/pull/20) открыт; ранее проверенный evidence-head019ba9d CI38286746831 SUCCESS. Новый exact-head CI необходимо смотреть отдельно.
+
 Визуальное одобрение владельца, отдельное разрешение на merge/deploy, успешный exact-main push CI, тот же защищённый manual Pages с личным review, новый реальный HTTPS acceptance. Physical Swiss mobile/laptop acceptance для этого UX — NOT TESTED. Размеры/память старой среды не доказывают поддержку всех устройств. Нативная/GPU/encoder память новой версии пока NOT MEASURED.

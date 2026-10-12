@@ -2,7 +2,7 @@
   "schema": 1,
   "scope": "LOCAL production/subpath and developer browser acceptance; NOT DEPLOYED",
   "baseCommit": "d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83",
-  "implementationCommit": "e40a071eba8e213cdf275acc2e59c976bed065e2",
+  "implementationCommit": "f93edb1b3a6394c3f85c87c03da0aff28fa4c47f",
   "date": "2026-10-12",
   "version": "1.2.0-rc.1",
   "cleanInstall": "PASS",
@@ -21,7 +21,7 @@
   "unifiedBrowser": {
     "fullStandardExports": true,
     "failed": 0,
-    "passed": 12
+    "passed": 14
   },
   "swissReferences": {
     "initialFailed": 2,
@@ -31,11 +31,11 @@
   },
   "packages": {
     "sogneCapBytes": 6291456,
-    "sogneCompleteBytes": 5960867,
-    "combinedCompleteBytes": 7982174,
+    "sogneCompleteBytes": 5962052,
+    "combinedCompleteBytes": 7983359,
     "combinedCapBytes": 9437184,
     "baselineCapBytes": 5242880,
-    "baselineCompleteBytes": 4955484,
+    "baselineCompleteBytes": 4956669,
     "verifiedPublicFiles": 31
   },
   "cpuPublicByteCacheCap": 2097152,
@@ -60,8 +60,8 @@
       "bytes": 19349140,
       "validator": "Independent FFmpeg + ffprobe",
       "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
-      "exportMs": 2465.0046999999977,
-      "sha256": "9834836886927e45e20af4e3f77853b7ad56cf2f3135b8312febd4271e445347",
+      "exportMs": 2166.8885999999984,
+      "sha256": "3bdc64a6b772208332a50217b6893708b55d94495fe223812c1145ac43258534",
       "exactPreviewExport": true,
       "decodedMeanAbsoluteError": 1.9231101707175926,
       "minimumFrameVariance": 325.2415483262803,
@@ -87,8 +87,8 @@
       "bytes": 13165241,
       "validator": "Independent FFmpeg + ffprobe",
       "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
-      "exportMs": 1662.2032,
-      "sha256": "8b76b6a521452e1bbe10cedd709e7bea4f9ad858ef4e039746d45783bff93806",
+      "exportMs": 1620.9964000000036,
+      "sha256": "a0e8143fe5b3887b30503c8058c2c33846d46e7a1c7becd5127dc45d0dcaf2f7",
       "exactPreviewExport": true,
       "decodedMeanAbsoluteError": 2.5328602430555556,
       "minimumFrameVariance": 495.2426185136974,
@@ -101,14 +101,14 @@
   },
   "production": {
     "status": "VERIFIED",
-    "sourceCommit": "e40a071eba8e213cdf275acc2e59c976bed065e2",
+    "sourceCommit": "f93edb1b3a6394c3f85c87c03da0aff28fa4c47f",
     "url": "http://127.0.0.1:4185/route-story/",
     "publicHttps": false,
     "browser": "155.0.4283.45",
     "os": "Windows_NT 10.0.26200",
     "physicalDevice": false,
     "manifestHashes": 31,
-    "packageBytes": 7976748,
+    "packageBytes": 7977933,
     "initialSwissAutoload": true,
     "legacyEntryRedirects": true,
     "privateGpxNotUploaded": true,
@@ -117,7 +117,7 @@
     "bad": [],
     "outputs": [
       {
-        "file": "artifacts/unified-final-production/main-furka-10s.mp4",
+        "file": "artifacts/unified-final/main-furka-10s.mp4",
         "container": "mov,mp4,m4a,3gp,3g2,mj2",
         "codec": "h264",
         "profile": "Constrained Baseline",
@@ -135,7 +135,7 @@
         "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
       },
       {
-        "file": "artifacts/unified-final-production/atlas-20s.mp4",
+        "file": "artifacts/unified-final/atlas-20s.mp4",
         "container": "mov,mp4,m4a,3gp,3g2,mj2",
         "codec": "h264",
         "profile": "Constrained Baseline",
@@ -151,11 +151,11 @@
         "bytes": 13165241,
         "validator": "Independent FFmpeg + ffprobe",
         "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
-        "exportMilliseconds": 5015.6905,
-        "sha256": "af46ce41bbcaf6be0295994183046c82f15aba5d47eef1c63695504fc5acd84f"
+        "exportMilliseconds": 4940.8658,
+        "sha256": "1852d46e9a15ba1cb9c1bc6cba090392fe382b09f0c66d59070b0becfc99a4ed"
       },
       {
-        "file": "artifacts/unified-final-production/night-30s.mp4",
+        "file": "artifacts/unified-final/night-30s.mp4",
         "container": "mov,mp4,m4a,3gp,3g2,mj2",
         "codec": "h264",
         "profile": "Constrained Baseline",
@@ -171,10 +171,23 @@
         "bytes": 19349140,
         "validator": "Independent FFmpeg + ffprobe",
         "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
-        "exportMilliseconds": 7131.545600000001,
-        "sha256": "e3080412b7e7d96ea43dd3ca827ba3273d1cb4691a86e4548081157d9b009356"
+        "exportMilliseconds": 7130.769899999999,
+        "sha256": "e91f51fca87aee2b67483395fa260adeed5f7a12149304339c070d137a557034"
       }
     ]
   },
-  "publication": "PENDING separate owner approval, exact merged-main CI, protected human environment review and new HTTPS acceptance"
+  "publication": "PENDING separate owner approval, exact merged-main CI, protected human environment review and new HTTPS acceptance",
+  "affectedLegacyTitleSuite": {
+    "failed": 0,
+    "passed": 8,
+    "sourceCommit": "f93edb1b3a6394c3f85c87c03da0aff28fa4c47f",
+    "skipped": 2
+  },
+  "reviewPullRequest": "https://github.com/Matawaka/route-story/pull/20",
+  "earlierGitHubCi": {
+    "head": "019ba9df740069b2a51f99f0150d2cf46afab666",
+    "status": "SUCCESS",
+    "url": "https://github.com/Matawaka/route-story/actions/runs/38286746831",
+    "latestHead": "PENDING after final evidence push"
+  }
 }
