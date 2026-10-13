@@ -7,7 +7,7 @@ import { normalizeAvcDescription } from './avc';
 const BITRATE = 1_500_000;
 export function avcCodecs(width:number,height:number):readonly string[]{
   const macroblocks=Math.ceil(width/16)*Math.ceil(height/16);
-  return macroblocks>8192?['avc1.640033','avc1.4d0033','avc1.640034']:macroblocks>3600?['avc1.640028','avc1.4d0028','avc1.640029']:['avc1.42001f','avc1.4d001f','avc1.64001f'];
+  return macroblocks>8192?['avc1.640033','avc1.4d0033','avc1.420033','avc1.640034']:macroblocks>3600?['avc1.640028','avc1.4d0028','avc1.420028','avc1.640029']:['avc1.42001f','avc1.4d001f','avc1.64001f'];
 }
 /** A single actual frame proves initialization/flush, beyond a support promise.
  * It does not establish native-memory safety or replace MP4 decoding acceptance. */
@@ -30,7 +30,7 @@ export async function detectEncoder(width: number, height: number, bitrate = BIT
   let last='';
   for (const codec of avcCodecs(width,height)) {
     const config: VideoEncoderConfig = { codec, width, height, bitrate, framerate: fps, avc: { format: 'avc' } };
-    signal?.throwIfAborted();try { if ((await VideoEncoder.isConfigSupported(config)).supported){if(width*height>1280*720)await probeFrame(config,signal);return codec;} } catch(error) { signal?.throwIfAborted();last=error instanceof Error?error.message:''; }
+    signal?.throwIfAborted();try { const support=await VideoEncoder.isConfigSupported(config);if(support.supported&&(width*height<=1280*720||support.config?.width===width&&support.config?.height===height)){if(width*height>1280*720)await probeFrame(config,signal);return codec;} } catch(error) { signal?.throwIfAborted();last=error instanceof Error?error.message:''; }
   }
   throw new Error(`На этом устройстве нет работающего H.264 для ${width} × ${height}. ${last?last+' ':''}Выберите 1080p или 720p либо другой браузер.`);
 }

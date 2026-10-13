@@ -41,6 +41,7 @@ export class TerrainRenderer {
   private framePixels=new Uint8Array(0);
   private frameImage?:ImageData;
   private readonly frameCanvas=document.createElement('canvas');
+  private outputTarget?:T.WebGLRenderTarget;
   constructor(route:Route,readonly terrain:TerrainDataset,public width:number,public height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset,cameraOptions?:TerrainCameraOptions){
     const begin=performance.now(),regional=!!terrain.manifest.regionalProjection,needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';this.timeline=new StoryTimeline(route,config,needsDynamics?new RouteDynamics(route,{name:`DEM ${regional?'swisstopo':terrain.manifest.id==='discovered-copernicus-dem'?'Copernicus DSM':'Kartverket'} (${terrain.level.spacingMeters} м)`,spacingMeters:terrain.level.spacingMeters,covers:r=>terrain.routeCoverage(r),elevation:p=>terrain.sampleElevation(p.lat,p.lon)}):undefined);this.config=this.timeline.config;
     try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height,cameraOptions,terrain.manifest.id==='discovered-copernicus-dem'?imagery?.manifest.spacingMeters:undefined);}catch(error){imagery?.dispose();throw error;}
@@ -135,10 +136,17 @@ export class TerrainRenderer {
     if(!Number.isSafeInteger(width)||!Number.isSafeInteger(height)||width<=0||height<=0||width*height>3840*2160||Math.abs(width/height-this.plan.aspect)>1e-9)throw Error('Неподдерживаемый размер кадра или формат.');
     if(width>viewport[0]||height>viewport[1]||Math.max(width,height)>Math.min(gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),this.gpu.capabilities.maxTextureSize))throw Error('GPU не поддерживает выбранный размер кадра. Выберите 1080p или 720p.');
   }
-  setOutputSize(width:number,height:number):void{
+  setOutputSize(width:number,height:number,useBoundedTarget=true):void{
     this.assertOutputSize(width,height);const gl=this.gpu.getContext();
     this.frameImage=undefined;this.framePixels=new Uint8Array(0);this.frameCanvas.width=width;this.frameCanvas.height=height;
-    this.gpu.setSize(width,height,false);this.width=width;this.height=height;this.camera.setViewOffset(width,height,0,Math.min(width,height)*.04,width,height);this.camera.updateProjectionMatrix();
+    this.gpu.setRenderTarget(null);this.outputTarget?.dispose();this.outputTarget=undefined;
+    if(useBoundedTarget&&Math.min(width,height)>720){
+      // One single-sample destination texture/depth buffer avoids allocating a
+      // 4K multisampled browser swap chain. Old presets retain their MSAA path.
+      this.outputTarget=new T.WebGLRenderTarget(width,height,{samples:0,depthBuffer:true,stencilBuffer:false});this.outputTarget.texture.colorSpace=T.SRGBColorSpace;
+      this.gpu.setSize(this.plan.width,this.plan.height,false);this.gpu.setRenderTarget(this.outputTarget);
+    }else this.gpu.setSize(width,height,false);
+    this.width=width;this.height=height;this.camera.setViewOffset(width,height,0,Math.min(width,height)*.04,width,height);this.camera.updateProjectionMatrix();
     const actual=gl.getParameter(gl.VIEWPORT) as Int32Array;if(actual[2]!==width||actual[3]!==height)throw Error('GPU не создал полный кадр. Выберите 1080p или 720p.');
   }
   get encodingCanvas():HTMLCanvasElement{return this.frameCanvas;}
@@ -173,7 +181,7 @@ export class TerrainRenderer {
     if(annotation&&this.direction)this.direction.visible=false;
     // WebGL enables framebuffer dithering by default. Explicitly disable it:
     // deterministic source frames must not depend on the driver's frame history.
-    this.gpu.getContext().disable(this.gpu.getContext().DITHER);
+    this.gpu.setRenderTarget(this.outputTarget??null);this.gpu.getContext().disable(this.gpu.getContext().DITHER);
     this.gpu.render(this.scene,this.camera);
     const gl=this.gpu.getContext();if(gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)throw Error('3D-кадр не готов.');
     if(gl.getError()===gl.OUT_OF_MEMORY)throw Error('GPU не хватает памяти для выбранного кадра. Выберите 1080p, 720p или «Кино · 2D».');
@@ -227,7 +235,7 @@ export class TerrainRenderer {
   dispose():void{
     this.framePixels=new Uint8Array(0);this.frameImage=undefined;
     this.frameCanvas.width=this.frameCanvas.height=0;
-    if(this.disposed)return;this.disposed=true;for(const resource of this.disposables)resource.dispose();this.scene.clear();
+    if(this.disposed)return;this.disposed=true;this.outputTarget?.dispose();this.outputTarget=undefined;for(const resource of this.disposables)resource.dispose();this.scene.clear();
     if(this.gpu){this.gpu.domElement.removeEventListener('webglcontextlost',this.onLost);if(!this.gpu.getContext().isContextLost())this.gpu.forceContextLoss();this.gpu.dispose();this.gpu.domElement.width=this.gpu.domElement.height=0;}
   }
 }

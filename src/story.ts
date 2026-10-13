@@ -29,10 +29,10 @@ export const MAX_VIDEO_BYTES = 32 * 1024 * 1024;
 /** The owner-requested minute preset retains 720p/5 Mbps; shorter presets keep their old bound. */
 export const MAX_MINUTE_VIDEO_BYTES = 48 * 1024 * 1024;
 export const QUALITY_PRESETS = Object.freeze({
-  compatibility:{long:640,short:360,bitrate:1_500_000,label:'360p'},
-  standard:{long:1280,short:720,bitrate:5_000_000,label:'720p'},
-  fullhd:{long:1920,short:1080,bitrate:10_000_000,label:'1080p'},
-  ultra:{long:3840,short:2160,bitrate:25_000_000,label:'4K'}
+  compatibility:Object.freeze({long:640,short:360,bitrate:1_500_000,label:'360p'}),
+  standard:Object.freeze({long:1280,short:720,bitrate:5_000_000,label:'720p'}),
+  fullhd:Object.freeze({long:1920,short:1080,bitrate:10_000_000,label:'1080p'}),
+  ultra:Object.freeze({long:3840,short:2160,bitrate:25_000_000,label:'4K'})
 });
 /** New-resolution caps are independent; old 32/48 MiB policies never expand. */
 export function videoByteLimit(config:StoryConfig):number {

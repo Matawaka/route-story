@@ -12,7 +12,7 @@ test('actual probe failure closes every new encoder and temporary canvas',async(
   window.VideoEncoder=class extends Native{constructor(init:VideoEncoderInit){super(init);instances.push(this);}static async isConfigSupported(c:VideoEncoderConfig){return{supported:true,config:c};}configure(){throw Error('Deliberate real-probe failure');}};
   document.createElement=((tag:string)=>{const c=create(tag);if(c instanceof HTMLCanvasElement)canvases.push(c);return c;}) as typeof document.createElement;
   try{await detectEncoder(1920,1080,10_000_000);}catch(e){message=(e as Error).message;}finally{window.VideoEncoder=Native;document.createElement=create;}return{message,states:instances.map(e=>e.state),sizes:canvases.map(c=>[c.width,c.height])};
- });expect(result.message).toContain('Deliberate real-probe failure');expect(result.states).toHaveLength(3);expect(result.states.every(s=>s==='closed')).toBe(true);expect(result.sizes.every(s=>s[0]===0&&s[1]===0)).toBe(true);
+ });expect(result.message).toContain('Deliberate real-probe failure');expect(result.states).toHaveLength(4);expect(result.states.every(s=>s==='closed')).toBe(true);expect(result.sizes.every(s=>s[0]===0&&s[1]===0)).toBe(true);
 });
 test('write failure aborts the file without claiming completion',async({page})=>{
  await page.goto('/');const result=await page.evaluate(async()=>{

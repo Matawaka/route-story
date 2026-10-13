@@ -32,6 +32,7 @@ let source:Source|undefined,retryAction:(()=>void)|undefined;
 let availability:SceneAvailability|undefined,welcomeVisible=true,startupPlayAllowed=false,startupPlayPending=false;
 let geographicConsent=false,geographyDeclined=false;
 let probeSequence=0;
+let probeController:AbortController|undefined;
 type SaveHandle={createWritable():Promise<FileSystemWritableFileStream>};
 const filePicker=(window as Window&{showSaveFilePicker?:(options:unknown)=>Promise<SaveHandle>}).showSaveFilePicker;
 function qualityNote():void{
@@ -119,10 +120,10 @@ function configFromControls():Readonly<StoryConfig>{
 }
 async function probe(op:AbortController):Promise<void>{
   const sequence=++probeSequence;
-  const deadline=new AbortController();const cancel=()=>deadline.abort(op.signal.reason);op.signal.addEventListener('abort',cancel,{once:true});const timer=setTimeout(()=>deadline.abort(Error('H.264 capability timeout')),10_000);
+  probeController?.abort();const deadline=new AbortController();probeController=deadline;const cancel=()=>deadline.abort(op.signal.reason);op.signal.addEventListener('abort',cancel,{once:true});const timer=setTimeout(()=>deadline.abort(Error('H.264 capability timeout')),10_000);
   try{const settings=exportSettings(story);if(renderer&&'gpu' in renderer)renderer.assertOutputSize(settings.width,settings.height);if(requiresFileExport(story)&&!filePicker)throw Error('Для минуты 4K нужна запись в файл; браузер не поддерживает выбор файла. Выберите 30 секунд или 1080p.');await abortable(detectEncoder(settings.width,settings.height,settings.bitrate,settings.fps,deadline.signal),deadline.signal);if(sequence===probeSequence&&operation===op&&!op.signal.aborted)encoder={status:'supported'};}
   catch(error){if(sequence===probeSequence&&operation===op&&!op.signal.aborted){const message=error instanceof Error?error.message:'Проверка H.264 не завершилась.';encoder={status:'unavailable',message:message+' Предпросмотр доступен. Выберите другое качество.'};if((story.qualityPreset==='ultra'||story.qualityPreset==='fullhd')&&!requiresFileExport(story)&&!/время|timeout/i.test(message)){const option=control('quality').selectedOptions[0];option.disabled=true;option.title=message;}}}
-  finally{clearTimeout(timer);op.signal.removeEventListener('abort',cancel);if(operation===op&&!op.signal.aborted)renderState();}
+  finally{clearTimeout(timer);op.signal.removeEventListener('abort',cancel);if(probeController===deadline)probeController=undefined;if(operation===op&&!op.signal.aborted)renderState();}
 }
 async function configure(op?:AbortController,autoplay=false):Promise<void>{
   if(busyExport()||!route||op&&(operation!==op||op.signal.aborted))return;const heading=source?.name==='furka'?swissHeading:'Подготавливаем маршрут',current=op??begin(heading),signal=current.signal;
@@ -139,7 +140,7 @@ async function configure(op?:AbortController,autoplay=false):Promise<void>{
     el('source-credit').textContent=prepared.credit;el('map-detail-note').textContent=`${prepared.notice??''} ${prepared.credit} · ${prepared.detail}`.trim();
     el('dynamics-note').textContent=`${renderer.timeline.dynamics.note}. Уклон: красный ↑≥10%, оранжевый ↑≥3%, нейтральный ±3%, светло-зелёный ↓≥3%, зелёный ↓≥10%. ${story.replayPacing==='terrain'?'Стилизованный темп по уклону':'Равномерный темп'} · это не реальная скорость. ${renderer.config.cameraMode==='terrain'?'Цвет 3D-пути соответствует выбранному режиму.':'В 2D путь сохраняет одноцветное оформление.'}`;
     canvas.setAttribute('aria-label',`История «${story.title}»: карта маршрута со стартом и финишем`);qualityNote();
-    if('gpu' in renderer){const gpuCanvas=renderer.gpu.domElement;const lost=()=>{if(operation!==current)return;current.abort();releaseRenderer();failure(Error('3D-контекст потерян'),'scene');};gpuCanvas.addEventListener('webglcontextlost',lost);contextCleanup=()=>gpuCanvas.removeEventListener('webglcontextlost',lost);}
+    if('gpu' in renderer){const gpuCanvas=renderer.gpu.domElement;const lost=()=>{if(operation!==current)return;exportController?.abort(Error('3D-контекст потерян'));current.abort();releaseRenderer();failure(Error('3D-контекст потерян'),'scene');};gpuCanvas.addEventListener('webglcontextlost',lost);contextCleanup=()=>gpuCanvas.removeEventListener('webglcontextlost',lost);}
     stageFor(current,heading)('Готовим предпросмотр');if(!draw())return;setState({phase:'READY',notice:prepared.notice??(autoplay&&reducedMotion?'3D-демо готово. Нажмите ▶ для воспроизведения.':undefined)});
     if(autoplay&&!reducedMotion){startupPlayPending=true;if(!welcomeVisible&&startupPlayAllowed)startPlay();}await probe(current);
   }catch(error){if(operation!==current||signal.aborted)return;releaseRenderer();failure(error,'scene');}
@@ -202,6 +203,7 @@ el('retry').addEventListener('click',()=>retryAction?.());el('simplify').addEven
 el('cancel-load').addEventListener('click',()=>{clearTimeout(titleTimer);operation?.abort();operation=undefined;releaseRenderer();setState({phase:'CANCELLED',notice:'Подготовка отменена. Можно повторить или выбрать другой маршрут.'});});
 for(const id of selects)control(id).addEventListener('change',()=>{
   if(busyExport())return;dismissWelcome();
+  if(id==='ratio')for(const option of Array.from(control('quality').options)){option.disabled=false;option.title='';}
   if(id==='quality'){
     el<HTMLInputElement>('direct-file').checked=control('quality').value==='ultra'&&!!filePicker;
     if(renderer&&operation&&!operation.signal.aborted&&story.qualityPreset!=='compatibility'&&control('quality').value!=='compatibility'&&!busyLoad()){
@@ -233,17 +235,17 @@ button.addEventListener('click',async()=>{
     // Picker is invoked during the click's user activation, before any await.
     const handle=el<HTMLInputElement>('direct-file').checked&&filePicker?await filePicker.call(window,{suggestedName:videoFilename(config),types:[{description:'Видео MP4',accept:{'video/mp4':['.mp4']}}]}):undefined;
     controller.signal.throwIfAborted();if(handle)writable=await handle.createWritable();
-    if('gpu' in active)active.setOutputSize(size.width,size.height);else if(active.width!==size.width||active.height!==size.height)temporary=active.atResolution(config,size.width,size.height);
+    if('gpu' in active){active.setOutputSize(size.width,size.height);active.captureFrame(0);}else if(active.width!==size.width||active.height!==size.height)temporary=active.atResolution(config,size.width,size.height);
     const render=temporary??active,options={config,canvas:'gpu' in render?render.encodingCanvas:undefined,draw:(target:HTMLCanvasElement,time:number)=>'gpu' in render?render.captureFrame(time):render.draw(target,time),signal:controller.signal,onProgress:(progress:number)=>setState({phase:'EXPORTING' as const,progress})};
     let bytes:number;
     if(writable){bytes=(await exportVideoToFile(options,writable)).bytes;fileDone=true;}
     else{const blob=await exportVideo(options);bytes=blob.size;downloadVideo(blob,videoFilename(config));}
     performance.mark('route-story-export-end');performance.measure('route-story-export','route-story-export-start','route-story-export-end');setState({phase:'READY',notice:`MP4 создан · ${config.durationSeconds} секунд · ${(bytes/1024/1024).toFixed(1)} МиБ. Видео готово${writable?' · файл записан':''}.`});
   }
-  catch(error){if(controller.signal.aborted||error instanceof DOMException&&error.name==='AbortError')setState({phase:'CANCELLED',notice:'Экспорт отменён.'});else{retryAction=()=>{if(renderer){setState({phase:'READY'});button.click();}else void configure();};setState({phase:'ERROR',error:uiError(error,'export'),blocking:!renderer});}}
+  catch(error){if(controller.signal.aborted&&controller.signal.reason instanceof Error&&/3D-контекст/.test(controller.signal.reason.message))failure(controller.signal.reason,'scene');else if(controller.signal.aborted||error instanceof DOMException&&error.name==='AbortError')setState({phase:'CANCELLED',notice:'Экспорт отменён.'});else{retryAction=()=>{if(renderer){setState({phase:'READY'});button.click();}else void configure();};setState({phase:'ERROR',error:uiError(error,'export'),blocking:!renderer});}}
   finally{temporary?.dispose();if(writable&&!fileDone)await writable.abort().catch(()=>{});if(renderer===active&&'gpu' in active){try{active.setOutputSize(...original);draw();}catch(error){releaseRenderer();failure(error,'scene');}}exportController=undefined;renderState();}
 });
-window.addEventListener('pagehide',()=>{clearTimeout(titleTimer);operation?.abort();exportController?.abort();cancelAnimationFrame(animationId);releaseRenderer();customMarker?.dispose();customMarker=undefined;disposeTraveler();clearResourceCache();route=undefined;source=undefined;});
+window.addEventListener('pagehide',()=>{clearTimeout(titleTimer);operation?.abort();probeController?.abort();exportController?.abort();cancelAnimationFrame(animationId);releaseRenderer();customMarker?.dispose();customMarker=undefined;disposeTraveler();clearResourceCache();route=undefined;source=undefined;});
 updateSceneOptions();renderState();
 // Only initial startup selects Switzerland; no retry or timer restores it.
 if(__SWISS_ENABLED__)selectDemo('furka',true);else setState({phase:'EMPTY'});
