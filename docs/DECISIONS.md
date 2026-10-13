@@ -1,5 +1,15 @@
 # Decisions
 
+## 2026-10-13 — First-user instructions, covered choices and upright marker reflection
+
+Owner requested a welcome before initial demo playback. Use a dismissible inline Russian guide with four steps, start/upload/close and a reusable «Как пользоваться» button. Initial Swiss preparation remains background work; playback waits acceptance, reduced-motion remains static. Explicit user input cancels pending initial playback, so ownGPX cannot be overwritten by a late demo. Guide/view state stays outside StoryConfig/export and storage.
+
+Use the SAME regional provider for coverage admission and loading. Existing strict Furka descriptor plus tiny source-checked Sogne bounds use the same terrain projection. Offer only covered terrain/photo modes and restore options before demo presets; explain absent photo/DEM in a persistent preview notice visible in compact/video-only modes. Metadata admission never replaces actual no-data/mesh/350m/LOS/readiness checks. No new region/service/map fetch architecture.
+
+Reflect raster markers when their current genuine segment edge projects leftward; bounded local 3D tangent accounts for the current camera. Start/finish use real edges, isolated points have no fabricated bearing. Artwork stays upright, source pixels remain unchanged, a separate cue follows travel. Canvas transforms or existing sprite UV implement reflection without an extra bitmap/texture. Depth-tested world geometry and dashed occlusion remain intact. Arbitrary custom art is mirrored relative to its original orientation, not semantically recognised.
+
+Code milestone d9311381adb5038af1e43b99fec8f078107fa368:238unit/build,62routine browserPASS/32explicit skips,32fullPASS/1local-owner-JPEG skip; independent20/30s Sogne/Furka H.264 videos and production subpath checks. Exact sizes/hashes and timing boundaries in MARKER_UX_EVIDENCE.json; previous5/6/9MiB limits unchanged. Native/GPU peaks/new physical devices unmeasured/untested. This new candidate needs owner merge/publication approval; previous PR23 permission does not automatically publish it.
+
 ## 2026-10-13 — Standard GPX links are inert metadata
 
 The official [GPX1.1 schema](https://www.topografix.com/GPX/1/1/) defines link metadata for files/tracks/points. A global blacklist accidentally treated the owner's standard metadata link as an executable HTML link. Exempt only exact lowercase link in the accepted GPX namespace from that element-name blacklist; parse only existing route fields and discard the link/URL. Do not fetch metadata or introduce anchor elements. Continue scanning children/attributes, rejecting actual scripts, foreign HTML links, SVG, event handlers, unsafe URL protocols, DTD/entities and invalid coordinates. Validate original files locally without publishing their data; reproduce the failure with a synthetic fixture. This correction needs its own reviewed PR and owner merge/deploy approval.

@@ -1,0 +1,667 @@
+{
+  "date": "2026-10-13",
+  "branch": "codex/marker-left-facing",
+  "base": "3119cee84fd0ed435c766b40b4543cfcfe3abaa2",
+  "markerMilestone": "1cf87e8ecf124a94634a16c7cda00da7429ee3b5",
+  "runtimeSource": "d9311381adb5038af1e43b99fec8f078107fa368",
+  "scope": "LOCAL owner-review candidate, not merged or deployed",
+  "checks": {
+    "unit": {
+      "passed": 238,
+      "files": 22,
+      "failed": 0
+    },
+    "build": "PASS",
+    "routineBrowser": {
+      "passed": 62,
+      "skipped": 32,
+      "failed": 0
+    },
+    "fullOptInBrowser": {
+      "passed": 32,
+      "skipped": 1,
+      "failed": 0,
+      "skipReason": "Owner original JPEG path not supplied; static synthetic JPEG/EXIF/security tests pass"
+    },
+    "cleanInstall": "PASS in ignored isolated folder using exact package/lockfile; running Windows preview locked root native module, root dependencies restored without changing lockfile",
+    "auditVulnerabilities": 0
+  },
+  "commands": [
+    "$env:PLAYWRIGHT_CHANNEL='msedge'; $env:CI='1'; $env:SWISS_BASELINE='1'; npm.cmd run check",
+    "$env:SWISS_PILOT='1'; $env:SWISS_BASELINE='0'; $env:UNIFIED_UX_ACCEPTANCE='1'; $env:FULL_EXPORT_ACCEPTANCE='1'; npx.cmd playwright test tests/e2e/unified.spec.ts tests/e2e/welcome-coverage.spec.ts tests/e2e/rider.spec.ts tests/e2e/captions.spec.ts tests/e2e/marker-facing.spec.ts",
+    "$env:BUILD_IMAGERY_PACK='0'; $env:BUILD_SWISS_PACK='0'; npm.cmd run build; node scripts/package-release.mjs",
+    "$env:BUILD_IMAGERY_PACK='1'; npm.cmd run build; node scripts/package-release.mjs --imagery-release",
+    "$env:BUILD_IMAGERY_PACK='1'; $env:BUILD_SWISS_PACK='1'; npm.cmd run build; node scripts/package-release.mjs --imagery-release --swiss-release",
+    "node scripts/acceptance/swiss-public.mjs",
+    "node scripts/acceptance/release.mjs --smoke"
+  ],
+  "packages": [
+    {
+      "name": "baseline",
+      "sourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+      "payloadBytes": 4961852,
+      "manifestBytes": 3693,
+      "completeBytes": 4965545,
+      "limitBytes": 5242880,
+      "files": 22
+    },
+    {
+      "name": "sogne",
+      "sourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+      "payloadBytes": 5966690,
+      "manifestBytes": 4349,
+      "completeBytes": 5971039,
+      "limitBytes": 6291456,
+      "files": 25
+    },
+    {
+      "name": "combined",
+      "sourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+      "payloadBytes": 7986043,
+      "manifestBytes": 5426,
+      "completeBytes": 7991469,
+      "limitBytes": 9437184,
+      "files": 31
+    }
+  ],
+  "productionUx": {
+    "status": "VERIFIED",
+    "scope": "LOCAL production /route-story/ subpath",
+    "sourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+    "url": "http://127.0.0.1:4185/route-story/",
+    "browser": "155.0.4283.45",
+    "os": "Windows_NT 10.0.26200",
+    "physicalDevice": false,
+    "manifestFiles": 31,
+    "welcomeBeforePlayback": true,
+    "firstSwiss3D": true,
+    "reopenPreservesFrame": true,
+    "mobileOverflow": false,
+    "coverageChoices": true,
+    "criticalNoticeVideoMode": true,
+    "csp": {
+      "meta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'",
+      "responseHeader": null
+    },
+    "external": [],
+    "errors": [],
+    "bad": [],
+    "storage": [
+      0,
+      0,
+      0
+    ]
+  },
+  "productionSwiss": {
+    "status": "VERIFIED",
+    "sourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+    "url": "http://127.0.0.1:4185/route-story/",
+    "publicHttps": false,
+    "browser": "155.0.4283.45",
+    "os": "Windows_NT 10.0.26200",
+    "physicalDevice": false,
+    "manifestHashes": 31,
+    "packageBytes": 7986043,
+    "initialSwissAutoload": true,
+    "legacyEntryRedirects": true,
+    "privateGpxNotUploaded": true,
+    "external": [],
+    "errors": [],
+    "bad": [],
+    "outputs": [
+      {
+        "file": "artifacts/marker-facing/production-swiss/main-furka-10s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 640,
+        "height": 360,
+        "duration": 10,
+        "decodedFrames": 240,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 240,
+        "firstFrameHash": "33d03a31567ed8a97a2d731377c6cc39",
+        "lastFrameHash": "be55de1cdf3fd16e1007fd1d40d80962",
+        "bytes": 2110685,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+      },
+      {
+        "file": "artifacts/marker-facing/production-swiss/atlas-10s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 1280,
+        "height": 720,
+        "duration": 10,
+        "decodedFrames": 240,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 240,
+        "firstFrameHash": "c6d0eabf43f7652e1ce0d273ea456d92",
+        "lastFrameHash": "15ecc31c3d8baaf146994b2ea4488ba2",
+        "bytes": 7009958,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "exportMilliseconds": 2697.7788999999993,
+        "sha256": "a467fb47919405abb389e0db787b346d66d98d22bff8df69e99fe866d1247cd5"
+      },
+      {
+        "file": "artifacts/marker-facing/production-swiss/night-10s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 720,
+        "height": 1280,
+        "duration": 10,
+        "decodedFrames": 240,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 240,
+        "firstFrameHash": "de70d00b679203e7b978a4195b1df0cd",
+        "lastFrameHash": "88dd36fae86a5ce7c86b5d6b8153270b",
+        "bytes": 6913017,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "exportMilliseconds": 2718.252999999999,
+        "sha256": "b8968682fcb07ddbd813cc3a451c56a84658afea24b58998ca48dd7a2e43c049"
+      }
+    ]
+  },
+  "productionGeneral": {
+    "status": "VERIFIED",
+    "scope": "local production subpath",
+    "publicHttps": false,
+    "os": "Windows_NT 10.0.26200 x64",
+    "physicalMobile": false,
+    "outputs": [
+      {
+        "name": "atlas-20s",
+        "source": "synthetic.gpx",
+        "sourceBytes": 912,
+        "sourceSha256": "bc2214fb9f0b96245cbb386af5b4185d75090da99f16f51486ee1fe69e17b730",
+        "points": 9,
+        "title": "Учебный маршрут · ATLAS",
+        "style": "Атлас",
+        "aspect": "landscape",
+        "quality": "standard",
+        "phases": [
+          {
+            "phase": "INTRO",
+            "time": 1
+          },
+          {
+            "phase": "ROUTE_REPLAY",
+            "time": 5
+          },
+          {
+            "phase": "OUTRO",
+            "time": 9
+          }
+        ],
+        "exportMilliseconds": 2481.2999999970198,
+        "encoder": {
+          "codec": "avc1.42001f",
+          "width": 1280,
+          "height": 720,
+          "displayWidth": 1280,
+          "displayHeight": 720,
+          "bitrate": 5000000,
+          "bitrateMode": "variable",
+          "alpha": "discard",
+          "framerate": 24,
+          "avc": {
+            "format": "avc"
+          }
+        },
+        "video": {
+          "file": "artifacts/marker-facing/production-release/smoke-atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "963ce10d5109141d09df2cf40758dbf6",
+          "lastFrameHash": "c5445fc7dd43ea0c2ccba875e7aa0c82",
+          "bytes": 4570349,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "nativePlayback": {
+          "width": 1280,
+          "height": 720,
+          "duration": 10,
+          "pixelVariation": 95,
+          "playbackAdvancedSeconds": 0.15717499999999962
+        }
+      },
+      {
+        "name": "night-30s",
+        "source": "synthetic-antimeridian.gpx",
+        "sourceBytes": 5384,
+        "sourceSha256": "89142ec62c5b85b0196f3bf0a6d35a406033d5efee67580afe4756cf5f650344",
+        "points": 80,
+        "title": "Через 180° · NIGHT",
+        "style": "Ночной",
+        "aspect": "portrait",
+        "quality": "standard",
+        "phases": [
+          {
+            "phase": "INTRO",
+            "time": 1
+          },
+          {
+            "phase": "ROUTE_REPLAY",
+            "time": 5
+          },
+          {
+            "phase": "OUTRO",
+            "time": 9
+          }
+        ],
+        "exportMilliseconds": 6071,
+        "encoder": {
+          "codec": "avc1.42001f",
+          "width": 720,
+          "height": 1280,
+          "displayWidth": 720,
+          "displayHeight": 1280,
+          "bitrate": 5000000,
+          "bitrateMode": "variable",
+          "alpha": "discard",
+          "framerate": 24,
+          "avc": {
+            "format": "avc"
+          }
+        },
+        "video": {
+          "file": "artifacts/marker-facing/production-release/smoke-night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "b57349c275d5fd85ca068eb5bf41fe65",
+          "lastFrameHash": "5a37746709e7b017e8d097352bbddf11",
+          "bytes": 3257626,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        "nativePlayback": {
+          "width": 720,
+          "height": 1280,
+          "duration": 10,
+          "pixelVariation": 101,
+          "playbackAdvancedSeconds": 0.16217599999999965
+        }
+      }
+    ],
+    "browser": {
+      "channel": "msedge",
+      "version": "155.0.4283.45"
+    },
+    "url": "http://127.0.0.1:4185/route-story/",
+    "secureContext": true,
+    "csp": {
+      "responseHeader": null,
+      "meta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    },
+    "sourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+    "version": "1.2.0-rc.1",
+    "packageBytes": 7986043,
+    "packageHashesVerified": 31,
+    "cancelAndRecovery": "VERIFIED",
+    "unsupportedEncoder": "VERIFIED simulated unavailable API",
+    "privacy": {
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "databases": [],
+        "caches": [],
+        "cookies": ""
+      },
+      "unexpectedRequests": [],
+      "badResponses": [],
+      "pageErrors": [],
+      "firstPartyBrowserRequests": 37,
+      "routeLostOnReload": true
+    }
+  },
+  "videos": [
+    {
+      "scene": "Sogne Atlas, full captions",
+      "executionSourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+      "timingBoundary": "export only; preparation separately timed",
+      "file": "artifacts/sprint11/full/landscape-traveler-20s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 1280,
+      "height": 720,
+      "duration": 20,
+      "decodedFrames": 480,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 480,
+      "firstFrameHash": "0831d78d84a732041836e75649a79223",
+      "lastFrameHash": "b2f33837e80b9523a89dfcec5f9acae5",
+      "bytes": 13425773,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "exportMs": 1282.300000011921,
+      "preparedMs": 301.29999999701977,
+      "previewExportEqual": true,
+      "seekEqual": true,
+      "decodedPixelError": 1.8263773148148148,
+      "allFramesNonblank": true,
+      "cancelledThenRetried": true,
+      "labels": [
+        {
+          "time": 0,
+          "box": [
+            456.1778771376537,
+            406.04302428130245,
+            553.3778771376537,
+            503.24302428130244
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 2,
+          "box": [
+            591.4000000000004,
+            226.00000000000045,
+            688.6000000000005,
+            323.20000000000044
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 5,
+          "box": [
+            591.3999999999999,
+            226,
+            688.5999999999999,
+            323.2
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 10,
+          "box": [
+            591.4,
+            226,
+            688.6,
+            323.2
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 15,
+          "box": [
+            591.4,
+            226.00000000000017,
+            688.6,
+            323.20000000000016
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 19.958333333333332,
+          "box": [
+            568.3765438475716,
+            172.79999999999998,
+            665.5765438475717,
+            270
+          ],
+          "labelCount": 1
+        }
+      ],
+      "sha256": "6b81a994f684123c5db4631f9f534885cdfe883a1435717870992a1862c16f68",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+    },
+    {
+      "scene": "Sogne Night, full captions",
+      "executionSourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+      "timingBoundary": "export only; preparation separately timed",
+      "file": "artifacts/sprint11/full/portrait-traveler-30s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 720,
+      "height": 1280,
+      "duration": 30,
+      "decodedFrames": 720,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 720,
+      "firstFrameHash": "e51dd221f3a130a9b18fcf7020c1056e",
+      "lastFrameHash": "c463dd1efbb20645edc24823328fde05",
+      "bytes": 19419720,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "exportMs": 1712.7999999970198,
+      "preparedMs": 282.19999998807907,
+      "previewExportEqual": true,
+      "seekEqual": true,
+      "decodedPixelError": 1.4820543981481482,
+      "allFramesNonblank": true,
+      "cancelledThenRetried": true,
+      "labels": [
+        {
+          "time": 0,
+          "box": [
+            154.24720911236906,
+            713.5517119299038,
+            251.44720911236908,
+            810.7517119299039
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 3,
+          "box": [
+            311.4,
+            506.00000000000034,
+            408.59999999999997,
+            603.2000000000004
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 7.5,
+          "box": [
+            311.40000000000015,
+            505.99999999999943,
+            408.60000000000014,
+            603.1999999999995
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 15,
+          "box": [
+            311.4,
+            506,
+            408.59999999999997,
+            603.2
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 22.5,
+          "box": [
+            311.4000000000003,
+            506,
+            408.6000000000003,
+            603.2
+          ],
+          "labelCount": 0
+        },
+        {
+          "time": 29.958333333333332,
+          "box": [
+            284.2761703204749,
+            425.019764817213,
+            381.47617032047486,
+            522.219764817213
+          ],
+          "labelCount": 1
+        }
+      ],
+      "sha256": "831cdd8451e29bb45dfe7b762d1fb53bdd0024e8a425d35effcccc3762a7e8d5",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+    },
+    {
+      "scene": "Furka Atlas, clean captions",
+      "executionSourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+      "timingBoundary": "export/download/save, excludes FFmpeg",
+      "file": "artifacts/video-captions/swiss-landscape-20s-clean.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 1280,
+      "height": 720,
+      "duration": 20,
+      "decodedFrames": 480,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 480,
+      "firstFrameHash": "ad06908e88dff138fe2b5bd5eba85cc2",
+      "lastFrameHash": "f243b036727585fcd5e6b697db0dc788",
+      "bytes": 13022379,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+      "captionMode": "none",
+      "exportMs": 1553.2841000000008,
+      "exactPreviewExport": true,
+      "decodedMeanAbsoluteError": 2.7513693576388887,
+      "minimumGeographicFrameVariance": 485.09168761453316,
+      "sourceCredits": [
+        "© swisstopo",
+        "© swisstopo · SWISSIMAGE 2023"
+      ],
+      "sha256": "bd85ba6de26306c2d9656a5987e691ff8c30a6aa8970443b31756948d130fc91",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "physicalDevice": false
+    },
+    {
+      "scene": "Furka Night, clean captions",
+      "executionSourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+      "timingBoundary": "export/download/save, excludes FFmpeg",
+      "file": "artifacts/video-captions/swiss-portrait-30s-clean.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 720,
+      "height": 1280,
+      "duration": 30,
+      "decodedFrames": 720,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 720,
+      "firstFrameHash": "4dfed3eb1c1e2ad673851a05bfb5de22",
+      "lastFrameHash": "a9a1c1b8cde7a8145fc7d80939742295",
+      "bytes": 19157496,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sourceCommit": "d9311381adb5038af1e43b99fec8f078107fa368",
+      "captionMode": "none",
+      "exportMs": 2089.826000000001,
+      "exactPreviewExport": true,
+      "decodedMeanAbsoluteError": 1.8736867042824075,
+      "minimumGeographicFrameVariance": 287.20133293999703,
+      "sourceCredits": [
+        "© swisstopo",
+        "© swisstopo · SWISSIMAGE 2023"
+      ],
+      "sha256": "0c8eba7a4f2f098ea00fbf25bc677795146ae45475c27579ad4b7964907ea355",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "physicalDevice": false
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "docs/images/welcome-guide.png",
+      "bytes": 32527,
+      "sha256": "8e3daa9914a884a6b3f91150074f66b4b93e7b5644daad63da5e97dfc0f0cb26",
+      "kind": "actual Canvas raster or browser screenshot"
+    },
+    {
+      "path": "docs/images/welcome-start-desktop.png",
+      "bytes": 368140,
+      "sha256": "b6c50d996c5fa0129c6eac9bdad5edb006c34d5e359b2e45ef97999c786f882f",
+      "kind": "actual Canvas raster or browser screenshot"
+    },
+    {
+      "path": "docs/images/welcome-start-mobile.png",
+      "bytes": 61037,
+      "sha256": "087fbb36c09a2b88a599758a446a031f51cad8b7add684443e171ec95dba843b",
+      "kind": "actual Canvas raster or browser screenshot"
+    },
+    {
+      "path": "docs/images/coverage-options-desktop.png",
+      "bytes": 110636,
+      "sha256": "52ca3c51157038b0accdff9dfc5453d4549e930213c0ba5f3283fb1434c5cba7",
+      "kind": "actual Canvas raster or browser screenshot"
+    },
+    {
+      "path": "docs/images/marker-left-facing.png",
+      "bytes": 76404,
+      "sha256": "200b8e210dad4bb096e6486df6d8baefa7ad6d6f7f4c78e2bf4855a552ab9a4c",
+      "kind": "actual Canvas raster or browser screenshot"
+    },
+    {
+      "path": "docs/images/marker-right-facing.png",
+      "bytes": 76414,
+      "sha256": "00981331527abfce346493924c911bf024129a34aa0b025194e3ffc76e6a7491",
+      "kind": "actual Canvas raster or browser screenshot"
+    },
+    {
+      "path": "docs/images/marker-left-facing-3d.png",
+      "bytes": 397058,
+      "sha256": "087926dd4ee3dade7fac25e31121f0bed4ef1ccb501ca0728de2cb64e08cec2f",
+      "kind": "actual Canvas raster or browser screenshot"
+    },
+    {
+      "path": "docs/images/marker-left-facing-decoded.png",
+      "bytes": 1099699,
+      "sha256": "da3f056334b55fabf4d38be894561b54c418306dc3e68ba16c837ff658f5ff16",
+      "kind": "FFmpeg decoded final frame of Sogne Atlas20s; time19.958333333333332"
+    }
+  ],
+  "markerProof": {
+    "exactRGBAHorizontalMirror": true,
+    "rasterKinds": 5,
+    "sourceUnchanged": true,
+    "transformRestored": true,
+    "classicCinematicStyleAspectCases": 8,
+    "reverseSeekPixelEquality": true,
+    "terrainAnnotationAndSpriteBothDirections": true,
+    "terrainDepthTestRetained": true,
+    "residentTextureCountStableAtMost": 3,
+    "noAdditionalMarkerTexture": true,
+    "segmentBoundaryDirectionUsesRealEdge": true
+  },
+  "limitations": {
+    "nativeMemoryPeak": "NOT MEASURED",
+    "gpuMemoryPeak": "NOT MEASURED",
+    "newPhysicalDevices": "NOT TESTED",
+    "timings": "Single samples on this machine, different timing boundaries; no speedup/regression claim",
+    "imageFacing": "Reflect the supplied raster relative to its normal orientation; no semantic facing recognition or animation",
+    "coverage": "Metadata preflight only; full no-data, geometry, 350m clearance, exact LOS and readiness still required",
+    "publication": "Existing site remains production base; new PR requires owner merge/publication approval and personal protected-environment review"
+  }
+}

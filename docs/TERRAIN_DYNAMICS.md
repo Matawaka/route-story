@@ -1,5 +1,7 @@
 # Terrain dynamics and local markers
 
+2026-10-13 local candidate: raster markers now reflect horizontally for leftward screen travel, using a stable real edge from the current segment/current camera, including exact start/finish/reverse seeks. No history, coordinate/path change, new texture or depth-test removal. Preferred annotation and optional sprite share the same decision. [Welcome/coverage/marker acceptance](MARKER_UX.md) and [exact evidence](MARKER_UX_EVIDENCE.json) distinguish source frames from independently decoded MP4 frames; this candidate is not yet deployed.
+
 Separate [Swiss pilot](SWISS_PILOT.md) uses the same prepared "Шах - вкрутанидзе" annotation, depth-tested route/timeline/export; its synthetic orthophoto-digitized26points are not a completed electric-unicycle ride. Existing Sogne grade/pacing/marker output is preserved by48 exact720p pixel comparisons. Swiss source/crop is not included in the public package.
 
 ## 2026-10-11: colorful rider / JPEG / readable annotation
