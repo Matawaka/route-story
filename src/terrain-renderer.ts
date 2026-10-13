@@ -39,8 +39,8 @@ export class TerrainRenderer {
   private readonly frustum=new T.Frustum();
   private readonly viewProjection=new T.Matrix4();
   constructor(route:Route,readonly terrain:TerrainDataset,readonly width:number,readonly height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset,cameraOptions?:TerrainCameraOptions){
-    const begin=performance.now(),regional=!!terrain.manifest.regionalProjection,needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';this.timeline=new StoryTimeline(route,config,needsDynamics?new RouteDynamics(route,{name:`DEM ${regional?'swisstopo':'Kartverket'} (${terrain.level.spacingMeters} м)`,spacingMeters:terrain.level.spacingMeters,covers:r=>terrain.routeCoverage(r),elevation:p=>terrain.sampleElevation(p.lat,p.lon)}):undefined);this.config=this.timeline.config;
-    try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height,cameraOptions);}catch(error){imagery?.dispose();throw error;}
+    const begin=performance.now(),regional=!!terrain.manifest.regionalProjection,needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';this.timeline=new StoryTimeline(route,config,needsDynamics?new RouteDynamics(route,{name:`DEM ${regional?'swisstopo':terrain.manifest.id==='discovered-copernicus-dem'?'Copernicus DSM':'Kartverket'} (${terrain.level.spacingMeters} м)`,spacingMeters:terrain.level.spacingMeters,covers:r=>terrain.routeCoverage(r),elevation:p=>terrain.sampleElevation(p.lat,p.lon)}):undefined);this.config=this.timeline.config;
+    try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height,cameraOptions,terrain.manifest.id==='discovered-copernicus-dem'?imagery?.manifest.spacingMeters:undefined);}catch(error){imagery?.dispose();throw error;}
     const canvas=document.createElement('canvas');
     try{this.gpu=new T.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:true,powerPreference:'default'});}
     catch{imagery?.dispose();throw Error('На этом устройстве недоступен WebGL 2 для рельефа. Выберите «Кино · 2D».');}
@@ -49,7 +49,7 @@ export class TerrainRenderer {
     canvas.addEventListener('webglcontextlost',this.onLost);
     const night=config.visualStyle==='night';this.scene.background=new T.Color(night?'#071421':'#b9ced2');
     this.scene.fog=new T.Fog(night?'#071421':'#b9ced2',24000,65000);
-    this.camera=new T.PerspectiveCamera(46,width/height,5,100000);
+    this.camera=new T.PerspectiveCamera(this.plan.fov??46,width/height,5,100000);
     this.camera.setViewOffset(width,height,0,Math.min(width,height)*.04,width,height);
     try{
       if(this.config.terrainSurface==='photo'&&!imagery)throw Error('Снимок не подготовлен. Выберите поверхность DEM.');
@@ -182,10 +182,11 @@ export class TerrainRenderer {
       if(this.timeline.dynamics.status==='usable'){const bands=['steepUp','up','flat','down','steepDown'] as const;const labels=['↑ ≥10%','↑ ≥3%','±3%','↓ ≥3%','↓ ≥10%'];const row=this.plan.options ? .25 : .215;bands.forEach((band,i)=>{const x=p+i*(w-p*2)/5;ctx.fillStyle=GRADE_STYLES[band].color;ctx.fillRect(x,h-u*row,u*.012,u*.025);ctx.fillStyle=ink;ctx.fillText(labels[i],x+u*.02,h-u*(row-.022));});}
       else{ctx.fillStyle=ink;ctx.fillText('Уклон не определён · нейтральный путь',p,h-u*.193);}
     }
-    ctx.font=`500 ${u*.019}px system-ui`;ctx.fillText(`${this.terrain.manifest.regionalProjection?'© swisstopo · LN02':'© Kartverket · CC BY 4.0'} · DEM ${this.terrain.level.spacingMeters} м · масштаб 1:1`,p,h-u*.063);
+    ctx.font=`500 ${u*.019}px system-ui`;ctx.fillText(`${this.terrain.manifest.regionalProjection?'© swisstopo · LN02':this.terrain.manifest.id==='discovered-copernicus-dem'?'Copernicus DSM · EGM2008':'© Kartverket · CC BY 4.0'} · DEM ${this.terrain.level.spacingMeters} м · масштаб 1:1`,p,h-u*.063);
     if(this.imagery){ctx.font=`500 ${u*.017}px system-ui`;ctx.fillText(this.imagery.manifest.attribution,p,h-u*.085);}
     ctx.fillStyle=night?'#ffd477':'#ed9a67';ctx.fillRect(p,h-u*.035,(w-p*2)*state.timelineProgress,u*.004);ctx.font=`500 ${u*.017}px system-ui`;ctx.textAlign='right';ctx.fillStyle=ink;ctx.fillText('Matawaka',w-p,h-u*.063);ctx.textAlign='left';
     if(state.markerOpacity<.4&&state.phase==='ROUTE_REPLAY'){ctx.fillStyle=`rgba(7,21,33,${(.4-state.markerOpacity)*2})`;ctx.fillRect(0,0,w,h);}
+    if(this.terrain.manifest.id==='discovered-copernicus-dem')drawVideoCredits(ctx,[this.terrain.manifest.attribution,...(this.imagery?[this.imagery.manifest.attribution]:[])],w,h);
   }
   dispose():void{
     if(this.disposed)return;this.disposed=true;for(const resource of this.disposables)resource.dispose();this.scene.clear();

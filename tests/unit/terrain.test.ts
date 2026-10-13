@@ -20,6 +20,15 @@ describe('bounded real terrain model',()=>{
  it('Auto uses relief near the track, not distant mountains in the pack',()=>{const t=fixture((x)=>Math.abs(x)>4000?1400:100),flat=route(t,[[[-500,0],[500,0]]]),mountain=route(t,[[[3500,0],[4500,0]]]);expect(t.max-t.min).toBe(1300);expect(t.routeReliefMeters(flat)).toBe(0);expect(t.routeReliefMeters(mountain)).toBe(1300);});
 });
 describe('pure terrain camera and conservative flight envelope',()=>{
+ it('discovered source detail uses a bounded valid camera at every frame, with original clearance',()=>{
+  const t=fixture((x,y)=>Math.round(250+600*Math.exp(-((x-1000)**2+(y-500)**2)/600000)));t.manifest.id='discovered-copernicus-dem';
+  const r=route(t,[[[-4000,-3500],[-1000,-1000],[1000,500],[4000,3500]],[[4500,3500],[5000,4000]]]);
+  for(const [width,height] of [[1280,720],[720,1280]]){const p=createTerrainCameraPlan(new StoryTimeline(r,{...defaultStoryConfig(),durationSeconds:30}),t,width,height,undefined,30);
+   expect(p.fov).toBe(65);for(let frame=0;frame<=720;frame++){const state=getTerrainCameraStateAt(frame/24,p);expect(state.clearance).toBeGreaterThanOrEqual(350-1e-6);expect(state.position[2]).toBeLessThanOrEqual(80000);expect(state.position.every(Number.isFinite)).toBe(true);}
+   expect(getTerrainCameraStateAt(15,p)).toEqual(getTerrainCameraStateAt(15,p));getTerrainCameraStateAt(29,p);getTerrainCameraStateAt(1,p);expect(getTerrainCameraStateAt(15,p)).toEqual(getTerrainCameraStateAt(15,p));
+  }
+  expect(()=>createTerrainCameraPlan(new StoryTimeline(r,defaultStoryConfig()),t,1280,720,undefined,1000)).toThrow('детализации');
+ });
  for(const duration of [10,20,30] as const)for(const [width,height] of [[1280,720],[720,1280]])it(`local corridor proves continuous flight ${duration}s ${width}x${height}`,()=>{
   const t=fixture((x,y)=>Math.round(250+1200*Math.exp(-((x-1000)**2+(y-500)**2)/600000))),r=route(t,[[[-4000,-3500],[-1000,-1000],[1000,500],[4000,3500]]]),timeline=new StoryTimeline(r,{...defaultStoryConfig(),durationSeconds:duration,terrainFlight:'corridor'}),p=createTerrainCameraPlan(timeline,t,width,height),old=createTerrainCameraPlan(new StoryTimeline(r,{...timeline.config,terrainFlight:'conservative'}),t,width,height);
   for(let i=1;i<p.shots.length;i++)if(p.shots[i-1].segment===p.shots[i].segment)expect(terrainCorridorDeficit(t,p.shots[i-1].position,p.shots[i].position)).toBeLessThan(1e-6);expect(terrainCorridorDeficit(t,p.overview.position,p.shots[0].position)).toBeLessThan(1e-6);expect(terrainCorridorDeficit(t,p.shots.at(-1)!.position,p.overview.position)).toBeLessThan(1e-6);

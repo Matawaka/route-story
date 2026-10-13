@@ -8,24 +8,25 @@ export function geographicUrl(value:string):URL {
 /** No disk cache, credentials, GPX, labels or filename. Two concurrent range
  * requests; finite transfer/request/deadline limits shared by one preparation. */
 export class GeographicNetwork {
- bytes=0;requests=0;private active=0;private waiting:(()=>void)[]=[];readonly started=performance.now();
- constructor(readonly signal:AbortSignal,readonly stage:(text:string)=>void){}
+ bytes=0;requests=0;lastError?:GeographicError;private active=0;private waiting:(()=>void)[]=[];readonly started=performance.now();readonly signal:AbortSignal;private controller=new AbortController();
+ constructor(signal:AbortSignal,readonly stage:(text:string)=>void){this.signal=AbortSignal.any([signal,this.controller.signal,AbortSignal.timeout(180000)]);}
  async bytesFrom(url:string,range?:readonly [number,number]):Promise<{bytes:Uint8Array;headers:Headers;status:number}>{
   geographicUrl(url);this.signal.throwIfAborted();if(performance.now()-this.started>180000||++this.requests>1200)throw new GeographicError('timeout','Подготовка географии превысила ограничение времени или запросов. Можно повторить или открыть 2D.');
   if(range&&(!range.every(Number.isSafeInteger)||range[0]<0||range[1]<range[0]||range[1]-range[0]+1>8*1024*1024))throw new GeographicError('resources','Фрагмент исходного файла превышает безопасный размер.');
-  if(this.active>=2)await new Promise<void>((resolve,reject)=>{const done=()=>{this.signal.removeEventListener('abort',cancel);resolve();},cancel=()=>{this.waiting=this.waiting.filter(f=>f!==done);reject(this.signal.reason);};this.waiting.push(done);this.signal.addEventListener('abort',cancel,{once:true});});
-  this.signal.throwIfAborted();this.active++;
+  if(this.active>=2)await new Promise<void>((resolve,reject)=>{const done=()=>{this.signal.removeEventListener('abort',cancel);resolve();},cancel=()=>{this.waiting=this.waiting.filter(f=>f!==done);reject(this.signal.reason);};this.waiting.push(done);this.signal.addEventListener('abort',cancel,{once:true});});else this.active++;
+  if(this.signal.aborted){this.active--;this.signal.throwIfAborted();}
   const combined=AbortSignal.any([this.signal,AbortSignal.timeout(30000)]);let response:Response|undefined;
   try{
    response=await fetch(url,{headers:range?{Range:`bytes=${range[0]}-${range[1]}`}:{},signal:combined,credentials:'omit',referrerPolicy:'no-referrer',redirect:'error',cache:'no-store'});
    if(!response.ok||range&&response.status!==206)throw new GeographicError(response.status===401||response.status===403?'auth':'source',range&&response.status===200?'Источник не поддерживает чтение фрагментов. Полный огромный GeoTIFF не скачивается.':`Географический источник недоступен (HTTP ${response.status}). Можно повторить или выбрать 2D.`);
    const max=range?range[1]-range[0]+1:2*1024*1024,declared=Number(response.headers.get('content-length'));if(declared>max)throw new GeographicError('resources','Ответ источника превышает безопасный размер.');
+   const contentRange=response.headers.get('content-range');if(range&&contentRange){const parsed=contentRange.match(/^bytes (\d+)-(\d+)\/(\d+)$/);if(!parsed||Number(parsed[1])!==range[0]||Number(parsed[2])!==range[1])throw new GeographicError('integrity','Источник вернул другой фрагмент GeoTIFF.');}
    const reader=response.body!.getReader(),parts:Uint8Array[]=[];let size=0;
    try{while(true){const chunk=await reader.read();if(chunk.done)break;size+=chunk.value.length;this.bytes+=chunk.value.length;if(size>max||this.bytes>64*1024*1024)throw new GeographicError('resources','Достигнут лимит загрузки географии 64 МиБ. Маршрут доступен в 2D.');parts.push(chunk.value);}}finally{await reader.cancel().catch(()=>{});reader.releaseLock();}
    if(range&&size!==max)throw new GeographicError('integrity','Источник вернул неполный фрагмент GeoTIFF.');
    const bytes=new Uint8Array(size);let offset=0;for(const p of parts){bytes.set(p,offset);offset+=p.length;}return{bytes,headers:response.headers,status:response.status};
-  }catch(e){this.signal.throwIfAborted();if(e instanceof GeographicError)throw e;throw new GeographicError(combined.aborted?'timeout':'network',combined.aborted?'Слишком долгая загрузка географических данных. Можно повторить.':'Не удалось получить географические данные. Проверьте соединение; источник может блокировать доступ из браузера.');}
-  finally{await response?.body?.cancel().catch(()=>{});this.active--;this.waiting.shift()?.();}
+  }catch(e){if(e instanceof GeographicError)this.lastError=e;else if(!this.signal.aborted)this.lastError=new GeographicError(combined.aborted?'timeout':'network',combined.aborted?'Слишком долгая загрузка географических данных. Можно повторить.':'Не удалось получить географические данные. Проверьте соединение; источник может блокировать доступ из браузера.');const failure=this.lastError??this.signal.reason;this.controller.abort(failure);throw failure;}
+  finally{await response?.body?.cancel().catch(()=>{});const next=this.waiting.shift();if(next)next();else this.active--;}
  }
  async json<T>(url:string):Promise<T>{const r=await this.bytesFrom(url);try{return JSON.parse(new TextDecoder().decode(r.bytes)) as T;}catch{throw new GeographicError('integrity','Повреждены метаданные источника.');}}
 }

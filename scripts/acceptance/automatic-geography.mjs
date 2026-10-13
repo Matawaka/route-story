@@ -1,0 +1,47 @@
+import {chromium} from '@playwright/test';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {readFileSync} from 'node:fs';import {createHash} from 'node:crypto';import {spawnSync,execFile} from 'node:child_process';import {promisify} from 'node:util';import os from 'node:os';
+import ffmpeg from 'ffmpeg-static';import assert from 'node:assert/strict';import {validateVideo} from '../validate-video.mjs';
+const path=process.argv[2];if(!path)throw Error('Supply an owner-consented local GPX path.');
+const label=process.argv[3]||'current',full=process.argv.includes('--full');if(!/^[a-z0-9-]+$/.test(label))throw Error('Safe output label');
+const dir=`artifacts/automatic-geography/${label}`;await mkdir(dir,{recursive:true});
+const browser=await chromium.launch({channel:process.env.PLAYWRIGHT_CHANNEL||'msedge'});
+const processSession=await browser.newBrowserCDPSession(),memory=[];
+async function sampleMemory(phase){if(os.platform()!=='win32')return;try{const {processInfo}=await processSession.send('SystemInfo.getProcessInfo'),ids=processInfo.map(p=>Number(p.id)).filter(id=>Number.isSafeInteger(id)&&id>0);if(!ids.length||ids.length>40)return;const script=`Get-Process -Id ${ids.join(',')} -ErrorAction SilentlyContinue | Select-Object Id,WorkingSet64,PrivateMemorySize64 | ConvertTo-Json -Compress`,{stdout}=await promisify(execFile)('powershell.exe',['-NoProfile','-NonInteractive','-Command',script],{windowsHide:true,timeout:5000});const rows=JSON.parse(stdout),list=Array.isArray(rows)?rows:[rows];let working=0,privateBytes=0;for(const p of list){working+=p.WorkingSet64;privateBytes+=p.PrivateMemorySize64;}memory.push({phase,workingSetBytes:working,privateBytes,processCount:list.length,timestamp:Date.now()});}catch{memory.push({phase,status:'UNAVAILABLE'});}}
+try{const page=await browser.newPage({viewport:{width:1440,height:1000}});const outside=[];page.on('request',r=>{if(!r.url().startsWith('http://127.0.0.1:4195/'))outside.push({host:new URL(r.url()).hostname,method:r.method()});});page.on('pageerror',e=>console.log('pageerror',e.message));
+ await page.addInitScript(()=>{const Native=window.VideoFrame;window.__sourceFrames={};window.VideoFrame=class extends Native{constructor(source,options){super(source,options);if(source instanceof HTMLCanvasElement&&window.__captureTimestamp===options?.timestamp)window.__sourceFrames[options.timestamp]=source.toDataURL();}};});
+ await page.goto('http://127.0.0.1:4195/');await page.locator('#welcome-close').click();await sampleMemory('before-import');await page.locator('#file').setInputFiles(path);await page.waitForFunction(()=>document.body.dataset.state==='READY'||document.body.dataset.state==='ERROR',{},{timeout:30000});
+ if(outside.length)throw Error('External requests before consent');
+ await page.locator('#find-geography').click();let stage='';const started=Date.now();
+ while(Date.now()-started<240000){const state=await page.evaluate(()=>({state:document.body.dataset.state,stage:document.querySelector('#status').textContent}));if(state.stage!==stage){stage=state.stage;console.log(state.state,stage);}if(state.state==='READY'||state.state==='ERROR')break;await page.waitForTimeout(500);}
+ const result=await page.evaluate(()=>({state:document.body.dataset.state,status:document.querySelector('#status').textContent,mode:document.querySelector('#preview').dataset.mode,detail:document.querySelector('#map-detail-note').textContent,distance:document.querySelector('#distance').textContent,segments:document.querySelector('#segments').textContent}));
+ await page.screenshot({path:`${dir}/current-ui.png`,fullPage:true});await writeFile(`${dir}/current-result.json`,JSON.stringify({browser:browser.version(),result,requests:outside.length,hosts:[...new Set(outside.map(r=>r.host))]},null,2));console.log(result);
+ if(result.state!=='READY'||result.mode!=='terrain')process.exitCode=1;
+ if(full&&result.state==='READY'&&result.mode==='terrain'){
+  await sampleMemory('prepared');
+  await page.evaluate(async()=>{const {TerrainRenderer}=await import('/src/terrain-renderer.ts'),draw=TerrainRenderer.prototype.draw;TerrainRenderer.prototype.draw=function(canvas,time){try{return draw.call(this,canvas,time);}catch(e){window.__drawFailure={time,message:e.message};throw e;}};});
+  const evidence=await page.evaluate(async()=>(await import('/src/geographic-preparation.ts')).geographicEvidence());const outputs=[];
+  const ready=async()=>{await page.waitForFunction(()=>document.body.dataset.state!=='LOADING');assert.notEqual(await page.locator('body').getAttribute('data-state'),'ERROR',await page.locator('#status').textContent());await page.waitForFunction(()=>!document.querySelector('#export').disabled);};
+  const change=async(id,value)=>{await page.locator(id).selectOption(value);await ready();};
+  await change('#quality','standard');await change('#video-captions','none');
+  for(const [aspect,style,duration]of[['landscape','atlas',20],['portrait','night',30]]){
+   await change('#ratio',aspect);await change('#duration',String(duration));await page.locator(`[data-style="${style}"]`).click();await ready();
+   await page.locator('#scrub').fill(String(duration/2));const preview=await page.locator('#preview').evaluate(c=>c.toDataURL());await page.locator('#scrub').fill('1');await page.locator('#scrub').fill(String(duration/2));assert.equal(await page.locator('#preview').evaluate(c=>c.toDataURL()),preview);
+   await page.evaluate(t=>{window.__captureTimestamp=t;window.__sourceFrames={};},duration*500000);
+   await page.screenshot({path:`${dir}/${style}-${aspect}.png`,fullPage:true});
+   let sampling=false;const timer=setInterval(()=>{if(!sampling){sampling=true;void sampleMemory('during-export').finally(()=>sampling=false);}},750);
+   const before=outside.length,downloadPromise=page.waitForEvent('download',{timeout:180000}),failure=page.waitForFunction(()=>document.body.dataset.state==='ERROR',undefined,{timeout:180000}).then(async()=>{throw Error(JSON.stringify(await page.evaluate(()=>({error:document.querySelector('#status').textContent,frame:window.__drawFailure}))));}),started=performance.now();let download;try{await page.locator('#export').click();download=await Promise.race([downloadPromise,failure]);}finally{clearInterval(timer);}const target=`${dir}/${style}-${duration}s.mp4`;await download.saveAs(target);await ready();const elapsed=performance.now()-started;
+   assert.equal(outside.length,before,'no external requests during MP4 encoding');assert.equal(await page.evaluate(t=>window.__sourceFrames[t],duration*500000),preview,'exact preview/pre-encode frame parity');
+   const width=aspect==='landscape'?1280:720,height=aspect==='landscape'?720:1280,video=validateVideo(target,width,height,duration);
+   const decoded=spawnSync(ffmpeg,['-v','error','-i',target,'-vf','scale=32:18,format=gray','-f','rawvideo','-'],{maxBuffer:2*1024*1024,windowsHide:true});assert.equal(decoded.status,0);assert.equal(decoded.stderr.length,0);assert.equal(decoded.stdout.length,video.decodedFrames*576);let minimumRange=255;for(let offset=0;offset<decoded.stdout.length;offset+=576){const frame=decoded.stdout.subarray(offset,offset+576),range=Math.max(...frame)-Math.min(...frame);minimumRange=Math.min(minimumRange,range);assert.ok(range>10,'every decoded frame contains nonblank geographic content');}
+   const image=spawnSync(ffmpeg,['-v','error','-ss',String(duration/2),'-i',target,'-frames:v','1','-y',`${dir}/${style}-decoded-middle.png`],{windowsHide:true});assert.equal(image.status,0);
+   outputs.push({...video,file:target,exportDownloadMilliseconds:elapsed,sha256:createHash('sha256').update(readFileSync(target)).digest('hex'),minimumGrayRange:minimumRange,previewExportPixelParity:true,reverseSeekPixelParity:true,externalRequestsDuringExport:0});console.log('VALIDATED',style,duration,video.bytes,elapsed);
+  }
+  await page.locator('#export').click();await page.locator('#cancel').click();await page.waitForFunction(()=>document.body.dataset.state==='CANCELLED');
+  const retryDownload=page.waitForEvent('download');await page.locator('#export').click();await(await retryDownload).saveAs(`${dir}/retry-30s.mp4`);await ready();validateVideo(`${dir}/retry-30s.mp4`,720,1280,30);
+  await page.setViewportSize({width:375,height:812});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:`${dir}/mobile-viewport.png`,fullPage:true});
+  const storage=await page.evaluate(async()=>({local:localStorage.length,session:sessionStorage.length,indexed:(await indexedDB.databases()).length}));assert.deepEqual(storage,{local:0,session:0,indexed:0});
+  await sampleMemory('after-export-cancel-retry');await page.locator('#clear-route').click();await sampleMemory('after-route-disposal');
+  await writeFile(`${dir}/acceptance.json`,JSON.stringify({status:'VERIFIED LOCAL',sourceCommit:process.env.BUILD_COMMIT||'working-tree',browser:browser.version(),os:`${os.type()} ${os.release()}`,physicalDevice:false,distance:result.distance,segments:result.segments,evidence,outputs,storage,cancelRetry:true,externalRequestsBeforeConsent:0,externalMethods:[...new Set(outside.map(r=>r.method))],nativeMemory:{method:'OS Get-Process WorkingSet64/PrivateMemorySize64, unique child PIDs from isolated browser CDP SystemInfo; sampled during exports at 750ms, not an exact peak; working sets may share pages',samples:memory},gpuMemory:'NOT MEASURED',javascriptHeap:'NOT MEASURED'},null,2));
+ }
+}finally{await browser.close();}

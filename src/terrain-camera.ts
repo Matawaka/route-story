@@ -12,12 +12,12 @@ export interface TerrainCameraOptions {
   overview:'reference'|'route'; detailSpacingMeters:.5; maximumTexelPixels:2;
 }
 interface Shot { progress:number; segment:number; position:TerrainPosePoint; target:TerrainPosePoint; relief:number }
-export interface TerrainCameraPlan { terrain:TerrainDataset; timeline:StoryTimeline; shots:Shot[]; overview:Shot; minimumAltitude:number; aspect:number; flight:'conservative'|'corridor'; width:number;height:number;options?:Readonly<TerrainCameraOptions>; }
+export interface TerrainCameraPlan { terrain:TerrainDataset; timeline:StoryTimeline; shots:Shot[]; overview:Shot; minimumAltitude:number; aspect:number; flight:'conservative'|'corridor'; width:number;height:number;options?:Readonly<TerrainCameraOptions>;fov?:number;sourceDetailMeters?:number }
 const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 const pointMix=(a:TerrainPosePoint,b:TerrainPosePoint,t:number):TerrainPosePoint=>t===0?a:t===1?b:[mix(a[0],b[0],t),mix(a[1],b[1],t),mix(a[2],b[2],t)];
 const clamp=(n:number,a:number,b:number)=>Math.min(b,Math.max(a,n));
-export function projectTerrainPoint(point:TerrainPosePoint,position:TerrainPosePoint,target:TerrainPosePoint,width:number,height:number):[number,number]{
-  const direction=target.map((v,i)=>v-position[i]),length=Math.hypot(...direction),f=direction.map(v=>v/length),horizontal=Math.hypot(f[0],f[1]),right=[f[1]/horizontal,-f[0]/horizontal,0],up=[f[2]*right[1],-f[2]*right[0],f[1]*right[0]-f[0]*right[1]],delta=point.map((v,i)=>v-position[i]),dot=(v:number[])=>v.reduce((n,c,i)=>n+c*delta[i],0),depth=dot(f),scale=height/2/Math.tan(46*Math.PI/360);
+export function projectTerrainPoint(point:TerrainPosePoint,position:TerrainPosePoint,target:TerrainPosePoint,width:number,height:number,fov=46):[number,number]{
+  const direction=target.map((v,i)=>v-position[i]),length=Math.hypot(...direction),f=direction.map(v=>v/length),horizontal=Math.hypot(f[0],f[1]),right=[f[1]/horizontal,-f[0]/horizontal,0],up=[f[2]*right[1],-f[2]*right[0],f[1]*right[0]-f[0]*right[1]],delta=point.map((v,i)=>v-position[i]),dot=(v:number[])=>v.reduce((n,c,i)=>n+c*delta[i],0),depth=dot(f),scale=height/2/Math.tan(fov*Math.PI/360);
   return [width/2+dot(right)*scale/depth,height/2-Math.min(width,height)*.04-dot(up)*scale/depth];
 }
 /** Ray breakpoints are all grid edges and triangle diagonals. Surface height is
@@ -59,7 +59,9 @@ export function terrainCorridorDeficit(terrain:TerrainDataset,a:TerrainPosePoint
   for(const p of [a,b]){const ceiling=terrain.ceiling([p[0],p[1]]);if(ceiling===undefined)throw Error('Положение камеры вне DEM.');deficit=Math.max(deficit,ceiling+350-p[2]);}
   return Math.max(0,deficit);
 }
-export function createTerrainCameraPlan(timeline:StoryTimeline,terrain:TerrainDataset,width:number,height:number,options?:TerrainCameraOptions):TerrainCameraPlan{
+export function createTerrainCameraPlan(timeline:StoryTimeline,terrain:TerrainDataset,width:number,height:number,options?:TerrainCameraOptions,sourceDetailMeters?:number):TerrainCameraPlan{
+  const discovered=terrain.manifest.id==='discovered-copernicus-dem',fieldOfView=discovered?65:46;
+  if(sourceDetailMeters!==undefined&&(!discovered||!Number.isFinite(sourceDetailMeters)||sourceDetailMeters<10||sourceDetailMeters>100))throw Error('Непроверенный предел детализации источника.');
   if(timeline.route.segments.length>128)throw Error('Для 3D допускается до 128 независимых сегментов. Выберите 2D; GPX не сокращается.');
   if(!terrain.routeCoverage(timeline.route))throw Error('Для этого маршрута нет полного локального DEM с безопасным полем камеры или превышен лимит геометрии. Выберите «Кино · 2D».');
   const all=timeline.route.segments.flat().map(p=>terrain.world(p));
@@ -70,14 +72,14 @@ export function createTerrainCameraPlan(timeline:StoryTimeline,terrain:TerrainDa
   const regional=!!terrain.manifest.regionalProjection;
   let framingRelief=options?.framingReliefMeters??terrain.max-terrain.min;
   if(options?.overview==='route'){let low=Infinity,high=-Infinity;for(const p of all){const h=terrain.meshElevation(p)!;low=Math.min(low,h);high=Math.max(high,h);}framingRelief=high-low;}
-  const radius=Math.max(regional?100:800,Math.hypot(maxX-minX,maxY-minY,framingRelief)/2),fov=46*Math.PI/180,hfov=2*Math.atan(Math.tan(fov/2)*aspect),distance=radius/Math.sin(Math.min(fov,hfov)/2)*1.35;
+  const radius=Math.max(regional?100:800,Math.hypot(maxX-minX,maxY-minY,framingRelief)/2),fov=fieldOfView*Math.PI/180,hfov=2*Math.atan(Math.tan(fov/2)*aspect),distance=discovered?Math.max(3000,framingRelief*2,(maxY-minY)/Math.tan(fov/2)*.65,(maxX-minX)/Math.tan(hfov/2)*.65):radius/Math.sin(Math.min(fov,hfov)/2)*1.35;
   const limits=options?.framingBounds??terrain.getTerrainBounds(),margin=regional?20:300,bound=(xy:TerrainXY):TerrainXY=>[clamp(xy[0],limits[0]+margin,limits[2]-margin),clamp(xy[1],limits[1]+margin,limits[3]-margin)];
   const target:TerrainPosePoint=[...center,terrain.sampleXY(center)!+100],overviewXY=bound([center[0],center[1]-distance*.38]);
   const overview:Shot={progress:0,segment:0,target,position:[...overviewXY,Math.max(minimumAltitude,distance*.94+target[2])],relief:terrain.max-terrain.min};
   // Fit the actual elevated route into caption-safe perspective space. A
   // bounding circle on a flat map cannot guarantee this on sloping terrain.
   for(let iteration=0;iteration<24;iteration++){
-    let fit=true;for(const xy of all){const p:TerrainPosePoint=[...xy,terrain.meshElevation(xy)!+24],[x,y]=projectTerrainPoint(p,overview.position,overview.target,width,height),unit=Math.min(width,height);if(x<unit*.075||x>width-unit*.075||y<unit*.22||y>height-unit*.28){fit=false;break;}}
+    let fit=true;for(const xy of all){const p:TerrainPosePoint=[...xy,terrain.meshElevation(xy)!+24],[x,y]=projectTerrainPoint(p,overview.position,overview.target,width,height,fieldOfView),unit=Math.min(width,height);if(x<unit*.075||x>width-unit*.075||y<unit*.22||y>height-unit*.28){fit=false;break;}}
     if(fit)break;overview.position=[overview.position[0],overview.position[1],overview.position[2]*1.12];if(iteration===23||overview.position[2]>80000)throw Error('Маршрут не помещается в безопасный 3D-обзор. Выберите 2D.');
   }
   const shots:Shot[]=[];
@@ -108,13 +110,13 @@ export function createTerrainCameraPlan(timeline:StoryTimeline,terrain:TerrainDa
     const pairs:[Shot,Shot][]=[[overview,shots[0]],[shots.at(-1)!,overview]];for(let i=1;i<shots.length;i++)if(shots[i-1].segment===shots[i].segment)pairs.push([shots[i-1],shots[i]]);
     for(const [a,b] of pairs)if(terrainCorridorDeficit(terrain,a.position,b.position)>1e-6)throw Error('Не удалось доказать безопасный коридор камеры.');
   }
-  return {terrain,timeline,shots,overview,minimumAltitude,aspect,flight,width,height,options};
+  return {terrain,timeline,shots,overview,minimumAltitude,aspect,flight,width,height,options,...(discovered?{fov:fieldOfView,sourceDetailMeters}:{})};
 }
 /** Measured ground-edge projection at the real route anchor. Local, not an
  * all-visible-pixels bound or native optical GSD measurement. */
-export function terrainTexelFootprint(terrain:TerrainDataset,position:TerrainPosePoint,target:TerrainPosePoint,xy:TerrainXY,width:number,height:number,spacing:number):number{
+export function terrainTexelFootprint(terrain:TerrainDataset,position:TerrainPosePoint,target:TerrainPosePoint,xy:TerrainXY,width:number,height:number,spacing:number,fov=46):number{
   const h=terrain.meshElevation(xy),e:TerrainXY=[xy[0]+spacing,xy[1]],n:TerrainXY=[xy[0],xy[1]+spacing],eh=terrain.meshElevation(e),nh=terrain.meshElevation(n);if(h===undefined||eh===undefined||nh===undefined||!Number.isFinite(spacing)||spacing<=0)throw Error('Детализация вне полного DEM.');
-  const p=projectTerrainPoint([...xy,h],position,target,width,height),a=projectTerrainPoint([...e,eh],position,target,width,height),b=projectTerrainPoint([...n,nh],position,target,width,height),pixels=Math.max(Math.hypot(a[0]-p[0],a[1]-p[1]),Math.hypot(b[0]-p[0],b[1]-p[1]));if(!Number.isFinite(pixels)||pixels<=0)throw Error('Некорректный масштаб земли.');return pixels;
+  const p=projectTerrainPoint([...xy,h],position,target,width,height,fov),a=projectTerrainPoint([...e,eh],position,target,width,height,fov),b=projectTerrainPoint([...n,nh],position,target,width,height,fov),pixels=Math.max(Math.hypot(a[0]-p[0],a[1]-p[1]),Math.hypot(b[0]-p[0],b[1]-p[1]));if(!Number.isFinite(pixels)||pixels<=0)throw Error('Некорректный масштаб земли.');return pixels;
 }
 /** Pure timestamp function, no previous frame, wall clock or mutable UI reads. */
 export function terrainFrameCoverage(terrain:TerrainDataset,pose:TerrainCameraState,width:number,height:number,screen:readonly number[]=[.05,.24,.95,.72]):{complete:boolean;minimumMarginMeters:number;corners:TerrainXY[]}{
@@ -161,8 +163,16 @@ export function getTerrainCameraStateAt(seconds:number,plan:TerrainCameraPlan):T
   const ceiling=plan.terrain.ceiling([position[0],position[1]]);if(ceiling===undefined)throw Error('Камера вне полного DEM.');
   const lifted=requiredVisibleAltitude(plan.terrain,position,look);let height=Math.max(plan.minimumAltitude,lifted,ceiling+350);
   if(plan.options){for(let i=0;i<8;i++){const pixels=terrainTexelFootprint(plan.terrain,[position[0],position[1],height],look,at,plan.width,plan.height,plan.options.detailSpacingMeters);if(pixels<=plan.options.maximumTexelPixels+1e-6)break;height+=Math.max(1,height-look[2])*(pixels/plan.options.maximumTexelPixels-1)*1.05;if(i===7)throw Error('Для этого ракурса недостаточно реальной детализации. Выберите обзорный вариант.');}}
+  if(plan.sourceDetailMeters){
+    const pixelsAt=(h:number)=>terrainTexelFootprint(plan.terrain,[position[0],position[1],h],look,at,plan.width,plan.height,plan.sourceDetailMeters!,plan.fov);
+    if(pixelsAt(height)>2){let low=height,high=80000;if(low>high||pixelsAt(high)>2)throw Error('Источник не поддерживает этот масштаб в безопасном диапазоне камеры. Выберите 2D.');
+      // Keep a demonstrably valid upper endpoint. A finite bisection never
+      // assumes the old eight multiplicative iterations will converge on slopes.
+      for(let i=0;i<22;i++){const middle=(low+high)/2;if(pixelsAt(middle)<=2)high=middle;else low=middle;}height=high;
+    }
+  }
   if(!Number.isFinite(height)||height>80000)throw Error('Безопасный 3D-ракурс недоступен. Выберите 2D.');
   position=[position[0],position[1],height];
   const dx=look[0]-position[0],dy=look[1]-position[1],distance=Math.hypot(dx,dy);
-  return {position,target:look,bearing:Math.atan2(dx,dy)*180/Math.PI,pitch:Math.atan2(position[2]-look[2],distance)*180/Math.PI,roll:0,fov:46,near:5,far:100000,phase:state.phase,segment:state.segment,clearance:position[2]-plan.terrain.ceiling([position[0],position[1]])!,visibilityLift:height-shot.position[2]};
+  return {position,target:look,bearing:Math.atan2(dx,dy)*180/Math.PI,pitch:Math.atan2(position[2]-look[2],distance)*180/Math.PI,roll:0,fov:plan.fov??46,near:5,far:100000,phase:state.phase,segment:state.segment,clearance:position[2]-plan.terrain.ceiling([position[0],position[1]])!,visibilityLift:height-shot.position[2]};
 }

@@ -12,6 +12,7 @@ import {uiError,type UiState,type ViewMode} from './ui-state';
 import './style.css';
 declare const __IMAGERY_ENABLED__:boolean;
 declare const __SWISS_ENABLED__:boolean;
+declare const __AUTO_GEOGRAPHY_ENABLED__:boolean;
 const el=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const canvas=el<HTMLCanvasElement>('preview'),file=el<HTMLInputElement>('file'),title=el<HTMLInputElement>('story-title');
 const play=el<HTMLButtonElement>('play'),scrub=el<HTMLInputElement>('scrub'),button=el<HTMLButtonElement>('export');
@@ -29,6 +30,7 @@ let encoder:{status:'checking'|'supported'|'unavailable';message?:string}={statu
 type Source={name:string;synthetic:boolean;read:(signal:AbortSignal)=>Promise<Route>};
 let source:Source|undefined,retryAction:(()=>void)|undefined;
 let availability:SceneAvailability|undefined,welcomeVisible=true,startupPlayAllowed=false,startupPlayPending=false;
+let geographicConsent=false,geographyDeclined=false;
 const sceneOptions={
   'camera-mode':Array.from(control('camera-mode').options).map(o=>o.cloneNode(true) as HTMLOptionElement),
   'terrain-surface':Array.from(control('terrain-surface').options).map(o=>o.cloneNode(true) as HTMLOptionElement)
@@ -46,11 +48,13 @@ function setSceneOptions(id:keyof typeof sceneOptions,allowed:readonly string[],
 }
 function restoreSceneOptions():void{for(const id of Object.keys(sceneOptions) as (keyof typeof sceneOptions)[])setSceneOptions(id,sceneOptions[id].map(o=>o.value),id==='camera-mode'?'cinematic':'dem');}
 function updateSceneOptions():void{
-  setSceneOptions('camera-mode',availability?.terrain?['cinematic','auto','terrain','classic']:['cinematic','classic'],'cinematic');
-  setSceneOptions('terrain-surface',availability?.photo?['dem','photo']:['dem'],'dem');
-  const active=!!availability?.terrain&&['terrain','auto'].includes(control('camera-mode').value);
+  const discovered=__AUTO_GEOGRAPHY_ENABLED__&&geographicConsent;
+  setSceneOptions('camera-mode',availability?.terrain||discovered?['cinematic','auto','terrain','classic']:['cinematic','classic'],'cinematic');
+  setSceneOptions('terrain-surface',availability?.photo||discovered?['dem','photo']:['dem'],'dem');
+  const active=!!(availability?.terrain||discovered)&&['terrain','auto'].includes(control('camera-mode').value);
   for(const id of ['terrain-surface','terrain-surface-label','terrain-flight','terrain-flight-label','route-color','marker-presentation']){el(id).hidden=!active;document.querySelector<HTMLLabelElement>(`label[for="${id}"]`)?.toggleAttribute('hidden',!active);}
   el('coverage-note').textContent=availability?.notice??'';el('coverage-note').hidden=!route||!availability?.notice;
+  el('geography-consent').hidden=!__AUTO_GEOGRAPHY_ENABLED__||!route||!!availability?.terrain||geographicConsent||geographyDeclined;
 }
 function dismissWelcome(playInitial=false):void{
   welcomeVisible=false;el('welcome').hidden=true;startupPlayAllowed=playInitial;
@@ -60,6 +64,7 @@ function dismissWelcome(playInitial=false):void{
 function renderState():void{
   document.body.dataset.state=state.phase;
   const loading=busyLoad(),exporting=busyExport(),available=!!renderer;
+  el<HTMLButtonElement>('find-geography').disabled=loading||exporting;el<HTMLButtonElement>('keep-local').disabled=exporting;
   el('loading').hidden=!loading;el('empty').hidden=available||loading;canvas.hidden=!available||loading;
   el('loading').setAttribute('aria-busy',String(loading));
   if(state.phase==='LOADING'){el('loading-heading').textContent=state.heading;el('loading-stage').textContent=state.stage;}
@@ -114,9 +119,9 @@ async function configure(op?:AbortController,autoplay=false):Promise<void>{
   // Old GPU resources leave before another pair of photo textures is decoded.
   releaseRenderer();renderState();
   try{
-    const prepared=await prepareScene(route,story,signal,stageFor(current,heading),customMarker);
+    const prepared=await prepareScene(route,story,signal,stageFor(current,heading),customMarker,geographicConsent);
     if(operation!==current||signal.aborted){prepared.renderer.dispose();return;}
-    scene=prepared;renderer=prepared.renderer;const settings=exportSettings(story);canvas.width=settings.width;canvas.height=settings.height;
+    scene=prepared;renderer=prepared.renderer;if(prepared.region==='discovered'){availability={terrain:true,photo:true};updateSceneOptions();}const settings=exportSettings(story);canvas.width=settings.width;canvas.height=settings.height;
     canvas.classList.toggle('portrait',story.aspectRatio==='portrait');canvas.dataset.region=prepared.region;canvas.dataset.mode=renderer.config.cameraMode;canvas.dataset.captions=renderer.config.captionMode;
     scrub.max=String(story.durationSeconds);scrub.value=String(Math.min(Number(scrub.value),story.durationSeconds));el('preview-format').textContent=story.aspectRatio==='portrait'?'9:16':'16:9';
     el('scene-name').textContent=`${prepared.region==='furka'?'Швейцария · Furka':prepared.region==='sogne'?'Норвегия · Sogne':'Маршрут'} · ${renderer.config.cameraMode==='terrain'?'3D':'2D'}${source?.synthetic?' · демо':''}`;
@@ -136,6 +141,7 @@ function updateFacts():void{
 async function importSource(next:Source,autoplay=false):Promise<void>{
   if(busyExport())return;source=next;retryAction=()=>void importSource(next,false);const heading=next.name==='furka'?swissHeading:'Подготавливаем маршрут',op=begin(heading);
   releaseRenderer();route=undefined;availability=undefined;el('coverage-note').hidden=true;canvas.width=canvas.height=0;renderState();
+  geographicConsent=false;geographyDeclined=false;el('geography-consent').hidden=true;
   try{stageFor(op,heading)('Читаем GPX · координаты остаются на вашем устройстве');const loaded=await next.read(op.signal);op.signal.throwIfAborted();if(operation!==op)return;
     route=loaded;availability=sceneAvailability(loaded,__SWISS_ENABLED__,__IMAGERY_ENABLED__);title.value=loaded.name;updateFacts();scrub.value=next.name==='sample'||next.name==='custom'?control('duration').value:'0';retryAction=()=>void configure();await configure(op,autoplay);
   }catch(error){if(operation!==op||op.signal.aborted)return;route=undefined;availability=undefined;updateSceneOptions();releaseRenderer();canvas.width=canvas.height=0;el('route-info').textContent='Файл не принят. Выберите другой GPX.';failure(error,'gpx');}
@@ -156,6 +162,8 @@ function clearRoute():void{
   if(busyExport())return;clearTimeout(titleTimer);operation?.abort();operation=undefined;stop();releaseRenderer();route=undefined;source=undefined;retryAction=undefined;customMarker?.dispose();customMarker=undefined;canvas.width=canvas.height=0;delete canvas.dataset.phase;delete canvas.dataset.mode;
   availability=undefined;updateSceneOptions();dismissWelcome();choice.value='empty';el('route-info').textContent='Маршрут не выбран.';el('scene-name').textContent='Route Story';el('source-credit').textContent='Источники карты: Natural Earth';setState({phase:'EMPTY'});
 }
+el('find-geography').addEventListener('click',()=>{if(!route||busyExport()||busyLoad())return;dismissWelcome();geographicConsent=true;restoreSceneOptions();preset({'camera-mode':'terrain','terrain-surface':'photo','terrain-flight':'conservative','route-color':'grade','replay-pacing':'terrain',marker:'traveler'});scrub.value='0';void configure();});
+el('keep-local').addEventListener('click',()=>{geographyDeclined=true;el('geography-consent').hidden=true;});
 function setView(next:ViewMode):void{
   dismissWelcome();
   view=next;document.body.dataset.view=view;document.body.dataset.settings='closed';el('explanations').textContent=view==='normal'?'Скрыть пояснения':'Показать пояснения';el('explanations').setAttribute('aria-pressed',String(view!=='normal'));
