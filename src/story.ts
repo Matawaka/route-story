@@ -20,6 +20,8 @@ export interface StoryConfig {
   readonly marker?: 'point' | 'traveler' | 'unicycle' | 'bicycle' | 'pedestrian' | 'custom';
   readonly markerPresentation?: 'annotation' | 'occluded';
   readonly markerSize?: 'small' | 'medium' | 'large';
+  /** Screen overlays only; geographic state and required credits are unchanged. */
+  readonly captionMode?: 'full' | 'none';
 }
 export const TITLE_LIMIT = 200;
 export const FPS = 24;
@@ -41,7 +43,8 @@ export function validateStoryConfig(input: StoryConfig, allowRegression = true):
   if(input.marker!==undefined&&!['point','traveler','unicycle','bicycle','pedestrian','custom'].includes(input.marker))throw Error('Неизвестный маркер.');
   if(input.markerPresentation!==undefined&&!['annotation','occluded'].includes(input.markerPresentation))throw Error('Неизвестная видимость маркера.');
   if(input.markerSize!==undefined&&!['small','medium','large'].includes(input.markerSize))throw Error('Неизвестный размер маркера.');
-  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset, cameraMode: input.cameraMode ?? 'classic',terrainSurface:input.terrainSurface??'dem',terrainFlight:input.terrainFlight??'conservative',routeColor:input.routeColor??'plain',replayPacing:input.replayPacing??'distance',marker:input.marker??'point',markerPresentation:input.markerPresentation??'annotation',markerSize:input.markerSize??'medium' });
+  if(input.captionMode!==undefined&&!['full','none'].includes(input.captionMode))throw Error('Неизвестный режим подписей в видео.');
+  return Object.freeze({ durationSeconds: input.durationSeconds, introSeconds: input.introSeconds, outroSeconds: input.outroSeconds, title: input.title.trim(), visualStyle: input.visualStyle, aspectRatio: input.aspectRatio, qualityPreset: input.qualityPreset, cameraMode: input.cameraMode ?? 'classic',terrainSurface:input.terrainSurface??'dem',terrainFlight:input.terrainFlight??'conservative',routeColor:input.routeColor??'plain',replayPacing:input.replayPacing??'distance',marker:input.marker??'point',markerPresentation:input.markerPresentation??'annotation',markerSize:input.markerSize??'medium',captionMode:input.captionMode??'full' });
 }
 export function defaultStoryConfig(title = 'Мой маршрут'): Readonly<StoryConfig> {
   return validateStoryConfig({ durationSeconds: 20, introSeconds: 2, outroSeconds: 2, title, visualStyle: 'atlas', aspectRatio: 'landscape', qualityPreset: 'compatibility', cameraMode: 'cinematic' });

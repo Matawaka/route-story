@@ -7,6 +7,8 @@ const segments = [[{ lon: 0, lat: 0 }, { lon: 1, lat: 0 }], [{ lon: 10, lat: 0 }
 const route: Route = { name: 'Synthetic', segments, ...routeMetrics(segments) };
 describe('bounded immutable story configuration', () => {
   it('defaults to 20s with two-second intro/outro', () => { expect(defaultStoryConfig().durationSeconds).toBe(20); expect(defaultStoryConfig().introSeconds).toBe(2); expect(Object.isFrozen(defaultStoryConfig())).toBe(true); });
+  it.each([undefined,'full','none'] as const)('validates caption mode %s without changing export bounds', captionMode=>{const config=validateStoryConfig({...defaultStoryConfig(),captionMode});expect(config.captionMode).toBe(captionMode??'full');expect(Object.isFrozen(config)).toBe(true);expect(exportSettings(config)).toEqual(exportSettings(defaultStoryConfig()));});
+  it.each([false,0,'hide','evil',null])('rejects invalid caption mode %s', captionMode=>{expect(()=>validateStoryConfig({...defaultStoryConfig(),captionMode} as never)).toThrow('подписей');});
   it.each([10,20,30] as const)('accepts %is and exact frame counts', durationSeconds => { expect(exportSettings({ ...defaultStoryConfig(), durationSeconds }).frameCount).toBe(durationSeconds*24); });
   it.each([NaN,Infinity,-1,0,4,9,31,1000])('rejects public duration %s', duration => { expect(()=>validateStoryConfig({...defaultStoryConfig(),durationSeconds:duration as 20},false)).toThrow(); });
   it.each([NaN,Infinity,-1,4])('rejects invalid intro/outro %s', value => { expect(()=>validateStoryConfig({...defaultStoryConfig(),introSeconds:value})).toThrow(); expect(()=>validateStoryConfig({...defaultStoryConfig(),outroSeconds:value})).toThrow(); });
@@ -17,6 +19,7 @@ describe('bounded immutable story configuration', () => {
   it('rejects unknown presets/styles/aspects and formats all labels', () => { for(const key of ['qualityPreset','visualStyle','aspectRatio'])expect(()=>validateStoryConfig({...defaultStoryConfig(),[key]:'evil'})).toThrow(); expect(formatVideoTime(20)).toBe('0:20');expect(formatVideoTime(30)).toBe('0:30'); });
 });
 describe('shared deterministic timeline', () => {
+  it('caption visibility never changes geographic or phase state',()=>{const full=new StoryTimeline(route,defaultStoryConfig()),clean=new StoryTimeline(route,{...defaultStoryConfig(),captionMode:'none'});for(const time of [0,2,6,10,18,20,6])expect(clean.at(time)).toEqual(full.at(time));});
   it.each([10,20,30] as const)('has exact intro/replay/outro boundaries for %is', durationSeconds => {
     const t=new StoryTimeline(route,{...defaultStoryConfig(),durationSeconds});
     expect(t.at(0)).toMatchObject({phase:'INTRO',routeProgress:0,point:segments[0][0],travelledKm:0});

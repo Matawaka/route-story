@@ -28,6 +28,9 @@
         <label class="field-label" for="story-title">Название истории</label>
         <input id="story-title" type="text" maxlength="200" value="Мой маршрут" aria-describedby="title-note" autocomplete="off" disabled>
         <p id="title-note" class="route-info auxiliary">До 200 символов · только текст.</p>
+        <label class="field-label" for="video-captions">Пояснения в видео и предпросмотре</label>
+        <select id="video-captions" aria-describedby="video-captions-note"><option value="full">Показывать подписи и показатели</option><option value="none">Без пояснений · карта и путешественник</option></select>
+        <p id="video-captions-note" class="route-info auxiliary">Убирает название, счётчики и легенду из кадра. Обязательные подписи источников остаются.</p>
         <div class="styles" role="group" aria-label="Стиль карты">
           <button class="style-card atlas active" data-style="atlas" aria-pressed="true"><span class="swatch" aria-hidden="true">╱</span><span>Атлас</span></button>
           <button class="style-card night" data-style="night" aria-pressed="false"><span class="swatch" aria-hidden="true">╱</span><span>Ночной</span></button>

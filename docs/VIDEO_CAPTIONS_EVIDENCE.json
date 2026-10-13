@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-13",
+  "branch": "codex/video-caption-toggle",
+  "base": "1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba",
+  "runtimeSource": "c3a9db942fcb323501eeee5b36a14d30bc5773c6",
+  "scope": "LOCAL candidate; not merged or deployed",
+  "checks": {
+    "unitPassed": 220,
+    "unitFiles": 20,
+    "build": "PASS",
+    "routineBrowser": {
+      "passed": 56,
+      "skipped": 30,
+      "failed": 0
+    },
+    "fullCaptionsAndPreviousUnified": {
+      "passed": 19,
+      "failed": 0
+    },
+    "committedCaptionSuite": {
+      "passed": 5,
+      "failed": 0
+    },
+    "auditVulnerabilities": 0
+  },
+  "packages": {
+    "baseline": {
+      "payloadBytes": 4954182,
+      "manifestBytes": 3693,
+      "totalBytes": 4957875,
+      "capBytes": 5242880
+    },
+    "sogne": {
+      "payloadBytes": 5958909,
+      "manifestBytes": 4349,
+      "totalBytes": 5963258,
+      "capBytes": 6291456
+    },
+    "combined": {
+      "payloadBytes": 7979141,
+      "manifestBytes": 5426,
+      "totalBytes": 7984567,
+      "capBytes": 9437184
+    }
+  },
+  "outputs": [
+    {
+      "file": "artifacts/video-captions/cinematic-landscape-10s-clean.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 640,
+      "height": 360,
+      "duration": 10,
+      "decodedFrames": 240,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 240,
+      "firstFrameHash": "943a20ba85d274a2e0ea9e36a6b2c2c4",
+      "lastFrameHash": "e0c5b0198ef2bd70e7fbe1831fda9a4e",
+      "bytes": 1368969,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sourceCommit": "c3a9db942fcb323501eeee5b36a14d30bc5773c6",
+      "captionMode": "none",
+      "exportMs": 838.3397999999997,
+      "exactPreviewExport": true,
+      "decodedMeanAbsoluteError": 1.1046672453703703,
+      "minimumGeographicFrameVariance": 65.46592580536344,
+      "sourceCredits": [
+        "Natural Earth"
+      ],
+      "sha256": "607e50b09e8107328332b4da9f050918780aa2a6e9390335a9c2c44eb7b42545",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "physicalDevice": false
+    },
+    {
+      "file": "artifacts/video-captions/swiss-landscape-20s-clean.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 1280,
+      "height": 720,
+      "duration": 20,
+      "decodedFrames": 480,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 480,
+      "firstFrameHash": "ad06908e88dff138fe2b5bd5eba85cc2",
+      "lastFrameHash": "84dd37b83e6f8636c5b0d6785d790b12",
+      "bytes": 13030539,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sourceCommit": "c3a9db942fcb323501eeee5b36a14d30bc5773c6",
+      "captionMode": "none",
+      "exportMs": 1553.6900999999998,
+      "exactPreviewExport": true,
+      "decodedMeanAbsoluteError": 2.7508485243055554,
+      "minimumGeographicFrameVariance": 483.5908969832057,
+      "sourceCredits": [
+        "© swisstopo",
+        "© swisstopo · SWISSIMAGE 2023"
+      ],
+      "sha256": "f06c8c2d748115beb6ac5a7919d626aace847b104eedc1c90ac2eca2c80004f5",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "physicalDevice": false
+    },
+    {
+      "file": "artifacts/video-captions/swiss-portrait-30s-clean.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 720,
+      "height": 1280,
+      "duration": 30,
+      "decodedFrames": 720,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 720,
+      "firstFrameHash": "4dfed3eb1c1e2ad673851a05bfb5de22",
+      "lastFrameHash": "7f9314a887014018f3aeee780e7c7350",
+      "bytes": 19157575,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sourceCommit": "c3a9db942fcb323501eeee5b36a14d30bc5773c6",
+      "captionMode": "none",
+      "exportMs": 2299.9974,
+      "exactPreviewExport": true,
+      "decodedMeanAbsoluteError": 1.872976707175926,
+      "minimumGeographicFrameVariance": 287.20133293999703,
+      "sourceCredits": [
+        "© swisstopo",
+        "© swisstopo · SWISSIMAGE 2023"
+      ],
+      "sha256": "8f76cd2fcba4bb20583e0e75b1ffdb23103908ac7e28edc163ee7fa257fe1a5f",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "physicalDevice": false
+    }
+  ],
+  "physicalDevice": "NOT TESTED",
+  "nativeMemory": "NOT MEASURED",
+  "publicSourceUnchanged": "1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba"
+}

@@ -10,6 +10,7 @@ import {imageryUV,imageryCoversTerrain,imageryDetailWeight,projectedDetailWeight
 import { RouteDynamics, GRADE_STYLES } from './route-dynamics';
 import { prepareMarker, type MarkerAsset } from './marker';
 import { annotationAt, drawAnnotation, intersectsMarker, markerSize, type MarkerRect } from './marker-annotation';
+import { drawVideoCredits } from './video-credits';
 
 /** Bounded genuine DEM mesh; one WebGL surface, synchronously captured into the
  * existing Canvas/WebCodecs pipeline. Optional resident regional photo texture;
@@ -150,7 +151,12 @@ export class TerrainRenderer {
     if(layout&&this.markerAsset){
       const target=this.timeline.route.segments[state.segment][Math.max(1,state.index)],next=target?this.terrain.world(target):xy,nextHeight=this.terrain.meshElevation(next),v=new T.Vector3(next[0],(nextHeight??this.marker.position.y-24)+24,-next[1]).project(this.camera);
       const occluded=requiredVisibleAltitude(this.terrain,pose.position,[xy[0],xy[1],this.marker.position.y])>pose.position[2]+.01;
-      ctx.save();ctx.globalAlpha=state.markerOpacity;drawAnnotation(ctx,this.markerAsset,anchor,layout,size,occluded,state.phase==='ROUTE_REPLAY'?[((v.x+1)*w/2)-anchor[0],((1-v.y)*h/2)-anchor[1]]:undefined);ctx.restore();
+      ctx.save();ctx.globalAlpha=state.markerOpacity;drawAnnotation(ctx,this.markerAsset,anchor,layout,size,occluded,state.phase==='ROUTE_REPLAY'?[((v.x+1)*w/2)-anchor[0],((1-v.y)*h/2)-anchor[1]]:undefined,this.config.captionMode!=='none');ctx.restore();
+    }
+    if(this.config.captionMode==='none'){
+      // Keep the segment cut beneath compact credits; never lose attribution in a fade.
+      if(state.markerOpacity<.4&&state.phase==='ROUTE_REPLAY'){ctx.fillStyle=`rgba(7,21,33,${(.4-state.markerOpacity)*2})`;ctx.fillRect(0,0,w,h);}
+      drawVideoCredits(ctx,[this.terrain.manifest.attribution,...(this.imagery?[this.imagery.manifest.attribution]:[])],w,h);return;
     }
     const gradient=ctx.createLinearGradient(0,0,0,h*.35);gradient.addColorStop(0,night?'#06111fea':'#173d4be6');gradient.addColorStop(1,'#173d4b00');ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h*.35);
     ctx.fillStyle=ink;ctx.font=`650 ${u*.023}px system-ui`;ctx.fillText('ROUTE STORY  /  TERRAIN',p,p);

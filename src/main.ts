@@ -15,7 +15,7 @@ const el=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const canvas=el<HTMLCanvasElement>('preview'),file=el<HTMLInputElement>('file'),title=el<HTMLInputElement>('story-title');
 const play=el<HTMLButtonElement>('play'),scrub=el<HTMLInputElement>('scrub'),button=el<HTMLButtonElement>('export');
 const choice=el<HTMLSelectElement>('route-choice'),markerFile=el<HTMLInputElement>('marker-file');
-const selects=['ratio','duration','quality','camera-mode','terrain-surface','terrain-flight','route-color','replay-pacing','marker','marker-size','marker-presentation'] as const;
+const selects=['ratio','duration','quality','camera-mode','terrain-surface','terrain-flight','route-color','replay-pacing','marker','marker-size','marker-presentation','video-captions'] as const;
 const control=(id:typeof selects[number])=>el<HTMLSelectElement>(id);
 const markerNoteBase=el('marker-note').textContent??'';
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -77,7 +77,7 @@ function begin(heading:string):AbortController{
 function stageFor(op:AbortController,heading:string):(stage:string)=>void{return stage=>{if(operation===op&&!op.signal.aborted)setState({phase:'LOADING',heading,stage});};}
 function configFromControls():Readonly<StoryConfig>{
   return validateStoryConfig({...story,title:title.value,durationSeconds:Number(control('duration').value) as StoryConfig['durationSeconds'],visualStyle:style,
-    aspectRatio:control('ratio').value as StoryConfig['aspectRatio'],qualityPreset:control('quality').value as StoryConfig['qualityPreset'],cameraMode:control('camera-mode').value as StoryConfig['cameraMode'],terrainSurface:control('terrain-surface').value as StoryConfig['terrainSurface'],terrainFlight:control('terrain-flight').value as StoryConfig['terrainFlight'],routeColor:control('route-color').value as StoryConfig['routeColor'],replayPacing:control('replay-pacing').value as StoryConfig['replayPacing'],marker:control('marker').value as StoryConfig['marker'],markerSize:control('marker-size').value as StoryConfig['markerSize'],markerPresentation:control('marker-presentation').value as StoryConfig['markerPresentation']},false);
+    aspectRatio:control('ratio').value as StoryConfig['aspectRatio'],qualityPreset:control('quality').value as StoryConfig['qualityPreset'],cameraMode:control('camera-mode').value as StoryConfig['cameraMode'],terrainSurface:control('terrain-surface').value as StoryConfig['terrainSurface'],terrainFlight:control('terrain-flight').value as StoryConfig['terrainFlight'],routeColor:control('route-color').value as StoryConfig['routeColor'],replayPacing:control('replay-pacing').value as StoryConfig['replayPacing'],marker:control('marker').value as StoryConfig['marker'],markerSize:control('marker-size').value as StoryConfig['markerSize'],markerPresentation:control('marker-presentation').value as StoryConfig['markerPresentation'],captionMode:control('video-captions').value as StoryConfig['captionMode']},false);
 }
 async function probe(op:AbortController):Promise<void>{
   const deadline=new AbortController();const cancel=()=>deadline.abort(op.signal.reason);op.signal.addEventListener('abort',cancel,{once:true});const timer=setTimeout(()=>deadline.abort(Error('H.264 capability timeout')),10_000);
@@ -94,7 +94,7 @@ async function configure(op?:AbortController,autoplay=false):Promise<void>{
     const prepared=await prepareScene(route,story,signal,stageFor(current,heading),customMarker);
     if(operation!==current||signal.aborted){prepared.renderer.dispose();return;}
     scene=prepared;renderer=prepared.renderer;const settings=exportSettings(story);canvas.width=settings.width;canvas.height=settings.height;
-    canvas.classList.toggle('portrait',story.aspectRatio==='portrait');canvas.dataset.region=prepared.region;canvas.dataset.mode=renderer.config.cameraMode;
+    canvas.classList.toggle('portrait',story.aspectRatio==='portrait');canvas.dataset.region=prepared.region;canvas.dataset.mode=renderer.config.cameraMode;canvas.dataset.captions=renderer.config.captionMode;
     scrub.max=String(story.durationSeconds);scrub.value=String(Math.min(Number(scrub.value),story.durationSeconds));el('preview-format').textContent=story.aspectRatio==='portrait'?'9:16':'16:9';
     el('scene-name').textContent=`${prepared.region==='furka'?'Швейцария · Furka':prepared.region==='sogne'?'Норвегия · Sogne':'Маршрут'} · ${renderer.config.cameraMode==='terrain'?'3D':'2D'}${source?.synthetic?' · демо':''}`;
     el('source-credit').textContent=prepared.credit;el('map-detail-note').textContent=`${prepared.notice??''} ${prepared.credit} · ${prepared.detail}`.trim();
