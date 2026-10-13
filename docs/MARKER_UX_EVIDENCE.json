@@ -1,6 +1,7 @@
 {
   "date": "2026-10-13",
   "branch": "codex/marker-left-facing",
+  "pullRequest": "https://github.com/Matawaka/route-story/pull/25",
   "base": "3119cee84fd0ed435c766b40b4543cfcfe3abaa2",
   "markerMilestone": "1cf87e8ecf124a94634a16c7cda00da7429ee3b5",
   "runtimeSource": "d9311381adb5038af1e43b99fec8f078107fa368",
