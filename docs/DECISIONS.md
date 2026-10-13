@@ -1,5 +1,13 @@
 # Decisions
 
+## 2026-10-13 — PR25 publicly accepted, preserve local/public evidence separately
+
+Protected Pages38367152785 ALLSUCCESS after actual owner review, exact main1c7e5a078472981308d90abef1ee13a7f521038a CI38366195077 SUCCESS. Actual returned HTTPS URL, sourceCommit and31asset hashes verified; additional welcome/coverage/reflection/privacy and full20/30s H.264/allframes/PTS/preview parity/cancelretry checks passed on WindowsEdge155. Record new actual MP4 container hashes/timing boundaries and public package size in MARKER_PUBLICATION_EVIDENCE.json; retain historical local MARKER_UX_EVIDENCE.json and previous GPX/caption proof. Public screenshots contain only synthetic demos. Existing docsPR24 remains a separate reviewable handover, not a deployment trigger. No physical/native/GPU conclusions are inferred from headless desktop/texture counts or old acceptance. No additional permission question, duplicate release/deploy or contest post is needed for the completed runtime delivery.
+
+## 2026-10-13 — Owner-authorized PR25 publication with existing protection
+
+Owner explicitly approved PR25 merge/deploy after success; d1334d5 merged preserving history into1c7e5a078472981308d90abef1ee13a7f521038a with identical reviewed tree. Exact main-push CI38366195077 SUCCESS. Dispatch only the existing manual protected Pages38367152785 with both previously approved packs and exactSHA; build/package checks succeeded, personal environment review remains required. Do not self-approve, duplicate deployment, relax protection or infer HTTPS success from build. Continue existing documentationPR24 with preserved earlier GPX/caption proof, rather than another handover PR. Source/runtime remain the reviewed main; documentation does not redeploy itself. Actual new public acceptance is pending at this checkpoint.
+
 ## 2026-10-13 — First-user instructions, covered choices and upright marker reflection
 
 Owner requested a welcome before initial demo playback. Use a dismissible inline Russian guide with four steps, start/upload/close and a reusable «Как пользоваться» button. Initial Swiss preparation remains background work; playback waits acceptance, reduced-motion remains static. Explicit user input cancels pending initial playback, so ownGPX cannot be overwritten by a late demo. Guide/view state stays outside StoryConfig/export and storage.
@@ -9,6 +17,10 @@ Use the SAME regional provider for coverage admission and loading. Existing stri
 Reflect raster markers when their current genuine segment edge projects leftward; bounded local 3D tangent accounts for the current camera. Start/finish use real edges, isolated points have no fabricated bearing. Artwork stays upright, source pixels remain unchanged, a separate cue follows travel. Canvas transforms or existing sprite UV implement reflection without an extra bitmap/texture. Depth-tested world geometry and dashed occlusion remain intact. Arbitrary custom art is mirrored relative to its original orientation, not semantically recognised.
 
 Code milestone d9311381adb5038af1e43b99fec8f078107fa368:238unit/build,62routine browserPASS/32explicit skips,32fullPASS/1local-owner-JPEG skip; independent20/30s Sogne/Furka H.264 videos and production subpath checks. Exact sizes/hashes and timing boundaries in MARKER_UX_EVIDENCE.json; previous5/6/9MiB limits unchanged. Native/GPU peaks/new physical devices unmeasured/untested. This new candidate needs owner merge/publication approval; previous PR23 permission does not automatically publish it.
+
+## 2026-10-13 — GPX parser publication independently verified
+
+Owner approved PR23 merge/publication and personally reviewed SAME Pages38352617587; exact-main3119cee CI and all HTTPS jobs SUCCESS. Original local uploads verified anonymously through the public UI with no route upload/storage or metadata fetch. Keep public evidence sanitised to numbered test cases/counts; raw GPX and coordinates stay outside Git. Preserve older local/public caption acceptance rather than replacing historical hashes with regenerated output. No inferred worldwide photo3D coverage: both tested private routes use explicit Cinematic2D/global fallback. This handover does not authorize merging itself, tags/Release or another deployment.
 
 ## 2026-10-13 — Standard GPX links are inert metadata
 
