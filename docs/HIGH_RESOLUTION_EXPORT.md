@@ -42,7 +42,7 @@ Old360p/720p memory-mode BufferTarget/fast-start behavior and32MiB payload/48MiB
 
 New bounds derive from configured bitrate×duration plus25% reserve and4MiB, rounded to8MiB; separate1MiB container allowance remains. Both packet accumulation and actual stream positions are bounded. These file policies are not global browser-memory guarantees.4K minute requires direct file saving and separate stress acceptance before public release. Browsers without File System Access retain bounded memory/download for shorter4K and FullHD; unsupported4K minute explains the file requirement and offers30s/1080p. No user data is automatically stored in OPFS or sent to a server.
 
-The user initiates the native file picker; abort/error prevents committing an incomplete write and permits retry. Write/close failures report free-space/permission guidance without revealing paths. Test acceptance exercises a real temporary OPFS FileSystemWritableFileStream and deletes it afterward; the native OS picker UI is separately NOT TESTED by that automation.
+The user initiates the native file picker; abort/error prevents committing an incomplete write and permits retry. Write/close failures report free-space/permission guidance without revealing paths. Encoded packet callbacks drive progress; incomplete frame counts cannot commit a file or report success. Test acceptance exercises a real temporary OPFS FileSystemWritableFileStream and deletes it afterward; the native OS picker UI is separately NOT TESTED by that automation.
 
 ## Reproducible acceptance
 

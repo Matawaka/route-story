@@ -28,3 +28,10 @@ test('real local file target cancels, retries and produces ordinary decodable MP
   const cancelledBytes=(await handle.getFile()).size,output=await exportVideoToFile({config,draw},await handle.createWritable()),bytes=Array.from(new Uint8Array(await(await handle.getFile()).arrayBuffer()));await root.removeEntry('synthetic-stream-regression.mp4');return{cancellation,cancelledBytes,output,bytes};
  });expect(result.cancellation).toBe('AbortError');expect(result.cancelledBytes).toBe(0);expect(result.output.bytes).toBe(result.bytes.length);mkdirSync('artifacts',{recursive:true});const file='artifacts/synthetic-stream-regression.mp4';writeFileSync(file,Buffer.from(result.bytes));validateVideo(file,640,360,4);
 });
+test('missing encoded frame rejects success and never commits the file',async({page})=>{
+ await page.goto('/');const result=await page.evaluate(async()=>{
+  const{exportVideoToFile}=await import('/src/exporter.ts'),{regressionStoryConfig}=await import('/src/story.ts'),Native=VideoEncoder;let closed=0,aborted=0,message='';
+  window.VideoEncoder=class extends Native{constructor(init:VideoEncoderInit){super({...init,output:(chunk,metadata)=>{if(chunk.timestamp<3_950_000)init.output(chunk,metadata);}});}};
+  try{await exportVideoToFile({config:regressionStoryConfig(),draw:(c,t)=>{const x=c.getContext('2d')!;x.fillStyle='#173649';x.fillRect(0,0,c.width,c.height);x.fillStyle='#f5ca60';x.fillRect(t*100,10,30,30);}}, {write:async()=>{},close:async()=>{closed++;},abort:async()=>{aborted++;}});}catch(e){message=(e as Error).message;}finally{window.VideoEncoder=Native;}return{closed,aborted,message};
+ });expect(result.message).toContain('неполное число кадров');expect(result.closed).toBe(0);expect(result.aborted).toBeGreaterThan(0);
+});

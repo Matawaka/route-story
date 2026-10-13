@@ -1,5 +1,30 @@
 # Performance and memory
 
+## MVP1.5 high-resolution candidate —2026-10-14
+
+Actual Windows10.0.26200 / Edge155.0.4283.45 / RTX3090 (ANGLE/D3D11). Same-source raw observations in HIGH_RESOLUTION_EVIDENCE.json; not medians/SLA. Private GPX/frames/videos remain outsideGit. FullHD10Mbps and4K25Mbps,24FPS, original geography/time unchanged. Source-image resolution does not become4K detail. Some measurements overlapped other browser tests; the controlled buffer comparison below was a separate paired run.
+
+| Scene / mode | Seconds | Actual landscape / portrait bytes | Export+download/save s, landscape / portrait | Max sampled private MiB across series |
+| --- | --- | --- | --- | ---: |
+| Furka /720p regression |20|12,992,355 /13,034,497|3.20 /3.17|914|
+| Furka /1080p |30|39,011,426 /38,627,971|8.33 /8.88|1035|
+| Furka /4K memory |30|103,352,380 /97,238,365|27.72 /29.09|1568|
+| Furka /4K real file |60|198,368,437 /191,203,363|55.81 /57.23|1868|
+| Mont Blanc /1080p |30|38,594,794 /38,532,067|8.58 /9.16|1215|
+| Mont Blanc /4K real file |30|99,737,153 /104,647,406|28.53 /29.43|1947|
+| Malerweg /1080p |30|39,493,816 /39,515,416|8.50 /12.15|1104|
+| Malerweg /4K real file |30|104,722,209 /101,607,351|28.14 /28.64|1710|
+| Sogne /1080p |30|39,621,355 /37,847,395|10.08 /11.12|1066|
+| Sogne /4K real file |30|100,028,508 /94,210,767|30.15 /31.63|1667|
+
+Mean wall time per encoded frame includes render/codec/file work, not CPU submission alone; per-video values derive from actual elapsed/frame counts in evidence. Full independent decoding is excluded from export wall time. Source preparation Mont Blanc37.07/60.55s and Malerweg19.12/19.75s in separate runs includes live catalogue/COG preparation; this is not a repeated latency benchmark. Prepared Sentinel source10m remains50/30m overview, DEM30m remains120/80m derived grid. No VPS/new paid resource.
+
+### Measured buffer change
+
+Same synthetic Furka/10s/4K/file target/route/camera/output/encoder, former MSAA framebuffer versus bounded single-sample target. Application export times9.87/9.81s→9.45/9.84s; sampled private maximum1861.96→1511.50MiB (~19% lower observed maximum). One paired run; no broad speedup or exact peak claim. Removing an extra composition copy saves a nominal31.64MiB surface/transfer at4K; synchronous readback still has a real cost. Source-renderer buffers/swap chain, encoder and browser overhead remain significant. Ordinary target/GL resource byte estimates do not prove GPU VRAM consumption. New target sampling can change edge rasterization; same-backend source equality and normalized camera geometry passed. Old360/720 antialiasing retained.
+
+Measurement: Windows Get-Process PrivateMemorySize64/WorkingSet64 over unique isolated-browser child PIDs identified by CDP,1s periodic samples, no forced production GC. Working sets can share pages; private bytes are not physical GPU VRAM or V8 heap. JS heap/GPU VRAM separately NOT MEASURED. Values include test capture/instrumentation and codec/browser caches; no confirmed leak from one high sample.4K source-track series reached≈1.9GiB process-private memory, so physical device acceptance remains mandatory before promising mobile support. Candidate offers explicit unsupported/lower-resolution recovery;4K60s requires streaming and is not available on browsers without the file API.
+
 ## Sprint 7 cinematic comparison — 2026-10-09
 
 Same machine: Windows_NT10.0.26200 x64, Node24.19.0, Microsoft Edge154.0.4258.62. Static main/tag baseline `5f39332b7358949d248da6b2f99ba445ee1b41e8` was measured before source changes. Final application checkpoint is `7443166d02dd3b78225725d69707c3d7a498a6c4`. Raw intermediate/final timings were captured immediately before that commit on the same application tree; they are not measurements of subsequent documentation changes. No other test/browser workload was run concurrently. One interrupted HMR-invalidated run was excluded. Public synthetic-only summaries: [CINEMATIC_EVIDENCE.json](CINEMATIC_EVIDENCE.json); raw files remain ignored under artifacts/sprint7.
