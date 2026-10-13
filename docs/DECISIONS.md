@@ -1,5 +1,11 @@
 # Decisions
 
+## 2026-10-13 — Standard GPX links are inert metadata
+
+The official [GPX1.1 schema](https://www.topografix.com/GPX/1/1/) defines link metadata for files/tracks/points. A global blacklist accidentally treated the owner's standard metadata link as an executable HTML link. Exempt only exact lowercase link in the accepted GPX namespace from that element-name blacklist; parse only existing route fields and discard the link/URL. Do not fetch metadata or introduce anchor elements. Continue scanning children/attributes, rejecting actual scripts, foreign HTML links, SVG, event handlers, unsafe URL protocols, DTD/entities and invalid coordinates. Validate original files locally without publishing their data; reproduce the failure with a synthetic fixture. This correction needs its own reviewed PR and owner merge/deploy approval.
+
+Owner-approved PR22 was merged and protected Pages38348908938 publicly verified on exact main d014d9dbe0318611789bb77545d4d18d2c52d921. Personal environment approval and exact-main pushCI were respected. Caption configuration/credits/limits unchanged by the GPX fix; no new publication is implied for it.
+
 ## 2026-10-13 — Optional captions are immutable video configuration
 
 Add StoryConfig.captionMode full/none (validated enum, legacy default full) and an explicit selector in main, independent of interface view mode. Hide optional in-frame title/HUD/endpoint/geographic labels/legend/progress/branding and their large backplates without changing route/timeline/camera/framing/pacing. Preserve exact required DEM/imagery credits, legible bounded source backplate and dashed occlusion cue. No fabricated attribution for a local2D diagram without loaded geography. Preview/export share one config; controls frozen during export, no mutable DOM reads. Retain user title/filename and existing durations/fps/payload/memory/source/camera safety. New local candidate requires its own owner review and publication authorization; prior PR20 approval does not merge/deploy this feature.

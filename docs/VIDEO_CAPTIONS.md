@@ -13,7 +13,13 @@
 
 ## Проверенная локальная реализация
 
-Runtime commit c3a9db942fcb323501eeee5b36a14d30bc5773c6, base main1d303ab; код не опубликован.220unit/20files,build,56browserPASS/30explicit skips,audit0. Отдельные full captions+previous unified19PASS;5caption cases rerun on committed runtime PASS. Classic/Cinematic Atlas/Night в обоих аспектах,0/6/20s, reversible seek, UI independence, title restore, occlusion cue, immutable export/cancelretry и реальное3D/720p покрыты.
+Историческая локальная проверка: runtime commit c3a9db942fcb323501eeee5b36a14d30bc5773c6, base main1d303ab.220unit/20files,build,56browserPASS/30explicit skips,audit0. Отдельные full captions+previous unified19PASS;5caption cases rerun on committed runtime PASS. Classic/Cinematic Atlas/Night в обоих аспектах,0/6/20s, reversible seek, UI independence, title restore, occlusion cue, immutable export/cancelretry и реальное3D/720p покрыты.
+
+## Проверенная публичная версия — 13 октября 2026
+
+Опция опубликована на [Route Story](https://matawaka.github.io/route-story/), sourceCommit `d014d9dbe0318611789bb77545d4d18d2c52d921`. [PR22](https://github.com/Matawaka/route-story/pull/22) слит с разрешения владельца; [main CI](https://github.com/Matawaka/route-story/actions/runs/38348340061) и все этапы [защищённого Pages выпуска](https://github.com/Matawaka/route-story/actions/runs/38348908938) SUCCESS. Владелец лично подтвердил окружение. Проверены реальные31hashes пакета, анонимныйHTTPS и необходимые подписи Swiss/Sogne.
+
+Дополнительная публичная проверка без пояснений: Atlas20s/1280×720/480frames/13030539B и Night30s/720×1280/720frames/19157575B; H.26424fps, независимое декодирование всех кадров и timestamps, точное preview/pre-encode равенство. Edge155.0.4283.45/Windows_NT10.0.26200. Отмена/повтор, обратная перемотка, отсутствие неподтверждённых запросов/хранения и явная ошибка кодека с работающим preview проверены. Время до сохранения download1654.7/2825.1ms, последующий FFmpeg исключён. Машинные результаты добавлены ниже исторических локальных в VIDEO_CAPTIONS_EVIDENCE.json; полные ролики/отчёты остаются локальными artifacts/video-captions/public. Новые физические устройства/peak native/GPU не измерялись. CSP подтверждён в meta; HTTP CSP header не наблюдался.
 
 Реальные чистые видео:2D10s640×360240frames; Swiss20s1280×720480frames и30s720×1280720frames. ВсеH.264/24fps,independent FFmpeg/ffprobe decode/PTS/full-frame counts. Direct export pixels exactly equal preview; decoded MAE и every-frame central-geography variance recorded. Полные файлы/отчёты в artifacts/video-captions; [машинные результаты](VIDEO_CAPTIONS_EVIDENCE.json). Время exportMs включает создание/сохранение download и исключает последующий FFmpeg; не сравнивается с другими границами замера. Physical/native/GPU tests NOTTESTED/NOTMEASURED.
 
@@ -42,4 +48,4 @@ $env:FULL_EXPORT_ACCEPTANCE='1'
 npx.cmd playwright test tests/e2e/captions.spec.ts tests/e2e/unified.spec.ts
 ```
 
-Публикация этого нового режима требует owner review/merge и отдельного разрешённого protected Pages выпуска. Предыдущая публикация1d303ab остаётся рабочей.
+Следующие изменения требуют собственного review и разрешённого protected Pages выпуска; публикация документации сама не запускает повторный деплой.
