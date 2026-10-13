@@ -39,6 +39,7 @@ function qualityNote():void{
   const s=exportSettings(story),high=story.qualityPreset==='fullhd'||story.qualityPreset==='ultra';
   el('quality-note').textContent=`${s.width} × ${s.height} · 24 кадра/с · примерно ${(exportSizeEstimate(story)/1048576).toFixed(0)} МиБ. ${story.qualityPreset==='ultra'?'Экспериментальный 4K: высокая нагрузка, зависит от устройства. Детализация исходной фотографии не повышается.':high?'Full HD: повышенная нагрузка.':'Размер зависит от сцены.'}${requiresFileExport(story)?' Для минуты 4K обязательна запись в файл.':''}`;
   el('direct-file-label').hidden=!high||!filePicker;el<HTMLInputElement>('direct-file').disabled=busyExport();
+  if(!high)el<HTMLInputElement>('direct-file').checked=false;
   el('export-note').textContent=`${story.durationSeconds} секунд · ${s.width} × ${s.height} · 24 кадра/с · H.264`;
 }
 const sceneOptions={

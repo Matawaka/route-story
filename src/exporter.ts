@@ -32,7 +32,8 @@ export async function detectEncoder(width: number, height: number, bitrate = BIT
     const config: VideoEncoderConfig = { codec, width, height, bitrate, framerate: fps, avc: { format: 'avc' } };
     signal?.throwIfAborted();try { const support=await VideoEncoder.isConfigSupported(config);if(support.supported&&(width*height<=1280*720||support.config?.width===width&&support.config?.height===height)){if(width*height>1280*720)await probeFrame(config,signal);return codec;} } catch(error) { signal?.throwIfAborted();last=error instanceof Error?error.message:''; }
   }
-  throw new Error(`На этом устройстве нет работающего H.264 для ${width} × ${height}. ${last?last+' ':''}Выберите 1080p или 720p либо другой браузер.`);
+  const pixels=width*height,fallback=pixels>1920*1080?'1080p или 720p':pixels>1280*720?'720p или «Совместимое · 360p»':pixels>640*360?'«Совместимое · 360p»':'другой браузер или устройство';
+  throw new Error(`На этом устройстве нет работающего H.264 для ${width} × ${height}. ${last?last+' ':''}Выберите ${fallback}.`);
 }
 
 export interface ExportOptions {
@@ -61,20 +62,21 @@ async function encodeVideo(options:ExportOptions,writable?:VideoFileWriter):Prom
   const codec = await detectEncoder(width, height, bitrate, fps,signal);
   signal?.throwIfAborted();
   const canvas = options.canvas??document.createElement('canvas');if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;}
-  let finalizing=false,fileCommitted=false,writtenBytes=0;
+  let finalizing=false,fileCommitted=false,writtenBytes=0,encodedBytes=0,encodedFrames=0;
   const target = writable?new StreamTarget(new WritableStream<StreamTargetChunk>({
     async write(chunk){signal?.throwIfAborted();const end=chunk.position+chunk.data.byteLength;if(!Number.isSafeInteger(end)||end>byteLimit+1024*1024)throw Error('Файл MP4 превысил выбранный предел.');try{await writable.write(chunk);}catch{throw Error('Не удалось записать MP4 в файл. Проверьте свободное место и разрешение на запись.');}writtenBytes=Math.max(writtenBytes,end);},
-    async close(){if(!finalizing||signal?.aborted){await writable.abort();return;}try{await writable.close();}catch{throw Error('Не удалось завершить запись MP4. Проверьте свободное место и попробуйте снова.');}fileCommitted=true;},
+    async close(){if(!finalizing||signal?.aborted){await writable.abort();return;}if(encodedFrames!==frameCount)throw Error('H.264 создал неполное число кадров. Повторите экспорт или выберите другое качество.');try{await writable.close();}catch{throw Error('Не удалось завершить запись MP4. Проверьте свободное место и попробуйте снова.');}fileCommitted=true;},
     async abort(reason){await writable.abort(reason);}
   },{highWaterMark:1}),{chunked:true,chunkSize:1024*1024}):new BufferTarget();
   // reserve creates an ordinary seekable MP4 with bounded metadata, not fMP4.
   // New memory-mode presets avoid the muxer's second all-media fast-start store.
   const output = new Output({ format: new Mp4OutputFormat({ fastStart:writable?'reserve':width*height>1280*720?false:'in-memory' }), target });
-  let encodedBytes = 0;
   const source = new CanvasSource(canvas, { codec: 'avc', fullCodecString: codec, quality: new Quality({ bitrate }), keyFrameInterval: 2,
     onEncodedPacket: (packet, metadata) => {
       if (metadata?.decoderConfig?.description) metadata.decoderConfig.description = normalizeAvcDescription(metadata.decoderConfig.description);
       encodedBytes += packet.data.byteLength; if (encodedBytes > byteLimit) throw new Error(`Видео превысило лимит ${byteLimit / 1024 / 1024} МиБ. Выберите более короткое видео или совместимое качество.`);
+      if(++encodedFrames>frameCount)throw Error('H.264 вернул неожиданное число кадров.');
+      if(!signal?.aborted)options.onProgress?.(.98*encodedFrames/frameCount);
     }
   });
   output.addVideoTrack(source, { frameRate: fps,...(writable?{maximumPacketCount:frameCount}:{}) });
@@ -87,25 +89,25 @@ async function encodeVideo(options:ExportOptions,writable?:VideoFileWriter):Prom
       // a partially loaded scene; still retain only the current frame.
       await options.draw(canvas, frame / fps);
       await source.add(frame / fps, 1 / fps);
-      options.onProgress?.(0.98 * (frame + 1) / frameCount);
       // Let input and cancellation events run even on fast software encoders.
       if (frame % 8 === 0) await new Promise(resolve => setTimeout(resolve, 0));
     }
     signal?.throwIfAborted();
     source.close();
     finalizing=true;await output.finalize();
+    if(encodedFrames!==frameCount)throw Error('H.264 создал неполное число кадров. Повторите экспорт или выберите другое качество.');
     if(writable&&!fileCommitted)throw Error('Файл MP4 не завершён.');
     const buffer=target instanceof BufferTarget?target.buffer:undefined;
     if(!writable&&!buffer)throw new Error('Кодировщик не создал MP4.');
     if(buffer&&buffer.byteLength>byteLimit+1024*1024)throw new Error('MP4 превысил допустимый размер.');
-    signal?.throwIfAborted();
+    if(!fileCommitted)signal?.throwIfAborted();
     complete = true;
     options.onProgress?.(1);
     return writable?{bytes:writtenBytes}:new Blob([buffer!], { type: 'video/mp4' });
   } finally {
     if(!complete)finalizing=false;
     try { source.close(); } finally {
-      try { if (!complete) await output.cancel(); } finally { if(writable&&!fileCommitted)await writable.abort().catch(()=>{});if(!options.canvas)canvas.width = canvas.height = 0; }
+      try { if (!complete&&output.state!=='finalized') await output.cancel(); } finally { if(writable&&!fileCommitted)await writable.abort().catch(()=>{});if(!options.canvas)canvas.width = canvas.height = 0; }
     }
   }
 }
