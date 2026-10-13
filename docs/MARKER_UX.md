@@ -1,6 +1,10 @@
 # Приветствие, доступные карты и направление путешественника
 
-Локальный кандидат от 2026-10-13: [PR #25](https://github.com/Matawaka/route-story/pull/25), `codex/marker-left-facing`, база `3119cee84fd0ed435c766b40b4543cfcfe3abaa2`, проверенный код `d9311381adb5038af1e43b99fec8f078107fa368`. Последующие коммиты содержат документацию и доказательства. Новое слияние/публикация ожидает одобрения владельца. Отдельный PR #24 с журналом предыдущей публикации сюда не включён.
+Историческая локальная приёмка от 2026-10-13: [PR #25](https://github.com/Matawaka/route-story/pull/25), `codex/marker-left-facing`, база `3119cee84fd0ed435c766b40b4543cfcfe3abaa2`, проверенный код `d9311381adb5038af1e43b99fec8f078107fa368`. После одобрения владельца PR слит с сохранением истории в **`1c7e5a078472981308d90abef1ee13a7f521038a` и опубликован** на [Route Story](https://matawaka.github.io/route-story/). Exact-main CI38366195077 и build/deploy/HTTPS Pages38367152785 прошли. Результаты ниже сохраняют исходную локальную область проверки; фактические публичные результаты и новые хеши отдельно в [MARKER_PUBLICATION_EVIDENCE.json](MARKER_PUBLICATION_EVIDENCE.json). Документальный PR #24 не включался в runtime PR #25.
+
+На настоящем HTTPS дополнительно проверены приветствие до движения, повтор инструкции без изменения кадра, отсутствие недоступных карт, оба направления и точная обратная перемотка маркера, мобильный viewport375 без переполнения, приватность и31hashes. Созданы и полностью декодированы Atlas20s1280×720/480frames и Night30s720×1280/720frames, H.26424fps/PTS/непустое меняющееся изображение/точная preview-preencode parity/отмена-повтор/unsupported encoder preview/обязательные credits. Public package7989863B с манифестом≤9MiB; response-header CSP отсутствует, restrictive metaCSP проверен.
+
+![Приветствие на фактически опубликованном сайте](images/welcome-public-guide.png)
 
 ## Первый запуск
 
@@ -79,4 +83,4 @@ node scripts/acceptance/swiss-public.mjs
 node scripts/acceptance/release.mjs --smoke
 ```
 
-Кандидат проверен локально. Следующий шаг — review владельца, разрешение на merge/deploy, exact-main CI, личное подтверждение `github-pages` и настоящая HTTPS-приёмка. Публичный main3119cee/стабильные теги сохранены.
+Локальный этап завершён и сохранён выше. Последующие owner approval, merge, exact-main CI, личное подтверждение `github-pages` и настоящая HTTPS-приёмка выполнены для production1c7e5a0. Финальный handover находится в существующем [PR #24](https://github.com/Matawaka/route-story/pull/24); он не сливается и не публикуется автоматически. Повторный деплой для документации не требуется. Новые физические устройства/native/GPU пики не измерялись.

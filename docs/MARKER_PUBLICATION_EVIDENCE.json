@@ -1,6 +1,6 @@
 {
   "date": "2026-10-13",
-  "status": "PENDING_PERSONAL_ENVIRONMENT_REVIEW",
+  "status": "VERIFIED",
   "reviewedPr": "https://github.com/Matawaka/route-story/pull/25",
   "reviewedPrHead": "d1334d587ab8d1f3fcd47bc012f1d3db92a92518",
   "prState": "MERGED",
@@ -24,21 +24,195 @@
     "includeImagery": true,
     "includeSwiss": true,
     "build": "SUCCESS",
-    "deploy": "WAITING",
-    "httpsAcceptance": "PENDING",
+    "deploy": "SUCCESS",
+    "httpsAcceptance": "SUCCESS",
     "environment": "github-pages",
     "requiredHumanReviewer": "Matawaka",
     "allowedBranch": "main",
-    "humanReviewConfirmed": false
+    "humanReviewConfirmed": true,
+    "workflowStatus": "completed",
+    "workflowConclusion": "success",
+    "jobs": {
+      "build": {
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Matawaka/route-story/actions/runs/38367152785/job/115194909243"
+      },
+      "deploy": {
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Matawaka/route-story/actions/runs/38367152785/job/115195089393"
+      },
+      "https-acceptance": {
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Matawaka/route-story/actions/runs/38367152785/job/115198137533"
+      }
+    }
   },
   "existingPublicUrl": "https://matawaka.github.io/route-story/",
-  "newDeploymentUrlVerified": null,
-  "publicAcceptance": "PENDING",
+  "newDeploymentUrlVerified": "https://matawaka.github.io/route-story/",
+  "publicAcceptance": "VERIFIED",
   "historicalLocalEvidence": "MARKER_UX_EVIDENCE.json",
   "handoverPr": "https://github.com/Matawaka/route-story/pull/24",
   "limitations": {
     "newPhysicalDeviceAcceptance": "NOT TESTED",
     "nativePeakMemory": "NOT MEASURED",
     "gpuPeakMemory": "NOT MEASURED"
-  }
+  },
+  "publicUx": {
+    "status": "VERIFIED",
+    "scope": "actual anonymous public HTTPS",
+    "sourceCommit": "1c7e5a078472981308d90abef1ee13a7f521038a",
+    "url": "https://matawaka.github.io/route-story/",
+    "browser": "155.0.4283.45",
+    "os": "Windows_NT 10.0.26200",
+    "physicalDevice": false,
+    "manifestFiles": 31,
+    "welcomeBeforePlayback": true,
+    "firstSwiss3D": true,
+    "reopenPreservesFrame": true,
+    "mobileOverflow": false,
+    "coverageChoices": true,
+    "criticalNoticeVideoMode": true,
+    "markerPoses": [
+      {
+        "time": 0,
+        "left": false
+      },
+      {
+        "time": 2,
+        "left": false
+      },
+      {
+        "time": 4,
+        "left": false
+      },
+      {
+        "time": 6,
+        "left": false
+      },
+      {
+        "time": 8,
+        "left": false
+      },
+      {
+        "time": 9.958333333333332,
+        "left": true
+      }
+    ],
+    "exactReverseSeek": true,
+    "csp": {
+      "meta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'",
+      "responseHeader": null
+    },
+    "external": [],
+    "errors": [],
+    "bad": [],
+    "storage": [
+      0,
+      0,
+      0
+    ]
+  },
+  "publicFullVideos": {
+    "status": "VERIFIED",
+    "url": "https://matawaka.github.io/route-story/",
+    "sourceCommit": "1c7e5a078472981308d90abef1ee13a7f521038a",
+    "publicHttps": true,
+    "browser": "155.0.4283.45",
+    "os": "Windows_NT 10.0.26200",
+    "physicalDevice": false,
+    "manifestHashes": 31,
+    "packageBytes": 7984437,
+    "metaCsp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'",
+    "httpCspHeader": null,
+    "cancelRetry": true,
+    "reverseSeekingExact": true,
+    "sogneCredits": [
+      "© Kartverket · CC BY 4.0 · cropped/resampled",
+      "Contains modified Copernicus Sentinel data 2025"
+    ],
+    "unsupportedEncoderKeepsPreview": true,
+    "storageEmpty": true,
+    "external": [],
+    "errors": [],
+    "bad": [],
+    "outputs": [
+      {
+        "file": "artifacts/marker-facing/public-full/atlas-20s-clean.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 1280,
+        "height": 720,
+        "duration": 20,
+        "decodedFrames": 480,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 480,
+        "firstFrameHash": "ad06908e88dff138fe2b5bd5eba85cc2",
+        "lastFrameHash": "f243b036727585fcd5e6b697db0dc788",
+        "bytes": 13022379,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "sourceCommit": "1c7e5a078472981308d90abef1ee13a7f521038a",
+        "captionMode": "none",
+        "publicHttps": true,
+        "exportMs": 1776.1348999999973,
+        "exactPreviewExport": true,
+        "decodedMeanAbsoluteError": 2.7513693576388887,
+        "minimumGeographicFrameVariance": 485.09168761453316,
+        "sourceCredits": [
+          "© swisstopo",
+          "© swisstopo · SWISSIMAGE 2023"
+        ],
+        "sha256": "a1134db298988ac09eb533a24e657e51126b092bf0b7ba2e1754960ed5a11a05"
+      },
+      {
+        "file": "artifacts/marker-facing/public-full/night-30s-clean.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 720,
+        "height": 1280,
+        "duration": 30,
+        "decodedFrames": 720,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 720,
+        "firstFrameHash": "4dfed3eb1c1e2ad673851a05bfb5de22",
+        "lastFrameHash": "a9a1c1b8cde7a8145fc7d80939742295",
+        "bytes": 19157496,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "sourceCommit": "1c7e5a078472981308d90abef1ee13a7f521038a",
+        "captionMode": "none",
+        "publicHttps": true,
+        "exportMs": 2276.666900000004,
+        "exactPreviewExport": true,
+        "decodedMeanAbsoluteError": 1.8736867042824075,
+        "minimumGeographicFrameVariance": 287.20133293999703,
+        "sourceCredits": [
+          "© swisstopo",
+          "© swisstopo · SWISSIMAGE 2023"
+        ],
+        "sha256": "a570797ad2481952d3b5ea722849d6ac2eb2b545de957a89d7e5d94f34a2ba55"
+      }
+    ],
+    "nativeMemory": "NOT MEASURED",
+    "gpuMemory": "NOT MEASURED"
+  },
+  "publicPackage": {
+    "payloadBytes": 7984437,
+    "manifestBytes": 5426,
+    "completeBytes": 7989863,
+    "files": 31,
+    "sourceCommit": "1c7e5a078472981308d90abef1ee13a7f521038a",
+    "manifestSha256": "ab174ba72dc1ae221987a2bda9b5a51feaf013a2422c309eac9a79bc37bd6876",
+    "packageLimitBytes": 9437184
+  },
+  "publicationMethod": "ONE existing manual protected Pages workflow, exact successful main-push CI, owner personally approved environment; no extra deployment/tag/Release/contest action",
+  "videoTimingBoundary": "Single run export/download/save, excludes FFmpeg/ffprobe; not a controlled comparative benchmark",
+  "verifiedDate": "2026-10-13"
 }
