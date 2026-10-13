@@ -7,6 +7,7 @@ import type { GeographyPack } from './geography';
 import { formatDistance, metricLabel, type Land } from './renderer';
 import { drawMarker, type MarkerAsset } from './marker';
 import { annotationAt, drawAnnotation, markerSize } from './marker-annotation';
+import { drawVideoCredits } from './video-credits';
 
 type Shape={path:Path2D;bounds:Bounds};
 type Chunk=Shape&{segment:number;startIndex:number;endIndex:number};
@@ -149,7 +150,7 @@ export class CinematicRenderer {
       if(label==='Финиш'&&state.phase==='OUTRO'){ctx.strokeStyle=colors.line;ctx.lineWidth=unit*.003;ctx.beginPath();ctx.arc(x,y,radius*(1.5+ease(state.outroProgress)),0,Math.PI*2);ctx.stroke();}
       if(leading&&this.markerAsset){const next=this.timeline.route.segments[state.segment][Math.max(1,state.index)],target=next?cameraProject(this.plan.world(next),camera,this.plan):[x,y],size=markerSize(this.timeline.config,unit),layout=annotationAt(x,y,0,w,h,size,[pad,h*.23,w-pad,h*.78]);if(layout)drawAnnotation(ctx,this.markerAsset,[x,y],layout,size,false,state.phase==='ROUTE_REPLAY'?[target[0]-x,target[1]-y]:undefined);}
       else{ctx.fillStyle=leading?colors.line:colors.panel;ctx.strokeStyle=colors.ink;ctx.lineWidth=unit*.0025;ctx.beginPath();ctx.arc(x,y,radius,0,Math.PI*2);ctx.fill();ctx.stroke();}
-      if(label){ctx.font=`600 ${unit*.026}px system-ui`;ctx.textAlign='left';ctx.textBaseline='middle';const tw=ctx.measureText(label).width,lx=Math.min(w-pad-tw,Math.max(pad,x+unit*.025));let ly=Math.max(h*.20+unit*.025,Math.min(h*.85-unit*.025,y+(label==='Старт'?unit*.04:-unit*.04))),box:Bounds=[lx-unit*.008,ly-unit*.022,lx+tw+unit*.008,ly+unit*.022];
+      if(label&&this.timeline.config.captionMode!=='none'){ctx.font=`600 ${unit*.026}px system-ui`;ctx.textAlign='left';ctx.textBaseline='middle';const tw=ctx.measureText(label).width,lx=Math.min(w-pad-tw,Math.max(pad,x+unit*.025));let ly=Math.max(h*.20+unit*.025,Math.min(h*.85-unit*.025,y+(label==='Старт'?unit*.04:-unit*.04))),box:Bounds=[lx-unit*.008,ly-unit*.022,lx+tw+unit*.008,ly+unit*.022];
         if(occupied.some(b=>intersects(box,b))){ly=Math.max(h*.20+unit*.025,Math.min(h*.85-unit*.025,ly+unit*.07));box=[box[0],ly-unit*.022,box[2],ly+unit*.022];}
         if(!occupied.some(b=>intersects(box,b))){occupied.push(box);ctx.fillStyle=colors.panel;ctx.fillRect(box[0],box[1],box[2]-box[0],box[3]-box[1]);ctx.fillStyle=colors.ink;ctx.fillText(label,lx,ly);}}
       occupied.push([x-unit*.035,y-unit*.035,x+unit*.035,y+unit*.035]);
@@ -158,11 +159,12 @@ export class CinematicRenderer {
     marker(this.timeline.route.segments[0][0],'Старт');marker(this.timeline.route.segments.at(-1)!.at(-1)!,'Финиш');marker(state.point,'',true);
     // Source labels are geographical anchors, not inferred stops or reverse geocoding.
     ctx.textBaseline='middle';ctx.textAlign='left';ctx.font=`500 ${unit*.025}px system-ui`;
-    for(const label of this.labels){const [x,y]=cameraProject(label.point,camera,this.plan),tw=ctx.measureText(label.text).width,box:Bounds=[x-unit*.012,y-unit*.020,x+tw+unit*.028,y+unit*.020];
+    for(const label of this.timeline.config.captionMode==='none'?[]:this.labels){const [x,y]=cameraProject(label.point,camera,this.plan),tw=ctx.measureText(label.text).width,box:Bounds=[x-unit*.012,y-unit*.020,x+tw+unit*.028,y+unit*.020];
       if(box[0]<pad||box[2]>w-pad||box[1]<h*.23||box[3]>h*.82||occupied.some(b=>intersects(box,b)))continue;
       occupied.push(box);ctx.fillStyle=colors.panel+'d9';ctx.fillRect(...[box[0],box[1],box[2]-box[0],box[3]-box[1]] as [number,number,number,number]);ctx.fillStyle=colors.quiet;ctx.beginPath();ctx.arc(x,y,unit*.0028,0,Math.PI*2);ctx.fill();ctx.fillText(label.text,x+unit*.013,y);
     }
     if(camera.cutOpacity>0){ctx.fillStyle=colors.panel;ctx.globalAlpha=camera.cutOpacity*.85;ctx.fillRect(0,h*.18,w,h*.66);ctx.globalAlpha=1;}
+    if(this.timeline.config.captionMode==='none'){drawVideoCredits(ctx,this.maps.length?['Natural Earth']:[],w,h);return;}
     // Screen-space composition; the geography continues beneath translucent edge gradients.
     const gradient=ctx.createLinearGradient(0,0,0,h*.22);gradient.addColorStop(0,colors.panel);gradient.addColorStop(1,colors.panel+'00');ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h*.22);
     const bottom=ctx.createLinearGradient(0,h*.8,0,h);bottom.addColorStop(0,colors.panel+'00');bottom.addColorStop(.55,colors.panel+'ee');bottom.addColorStop(1,colors.panel);ctx.fillStyle=bottom;ctx.fillRect(0,h*.8,w,h*.2);

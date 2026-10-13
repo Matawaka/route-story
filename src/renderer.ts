@@ -6,6 +6,7 @@ import type { CinematicGeography } from './geography';
 import { regressionStoryConfig, type StoryConfig, type VisualStyle } from './story';
 import { prepareMarker, drawMarker, type MarkerAsset } from './marker';
 import { annotationAt, drawAnnotation, intersectsMarker, markerSize } from './marker-annotation';
+import { drawVideoCredits } from './video-credits';
 export type { VisualStyle } from './story';
 export type Land = { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[];geography?:CinematicGeography };
 export const palette = {
@@ -177,6 +178,7 @@ export class RouteRenderer {
     if (state.showStart) marker(start);
     if (state.showFinish && this.endpointLabels.length === 2) marker(finish);
     ctx.save(); ctx.globalAlpha = state.markerOpacity; marker(state.point, true); ctx.restore();
+    if(this.config.captionMode==='none'){drawVideoCredits(ctx,this.land.features.length?['Natural Earth']:[],w,h);return;}
     ctx.font = `600 ${unit * .032}px system-ui`; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
     for (const label of this.endpointLabels) {
       const padding = unit * .009;
