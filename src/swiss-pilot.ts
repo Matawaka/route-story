@@ -6,6 +6,7 @@ import type {TerrainCameraOptions} from './terrain-camera';
 import {getTerrainCameraStateAt,terrainFrameCoverage} from './terrain-camera';
 import type {TerrainRenderer} from './terrain-renderer';
 import {MAX_IMAGE_BYTES,MAX_IMAGE_PIXELS,MAX_TEXTURE_SIDE,type ImageryManifest,type PreparedImagery} from './imagery';
+import {localBytes} from './local-resource';
 const files=new Set(['furka-2m.i16','furka-50m.i16','furka-high-overview.jpg','furka-high-detail.jpg','furka-low-overview.jpg','furka-low-detail.jpg','furka-synthetic.gpx']);
 declare const __SWISS_PUBLIC__:boolean;
 for(const name of ['furka-context-5m.i16','furka-context-50m.i16','furka-context-high-overview.jpg','furka-context-high-detail.jpg','furka-context-low-overview.jpg','furka-context-low-detail.jpg'])files.add(name);
@@ -22,19 +23,11 @@ export function validateSwissFrames(r:TerrainRenderer):{frames:number;coverage:'
   for(let i=0;i<r.config.durationSeconds*24;i++){const pose=getTerrainCameraStateAt(i/24,r.plan),coverage=terrainFrameCoverage(r.terrain,pose,r.width,r.height,screen);if(!coverage.complete)throw Error('Для этого ракурса не доказано полное покрытие карты. Выберите обзорный вариант или Sogne/2D.');margin=Math.min(margin,coverage.minimumMarginMeters);}
   return{frames:r.config.durationSeconds*24,coverage:'VERIFIED',minimumPlaneMarginMeters:margin};
 }
-async function resource(file:string,limit:number,signal?:AbortSignal):Promise<Uint8Array<ArrayBuffer>>{
-  if(!files.has(file))throw Error('Непроверенный ресурс Swiss pilot.');signal?.throwIfAborted();
-  const url=__SWISS_PUBLIC__?`${import.meta.env.BASE_URL}regions/furka/${file}`:`/${file.startsWith('furka-context-')?'__swiss-phase-c':'__swiss-pilot'}/${file}`;
-  const r=await fetch(url,{signal});if(!r.ok||!r.body)throw Error('Региональный пакет недоступен. Выберите Sogne или «Кино · 2D».');
-  const reader=r.body.getReader(),parts:Uint8Array[]=[];let count=0;
-  try{for(;;){const {value,done}=await reader.read();if(done)break;count+=value.byteLength;if(count>limit)throw Error('Региональный файл превысил лимит.');parts.push(value);}}
-  catch(e){await reader.cancel();throw e;}finally{reader.releaseLock();}
-  const out=new Uint8Array(count);let offset=0;for(const p of parts){out.set(p,offset);offset+=p.length;}return out;
-}
 async function checked(file:string,bytes:number,sha256:string,limit:number,signal?:AbortSignal){
+  if(!files.has(file))throw Error('Непроверенный ресурс Swiss pilot.');
   if(bytes>limit||bytes<1||!/^[a-f0-9]{64}$/.test(sha256))throw Error('Некорректный размер или хеш регионального ресурса.');
-  const data=await resource(file,limit,signal),hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',data)),b=>b.toString(16).padStart(2,'0')).join('');
-  if(data.byteLength!==bytes||hash!==sha256)throw Error('Региональный ресурс повреждён.');signal?.throwIfAborted();return data;
+  const url=__SWISS_PUBLIC__?`${import.meta.env.BASE_URL}regions/furka/${file}`:`/${file.startsWith('furka-context-')?'__swiss-phase-c':'__swiss-pilot'}/${file}`;
+  return localBytes(url,{limit,bytes,sha256,signal,kind:file.endsWith('.jpg')?'image':file.endsWith('.gpx')?'route':'terrain'});
 }
 export function validateSwissImagery(m:ImageryManifest,coverage:SwissCoverage='pilot'):void{
   const extended=coverage==='extended';

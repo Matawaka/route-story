@@ -13,7 +13,7 @@ await withServer(async url=>{
  const external=[],errors=[];await page.context().route('**/*',r=>{if(new URL(r.request().url()).origin!==new URL(url).origin){external.push(r.request().url());return r.abort();}return r.continue();});page.on('pageerror',e=>errors.push(e.message));
  try{
   for(const [style,aspect,duration] of [['atlas','landscape',20],['night','portrait',30]]){
-   await page.goto(url);await page.locator(prototype?'#demo':'#cinematic-demo').click();await page.waitForFunction(()=>!document.querySelector('#export').disabled);
+   await page.goto(url);await page.locator('#route-choice').selectOption(prototype?'sample':'fjords');await page.waitForFunction(()=>!document.querySelector('#export').disabled);
    await page.locator('#camera-mode').selectOption('cinematic');await page.locator('#quality').selectOption('standard');await page.locator('#ratio').selectOption(aspect);await page.locator('#duration').selectOption(String(duration));await page.locator(`[data-style=${style}]`).click();await page.locator('#story-title').fill(prototype?'Камера · прототип':style==='atlas'?'Между островами':'Свет фьордов');await page.waitForFunction(()=>!document.querySelector('#export').disabled);
    for(const time of [0,1,2,duration/4,duration/2,duration-2,duration]){await page.locator('#scrub').fill(String(time));await page.locator('#preview').screenshot({path:`${folder}/${style}-${time}s-preview.png`});}
    const pending=page.waitForEvent('download');await page.locator('#export').click();const path=`${folder}/${style}-${duration}s.mp4`;await(await pending).saveAs(path);

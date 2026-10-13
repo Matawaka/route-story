@@ -42,7 +42,7 @@ test('graded true ribbon and all icon modes retain occlusion, alignment and dete
 
 test('2D Classic/Cinematic markers preserve exact seek, neutral missing heights and local privacy',async({page,context})=>{
  const external:string[]=[];await context.route('**/*',r=>new URL(r.request().url()).origin==='http://127.0.0.1:4173'?r.continue():(external.push(r.request().url()),r.abort()));
- await page.goto('/');await page.locator('#demo').click();await expect(page.locator('#export')).toBeEnabled();await page.locator('#marker').selectOption('unicycle');await expect(page.locator('#export')).toBeEnabled();
+ await page.goto('/');await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();await page.locator('#marker').selectOption('unicycle');await expect(page.locator('#export')).toBeEnabled();
  const result=await page.evaluate(async()=>{
   const [{RouteRenderer},{loadGeography},{parseGpx},{defaultStoryConfig}]=await Promise.all(['/src/renderer.ts','/src/geography.ts','/src/gpx.ts','/src/story.ts'].map(p=>import(p))),route=parseGpx(await(await fetch('/samples/synthetic.gpx')).text()),land=await(await fetch('/maps/ne_110m_land.geojson')).json();delete route.segments[0][0].elevation;
   const results=[];for(const camera of ['classic','cinematic'])for(const marker of ['unicycle','bicycle','pedestrian']){
@@ -80,7 +80,7 @@ for(const aspect of ['landscape','portrait'])test(`real graded unicycle MP4, fra
 });
 
 test('custom local PNG in the UI exports and recovers from rejected replacement/cancel',async({page,context})=>{
- const uploads:string[]=[];context.on('request',r=>{if(r.method()!=='GET')uploads.push(r.url());});await page.goto('/');await page.locator('#terrain-demo').click();await expect(page.locator('#export')).toBeEnabled();
+ const uploads:string[]=[];context.on('request',r=>{if(r.method()!=='GET')uploads.push(r.url());});await page.goto('/');await page.locator('#route-choice').selectOption('sogne');await expect(page.locator('#export')).toBeEnabled();
  const png=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d')!;x.fillStyle='#e85cd3';x.beginPath();x.arc(64,64,50,0,Math.PI*2);x.fill();x.fillStyle='#45dfea';x.fillRect(40,20,40,40);return c.toDataURL().split(',')[1];});
  await page.locator('#marker-file').setInputFiles({name:'local.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});await expect(page.locator('#marker')).toHaveValue('custom');await expect(page.locator('#export')).toBeEnabled();
  await page.locator('#route-color').selectOption('grade');await expect(page.locator('#export')).toBeEnabled();await page.locator('#replay-pacing').selectOption('terrain');await expect(page.locator('#export')).toBeEnabled();await page.locator('#duration').selectOption('10');await expect(page.locator('#export')).toBeEnabled();await page.locator('#quality').selectOption('compatibility');await expect(page.locator('#export')).toBeEnabled();

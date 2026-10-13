@@ -1,0 +1,225 @@
+{
+  "schema": 1,
+  "scope": "LOCAL production/subpath and developer browser acceptance; NOT DEPLOYED",
+  "baseCommit": "d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83",
+  "implementationCommit": "f93edb1b3a6394c3f85c87c03da0aff28fa4c47f",
+  "date": "2026-10-12",
+  "version": "1.2.0-rc.1",
+  "cleanInstall": "PASS",
+  "dependencyAuditVulnerabilities": 0,
+  "unitTests": {
+    "files": 20,
+    "failed": 0,
+    "passed": 211
+  },
+  "browserBaseline": {
+    "skipped": 25,
+    "failed": 0,
+    "note": "FULL_EXPORT_ACCEPTANCE=0 also enabled one legacy truthiness-gated Standard proof; normal CI unset flag has 53 passing tests.",
+    "passed": 54
+  },
+  "unifiedBrowser": {
+    "fullStandardExports": true,
+    "failed": 0,
+    "passed": 14
+  },
+  "swissReferences": {
+    "initialFailed": 2,
+    "initialPassed": 7,
+    "focusedRerunPassed": 2,
+    "note": "Fresh corruption tests explicitly evict new verified cache; hash/decode/GPU/camera assertions preserved."
+  },
+  "packages": {
+    "sogneCapBytes": 6291456,
+    "sogneCompleteBytes": 5962052,
+    "combinedCompleteBytes": 7983359,
+    "combinedCapBytes": 9437184,
+    "baselineCapBytes": 5242880,
+    "baselineCompleteBytes": 4956669,
+    "verifiedPublicFiles": 31
+  },
+  "cpuPublicByteCacheCap": 2097152,
+  "nativeMemory": "NOT MEASURED",
+  "gpuMemory": "NOT MEASURED",
+  "physicalDevices": "NOT TESTED for this unified UX",
+  "previewExport": {
+    "portrait": {
+      "file": "artifacts/unified/portrait-30s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 720,
+      "height": 1280,
+      "duration": 30,
+      "decodedFrames": 720,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 720,
+      "firstFrameHash": "de70d00b679203e7b978a4195b1df0cd",
+      "lastFrameHash": "b862c1e91f218f0a65896694929ef9cd",
+      "bytes": 19349140,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "exportMs": 2166.8885999999984,
+      "sha256": "3bdc64a6b772208332a50217b6893708b55d94495fe223812c1145ac43258534",
+      "exactPreviewExport": true,
+      "decodedMeanAbsoluteError": 1.9231101707175926,
+      "minimumFrameVariance": 325.2415483262803,
+      "orangeRiderOrRoutePixels": 692,
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "nativeMemory": "NOT MEASURED",
+      "physicalDevice": false
+    },
+    "landscape": {
+      "file": "artifacts/unified/landscape-20s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 1280,
+      "height": 720,
+      "duration": 20,
+      "decodedFrames": 480,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 480,
+      "firstFrameHash": "c6d0eabf43f7652e1ce0d273ea456d92",
+      "lastFrameHash": "3b07208e1675409854f79c7402411be8",
+      "bytes": 13165241,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "exportMs": 1620.9964000000036,
+      "sha256": "a0e8143fe5b3887b30503c8058c2c33846d46e7a1c7becd5127dc45d0dcaf2f7",
+      "exactPreviewExport": true,
+      "decodedMeanAbsoluteError": 2.5328602430555556,
+      "minimumFrameVariance": 495.2426185136974,
+      "orangeRiderOrRoutePixels": 715,
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+      "nativeMemory": "NOT MEASURED",
+      "physicalDevice": false
+    },
+    "sourcePixelParity": true
+  },
+  "production": {
+    "status": "VERIFIED",
+    "sourceCommit": "f93edb1b3a6394c3f85c87c03da0aff28fa4c47f",
+    "url": "http://127.0.0.1:4185/route-story/",
+    "publicHttps": false,
+    "browser": "155.0.4283.45",
+    "os": "Windows_NT 10.0.26200",
+    "physicalDevice": false,
+    "manifestHashes": 31,
+    "packageBytes": 7977933,
+    "initialSwissAutoload": true,
+    "legacyEntryRedirects": true,
+    "privateGpxNotUploaded": true,
+    "external": [],
+    "errors": [],
+    "bad": [],
+    "outputs": [
+      {
+        "file": "artifacts/unified-final/main-furka-10s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 640,
+        "height": 360,
+        "duration": 10,
+        "decodedFrames": 240,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 240,
+        "firstFrameHash": "33d03a31567ed8a97a2d731377c6cc39",
+        "lastFrameHash": "19c1315b2103e9074d7587d8dedc0e2d",
+        "bytes": 2109925,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+      },
+      {
+        "file": "artifacts/unified-final/atlas-20s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 1280,
+        "height": 720,
+        "duration": 20,
+        "decodedFrames": 480,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 480,
+        "firstFrameHash": "c6d0eabf43f7652e1ce0d273ea456d92",
+        "lastFrameHash": "3b07208e1675409854f79c7402411be8",
+        "bytes": 13165241,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "exportMilliseconds": 4940.8658,
+        "sha256": "1852d46e9a15ba1cb9c1bc6cba090392fe382b09f0c66d59070b0becfc99a4ed"
+      },
+      {
+        "file": "artifacts/unified-final/night-30s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 720,
+        "height": 1280,
+        "duration": 30,
+        "decodedFrames": 720,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 720,
+        "firstFrameHash": "de70d00b679203e7b978a4195b1df0cd",
+        "lastFrameHash": "b862c1e91f218f0a65896694929ef9cd",
+        "bytes": 19349140,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "exportMilliseconds": 7130.769899999999,
+        "sha256": "e91f51fca87aee2b67483395fa260adeed5f7a12149304339c070d137a557034"
+      }
+    ]
+  },
+  "publication": "PENDING PR20 merge approval, new exact-main CI, required human environment review and actual HTTPS acceptance; owner deployment authorization recorded 2026-10-13",
+  "affectedLegacyTitleSuite": {
+    "failed": 0,
+    "passed": 8,
+    "sourceCommit": "f93edb1b3a6394c3f85c87c03da0aff28fa4c47f",
+    "skipped": 2
+  },
+  "reviewPullRequest": "https://github.com/Matawaka/route-story/pull/20",
+  "earlierGitHubCi": {
+    "head": "019ba9df740069b2a51f99f0150d2cf46afab666",
+    "status": "SUCCESS",
+    "url": "https://github.com/Matawaka/route-story/actions/runs/38286746831",
+    "latestHead": "PENDING after final evidence push"
+  },
+  "ownerReview": {
+    "date": "2026-10-13",
+    "visuals": "APPROVED",
+    "deployment": "AUTHORIZED after removing four duplicate shortcuts",
+    "correction": "Single route-choice dropdown; no duplicate demo controls",
+    "tests": {
+      "unitPassed": 211,
+      "unitFiles": 20,
+      "build": "PASS",
+      "routineInitial": {
+        "passed": 51,
+        "failed": 2,
+        "skipped": 28,
+        "reason": "Two stale selectors for removed demo button; corrected to actual dropdown without weakening assertions"
+      },
+      "focusedRerun": {
+        "passed": 2,
+        "failed": 0
+      },
+      "unified": {
+        "passed": 14,
+        "failed": 0,
+        "fullLandscapeSeconds": 20,
+        "fullPortraitSeconds": 30
+      }
+    },
+    "priorExactHeadCi": {
+      "head": "e863a661e308c94c45d573dde00ca210ed53cb76",
+      "status": "SUCCESS",
+      "url": "https://github.com/Matawaka/route-story/actions/runs/38291485274"
+    }
+  }
+}

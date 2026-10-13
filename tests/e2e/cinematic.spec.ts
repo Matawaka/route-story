@@ -4,7 +4,7 @@ import {syntheticGpx} from '../fixtures/synthetic';
 
 test('cinematic demo has ready local detail; seek and export use identical camera pixels',async({page,context})=>{
   const external:string[]=[];await context.route('**/*',r=>{if(new URL(r.request().url()).origin!=='http://127.0.0.1:4173'){external.push(r.request().url());return r.abort();}return r.continue();});
-  await page.goto('/');await page.locator('#cinematic-demo').click();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#scrub')).toHaveValue('0');await expect(page.locator('#map-detail-note')).toContainText('1:10m');
+  await page.goto('/');await page.locator('#route-choice').selectOption('fjords');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#scrub')).toHaveValue('0');await expect(page.locator('#map-detail-note')).toContainText('1:10m');
   const result=await page.evaluate(async xml=>{
     const paths=['/src/renderer.ts','/src/gpx.ts','/src/story.ts','/src/geography.ts','/src/camera.ts','/src/exporter.ts'];const[{RouteRenderer},{parseGpx},{defaultStoryConfig},{loadGeography},{createCameraPlan,getCameraStateAt},{exportVideo}]=await Promise.all(paths.map(p=>import(p)));
     const route=parseGpx(xml),land={features:[],geography:await loadGeography()},results=[];
@@ -24,13 +24,13 @@ test('cinematic demo has ready local detail; seek and export use identical camer
 
 test('missing detail resources prevent partial export and recover on retry',async({page})=>{
   let blocked=true;await page.route('**/maps/fjords-10m.json',r=>blocked?r.fulfill({status:503,body:'Unavailable'}):r.continue());
-  await page.goto('/');await page.locator('#cinematic-demo').click();await expect(page.locator('#status')).toContainText('локальные слои карты');await expect(page.locator('#export')).toBeDisabled();await expect(page.locator('#preview')).toBeHidden();
-  blocked=false;await page.locator('#cinematic-demo').click();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#preview')).toBeVisible();
+  await page.goto('/');await page.locator('#route-choice').selectOption('fjords');await expect(page.locator('#status')).toContainText('локальные слои карты');await expect(page.locator('#export')).toBeDisabled();await expect(page.locator('#preview')).toBeHidden();
+  blocked=false;await page.locator('#route-choice').selectOption('fjords');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#preview')).toBeVisible();
 });
 
 test('classic/reduced-motion fallback remains available; camera controls lock during export',async({page})=>{
-  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');await page.locator('#demo').click();await expect(page.locator('#camera-mode')).toHaveValue('classic');await expect(page.locator('#export')).toBeEnabled();
-  await page.locator('#camera-mode').selectOption('cinematic');await page.locator('#duration').selectOption('30');await expect(page.locator('#export')).toBeEnabled();await page.locator('#export').click();await expect(page.locator('#camera-mode')).toBeDisabled();await expect(page.locator('#cinematic-demo')).toBeDisabled();await page.locator('#cancel').click();await expect(page.locator('#status')).toHaveText('Экспорт отменён.');await expect(page.locator('#camera-mode')).toBeEnabled();await page.locator('#camera-mode').selectOption('classic');await expect(page.locator('#export')).toBeEnabled();
+  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#camera-mode')).toHaveValue('classic');await expect(page.locator('#export')).toBeEnabled();
+  await page.locator('#camera-mode').selectOption('cinematic');await page.locator('#duration').selectOption('30');await expect(page.locator('#export')).toBeEnabled();await page.locator('#export').click();await expect(page.locator('#camera-mode')).toBeDisabled();await expect(page.locator('#route-choice')).toBeDisabled();await page.locator('#cancel').click();await expect(page.locator('#status')).toHaveText('Экспорт отменён.');await expect(page.locator('#camera-mode')).toBeEnabled();await page.locator('#camera-mode').selectOption('classic');await expect(page.locator('#export')).toBeEnabled();
 });
 
 test('cinematic polar, antimeridian, dense and disconnected routes are finite and reversible',async({page})=>{

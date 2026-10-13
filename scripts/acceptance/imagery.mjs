@@ -30,7 +30,7 @@ await run(async url=>{
  for(const [quality,aspect,style,surface] of scenarios){
   const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:90000});assert.equal(response.status(),200);assert.equal(await page.evaluate(()=>isSecureContext),true);
   csp={responseHeader:response.headers()['content-security-policy']||null,meta:await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content')};if(production){assert.ok(csp.meta.includes("connect-src 'self'")&&csp.meta.includes("object-src 'none'"));assert.ok(!/unsafe-inline|unsafe-eval/.test(csp.meta));}
-  await page.locator('#terrain-demo').click();await page.waitForFunction(()=>!document.querySelector('#export').disabled);
+  await page.locator('#route-choice').selectOption('sogne');await page.waitForFunction(()=>!document.querySelector('#export').disabled);
   const duration=full&&quality==='standard'?(style==='atlas'?20:30):10;
   await page.locator('#ratio').selectOption(aspect);await page.locator('#quality').selectOption(quality);await page.locator('#duration').selectOption(String(duration));await page.locator(`[data-style=${style}]`).click();await page.locator('#story-title').fill('Согне-фьорд · синтетический маршрут');
   if(surface==='single')await page.route('**/imagery/sogne-sentinel.json',r=>r.fulfill({contentType:'application/json',body:readFileSync('public/imagery/sogne-sentinel-20m.json')}));

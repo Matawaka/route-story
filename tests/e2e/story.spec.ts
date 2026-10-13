@@ -5,7 +5,7 @@ import os from 'node:os';
 import { validateVideo } from '../../scripts/validate-video.mjs';
 
 test('10/20/30-second labels and phases support reversible keyboard seeking', async ({page}) => {
-  await page.goto('/');await page.locator('#demo').click();await expect(page.locator('#export')).toBeEnabled();
+  await page.goto('/');await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();
   for(const seconds of [10,20,30]) {
     await page.getByLabel('Длительность видео').selectOption(String(seconds));await expect(page.locator('#scrub')).toHaveAttribute('max',String(seconds));
     await page.locator('#scrub').fill('0');await expect(page.locator('#preview')).toHaveAttribute('data-phase','INTRO');await expect(page.locator('#time')).toHaveText(`0:00 / 0:${seconds}`);
@@ -17,14 +17,14 @@ test('10/20/30-second labels and phases support reversible keyboard seeking', as
 });
 
 test('bounded medium 20-second Standard export independently decodes', async ({page}) => {
-  await page.goto('/');await page.locator('#demo').click();await page.getByLabel('Качество видео').selectOption('standard');await expect(page.locator('#export')).toBeEnabled();
+  await page.goto('/');await page.locator('#route-choice').selectOption('sample');await page.getByLabel('Качество видео').selectOption('standard');await expect(page.locator('#export')).toBeEnabled();
   await expect(page.locator('#preview')).toHaveAttribute('width','1280');await expect(page.locator('#preview')).toHaveAttribute('height','720');
   const pending=page.waitForEvent('download');await page.locator('#export').click();const download=await pending;mkdirSync('artifacts',{recursive:true});const path='artifacts/story-standard-20s.mp4';await download.saveAs(path);
   expect(validateVideo(path,1280,720,20).decodedFrames).toBe(480);await expect(page.locator('#status')).toContainText('20 секунд');
 });
 
 test('export snapshot ignores mutation and reproduces the preview frame', async ({page}) => {
-  await page.goto('/');await page.locator('#demo').click();await page.getByLabel('Длительность видео').selectOption('10');await expect(page.locator('#export')).toBeEnabled();await page.locator('#scrub').fill('6');
+  await page.goto('/');await page.locator('#route-choice').selectOption('sample');await page.getByLabel('Длительность видео').selectOption('10');await expect(page.locator('#export')).toBeEnabled();await page.locator('#scrub').fill('6');
   const result=await page.evaluate(async()=>{
     const paths=['/src/exporter.ts','/src/renderer.ts','/src/story.ts','/src/gpx.ts','/src/geography.ts'];
     const [{exportVideo},{RouteRenderer},{defaultStoryConfig},{parseGpx},{loadGeography}]=await Promise.all(paths.map(p=>import(p)));
@@ -37,16 +37,16 @@ test('export snapshot ignores mutation and reproduces the preview frame', async 
 });
 
 test('UI cancellation restores controls and a subsequent export succeeds', async ({page})=>{
-  await page.goto('/');await page.locator('#demo').click();await page.getByLabel('Длительность видео').selectOption('30');await expect(page.locator('#export')).toBeEnabled();
+  await page.goto('/');await page.locator('#route-choice').selectOption('sample');await page.getByLabel('Длительность видео').selectOption('30');await expect(page.locator('#export')).toBeEnabled();
   const downloads:string[]=[];page.on('download',d=>downloads.push(d.suggestedFilename()));await page.locator('#export').click();await expect(page.locator('#cancel')).toBeVisible();
-  for(const id of ['duration','quality','ratio','file','demo','scrub','story-title'])await expect(page.locator(`#${id}`)).toBeDisabled();
+  for(const id of ['duration','quality','ratio','file','route-choice','scrub','story-title'])await expect(page.locator(`#${id}`)).toBeDisabled();
   await page.locator('#cancel').click();await expect(page.locator('#status')).toHaveText('Экспорт отменён.');await expect(page.locator('#export')).toBeEnabled();expect(downloads).toEqual([]);
   await page.getByLabel('Длительность видео').selectOption('10');await expect(page.locator('#export')).toBeEnabled();const pending=page.waitForEvent('download');await page.locator('#export').click();const d=await pending;expect(d.suggestedFilename()).toContain('10s');await expect(page.locator('#duration')).toBeEnabled();
 });
 
 test('title editor uses inert text, strict limits and a safe filename',async({page})=>{
   const external:string[]=[];page.on('request',r=>{if(r.url().includes('evil.test'))external.push(r.url());});
-  await page.goto('/');await page.locator('#demo').click();await expect(page.locator('#export')).toBeEnabled();
+  await page.goto('/');await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();
   const title=page.getByLabel('Название истории');await expect(title).toHaveValue('Учебный маршрут');await expect(title).toHaveAttribute('maxlength','200');
   await title.fill('');await expect(title).toHaveAttribute('aria-invalid','true');await expect(page.locator('#export')).toBeDisabled();
   // Bypass the DOM maxlength to verify configuration validation also enforces the bound.
@@ -59,7 +59,7 @@ test('title editor uses inert text, strict limits and a safe filename',async({pa
 });
 
 test('visible storytelling scenes preserve two factual metrics in all styles/formats',async({page})=>{
-  await page.goto('/');await page.locator('#demo').click();await expect(page.locator('#export')).toBeEnabled();
+  await page.goto('/');await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();
   await page.evaluate(()=>{const native=CanvasRenderingContext2D.prototype.fillText;Object.assign(window,{paintedText:[]});CanvasRenderingContext2D.prototype.fillText=function(text:string,...args:Parameters<typeof native> extends [string,...infer P]?P:never){(window as any).paintedText.push(text);return native.call(this,text,...args);};});
   mkdirSync('artifacts',{recursive:true});
   for(const style of ['Атлас','Ночной'])for(const aspect of ['landscape','portrait']){
@@ -77,16 +77,16 @@ test('visible storytelling scenes preserve two factual metrics in all styles/for
 
 test('Standard capability failure offers explicit Compatibility recovery',async({page})=>{
   await page.addInitScript(()=>{const probe=VideoEncoder.isConfigSupported.bind(VideoEncoder);VideoEncoder.isConfigSupported=async config=>config.width!>640||config.height!>640?{supported:false,config}:probe(config);});
-  await page.goto('/');await page.locator('#demo').click();await expect(page.locator('#export')).toBeEnabled();await page.getByLabel('Качество видео').selectOption('standard');
+  await page.goto('/');await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();await page.getByLabel('Качество видео').selectOption('standard');
   await expect(page.locator('#status')).toContainText('Совместимое');await expect(page.locator('#export')).toBeDisabled();await expect(page.locator('#quality')).toHaveValue('standard');await expect(page.locator('#preview')).toHaveAttribute('width','1280');
   await page.getByLabel('Качество видео').selectOption('compatibility');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#preview')).toHaveAttribute('width','640');
 });
 
 test('UI restores a valid state after renderer failure and can export again',async({page})=>{
-  await page.goto('/');await page.locator('#demo').click();await page.getByLabel('Длительность видео').selectOption('10');await expect(page.locator('#export')).toBeEnabled();
+  await page.goto('/');await page.locator('#route-choice').selectOption('sample');await page.getByLabel('Длительность видео').selectOption('10');await expect(page.locator('#export')).toBeEnabled();
   await page.evaluate(async()=>{const path='/src/renderer.ts';const {RouteRenderer}=await import(path),native=RouteRenderer.prototype.draw;RouteRenderer.prototype.draw=function(...args:any[]){RouteRenderer.prototype.draw=native;throw new Error('Deliberate export failure');};});
-  await page.locator('#export').click();await expect(page.locator('#status')).toContainText('Не удалось создать MP4: Deliberate export failure');await expect(page.locator('#cancel')).toBeHidden();
-  for(const id of ['export','duration','quality','ratio','file','demo','scrub','story-title'])await expect(page.locator(`#${id}`)).toBeEnabled();
+  await page.locator('#export').click();await expect(page.locator('#status')).toContainText('Не удалось создать MP4');await expect(page.locator('#status')).not.toContainText('Deliberate export failure');await expect(page.locator('#error-code')).toHaveText('export/export');await expect(page.locator('#cancel')).toBeHidden();
+  for(const id of ['export','duration','quality','ratio','file','route-choice','scrub','story-title'])await expect(page.locator(`#${id}`)).toBeEnabled();
   const pending=page.waitForEvent('download');await page.locator('#export').click();await pending;await expect(page.locator('#status')).toContainText('MP4 создан');
 });
 

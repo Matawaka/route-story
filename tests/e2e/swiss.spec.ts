@@ -32,6 +32,7 @@ for(const aspect of ['landscape','portrait'])test(`actual Swiss same-camera low/
 });
 test('Swiss bounds/hash admission and explicit no-asset failure retain honest local behaviour',async({page})=>{
  await page.goto('/swiss-pilot.html');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#status')).toContainText('Синтетическое');
+ await page.evaluate(async()=>{const path='/src/local-resource.ts';(await import(path)).clearResourceCache();});
  await page.route('**/__swiss-pilot/furka-high-detail.jpg',r=>r.fulfill({body:Buffer.from([1,2]),contentType:'image/jpeg'}));const error=await page.evaluate(async()=>{const {loadSwissImagery}=await import('/src/swiss-pilot.ts');try{await loadSwissImagery();return 'unexpected success';}catch(e){return(e as Error).message;}});expect(error).toContain('повреждён');
 });
 test('same-camera Swiss 2m versus deliberately coarse 50m mesh comparison',async({page})=>{

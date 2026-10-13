@@ -1,4 +1,5 @@
 /** Trusted, locally bundled geography. Uploaded routes never select a remote URL. */
+import {localBytes,abortable} from './local-resource';
 export interface GeographyPack {
   readonly schema:1;
   readonly name:string;
@@ -21,10 +22,10 @@ export function validateGeography(value:unknown):GeographyPack {
   for(const label of p.labels){point(label.point);if(typeof label.text!=='string'||!label.text.trim()||label.text.length>80||/[\u0000-\u001f\u007f]/.test(label.text)||!Number.isFinite(label.rank))throw new Error('Некорректная подпись карты.');}
   return Object.freeze(p);
 }
-export function loadGeography():Promise<CinematicGeography> {
+export function loadGeography(signal?:AbortSignal):Promise<CinematicGeography> {
+  signal?.throwIfAborted();
   if(!ready)ready=Promise.all(['world-50m.json','fjords-10m.json'].map(async name=>{
-    const response=await fetch(`${import.meta.env.BASE_URL}maps/${name}`);if(!response.ok)throw new Error('Не удалось загрузить локальные слои карты. Экспорт недоступен до их готовности.');
-    const bytes=await response.arrayBuffer();if(bytes.byteLength>4*1024*1024)throw new Error('Пакет карты превысил лимит.');return validateGeography(JSON.parse(new TextDecoder().decode(bytes)));
+    const bytes=await localBytes(`${import.meta.env.BASE_URL}maps/${name}`,{limit:4*1024*1024,kind:'map'});return validateGeography(JSON.parse(new TextDecoder().decode(bytes)));
   })).then(([world,region])=>Object.freeze({world,region})).catch(error=>{ready=undefined;throw error;});
-  return ready;
+  return abortable(ready,signal);
 }
