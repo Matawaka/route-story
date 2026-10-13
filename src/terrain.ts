@@ -79,8 +79,8 @@ export class TerrainDataset {
   }
 }
 const cache=new Map<string,TerrainDataset>();
-export async function loadTerrain(quality:'compatibility'|'standard',signal?:AbortSignal):Promise<TerrainDataset>{
-  signal?.throwIfAborted();const key=quality==='standard'?'50':'100';if(cache.has(key))return cache.get(key)!;
+export async function loadTerrain(quality:import('./story').QualityPreset,signal?:AbortSignal):Promise<TerrainDataset>{
+  signal?.throwIfAborted();const key=quality==='compatibility'?'100':'50';if(cache.has(key))return cache.get(key)!;
   const root=`${import.meta.env.BASE_URL}terrain/`;
   const manifest:TerrainManifest=JSON.parse(new TextDecoder().decode(await localBytes(root+'sogne.json',{limit:16384,kind:'terrain',signal})));
   const level=manifest.lods.find(l=>l.file===`sogne-${key}m.i16`);if(!level||level.bytes>1000000)throw Error('Неизвестный размер DEM.');

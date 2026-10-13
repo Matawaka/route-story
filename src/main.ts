@@ -1,8 +1,8 @@
 import {readGpx,parseGpx} from './gpx';
-import {detectEncoder,downloadVideo,exportVideo} from './exporter';
+import {detectEncoder,downloadVideo,exportVideo,exportVideoToFile,type VideoFileWriter} from './exporter';
 import {formatDistance} from './renderer';
 import type {Route} from './route';
-import {defaultStoryConfig,exportSettings,formatVideoTime,validateStoryConfig,videoFilename,type StoryConfig} from './story';
+import {defaultStoryConfig,exportSettings,previewSettings,exportSizeEstimate,requiresFileExport,formatVideoTime,validateStoryConfig,videoFilename,type StoryConfig} from './story';
 import {prepareCustomMarker,type MarkerAsset} from './marker';
 import {disposeTraveler} from './traveler';
 import {prepareScene,type SceneRenderer,type PreparedScene} from './scene-provider';
@@ -31,6 +31,15 @@ type Source={name:string;synthetic:boolean;read:(signal:AbortSignal)=>Promise<Ro
 let source:Source|undefined,retryAction:(()=>void)|undefined;
 let availability:SceneAvailability|undefined,welcomeVisible=true,startupPlayAllowed=false,startupPlayPending=false;
 let geographicConsent=false,geographyDeclined=false;
+let probeSequence=0;
+type SaveHandle={createWritable():Promise<FileSystemWritableFileStream>};
+const filePicker=(window as Window&{showSaveFilePicker?:(options:unknown)=>Promise<SaveHandle>}).showSaveFilePicker;
+function qualityNote():void{
+  const s=exportSettings(story),high=story.qualityPreset==='fullhd'||story.qualityPreset==='ultra';
+  el('quality-note').textContent=`${s.width} × ${s.height} · 24 кадра/с · примерно ${(exportSizeEstimate(story)/1048576).toFixed(0)} МиБ. ${story.qualityPreset==='ultra'?'Экспериментальный 4K: высокая нагрузка, зависит от устройства. Детализация исходной фотографии не повышается.':high?'Full HD: повышенная нагрузка.':'Размер зависит от сцены.'}${requiresFileExport(story)?' Для минуты 4K обязательна запись в файл.':''}`;
+  el('direct-file-label').hidden=!high||!filePicker;el<HTMLInputElement>('direct-file').disabled=busyExport();
+  el('export-note').textContent=`${story.durationSeconds} секунд · ${s.width} × ${s.height} · 24 кадра/с · H.264`;
+}
 const sceneOptions={
   'camera-mode':Array.from(control('camera-mode').options).map(o=>o.cloneNode(true) as HTMLOptionElement),
   'terrain-surface':Array.from(control('terrain-surface').options).map(o=>o.cloneNode(true) as HTMLOptionElement)
@@ -78,13 +87,14 @@ function renderState():void{
   el('recovery-actions').hidden=!(state.phase==='ERROR'||state.phase==='CANCELLED');el<HTMLButtonElement>('retry').disabled=!retryAction;
   el('simplify').hidden=!route||exporting;el('error-details').hidden=state.phase!=='ERROR';el('error-code').textContent=state.phase==='ERROR'?state.error.code:'';
   el('encoder-note').hidden=!available||loading||encoder.status!=='unavailable';el('encoder-note').textContent=encoder.message??'';
-  el('compatibility').hidden=!available||encoder.status!=='unavailable'||control('quality').value!=='standard';
+  el('compatibility').hidden=!available||encoder.status!=='unavailable'||control('quality').value==='compatibility';
   button.disabled=!available||loading||exporting||encoder.status!=='supported'||state.phase==='ERROR'&&state.blocking!==false;
   play.disabled=scrub.disabled=!available||loading||exporting;play.textContent=state.phase==='PLAYING'?'Ⅱ':'▶';play.setAttribute('aria-label',state.phase==='PLAYING'?'Пауза':'Воспроизвести');
   title.disabled=!route||exporting;for(const id of selects)control(id).disabled=exporting||loading&&!route;markerFile.disabled=exporting||loading;
   for(const id of ['file','route-choice','clear-route','empty-file','empty-swiss','empty-other'])el<HTMLInputElement>(id).disabled=exporting;
   for(const card of document.querySelectorAll<HTMLButtonElement>('[data-style]'))card.disabled=exporting||loading;el('facts').hidden=!route;
   el<HTMLButtonElement>('show-welcome').disabled=exporting;
+  qualityNote();
 }
 function stop():void{cancelAnimationFrame(animationId);animationId=0;if(state.phase==='PLAYING')setState({phase:'PAUSED'});}
 function releaseRenderer():void{contextCleanup?.();contextCleanup=undefined;renderer?.dispose();renderer=undefined;scene=undefined;delete canvas.dataset.region;}
@@ -108,9 +118,10 @@ function configFromControls():Readonly<StoryConfig>{
     aspectRatio:control('ratio').value as StoryConfig['aspectRatio'],qualityPreset:control('quality').value as StoryConfig['qualityPreset'],cameraMode:control('camera-mode').value as StoryConfig['cameraMode'],terrainSurface:control('terrain-surface').value as StoryConfig['terrainSurface'],terrainFlight:control('terrain-flight').value as StoryConfig['terrainFlight'],routeColor:control('route-color').value as StoryConfig['routeColor'],replayPacing:control('replay-pacing').value as StoryConfig['replayPacing'],marker:control('marker').value as StoryConfig['marker'],markerSize:control('marker-size').value as StoryConfig['markerSize'],markerPresentation:control('marker-presentation').value as StoryConfig['markerPresentation'],captionMode:control('video-captions').value as StoryConfig['captionMode']},false);
 }
 async function probe(op:AbortController):Promise<void>{
+  const sequence=++probeSequence;
   const deadline=new AbortController();const cancel=()=>deadline.abort(op.signal.reason);op.signal.addEventListener('abort',cancel,{once:true});const timer=setTimeout(()=>deadline.abort(Error('H.264 capability timeout')),10_000);
-  try{const settings=exportSettings(story);await abortable(detectEncoder(settings.width,settings.height,settings.bitrate,settings.fps),deadline.signal);if(operation===op&&!op.signal.aborted)encoder={status:'supported'};}
-  catch(error){if(operation===op&&!op.signal.aborted)encoder={status:'unavailable',message:uiError(error,'export').category==='codec'?uiError(error,'export').message:'Проверка H.264 не завершилась. Предпросмотр доступен; попробуйте совместимое качество или другой браузер.'};}
+  try{const settings=exportSettings(story);if(renderer&&'gpu' in renderer)renderer.assertOutputSize(settings.width,settings.height);if(requiresFileExport(story)&&!filePicker)throw Error('Для минуты 4K нужна запись в файл; браузер не поддерживает выбор файла. Выберите 30 секунд или 1080p.');await abortable(detectEncoder(settings.width,settings.height,settings.bitrate,settings.fps,deadline.signal),deadline.signal);if(sequence===probeSequence&&operation===op&&!op.signal.aborted)encoder={status:'supported'};}
+  catch(error){if(sequence===probeSequence&&operation===op&&!op.signal.aborted){const message=error instanceof Error?error.message:'Проверка H.264 не завершилась.';encoder={status:'unavailable',message:message+' Предпросмотр доступен. Выберите другое качество.'};if((story.qualityPreset==='ultra'||story.qualityPreset==='fullhd')&&!requiresFileExport(story)&&!/время|timeout/i.test(message)){const option=control('quality').selectedOptions[0];option.disabled=true;option.title=message;}}}
   finally{clearTimeout(timer);op.signal.removeEventListener('abort',cancel);if(operation===op&&!op.signal.aborted)renderState();}
 }
 async function configure(op?:AbortController,autoplay=false):Promise<void>{
@@ -121,13 +132,13 @@ async function configure(op?:AbortController,autoplay=false):Promise<void>{
   try{
     const prepared=await prepareScene(route,story,signal,stageFor(current,heading),customMarker,geographicConsent);
     if(operation!==current||signal.aborted){prepared.renderer.dispose();return;}
-    scene=prepared;renderer=prepared.renderer;if(prepared.region==='discovered'){availability={terrain:true,photo:true};updateSceneOptions();}const settings=exportSettings(story);canvas.width=settings.width;canvas.height=settings.height;
+    scene=prepared;renderer=prepared.renderer;if(prepared.region==='discovered'){availability={terrain:true,photo:true};updateSceneOptions();}const settings=previewSettings(story);canvas.width=settings.width;canvas.height=settings.height;
     canvas.classList.toggle('portrait',story.aspectRatio==='portrait');canvas.dataset.region=prepared.region;canvas.dataset.mode=renderer.config.cameraMode;canvas.dataset.captions=renderer.config.captionMode;
     scrub.max=String(story.durationSeconds);scrub.value=String(Math.min(Number(scrub.value),story.durationSeconds));el('preview-format').textContent=story.aspectRatio==='portrait'?'9:16':'16:9';
     el('scene-name').textContent=`${prepared.region==='furka'?'Швейцария · Furka':prepared.region==='sogne'?'Норвегия · Sogne':'Маршрут'} · ${renderer.config.cameraMode==='terrain'?'3D':'2D'}${source?.synthetic?' · демо':''}`;
     el('source-credit').textContent=prepared.credit;el('map-detail-note').textContent=`${prepared.notice??''} ${prepared.credit} · ${prepared.detail}`.trim();
     el('dynamics-note').textContent=`${renderer.timeline.dynamics.note}. Уклон: красный ↑≥10%, оранжевый ↑≥3%, нейтральный ±3%, светло-зелёный ↓≥3%, зелёный ↓≥10%. ${story.replayPacing==='terrain'?'Стилизованный темп по уклону':'Равномерный темп'} · это не реальная скорость. ${renderer.config.cameraMode==='terrain'?'Цвет 3D-пути соответствует выбранному режиму.':'В 2D путь сохраняет одноцветное оформление.'}`;
-    canvas.setAttribute('aria-label',`История «${story.title}»: карта маршрута со стартом и финишем`);el('export-note').textContent=`${story.durationSeconds} секунд · ${settings.width} × ${settings.height} · 24 кадра/с · H.264`;
+    canvas.setAttribute('aria-label',`История «${story.title}»: карта маршрута со стартом и финишем`);qualityNote();
     if('gpu' in renderer){const gpuCanvas=renderer.gpu.domElement;const lost=()=>{if(operation!==current)return;current.abort();releaseRenderer();failure(Error('3D-контекст потерян'),'scene');};gpuCanvas.addEventListener('webglcontextlost',lost);contextCleanup=()=>gpuCanvas.removeEventListener('webglcontextlost',lost);}
     stageFor(current,heading)('Готовим предпросмотр');if(!draw())return;setState({phase:'READY',notice:prepared.notice??(autoplay&&reducedMotion?'3D-демо готово. Нажмите ▶ для воспроизведения.':undefined)});
     if(autoplay&&!reducedMotion){startupPlayPending=true;if(!welcomeVisible&&startupPlayAllowed)startPlay();}await probe(current);
@@ -189,7 +200,16 @@ el('retry').addEventListener('click',()=>retryAction?.());el('simplify').addEven
   control('camera-mode').value='classic';void configure();
 });el('compatibility').addEventListener('click',()=>{control('quality').value='compatibility';void configure();});
 el('cancel-load').addEventListener('click',()=>{clearTimeout(titleTimer);operation?.abort();operation=undefined;releaseRenderer();setState({phase:'CANCELLED',notice:'Подготовка отменена. Можно повторить или выбрать другой маршрут.'});});
-for(const id of selects)control(id).addEventListener('change',()=>{if(busyExport())return;dismissWelcome();if(id==='marker'&&control('marker').value!=='custom'){customMarker?.dispose();customMarker=undefined;}void configure();});
+for(const id of selects)control(id).addEventListener('change',()=>{
+  if(busyExport())return;dismissWelcome();
+  if(id==='quality'){
+    el<HTMLInputElement>('direct-file').checked=control('quality').value==='ultra'&&!!filePicker;
+    if(renderer&&operation&&!operation.signal.aborted&&story.qualityPreset!=='compatibility'&&control('quality').value!=='compatibility'&&!busyLoad()){
+      stop();story=configFromControls();encoder={status:'checking'};setState({phase:'READY'});void probe(operation);return;
+    }
+  }
+  if(id==='marker'&&control('marker').value!=='custom'){customMarker?.dispose();customMarker=undefined;}void configure();
+});
 title.addEventListener('input',()=>{
   if(busyExport()||!route)return;dismissWelcome();const op=begin('Обновляем название истории');
   stageFor(op,'Обновляем название истории')('Название обновится после ввода · экспорт временно недоступен');
@@ -207,10 +227,21 @@ el('welcome-start').addEventListener('click',()=>{dismissWelcome(true);if(!rende
 el('welcome-file').addEventListener('click',()=>{dismissWelcome();file.click();});
 el('show-welcome').addEventListener('click',()=>{if(busyExport())return;stop();startupPlayPending=false;startupPlayAllowed=false;welcomeVisible=true;el('welcome').hidden=false;el('welcome-start').textContent='Продолжить';el('welcome-start').focus();window.scrollTo({top:0,behavior:'instant'});});
 button.addEventListener('click',async()=>{
-  if(!renderer||busyExport()||busyLoad()||encoder.status!=='supported')return;dismissWelcome();stop();const active=renderer,config=active.config,controller=new AbortController();exportController=controller;setState({phase:'EXPORTING'});performance.mark('route-story-export-start');
-  try{const blob=await exportVideo({config,draw:(target,time)=>active.draw(target,time),signal:controller.signal,onProgress:progress=>setState({phase:'EXPORTING',progress})});downloadVideo(blob,videoFilename(config));performance.mark('route-story-export-end');performance.measure('route-story-export','route-story-export-start','route-story-export-end');setState({phase:'READY',notice:`MP4 создан · ${config.durationSeconds} секунд · ${(blob.size/1024/1024).toFixed(1)} МиБ. Видео готово.`});}
-  catch(error){if(controller.signal.aborted)setState({phase:'CANCELLED',notice:'Экспорт отменён.'});else{retryAction=()=>{if(renderer){setState({phase:'READY'});button.click();}else void configure();};setState({phase:'ERROR',error:uiError(error,'export'),blocking:!renderer});}}
-  finally{exportController=undefined;renderState();}
+  if(!renderer||busyExport()||busyLoad()||encoder.status!=='supported')return;dismissWelcome();stop();const active=renderer,config=validateStoryConfig({...active.config,qualityPreset:story.qualityPreset}),controller=new AbortController(),size=exportSettings(config),original=[active.width,active.height] as const;exportController=controller;setState({phase:'EXPORTING'});performance.mark('route-story-export-start');
+  let temporary:SceneRenderer|undefined,writable:VideoFileWriter|undefined,fileDone=false;
+  try{
+    // Picker is invoked during the click's user activation, before any await.
+    const handle=el<HTMLInputElement>('direct-file').checked&&filePicker?await filePicker.call(window,{suggestedName:videoFilename(config),types:[{description:'Видео MP4',accept:{'video/mp4':['.mp4']}}]}):undefined;
+    controller.signal.throwIfAborted();if(handle)writable=await handle.createWritable();
+    if('gpu' in active)active.setOutputSize(size.width,size.height);else if(active.width!==size.width||active.height!==size.height)temporary=active.atResolution(config,size.width,size.height);
+    const render=temporary??active,options={config,canvas:'gpu' in render?render.encodingCanvas:undefined,draw:(target:HTMLCanvasElement,time:number)=>'gpu' in render?render.captureFrame(time):render.draw(target,time),signal:controller.signal,onProgress:(progress:number)=>setState({phase:'EXPORTING' as const,progress})};
+    let bytes:number;
+    if(writable){bytes=(await exportVideoToFile(options,writable)).bytes;fileDone=true;}
+    else{const blob=await exportVideo(options);bytes=blob.size;downloadVideo(blob,videoFilename(config));}
+    performance.mark('route-story-export-end');performance.measure('route-story-export','route-story-export-start','route-story-export-end');setState({phase:'READY',notice:`MP4 создан · ${config.durationSeconds} секунд · ${(bytes/1024/1024).toFixed(1)} МиБ. Видео готово${writable?' · файл записан':''}.`});
+  }
+  catch(error){if(controller.signal.aborted||error instanceof DOMException&&error.name==='AbortError')setState({phase:'CANCELLED',notice:'Экспорт отменён.'});else{retryAction=()=>{if(renderer){setState({phase:'READY'});button.click();}else void configure();};setState({phase:'ERROR',error:uiError(error,'export'),blocking:!renderer});}}
+  finally{temporary?.dispose();if(writable&&!fileDone)await writable.abort().catch(()=>{});if(renderer===active&&'gpu' in active){try{active.setOutputSize(...original);draw();}catch(error){releaseRenderer();failure(error,'scene');}}exportController=undefined;renderState();}
 });
 window.addEventListener('pagehide',()=>{clearTimeout(titleTimer);operation?.abort();exportController?.abort();cancelAnimationFrame(animationId);releaseRenderer();customMarker?.dispose();customMarker=undefined;disposeTraveler();clearResourceCache();route=undefined;source=undefined;});
 updateSceneOptions();renderState();

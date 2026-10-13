@@ -41,11 +41,11 @@ export class TerrainRenderer {
   private framePixels=new Uint8Array(0);
   private frameImage?:ImageData;
   private readonly frameCanvas=document.createElement('canvas');
-  constructor(route:Route,readonly terrain:TerrainDataset,readonly width:number,readonly height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset,cameraOptions?:TerrainCameraOptions){
+  constructor(route:Route,readonly terrain:TerrainDataset,public width:number,public height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset,cameraOptions?:TerrainCameraOptions){
     const begin=performance.now(),regional=!!terrain.manifest.regionalProjection,needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';this.timeline=new StoryTimeline(route,config,needsDynamics?new RouteDynamics(route,{name:`DEM ${regional?'swisstopo':terrain.manifest.id==='discovered-copernicus-dem'?'Copernicus DSM':'Kartverket'} (${terrain.level.spacingMeters} м)`,spacingMeters:terrain.level.spacingMeters,covers:r=>terrain.routeCoverage(r),elevation:p=>terrain.sampleElevation(p.lat,p.lon)}):undefined);this.config=this.timeline.config;
     try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height,cameraOptions,terrain.manifest.id==='discovered-copernicus-dem'?imagery?.manifest.spacingMeters:undefined);}catch(error){imagery?.dispose();throw error;}
     const canvas=document.createElement('canvas');
-    try{this.gpu=new T.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:true,powerPreference:'default'});}
+    try{this.gpu=new T.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:false,powerPreference:'default'});}
     catch{imagery?.dispose();throw Error('На этом устройстве недоступен WebGL 2 для рельефа. Выберите «Кино · 2D».');}
     this.gpu.setPixelRatio(1);this.gpu.setSize(width,height,false);this.gpu.outputColorSpace=T.SRGBColorSpace;
     this.gpu.debug.onShaderError=()=>{throw Error('Не удалось подготовить 3D-шейдер. Экспорт остановлен; выберите 2D.');};
@@ -128,6 +128,21 @@ export class TerrainRenderer {
     }catch(error){this.dispose();throw error;}
   }
   private readonly onLost=(event:Event)=>{event.preventDefault();this.lost=true;};
+  /** Resize the same resident scene/context, not its geographic camera plan.
+   * The synchronous readback occurs before the default framebuffer is cleared. */
+  assertOutputSize(width:number,height:number):void{
+    const gl=this.gpu.getContext(),viewport=gl.getParameter(gl.MAX_VIEWPORT_DIMS) as Int32Array;
+    if(!Number.isSafeInteger(width)||!Number.isSafeInteger(height)||width<=0||height<=0||width*height>3840*2160||Math.abs(width/height-this.plan.aspect)>1e-9)throw Error('Неподдерживаемый размер кадра или формат.');
+    if(width>viewport[0]||height>viewport[1]||Math.max(width,height)>Math.min(gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),this.gpu.capabilities.maxTextureSize))throw Error('GPU не поддерживает выбранный размер кадра. Выберите 1080p или 720p.');
+  }
+  setOutputSize(width:number,height:number):void{
+    this.assertOutputSize(width,height);const gl=this.gpu.getContext();
+    this.frameImage=undefined;this.framePixels=new Uint8Array(0);this.frameCanvas.width=width;this.frameCanvas.height=height;
+    this.gpu.setSize(width,height,false);this.width=width;this.height=height;this.camera.setViewOffset(width,height,0,Math.min(width,height)*.04,width,height);this.camera.updateProjectionMatrix();
+    const actual=gl.getParameter(gl.VIEWPORT) as Int32Array;if(actual[2]!==width||actual[3]!==height)throw Error('GPU не создал полный кадр. Выберите 1080p или 720p.');
+  }
+  get encodingCanvas():HTMLCanvasElement{return this.frameCanvas;}
+  captureFrame(seconds:number):void{this.renderFrame(seconds);}
   draw(canvas:HTMLCanvasElement,seconds:number):void{
     this.renderFrame(seconds);
     const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx)throw Error('Canvas 2D недоступен.');
@@ -161,7 +176,7 @@ export class TerrainRenderer {
     this.gpu.getContext().disable(this.gpu.getContext().DITHER);
     this.gpu.render(this.scene,this.camera);
     const gl=this.gpu.getContext();if(gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)throw Error('3D-кадр не готов.');
-    if(this.plan.options&&gl.getError()===gl.OUT_OF_MEMORY)throw Error('GPU не хватает памяти для Swiss-сцены. Вернитесь к Sogne или «Кино · 2D».');
+    if(gl.getError()===gl.OUT_OF_MEMORY)throw Error('GPU не хватает памяти для выбранного кадра. Выберите 1080p, 720p или «Кино · 2D».');
     const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx)throw Error('Canvas 2D недоступен.');
     if(canvas.width!==this.width||canvas.height!==this.height){canvas.width=this.width;canvas.height=this.height;}
     // A direct WebGL->Canvas drawImage may switch browser transfer/rounding paths
