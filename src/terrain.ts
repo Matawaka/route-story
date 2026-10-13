@@ -11,6 +11,10 @@ export interface TerrainManifest {
   regionalProjection?:RegionalProjection;
 }
 const R=6371008.8, rad=Math.PI/180;
+/** Shared projection for fixed-pack discovery and the validated DEM renderer. */
+export function terrainWorld(manifest:Pick<TerrainManifest,'origin'|'regionalProjection'>,p:RoutePoint,cos=Math.cos(manifest.origin[1]*rad)):TerrainXY {
+  return manifest.regionalProjection?regionalWorld(manifest.regionalProjection,p):[R*rad*wrapDelta(p.lon-manifest.origin[0])*cos,R*rad*(p.lat-manifest.origin[1])];
+}
 /** A bounded, local tangent scene in metres. GPX distance is never calculated here. */
 export class TerrainDataset {
   readonly cos:number;
@@ -25,7 +29,7 @@ export class TerrainDataset {
     for(const value of heights)if(value!==manifest.noData){if(value < -500||value>9000)throw Error('Высоты DEM вне поддерживаемого диапазона.');min=Math.min(min,value);max=Math.max(max,value);}
     if(!Number.isFinite(min))throw Error('DEM не содержит высот.');this.min=min;this.max=max;
   }
-  world(p:RoutePoint):TerrainXY{return this.manifest.regionalProjection?regionalWorld(this.manifest.regionalProjection,p):[R*rad*wrapDelta(p.lon-this.manifest.origin[0])*this.cos,R*rad*(p.lat-this.manifest.origin[1])];}
+  world(p:RoutePoint):TerrainXY{return terrainWorld(this.manifest,p,this.cos);}
   geographic([x,y]:TerrainXY):RoutePoint{return this.manifest.regionalProjection?regionalGeographic(this.manifest.regionalProjection,[x,y]):{lon:wrapDelta(this.manifest.origin[0]+x/(R*rad*this.cos)),lat:this.manifest.origin[1]+y/(R*rad)};}
   contains([x,y]:TerrainXY,margin=0):boolean{const m=this.manifest;return Number.isFinite(x)&&Number.isFinite(y)&&x>=m.westMeters+margin&&x<=m.eastMeters-margin&&y>=m.southMeters+margin&&y<=m.northMeters-margin;}
   /** No interpolation through missing corners, no invented sea-level fill. */

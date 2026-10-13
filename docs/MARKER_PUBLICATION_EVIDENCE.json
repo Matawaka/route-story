@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-13",
+  "status": "PENDING_PERSONAL_ENVIRONMENT_REVIEW",
+  "reviewedPr": "https://github.com/Matawaka/route-story/pull/25",
+  "reviewedPrHead": "d1334d587ab8d1f3fcd47bc012f1d3db92a92518",
+  "prState": "MERGED",
+  "productionSha": "1c7e5a078472981308d90abef1ee13a7f521038a",
+  "reviewedTreeIdentical": true,
+  "ownerMergeAndDeploymentAuthorized": true,
+  "mainCi": {
+    "url": "https://github.com/Matawaka/route-story/actions/runs/38366195077",
+    "event": "push",
+    "status": "SUCCESS",
+    "unitPassed": 238,
+    "unitFiles": 22,
+    "build": "PASS",
+    "browserPassed": 62,
+    "browserSkipped": 32,
+    "browserFailed": 0
+  },
+  "deployment": {
+    "url": "https://github.com/Matawaka/route-story/actions/runs/38367152785",
+    "reviewedSha": "1c7e5a078472981308d90abef1ee13a7f521038a",
+    "includeImagery": true,
+    "includeSwiss": true,
+    "build": "SUCCESS",
+    "deploy": "WAITING",
+    "httpsAcceptance": "PENDING",
+    "environment": "github-pages",
+    "requiredHumanReviewer": "Matawaka",
+    "allowedBranch": "main",
+    "humanReviewConfirmed": false
+  },
+  "existingPublicUrl": "https://matawaka.github.io/route-story/",
+  "newDeploymentUrlVerified": null,
+  "publicAcceptance": "PENDING",
+  "historicalLocalEvidence": "MARKER_UX_EVIDENCE.json",
+  "handoverPr": "https://github.com/Matawaka/route-story/pull/24",
+  "limitations": {
+    "newPhysicalDeviceAcceptance": "NOT TESTED",
+    "nativePeakMemory": "NOT MEASURED",
+    "gpuPeakMemory": "NOT MEASURED"
+  }
+}

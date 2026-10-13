@@ -9,12 +9,13 @@ const ready=async(page:any)=>{await expect(page.locator('#preview')).toHaveAttri
 const seek=async(page:any,t:number)=>{await page.locator('#scrub').evaluate((input:HTMLInputElement,value:number)=>{input.value=String(value);input.dispatchEvent(new Event('input',{bubbles:true}));},t);return page.locator('#preview').evaluate((c:HTMLCanvasElement)=>c.toDataURL());};
 const cacheClear=async(page:any)=>page.evaluate(async()=>{const path='/src/local-resource.ts';(await import(path)).clearResourceCache();});
 
-test('main startup loads true Swiss 3D, all presets and autoplay exactly once',async({page})=>{
+test('main startup loads true Swiss 3D, all presets and starts exactly once after welcome',async({page})=>{
   let release:()=>void=()=>{};const gate=new Promise<void>(r=>release=r);await page.route('**/furka-context-5m.i16',async r=>{await gate;try{await r.continue();}catch{}});
   await page.goto('/');await expect(page.locator('#loading')).toBeVisible();await expect(page.locator('#loading-heading')).toHaveText('Подготавливаем 3D-маршрут по Швейцарским Альпам');await expect(page.locator('#route-choice')).toBeEnabled();release();await ready(page);
   await expect(page.locator('#swiss-demo, #cinematic-demo, #terrain-demo, #demo, .demo-shortcuts')).toHaveCount(0);
   expect(await page.locator('#route-choice option').evaluateAll(options=>options.map(option=>(option as HTMLOptionElement).value))).toEqual(['empty','furka','sogne','fjords','sample','custom']);
-  await expect(page.locator('body')).toHaveAttribute('data-state','PLAYING');
+  await expect(page.locator('#welcome')).toBeVisible();await expect(page.locator('body')).toHaveAttribute('data-state','READY');await expect(page.locator('#scrub')).toHaveValue('0');
+  await page.locator('#welcome-start').click();await expect(page.locator('#welcome')).toBeHidden();await expect(page.locator('body')).toHaveAttribute('data-state','PLAYING');
   for(const[id,value]of Object.entries({'route-choice':'furka','camera-mode':'terrain','terrain-surface':'photo','terrain-flight':'corridor','route-color':'grade','replay-pacing':'terrain',marker:'traveler',ratio:'landscape',duration:'20',quality:'standard'}))await expect(page.locator(`#${id}`)).toHaveValue(value);
   await expect(page.locator('#preview')).toHaveAttribute('width','1280');await expect(page.locator('#preview')).toHaveAttribute('height','720');await expect(page.locator('#route-info')).toContainText('не реальная поездка');
   const first=await seek(page,7);await seek(page,15);expect(await seek(page,7)).toBe(first);
@@ -67,8 +68,8 @@ test('missing built-in rider asset does not prevent explicit plain 2D recovery',
 test('unsupported codec, marker replacement, own GPX and switching Sogne remain usable',async({page})=>{
   await page.addInitScript(()=>Object.defineProperty(window,'VideoEncoder',{configurable:true,value:undefined}));await page.goto('/');await expect(page.locator('#status')).toContainText('WebCodecs',{timeout:60000});await expect(page.locator('#preview')).toHaveAttribute('data-region','furka');await seek(page,5);await expect(page.locator('#export')).toBeDisabled();
   const png=readFileSync('public/markers/traveler-euc-256.png');await page.locator('#marker-file').setInputFiles({name:'local.png',mimeType:'image/png',buffer:png});await expect(page.locator('#marker')).toHaveValue('custom');await expect(page.locator('#scrub')).toBeEnabled();await expect(page.locator('#status')).toContainText('WebCodecs');
-  await page.locator('#file').setInputFiles({name:'private.gpx',mimeType:'application/gpx+xml',buffer:readFileSync('public/samples/synthetic.gpx')});await expect(page.locator('#preview')).toHaveAttribute('data-region','global');await expect(page.locator('#camera-mode')).toHaveValue('auto');await expect(page.locator('#map-detail-note')).toContainText('Используется 2D');await expect(page.locator('#route-choice')).toHaveValue('custom');
-  await page.locator('#camera-mode').selectOption('terrain');await expect(page.locator('body')).toHaveAttribute('data-state','ERROR');await expect(page.locator('#error-code')).toHaveText('scene/coverage');await page.locator('#simplify').click();await expect(page.locator('#preview')).toHaveAttribute('data-region','global');
+  await page.locator('#file').setInputFiles({name:'private.gpx',mimeType:'application/gpx+xml',buffer:readFileSync('public/samples/synthetic.gpx')});await expect(page.locator('#preview')).toHaveAttribute('data-region','global');await expect(page.locator('#camera-mode')).toHaveValue('cinematic');await expect(page.locator('#coverage-note')).toContainText('Доступна обзорная карта 2D');await expect(page.locator('#route-choice')).toHaveValue('custom');
+  await expect(page.locator('#camera-mode option[value="terrain"]')).toHaveCount(0);await expect(page.locator('#coverage-note')).toContainText('картографической информации');await expect(page.locator('#preview')).toHaveAttribute('data-region','global');
   await page.locator('#route-choice').selectOption('sogne');await expect(page.locator('#preview')).toHaveAttribute('data-region','sogne');await expect(page.locator('#status')).toContainText('WebCodecs');
 });
 

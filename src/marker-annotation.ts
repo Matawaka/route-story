@@ -10,11 +10,11 @@ export function annotationAt(x:number,y:number,z:number,width:number,height:numb
   const left=Math.max(safe[0],Math.min(safe[2]-size,x-size/2)),top=Math.max(safe[1],Math.min(safe[3]-size,y-size-8));
   return {box:[left,top,left+size,top+size],x:left+size/2,y:top+size};
 }
-export function drawAnnotation(ctx:CanvasRenderingContext2D,asset:MarkerAsset,anchor:readonly[number,number],layout:NonNullable<ReturnType<typeof annotationAt>>,size:number,occluded:boolean,direction?:readonly[number,number],showOcclusionCaption=true):void {
+export function drawAnnotation(ctx:CanvasRenderingContext2D,asset:MarkerAsset,anchor:readonly[number,number],layout:NonNullable<ReturnType<typeof annotationAt>>,size:number,occluded:boolean,direction?:readonly[number,number],showOcclusionCaption=true,showDirectionCue=true):void {
   ctx.save();ctx.strokeStyle='#fff5da';ctx.lineWidth=Math.max(1,size*.025);ctx.setLineDash(occluded?[size*.08,size*.06]:[]);
   ctx.beginPath();ctx.moveTo(...anchor);ctx.lineTo(layout.x,layout.y);ctx.stroke();ctx.setLineDash([]);
   ctx.beginPath();ctx.arc(...anchor,Math.max(2,size*.035),0,Math.PI*2);ctx.stroke();
-  ctx.shadowColor='#fff5dad9';ctx.shadowBlur=size*.055;drawMarker(ctx,asset,layout.x,layout.y,size,direction);ctx.shadowBlur=0;
+  ctx.shadowColor='#fff5dad9';ctx.shadowBlur=size*.055;drawMarker(ctx,asset,layout.x,layout.y,size,direction,showDirectionCue);ctx.shadowBlur=0;
   if(occluded&&showOcclusionCaption){ctx.font=`600 ${Math.max(9,size*.15)}px system-ui`;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillStyle='#071521e6';const text='За рельефом',tw=ctx.measureText(text).width;ctx.fillRect(layout.x-tw/2-3,layout.y+2,tw+6,size*.19);ctx.fillStyle='#fff5da';ctx.fillText(text,layout.x,layout.y+3);}
   ctx.restore();
 }

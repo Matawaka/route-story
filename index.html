@@ -8,7 +8,15 @@
   <title>Route Story · Matawaka</title>
 </head>
 <body data-view="normal" data-state="INITIALIZING" data-settings="closed">
-  <header class="topbar"><a class="brand" href="./"><span class="brand-mark" aria-hidden="true">↗</span> Route Story</a><span class="local-badge">● Всё на вашем устройстве</span></header>
+  <header class="topbar"><a class="brand" href="./"><span class="brand-mark" aria-hidden="true">↗</span> Route Story</a><button id="show-welcome" class="text-button">Как пользоваться</button><span class="local-badge">● Всё на вашем устройстве</span></header>
+  <section id="welcome" class="welcome-panel" aria-labelledby="welcome-title">
+    <button id="welcome-close" class="text-button welcome-close" aria-label="Закрыть приветствие">×</button>
+    <h2 id="welcome-title">Превратите маршрут в видео</h2>
+    <p>Route Story создаёт анимированную карту из GPX-трека. Файл обрабатывается на вашем устройстве и не отправляется на сервер.</p>
+    <ol><li>Посмотрите демо или загрузите свой GPX.</li><li>Выберите стиль, путешественника, длительность и формат видео.</li><li>Нажмите ▶ для просмотра. Ползунок позволяет перематывать маршрут.</li><li>Нажмите «Скачать MP4» и откройте готовый файл. Экспорт доступен при поддержке H.264.</li></ol>
+    <p id="welcome-demo-note">Демонстрация — синтетический маршрут, а не запись реальной поездки.</p>
+    <div class="welcome-actions"><button id="welcome-start" class="primary-button">Начать демо</button><button id="welcome-file" class="text-button">Загрузить свой GPX</button></div>
+  </section>
   <main class="workspace">
     <aside class="controls">
       <div class="eyebrow auxiliary">ИЗ ТРЕКА В ИСТОРИЮ</div>
@@ -67,6 +75,7 @@
     <section class="preview-area" aria-labelledby="preview-title">
       <div class="preview-heading"><h2 id="preview-title">Предпросмотр</h2><span id="preview-format">16:9</span></div>
       <div class="view-toolbar"><button id="explanations" class="text-button" aria-pressed="false">Скрыть пояснения</button><button id="video-only" class="text-button" aria-pressed="false">Только видео</button><button id="show-settings" class="text-button" hidden aria-expanded="false">Настройки и маршрут</button><span id="scene-name">Route Story</span></div>
+      <p id="coverage-note" class="coverage-note" role="status" hidden></p>
       <div class="canvas-stage">
         <div id="empty" class="empty-state"><div class="empty-path" aria-hidden="true">⌁</div><h3>Здесь появится ваш маршрут</h3><p>Выберите демонстрацию или загрузите GPX.</p><button id="empty-swiss" class="text-button" hidden>Открыть демонстрацию Швейцарии</button><button id="empty-file" class="text-button">Загрузить GPX</button><button id="empty-other" class="text-button">Выбрать другое демо</button></div>
         <div id="loading" class="loading-state" hidden><span class="loading-symbol" aria-hidden="true">⌁</span><h3 id="loading-heading"></h3><p id="loading-stage" role="status" aria-live="polite"></p><button id="cancel-load" class="text-button">Отменить подготовку</button></div>

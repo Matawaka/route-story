@@ -30,8 +30,9 @@ test('3D readiness failures and unsupported coverage preserve explicit 2D recove
  await page.route('**/terrain/sogne-50m.i16',r=>r.fulfill({body:'corrupt'}));await page.goto('/');await page.locator('#route-choice').selectOption('sogne');await expect(page.locator('#status')).toContainText('DEM повреждён');await expect(page.locator('#export')).toBeDisabled();
  await expect(page.locator('#route-info')).toContainText('721');await page.locator('#camera-mode').selectOption('cinematic');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#route-info')).toContainText('721');
  await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();
- await page.unroute('**/terrain/sogne-50m.i16');await page.locator('#camera-mode').selectOption('terrain');await expect(page.locator('#status')).toContainText('Выберите «Кино · 2D»');await expect(page.locator('#export')).toBeDisabled();
- await page.locator('#camera-mode').selectOption('auto');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#map-detail-note')).toContainText('Используется 2D');
+ await page.unroute('**/terrain/sogne-50m.i16');await expect(page.locator('#camera-mode option[value="terrain"], #camera-mode option[value="auto"]')).toHaveCount(0);await expect(page.locator('#coverage-note')).toContainText('картографической информации');await expect(page.locator('#export')).toBeEnabled();
+ // Direct API callers cannot bypass coverage admission by forcing a removed option.
+ const refusal=await page.evaluate(async()=>{const [{prepareScene},{parseGpx},{defaultStoryConfig}]=await Promise.all(['/src/scene-provider.ts','/src/gpx.ts','/src/story.ts'].map(p=>import(p)));try{await prepareScene(parseGpx(await(await fetch('/samples/synthetic.gpx')).text()),{...defaultStoryConfig(),cameraMode:'terrain'},new AbortController().signal,()=>{});return'';}catch(e){return(e as Error).message;}});expect(refusal).toContain('DEM недоступен');
 });
 
 test('unavailable WebGL retains the imported GPX and Auto explains its 2D choice',async({page})=>{
