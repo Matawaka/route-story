@@ -1,5 +1,16 @@
 # Implementation state
 
+## Optional video captions LOCAL candidate — 2026-10-13
+
+Continue from actual main1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba (PR20 merged and protected Pages38341902700/mainCI38341239164 SUCCESS/public full acceptance already verified separately). Open documentationPR21/82a341f remains separate, not absorbed. Short-lived codex/video-caption-toggle; runtime c3a9db942fcb323501eeee5b36a14d30bc5773c6, final documentation HEAD authoritative via Git after evidence commit. No merge/deploy permission inferred for this new feature.
+
+Implemented validated captionMode full(default)/none in immutable StoryConfig, one existing main selector «Пояснения в видео и предпросмотре», all Classic/Cinematic/Terrain renderers. None removes optional title/HUD/endpoint/map labels/legend/compass/progress/branding and large caption panels; preserves source credits from exact manifests on a compact legible backplate, actual route/rider/grades/pacing/camera/350m/LOS. Occluded annotation retains dashed world anchor cue without text. Interface hide/video modes remain independent. Title/config retained, selector export-frozen, forced DOM mutation cannot alter export snapshot. No new data/dependency/limit/network/storage/workflow.
+
+Exact checks: npm.cmd run check with Edge/CI/SWISS_BASELINE1:220unit20files/build/56browserPASS/30explicit opt-in skips. SWISS_PILOT1/SWISS_BASELINE0/UNIFIED_UX_ACCEPTANCE1/FULL_EXPORT_ACCEPTANCE1 captions.spec.ts+unified.spec.ts:19PASS; committed c3a9db942fcb323501eeee5b36a14d30bc5773c6 caption suite rerun5PASS. Camera/timeline seek independence, defaults, eight2D style/aspect/camera combinations, required attribution/occlusion, cancelretry/export snapshot, preview/export exact pixels and independent real10s2D/full20s16:9+30s9:16 H.26424fps decode/PTS/frame counts/nonblank central geography proved. npm.cmd audit:0. Committed build/package allowlists:4957875/5963258/7984567B including manifests≤5/6/9MiB; output/current hashes and per-run measurements in VIDEO_CAPTIONS_EVIDENCE.json. Physical/new native/GPU peak NOTTESTED/NOTMEASURED.
+
+Local files artifacts/video-captions, decoded/native-resolution comparison frames committed docs/images/captions-*.png; docs/VIDEO_CAPTIONS.md contains use/commands. Existing public site1d303ab unchanged. Next: push focused reviewable PR, inspect exact-head CI, owner review and separately authorize merge/deploy before public launch of this option.
+
+
 ## Owner visual approval / remove duplicate demo shortcuts — 2026-10-13
 
 Continue existing PR20/codex/unified-route-story-ux from e863a661e308c94c45d573dde00ca210ed53cb76; actual main rechecked d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83. Owner approved appearance and public deployment after deleting the four redundant demo shortcuts. Keep one route-choice dropdown and contextual Empty recovery actions. Remove obsolete HTML, listeners and CSS; all acceptance tools now choose the same dropdown. No map, camera, timeline, video, data/source, dependency, package cap or protected-workflow change.

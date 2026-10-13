@@ -1,5 +1,10 @@
 # Decisions
 
+## 2026-10-13 — Optional captions are immutable video configuration
+
+Add StoryConfig.captionMode full/none (validated enum, legacy default full) and an explicit selector in main, independent of interface view mode. Hide optional in-frame title/HUD/endpoint/geographic labels/legend/progress/branding and their large backplates without changing route/timeline/camera/framing/pacing. Preserve exact required DEM/imagery credits, legible bounded source backplate and dashed occlusion cue. No fabricated attribution for a local2D diagram without loaded geography. Preview/export share one config; controls frozen during export, no mutable DOM reads. Retain user title/filename and existing durations/fps/payload/memory/source/camera safety. New local candidate requires its own owner review and publication authorization; prior PR20 approval does not merge/deploy this feature.
+
+
 ## 2026-10-13 — One demo selector after owner visual review
 
 Remove the four redundant demo shortcuts below the route dropdown, including their listeners and obsolete CSS. Keep all existing dropdown choices and contextual Empty recovery actions. Browser and external acceptance automation must use the same actual dropdown, never retain hidden substitute buttons. Export-conflict assertions continue proving that route changes are disabled during export and restored after failure. No renderer or exported-frame changes. Owner approved the visuals and deployment after this correction; exact-main CI and personal protected Pages approval remain mandatory.
