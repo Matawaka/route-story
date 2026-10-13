@@ -1,6 +1,17 @@
 import {test,expect} from '@playwright/test';
 import {mkdirSync,writeFileSync} from 'node:fs';
 const out='artifacts/marker-facing';
+test('short zigzags do not reflect the rendered upright rider and exact seeking remains stable',async({page})=>{
+ await page.goto('/');const result=await page.evaluate(async()=>{
+  const [{RouteRenderer},{routeMetrics},{defaultStoryConfig},{loadTraveler},{loadGeography}]=await Promise.all(['/src/renderer.ts','/src/geo.ts','/src/story.ts','/src/traveler.ts','/src/geography.ts'].map(p=>import(p)));
+  const segments=[Array.from({length:1001},(_,i)=>({lon:6+(i%2?-.00002:.00002),lat:61+i*.00001}))],route={name:'Синтетический зигзаг',segments,...routeMetrics(segments)},asset=await loadTraveler(),land={...await(await fetch('/maps/ne_110m_land.geojson')).json(),geography:await loadGeography()},results=[];
+  for(const visualStyle of ['atlas','night'])for(const aspectRatio of ['landscape','portrait']){
+   const w=aspectRatio==='landscape'?640:360,h=aspectRatio==='landscape'?360:640,r=new RouteRenderer(route,land,w,h,visualStyle,{...defaultStoryConfig(),visualStyle,aspectRatio,durationSeconds:60,cameraMode:'cinematic',marker:'traveler'},asset),c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d',{willReadFrequently:true})!,native=ctx.drawImage.bind(ctx),signs=[];
+   ctx.drawImage=((image:CanvasImageSource,...args:number[])=>{if(image===(r as any).markerAsset.canvas)signs.push(ctx.getTransform().a);native(image,...args as [number,number]);}) as typeof ctx.drawImage;
+   try{for(let i=1;i<200;i++)r.draw(c,2+56*i/200);r.draw(c,30);const first=c.toDataURL();r.draw(c,59);r.draw(c,1);r.draw(c,30);results.push({visualStyle,aspectRatio,allUpright:signs.every(v=>v===1),draws:signs.length,reverseEqual:first===c.toDataURL()});}finally{r.dispose();}
+  }return results;
+ });for(const r of result){expect(r.draws).toBeGreaterThan(190);expect(r.allUpright).toBe(true);expect(r.reverseEqual).toBe(true);}
+});
 test('all raster markers reflect horizontally without rotating, mutating their source or leaking transforms',async({page})=>{
   await page.goto('/');const result=await page.evaluate(async()=>{
     const [{loadTraveler},{prepareMarker,MarkerAsset,drawMarker}]=await Promise.all([import('/src/traveler.ts'),import('/src/marker.ts')]);
@@ -38,9 +49,9 @@ test('3D annotation and depth-tested sprite use the same local screen direction 
   await page.goto('/');const result=await page.evaluate(async()=>{
     const [{TerrainRenderer},{loadTerrain},{loadImagery},{parseGpx},{defaultStoryConfig},{loadTraveler}]=await Promise.all(['/src/terrain-renderer.ts','/src/terrain.ts','/src/imagery.ts','/src/gpx.ts','/src/story.ts','/src/traveler.ts'].map(p=>import(p))),route=parseGpx(await(await fetch('/samples/terrain-sogne.gpx')).text()),asset=await loadTraveler(),results=[];
     for(const presentation of ['annotation','occluded']){
-      const config={...defaultStoryConfig(),durationSeconds:4,introSeconds:.5,outroSeconds:.5,cameraMode:'terrain',terrainSurface:'photo',terrainFlight:'corridor',marker:'traveler',markerPresentation:presentation},r=new TerrainRenderer(route,await loadTerrain('compatibility'),640,360,config,await loadImagery(),asset),c=document.createElement('canvas');c.width=640;c.height=360;const ctx=c.getContext('2d',{willReadFrequently:true})!,native=ctx.drawImage.bind(ctx);let scales:number[]=[];
+      const config={...defaultStoryConfig(),durationSeconds:4,introSeconds:.5,outroSeconds:.5,cameraMode:'terrain',terrainSurface:'photo',terrainFlight:'corridor',marker:'traveler',markerPresentation:presentation},r=new TerrainRenderer(route,await loadTerrain('compatibility'),640,360,config,await loadImagery(),asset),c=document.createElement('canvas');c.width=640;c.height=360;const ctx=(r as any).frameCanvas.getContext('2d',{willReadFrequently:true})!,native=ctx.drawImage.bind(ctx);let scales:number[]=[];
       ctx.drawImage=((image:CanvasImageSource,...args:number[])=>{if(image===(r as any).markerAsset.canvas)scales.push(ctx.getTransform().a);native(image,...args as [number,number]);}) as typeof ctx.drawImage;
-      try{const poses=[];for(const time of [0,.5,1,1.5,2,2.5,3,3.999]){scales=[];r.draw(c,time);const sprite=(r as any).marker;poses.push({time,repeat:sprite.material.map.repeat.x,offset:sprite.material.map.offset.x,annotationScale:scales[0],textures:r.gpu.info.memory.textures,depthTest:sprite.material.depthTest,frame:c.toDataURL()});}r.draw(c,1);const first=c.toDataURL();r.draw(c,3);r.draw(c,0);r.draw(c,1);results.push({presentation,poses,seekEqual:first===c.toDataURL()});}finally{r.dispose();}
+      try{const poses=[];for(const time of [0,.5,1,1.5,2,2.5,3,3.999]){scales=[];r.draw(c,time);const sprite=(r as any).marker;poses.push({time,repeat:sprite.material.map.repeat.x,offset:sprite.material.map.offset.x,annotationScale:scales[0],textures:r.gpu.info.memory.textures,depthTest:sprite.material.depthTest,frame:c.toDataURL()});}r.draw(c,1);const first=c.toDataURL();r.draw(c,3);r.draw(c,0);r.draw(c,1);results.push({presentation,poses,seekEqual:first===c.toDataURL()});}finally{r.dispose();if((r as any).frameCanvas.width!==0||(r as any).framePixels.length!==0||(r as any).frameImage!==undefined)throw Error('Frame resources retained after disposal');}
     }return results;
   });mkdirSync(out,{recursive:true});
   for(const r of result){expect(r.seekEqual).toBe(true);expect(new Set(r.poses.map(p=>p.repeat))).toEqual(new Set([-1,1]));expect(new Set(r.poses.map(p=>p.textures)).size).toBe(1);expect(r.poses[0].textures).toBeLessThanOrEqual(3);

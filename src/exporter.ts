@@ -1,7 +1,7 @@
 // Frame sequencing and capability probing adapted from Travel Animation exporter.js.
 // Copyright (c) 2026 topmonroe9. MIT; see licenses/TRAVEL_ANIMATION.txt.
 import { BufferTarget, CanvasSource, Mp4OutputFormat, Output, Quality } from 'mediabunny';
-import { exportSettings, MAX_VIDEO_BYTES, regressionStoryConfig, validateStoryConfig, type StoryConfig } from './story';
+import { exportSettings, videoByteLimit, regressionStoryConfig, validateStoryConfig, type StoryConfig } from './story';
 import { normalizeAvcDescription } from './avc';
 
 const BITRATE = 1_500_000;
@@ -32,6 +32,7 @@ export async function exportVideo(options: {
   }
   const config = validateStoryConfig(options.config ?? { ...regressionStoryConfig(), aspectRatio: options.height === 640 ? 'portrait' : 'landscape' });
   const { width, height, bitrate, fps, frameCount } = exportSettings(config);
+  const byteLimit = videoByteLimit(config);
   signal?.throwIfAborted();
   const codec = await detectEncoder(width, height, bitrate, fps);
   signal?.throwIfAborted();
@@ -42,7 +43,7 @@ export async function exportVideo(options: {
   const source = new CanvasSource(canvas, { codec: 'avc', fullCodecString: codec, quality: new Quality({ bitrate }), keyFrameInterval: 2,
     onEncodedPacket: (packet, metadata) => {
       if (metadata?.decoderConfig?.description) metadata.decoderConfig.description = normalizeAvcDescription(metadata.decoderConfig.description);
-      encodedBytes += packet.data.byteLength; if (encodedBytes > MAX_VIDEO_BYTES) throw new Error('Видео превысило лимит 32 МиБ. Выберите более короткое видео или совместимое качество.');
+      encodedBytes += packet.data.byteLength; if (encodedBytes > byteLimit) throw new Error(`Видео превысило лимит ${byteLimit / 1024 / 1024} МиБ. Выберите более короткое видео или совместимое качество.`);
     }
   });
   output.addVideoTrack(source, { frameRate: fps });
@@ -63,7 +64,7 @@ export async function exportVideo(options: {
     source.close();
     await output.finalize();
     if (!target.buffer) throw new Error('Кодировщик не создал MP4.');
-    if (target.buffer.byteLength > MAX_VIDEO_BYTES + 1024 * 1024) throw new Error('MP4 превысил допустимый размер.');
+    if (target.buffer.byteLength > byteLimit + 1024 * 1024) throw new Error('MP4 превысил допустимый размер.');
     signal?.throwIfAborted();
     complete = true;
     options.onProgress?.(1);

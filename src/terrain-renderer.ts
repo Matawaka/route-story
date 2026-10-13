@@ -38,6 +38,9 @@ export class TerrainRenderer {
   private detailBox?:T.Box3;
   private readonly frustum=new T.Frustum();
   private readonly viewProjection=new T.Matrix4();
+  private framePixels=new Uint8Array(0);
+  private frameImage?:ImageData;
+  private readonly frameCanvas=document.createElement('canvas');
   constructor(route:Route,readonly terrain:TerrainDataset,readonly width:number,readonly height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset,cameraOptions?:TerrainCameraOptions){
     const begin=performance.now(),regional=!!terrain.manifest.regionalProjection,needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';this.timeline=new StoryTimeline(route,config,needsDynamics?new RouteDynamics(route,{name:`DEM ${regional?'swisstopo':terrain.manifest.id==='discovered-copernicus-dem'?'Copernicus DSM':'Kartverket'} (${terrain.level.spacingMeters} м)`,spacingMeters:terrain.level.spacingMeters,covers:r=>terrain.routeCoverage(r),elevation:p=>terrain.sampleElevation(p.lat,p.lon)}):undefined);this.config=this.timeline.config;
     try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height,cameraOptions,terrain.manifest.id==='discovered-copernicus-dem'?imagery?.manifest.spacingMeters:undefined);}catch(error){imagery?.dispose();throw error;}
@@ -126,17 +129,26 @@ export class TerrainRenderer {
   }
   private readonly onLost=(event:Event)=>{event.preventDefault();this.lost=true;};
   draw(canvas:HTMLCanvasElement,seconds:number):void{
+    this.renderFrame(seconds);
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx)throw Error('Canvas 2D недоступен.');
+    if(canvas.width!==this.width||canvas.height!==this.height){canvas.width=this.width;canvas.height=this.height;}
+    // Copy fully composited opaque bytes, including the marker, to either CPU or
+    // GPU-backed destination canvases without re-rasterizing fractional edges.
+    ctx.putImageData(this.frameCanvas.getContext('2d')!.getImageData(0,0,this.width,this.height),0,0);
+  }
+  private renderFrame(seconds:number):void{
+    const canvas=this.frameCanvas;
     if(this.disposed||this.lost||this.gpu.getContext().isContextLost())throw Error('3D-контекст потерян. Переключите камеру на 2D или выберите 3D повторно.');
     const state=this.timeline.at(seconds),pose=getTerrainCameraStateAt(seconds,this.plan),night=this.config.visualStyle==='night';
     this.camera.position.set(pose.position[0],pose.position[2],-pose.position[1]);this.camera.up.set(0,1,0);this.camera.lookAt(pose.target[0],pose.target[2],-pose.target[1]);
     this.camera.updateMatrixWorld();
     if(this.imagery){this.camera.updateMatrixWorld();this.viewProjection.multiplyMatrices(this.camera.projectionMatrix,this.camera.matrixWorldInverse);this.frustum.setFromProjectionMatrix(this.viewProjection);const visible=!!this.detailBox&&this.frustum.intersectsBox(this.detailBox);this.detailWeight.value=this.imagery.manifest.detailSelection?projectedDetailWeight(this.imagery.manifest,terrainTexelFootprint(this.terrain,pose.position,pose.target,this.terrain.world(state.point),this.width,this.height,this.imagery.manifest.detail!.spacingMeters),visible):imageryDetailWeight(this.imagery.manifest,Math.hypot(...pose.position.map((v,i)=>v-pose.target[i])),pose.fov,this.height,visible);}
     const xy=this.terrain.world(state.point);this.marker.position.set(xy[0],this.terrain.meshElevation(xy)!+24,-xy[1]);this.routeMaterial.uniforms.progress.value=state.travelledKm;
-    // Project a bounded local tangent in the CURRENT camera, not a previous frame.
-    // Source endpoints stay in the current segment; isolated/stationary points have no facing.
+    // Project the same bounded distance-window heading as 2D in the current camera.
+    // The icon's actual world anchor above remains on the unsmoothed GPX.
     let facing:readonly[number,number]|undefined;
-    const edge=this.markerAsset?this.timeline.path.edgeAt(state.segment,state.index):undefined;
-    if(edge){const a=this.terrain.world(edge.a),b=this.terrain.world(edge.b),vector=new T.Vector3(b[0]-a[0],this.terrain.meshElevation(b)!-this.terrain.meshElevation(a)!,-b[1]+a[1]);
+    const chord=this.markerAsset?this.timeline.path.headingPoints(state.segment,state.index,state.travelledKm):undefined;
+    if(chord){const a=this.terrain.world(chord[0]),b=this.terrain.world(chord[1]),vector=new T.Vector3(b[0]-a[0],this.terrain.meshElevation(b)!-this.terrain.meshElevation(a)!,-b[1]+a[1]);
       if(vector.length()>1e-6){const anchor=this.marker.position.clone().project(this.camera),near=this.marker.position.clone().add(vector.normalize()).project(this.camera);facing=[(near.x-anchor.x)*this.width/2,(anchor.y-near.y)*this.height/2];}}
     for(const mesh of [this.marker,this.start,this.finish])mesh.scale.setScalar(this.camera.position.distanceTo(mesh.position)*.009);
     if(this.marker instanceof T.Sprite){const depth=new T.Vector3().copy(this.marker.position).applyMatrix4(this.camera.matrixWorldInverse).z;this.marker.scale.setScalar(Math.abs(depth)*2*Math.tan(this.camera.fov*Math.PI/360)/this.height*Math.min(this.width,this.height)*.11);const map=this.marker.material.map!,left=markerFacesLeft(facing);map.repeat.x=left?-1:1;map.offset.x=left?1:0;map.updateMatrix();}
@@ -144,12 +156,21 @@ export class TerrainRenderer {
     this.marker.visible=state.markerOpacity>.1&&!annotation;this.finish.visible=state.phase==='OUTRO'||state.routeProgress>.9;
     if(this.direction){const next=this.timeline.route.segments[state.segment][Math.max(1,state.index)],target=next?this.terrain.world(next):xy,endHeight=this.terrain.meshElevation(target),vector=new T.Vector3(target[0]-xy[0],(endHeight??this.marker.position.y-24)+24-this.marker.position.y,-target[1]+xy[1]),remaining=vector.length();this.direction.visible=state.phase==='ROUTE_REPLAY'&&state.markerOpacity>.1&&remaining>1e-4;if(this.direction.visible){const length=Math.min(remaining,100,this.camera.position.distanceTo(this.marker.position)*.03);this.direction.position.copy(this.marker.position);this.direction.position.y+=8;this.direction.setDirection(vector.normalize());this.direction.setLength(length,Math.min(25,length*.4),Math.min(15,length*.25));}}
     if(annotation&&this.direction)this.direction.visible=false;
+    // WebGL enables framebuffer dithering by default. Explicitly disable it:
+    // deterministic source frames must not depend on the driver's frame history.
+    this.gpu.getContext().disable(this.gpu.getContext().DITHER);
     this.gpu.render(this.scene,this.camera);
     const gl=this.gpu.getContext();if(gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)throw Error('3D-кадр не готов.');
     if(this.plan.options&&gl.getError()===gl.OUT_OF_MEMORY)throw Error('GPU не хватает памяти для Swiss-сцены. Вернитесь к Sogne или «Кино · 2D».');
     const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx)throw Error('Canvas 2D недоступен.');
     if(canvas.width!==this.width||canvas.height!==this.height){canvas.width=this.width;canvas.height=this.height;}
-    ctx.resetTransform();ctx.globalAlpha=1;ctx.drawImage(this.gpu.domElement,0,0);
+    // A direct WebGL->Canvas drawImage may switch browser transfer/rounding paths
+    // after repeated exports. Fixed RGBA readback keeps the underlying pixels
+    // identical before compositing the CPU marker. Only two current-frame buffers.
+    if(!this.frameImage){this.frameImage=new ImageData(this.width,this.height);this.framePixels=new Uint8Array(this.width*this.height*4);}
+    gl.readPixels(0,0,this.width,this.height,gl.RGBA,gl.UNSIGNED_BYTE,this.framePixels);
+    const row=this.width*4;for(let y=0;y<this.height;y++)this.frameImage.data.set(this.framePixels.subarray((this.height-1-y)*row,(this.height-y)*row),y*row);
+    ctx.resetTransform();ctx.globalAlpha=1;ctx.putImageData(this.frameImage,0,0);
     const w=this.width,h=this.height,u=Math.min(w,h),p=u*.075,ink=night?'#fff3d6':'#fff9ed';
     const projected=this.marker.position.clone().project(this.camera),anchor=[(projected.x+1)*w/2,(1-projected.y)*h/2] as const,size=markerSize(this.config,u);
     const layout=annotation&&state.markerOpacity>.1?annotationAt(...anchor,projected.z,w,h,size,[p,u*.24,w-p,h-u*(this.plan.options?.overview!==undefined ? .31 : .29)]):undefined;
@@ -189,6 +210,8 @@ export class TerrainRenderer {
     if(this.terrain.manifest.id==='discovered-copernicus-dem')drawVideoCredits(ctx,[this.terrain.manifest.attribution,...(this.imagery?[this.imagery.manifest.attribution]:[])],w,h);
   }
   dispose():void{
+    this.framePixels=new Uint8Array(0);this.frameImage=undefined;
+    this.frameCanvas.width=this.frameCanvas.height=0;
     if(this.disposed)return;this.disposed=true;for(const resource of this.disposables)resource.dispose();this.scene.clear();
     if(this.gpu){this.gpu.domElement.removeEventListener('webglcontextlost',this.onLost);if(!this.gpu.getContext().isContextLost())this.gpu.forceContextLoss();this.gpu.dispose();this.gpu.domElement.width=this.gpu.domElement.height=0;}
   }

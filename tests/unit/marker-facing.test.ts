@@ -2,6 +2,11 @@ import {describe,it,expect} from 'vitest';
 import {markerFacesLeft,routeMarkerDirection} from '../../src/marker';
 import {RoutePath,fitProjection} from '../../src/geo';
 describe('deterministic marker facing',()=>{
+  it('ignores repeated short lateral zigzags while retaining the original points and exact reverse seeking',()=>{
+    const points=Array.from({length:1001},(_,i)=>({lon:6+(i%2?-.00002:.00002),lat:61+i*.00001})),path=new RoutePath([points]),before=JSON.stringify(points),project=({lon,lat}:{lon:number;lat:number})=>[lon,-lat] as const;
+    const at=(p:number)=>{const s=path.at(p);return markerFacesLeft(routeMarkerDirection(path,s.segment,s.index,project,s.distance));};
+    for(let i=1;i<999;i++)expect(at(i/1000)).toBe(false);expect(at(.4)).toBe(at(.4));at(.9);expect(at(.4)).toBe(false);expect(JSON.stringify(points)).toBe(before);
+  });
   it('reflects only leftward screen motion; vertical/stationary/nonfinite vectors stay neutral',()=>{
     for(const d of [[-1,0],[-1,2],[-20,-3]] as const)expect(markerFacesLeft(d)).toBe(true);
     for(const d of [[1,0],[0,1],[0,-1],[0,0],[-.00001,1],[NaN,1],[-1,Infinity]] as const)expect(markerFacesLeft(d)).toBe(false);

@@ -98,12 +98,12 @@ export function prepareMarker(kind: StoryConfig['marker'], custom?: MarkerAsset)
 export function markerFacesLeft(direction?:readonly[number,number]):boolean {
   if (!direction || !direction.every(Number.isFinite)) return false;
   const length=Math.hypot(...direction);
-  // A tiny relative dead zone avoids horizontal reflection from vertical rounding noise.
-  return length>1e-6 && direction[0]<-length*.001;
+  // Near-vertical motion and minor turns keep the upright artwork neutral.
+  return length>1e-6 && direction[0]<-length*.15;
 }
-export function routeMarkerDirection(path:RoutePath,segment:number,index:number,project:(point:RoutePoint)=>readonly[number,number]):readonly[number,number]|undefined {
-  const edge=path.edgeAt(segment,index);if(!edge)return;
-  const a=project(edge.a),b=project(edge.b),direction=[b[0]-a[0],b[1]-a[1]] as const;
+export function routeMarkerDirection(path:RoutePath,segment:number,index:number,project:(point:RoutePoint)=>readonly[number,number],distance?:number):readonly[number,number]|undefined {
+  const chord=path.headingPoints(segment,index,distance);if(!chord)return;
+  const a=project(chord[0]),b=project(chord[1]),direction=[b[0]-a[0],b[1]-a[1]] as const;
   return direction.every(Number.isFinite)&&Math.hypot(...direction)>1e-6?direction:undefined;
 }
 export function drawMarker(ctx:CanvasRenderingContext2D,asset:MarkerAsset,x:number,y:number,size:number,direction?:readonly [number,number],showDirectionCue=true):void {

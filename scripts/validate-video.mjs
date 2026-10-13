@@ -12,7 +12,7 @@ function checkedDecode(executable, args, maxBuffer = 8 * 1024 * 1024) {
 }
 
 export function validateVideo(path, width, height, durationSeconds = 4, fps = 24) {
-  assert.ok([4,10,20,30].includes(durationSeconds), 'bounded expected duration');
+  assert.ok([4,10,20,30,60].includes(durationSeconds), 'bounded expected duration');
   assert.equal(fps,24,'expected frame rate');
   const expectedFrames = durationSeconds * fps;
   const metadata = JSON.parse(checkedDecode(process.env.FFPROBE_PATH || ffprobe.path, ['-v', 'error', '-count_frames', '-show_streams', '-show_format', '-of', 'json', path]));

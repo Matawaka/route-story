@@ -1,5 +1,11 @@
 # Decisions
 
+## 2026-10-13 — Long-route stability and bounded minute video
+
+Owner specifically requested calmer winding-route camera, fewer short-turn marker reflections and a minute option. Use smoothed north-up tracking only for3D tracks>5km, preserving shorter reviewed cinematic plans and all350m/LOS/corridor/source-resolution guards. Gaze/camera are smoothed within segments; original route/marker is not. Heading uses100–250m distance chords and a15% horizontal dead zone with binary segment-bound lookup, never prior playback frames. Extend bounded enum to60s/1440frames, preserving24FPS/resolution/bitrate; explicit minute-only48MiB payload is required for5Mbps60s, old32MiB bound unchanged.
+
+Exact-frame regression exposed a rare1-level background difference; do not introduce a pixel tolerance. Disable framebuffer dithering, composite the real current RGBA frame/marker/credits in a fixed CPU canvas, copy final bytes to preview/export. Keep only bounded current-frame buffers and dispose them. This sacrifices export speed for reproducible output; measured20/30s times rose materially and physical mobile minute-mode remains unverified. Historical measurements remain intact; CAMERA_STABILITY_EVIDENCE contains separate actual results. No deployment/merge permission or new map-pack approval inferred.
+
 ## 2026-10-13 — Consented browser-only generic photographic terrain candidate
 
 Use real Earth Search Sentinel-2 RGB/SCL COG windows and Planetary Computer Copernicus DSM rather than manually constructing another list of regions. Browser CORS/HTTP206 were actually verified; direct AWS DEM CORS failed. No VPS/key/payment is needed for the tested path. Keep first-party Furka/Sogne precedence and require fresh approximate-area consent for each user import. GPX/points/labels/file names stay local; no source requests during encoding.

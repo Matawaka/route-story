@@ -20,6 +20,18 @@ describe('bounded real terrain model',()=>{
  it('Auto uses relief near the track, not distant mountains in the pack',()=>{const t=fixture((x)=>Math.abs(x)>4000?1400:100),flat=route(t,[[[-500,0],[500,0]]]),mountain=route(t,[[[3500,0],[4500,0]]]);expect(t.max-t.min).toBe(1300);expect(t.routeReliefMeters(flat)).toBe(0);expect(t.routeReliefMeters(mountain)).toBe(1300);});
 });
 describe('pure terrain camera and conservative flight envelope',()=>{
+ it('tracks long zigzags north-up without bend-driven yaw, retaining exact GPX and minute seeking',()=>{
+  const t=fixture(()=>500),points=Array.from({length:1001},(_,i)=>[i%2?30:-30,-7000+14*i]),r=route(t,[points]),original=JSON.stringify(r.segments);
+  for(const [width,height] of [[1280,720],[720,1280]]){
+   const p=createTerrainCameraPlan(new StoryTimeline(r,{...defaultStoryConfig(),durationSeconds:60}),t,width,height);expect(p.stableFollow).toBe(true);
+   let previous=getTerrainCameraStateAt(2,p);
+   for(let frame=49;frame<1392;frame++){const time=frame/24,c=getTerrainCameraStateAt(time,p);expect(c.bearing).toBeCloseTo(0,8);expect(Math.hypot(c.position[0]-previous.position[0],c.position[1]-previous.position[1])).toBeLessThan(100);
+    expect(c.clearance).toBeGreaterThanOrEqual(350);expect(requiredVisibleAltitude(t,c.position,c.target)).toBeCloseTo(c.position[2],6);
+    const s=p.timeline.at(time),xy=t.world(s.point),pixel=projectTerrainPoint([...xy,524],c.position,c.target,width,height);expect(pixel[0]).toBeGreaterThan(width*.05);expect(pixel[0]).toBeLessThan(width*.95);expect(pixel[1]).toBeGreaterThan(height*.2);expect(pixel[1]).toBeLessThan(height*.8);previous=c;
+   }
+   const middle=getTerrainCameraStateAt(30,p);getTerrainCameraStateAt(59,p);getTerrainCameraStateAt(1,p);expect(getTerrainCameraStateAt(30,p)).toEqual(middle);
+  }expect(JSON.stringify(r.segments)).toBe(original);
+ });
  it('discovered source detail uses a bounded valid camera at every frame, with original clearance',()=>{
   const t=fixture((x,y)=>Math.round(250+600*Math.exp(-((x-1000)**2+(y-500)**2)/600000)));t.manifest.id='discovered-copernicus-dem';
   const r=route(t,[[[-4000,-3500],[-1000,-1000],[1000,500],[4000,3500]],[[4500,3500],[5000,4000]]]);
