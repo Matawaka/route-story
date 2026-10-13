@@ -19,7 +19,9 @@
     "release:acceptance": "node scripts/acceptance/release.mjs"
   },
   "dependencies": {
+    "geotiff": "3.0.5",
     "mediabunny": "1.61.3",
+    "proj4": "2.22.0",
     "three": "0.186.1"
   },
   "devDependencies": {

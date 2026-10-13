@@ -1,5 +1,9 @@
 # Implementation state
 
+## Automatic photographic terrain — owner pause, 2026-10-13
+
+Active branch `codex/automatic-photographic-terrain`, based on actual main `1c7e5a078472981308d90abef1ee13a7f521038a`. Owner authorized approximate-area searches for Mont Blanc/Malerweg, then explicitly requested pause with 1% Codex capacity remaining. Saved initial planner/discovery/bounded COG modules and pinned decoder/projection dependencies. Browser source access verified (Sentinel/Earth Search and Planetary Computer DEM); direct AWS DEM blocked by browser CORS. Application integration, real crop/scene/video acceptance and new-module tests remain unfinished. Public app is unchanged. See [complete continuation checkpoint](AUTOMATIC_GEOGRAPHY_CHECKPOINT.md); do not restart deployment or imply universal photo coverage. No merge/deploy/tag permission for this task.
+
 ## Final welcome / coverage / marker candidate — 2026-10-13
 
 Actual base/remote/public main rechecked3119cee84fd0ed435c766b40b4543cfcfe3abaa2. Short-lived codex/marker-left-facing; runtime milestone d9311381adb5038af1e43b99fec8f078107fa368, preceding marker1cf87e8ecf124a94634a16c7cda00da7429ee3b5, evidence8e8aad628c75dcb4dfa535b89fa240261c19f26f. Current HEAD after handover-only commit is authoritative via git. OPEN featurePR25 https://github.com/Matawaka/route-story/pull/25 targets main; attached to chat. Initial exact-head CI38364733898 was IN_PROGRESS at this handover; inspect latest PR head/checks before approval, never treat a pending run as passed. Local production candidate shown at http://127.0.0.1:4187/ (reviewed runtime d931138). Open documentationPR24/cb2130edebd09ee823b162f0c816efd2ce403087 remains separate. No new merge/deploy/tag/Release/contest permission inferred from previous PR23 approval.
