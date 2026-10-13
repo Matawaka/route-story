@@ -176,7 +176,7 @@
       }
     ]
   },
-  "publication": "PENDING PR20 merge approval, new exact-main CI, required human environment review and actual HTTPS acceptance; owner deployment authorization recorded 2026-10-13",
+  "publication": "VERIFIED PUBLIC HTTPS:merged main1d303aba, successful protected Pages workflow and independent full20s/30s export acceptance",
   "affectedLegacyTitleSuite": {
     "failed": 0,
     "passed": 8,
@@ -221,5 +221,239 @@
       "status": "SUCCESS",
       "url": "https://github.com/Matawaka/route-story/actions/runs/38291485274"
     }
+  },
+  "publicationCheckpoint": {
+    "date": "2026-10-13",
+    "productionSource": "1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba",
+    "pullRequest": "https://github.com/Matawaka/route-story/pull/20",
+    "merge": "MERGED",
+    "ownerMerge": "AUTHORIZED",
+    "ownerDeployment": "AUTHORIZED",
+    "mainCi": {
+      "status": "SUCCESS",
+      "url": "https://github.com/Matawaka/route-story/actions/runs/38341239164",
+      "unit": 211,
+      "browserPassed": 53,
+      "browserSkipped": 28
+    },
+    "pages": {
+      "run": "https://github.com/Matawaka/route-story/actions/runs/38341902700",
+      "status": "SUCCESS build/deploy/https-acceptance",
+      "build": "SUCCESS",
+      "page_url": "https://matawaka.github.io/route-story/",
+      "httpsAcceptance": "SUCCESS all three automated acceptance scripts and additional full public acceptance",
+      "include_imagery": true,
+      "include_swiss": true,
+      "personalApproval": "Confirmed by owner and successful required human environment review"
+    },
+    "localMainPackage": {
+      "files": 31,
+      "payloadBytes": 7977004,
+      "manifestBytes": 5426,
+      "totalBytes": 7982430,
+      "limitBytes": 9437184
+    },
+    "physicalSwissDevice": "NOT TESTED",
+    "nativeGpuPeakMemory": "NOT MEASURED",
+    "publicFullAcceptance": {
+      "status": "VERIFIED",
+      "sourceCommit": "1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba",
+      "url": "https://matawaka.github.io/route-story/",
+      "publicHttps": true,
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "physicalDevice": false,
+      "manifestHashes": 31,
+      "packageBytes": 7975410,
+      "initialSwissAutoload": true,
+      "legacyEntryRedirects": true,
+      "privateGpxNotUploaded": true,
+      "external": [],
+      "errors": [],
+      "bad": [],
+      "outputs": [
+        {
+          "file": "artifacts/unified-publication/public-full/main-furka-10s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 640,
+          "height": 360,
+          "duration": 10,
+          "decodedFrames": 240,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 240,
+          "firstFrameHash": "33d03a31567ed8a97a2d731377c6cc39",
+          "lastFrameHash": "19c1315b2103e9074d7587d8dedc0e2d",
+          "bytes": 2109925,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r"
+        },
+        {
+          "file": "artifacts/unified-publication/public-full/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "c6d0eabf43f7652e1ce0d273ea456d92",
+          "lastFrameHash": "3b07208e1675409854f79c7402411be8",
+          "bytes": 13165241,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportMilliseconds": 5186.2382,
+          "sha256": "61c30a189f2e72723ef034d5c2e8a361e36dbbb3f9e9ce62fc0a50f6e1787296"
+        },
+        {
+          "file": "artifacts/unified-publication/public-full/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "de70d00b679203e7b978a4195b1df0cd",
+          "lastFrameHash": "b862c1e91f218f0a65896694929ef9cd",
+          "bytes": 19349140,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportMilliseconds": 7436.9568,
+          "sha256": "66972a72bd4fb08f65aec10cac4142b5a374020a7f6f9cdeddf302d18a6a76b1"
+        }
+      ]
+    },
+    "deployedPackage": {
+      "payloadBytes": 7975410,
+      "manifestBytes": 5426,
+      "totalBytes": 7980836,
+      "limitBytes": 9437184,
+      "files": 31
+    },
+    "csp": {
+      "responseHeader": null,
+      "meta": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    },
+    "githubPublicAcceptance": [
+      {
+        "path": "artifacts\\unified-publication\\github-https\\acceptance-https-smoke.json",
+        "status": "VERIFIED",
+        "sourceCommit": "1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba",
+        "browser": {
+          "channel": "msedge",
+          "version": "153.0.4234.48"
+        },
+        "os": "Windows_NT 10.0.26100 x64",
+        "publicHttps": true,
+        "outputs": [
+          {
+            "codec": "h264",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "frames": 240,
+            "bytes": 2523904
+          },
+          {
+            "codec": "h264",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "frames": 240,
+            "bytes": 1457219
+          }
+        ]
+      },
+      {
+        "path": "artifacts\\unified-publication\\github-https\\imagery\\acceptance.json",
+        "status": "VERIFIED",
+        "sourceCommit": "1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba",
+        "browser": {
+          "channel": "msedge",
+          "version": "153.0.4234.48"
+        },
+        "os": "Windows_NT 10.0.26100",
+        "publicHttps": true,
+        "outputs": [
+          {
+            "codec": "h264",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "frames": 240,
+            "bytes": 1870692
+          },
+          {
+            "codec": "h264",
+            "width": 360,
+            "height": 640,
+            "duration": 10,
+            "frames": 240,
+            "bytes": 1856720
+          }
+        ]
+      },
+      {
+        "path": "artifacts\\unified-publication\\github-https\\swiss\\acceptance.json",
+        "status": "VERIFIED",
+        "sourceCommit": "1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba",
+        "browser": "153.0.4234.48",
+        "os": "Windows_NT 10.0.26100",
+        "publicHttps": true,
+        "outputs": [
+          {
+            "codec": "h264",
+            "width": 640,
+            "height": 360,
+            "duration": 10,
+            "frames": 240,
+            "bytes": 1870497
+          },
+          {
+            "codec": "h264",
+            "width": 1280,
+            "height": 720,
+            "duration": 10,
+            "frames": 240,
+            "bytes": 6161301
+          },
+          {
+            "codec": "h264",
+            "width": 720,
+            "height": 1280,
+            "duration": 10,
+            "frames": 240,
+            "bytes": 6157696
+          }
+        ]
+      }
+    ],
+    "publicFullGeographicFrameStats": [
+      {
+        "file": "artifacts/unified-publication/public-full/atlas-20s.mp4",
+        "sourceCommit": "1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba",
+        "decodedFrames": 480,
+        "spatialSample": "Central geographic crop, 80% width / 50% height, scaled160x90 gray; every decoded frame",
+        "minimumLuminanceVariance": 593.2129806664743,
+        "status": "PASS"
+      },
+      {
+        "file": "artifacts/unified-publication/public-full/night-30s.mp4",
+        "sourceCommit": "1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba",
+        "decodedFrames": 720,
+        "spatialSample": "Central geographic crop, 80% width / 50% height, scaled160x90 gray; every decoded frame",
+        "minimumLuminanceVariance": 392.9380817708334,
+        "status": "PASS"
+      }
+    ]
   }
 }
