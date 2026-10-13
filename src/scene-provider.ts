@@ -8,11 +8,12 @@ import type {TerrainRenderer} from './terrain-renderer';
 import {loadTerrain} from './terrain';
 import {loadImagery,type PreparedImagery} from './imagery';
 import {loadGeography} from './geography';
-import {regionalPackForRoute} from './region-selection';
+import {sceneAvailability} from './scene-availability';
 import {loadTraveler} from './traveler';
 import type {MarkerAsset} from './marker';
 import {localBytes,abortable,ResourceError} from './local-resource';
 declare const __SWISS_ENABLED__:boolean;
+declare const __IMAGERY_ENABLED__:boolean;
 export type SceneRenderer=RouteRenderer|TerrainRenderer;
 export interface PreparedScene {renderer:SceneRenderer; region:'furka'|'sogne'|'global'; credit:string; detail:string; notice?:string}
 let land:Promise<Land>|undefined;
@@ -23,13 +24,18 @@ function loadLand(signal:AbortSignal):Promise<Land>{
 }
 export async function prepareScene(route:Route,requested:Readonly<StoryConfig>,signal:AbortSignal,stage:(name:string)=>void,custom?:MarkerAsset):Promise<PreparedScene>{
   const settings=exportSettings(requested);let config=requested,notice:string|undefined;
+  const available=sceneAvailability(route,__SWISS_ENABLED__,__IMAGERY_ENABLED__);
+  if(config.cameraMode==='terrain'||config.cameraMode==='auto'){
+    if(!available.terrain){if(config.cameraMode==='terrain')throw Error('Картографической информации выбранной местности нет: DEM недоступен. Выберите обзорную карту 2D.');notice=available.notice;config=validateStoryConfig({...requested,cameraMode:'cinematic'});}
+    else if(config.terrainSurface==='photo'&&!available.photo)throw Error('Фотокарты выбранной местности нет в этой сборке. Выберите поверхность DEM или обзорную карту 2D.');
+  }
   const readyMarker=config.marker==='traveler'?await loadTraveler(signal):custom;
   signal.throwIfAborted();
   if(config.cameraMode==='terrain'||config.cameraMode==='auto'){
     let imagery:PreparedImagery|undefined,next:TerrainRenderer|undefined;
     try{
       stage('Получаем модель рельефа · проверяем целостность данных');
-      const swiss=__SWISS_ENABLED__&&regionalPackForRoute(route)==='furka'?await import('./swiss-pilot'):undefined;
+      const swiss=available.region==='furka'?await import('./swiss-pilot'):undefined;
       const terrain=swiss?await swiss.loadSwissTerrain(false,signal,'extended'):await loadTerrain(config.qualityPreset,signal);
       if(!terrain.routeCoverage(route)||(config.cameraMode==='auto'&&terrain.routeReliefMeters(route)<100))throw Error('Маршрут вне полного покрытия DEM или без выразительного рельефа.');
       config=validateStoryConfig({...config,cameraMode:'terrain'});

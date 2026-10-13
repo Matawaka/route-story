@@ -8,7 +8,7 @@ import type { Route } from './route';
 import type { StoryConfig } from './story';
 import {imageryUV,imageryCoversTerrain,imageryDetailWeight,projectedDetailWeight,type PreparedImagery} from './imagery';
 import { RouteDynamics, GRADE_STYLES } from './route-dynamics';
-import { prepareMarker, type MarkerAsset } from './marker';
+import { prepareMarker, markerFacesLeft, type MarkerAsset } from './marker';
 import { annotationAt, drawAnnotation, intersectsMarker, markerSize, type MarkerRect } from './marker-annotation';
 import { drawVideoCredits } from './video-credits';
 
@@ -132,8 +132,14 @@ export class TerrainRenderer {
     this.camera.updateMatrixWorld();
     if(this.imagery){this.camera.updateMatrixWorld();this.viewProjection.multiplyMatrices(this.camera.projectionMatrix,this.camera.matrixWorldInverse);this.frustum.setFromProjectionMatrix(this.viewProjection);const visible=!!this.detailBox&&this.frustum.intersectsBox(this.detailBox);this.detailWeight.value=this.imagery.manifest.detailSelection?projectedDetailWeight(this.imagery.manifest,terrainTexelFootprint(this.terrain,pose.position,pose.target,this.terrain.world(state.point),this.width,this.height,this.imagery.manifest.detail!.spacingMeters),visible):imageryDetailWeight(this.imagery.manifest,Math.hypot(...pose.position.map((v,i)=>v-pose.target[i])),pose.fov,this.height,visible);}
     const xy=this.terrain.world(state.point);this.marker.position.set(xy[0],this.terrain.meshElevation(xy)!+24,-xy[1]);this.routeMaterial.uniforms.progress.value=state.travelledKm;
+    // Project a bounded local tangent in the CURRENT camera, not a previous frame.
+    // Source endpoints stay in the current segment; isolated/stationary points have no facing.
+    let facing:readonly[number,number]|undefined;
+    const edge=this.markerAsset?this.timeline.path.edgeAt(state.segment,state.index):undefined;
+    if(edge){const a=this.terrain.world(edge.a),b=this.terrain.world(edge.b),vector=new T.Vector3(b[0]-a[0],this.terrain.meshElevation(b)!-this.terrain.meshElevation(a)!,-b[1]+a[1]);
+      if(vector.length()>1e-6){const anchor=this.marker.position.clone().project(this.camera),near=this.marker.position.clone().add(vector.normalize()).project(this.camera);facing=[(near.x-anchor.x)*this.width/2,(anchor.y-near.y)*this.height/2];}}
     for(const mesh of [this.marker,this.start,this.finish])mesh.scale.setScalar(this.camera.position.distanceTo(mesh.position)*.009);
-    if(this.marker instanceof T.Sprite){const depth=new T.Vector3().copy(this.marker.position).applyMatrix4(this.camera.matrixWorldInverse).z;this.marker.scale.setScalar(Math.abs(depth)*2*Math.tan(this.camera.fov*Math.PI/360)/this.height*Math.min(this.width,this.height)*.11);}
+    if(this.marker instanceof T.Sprite){const depth=new T.Vector3().copy(this.marker.position).applyMatrix4(this.camera.matrixWorldInverse).z;this.marker.scale.setScalar(Math.abs(depth)*2*Math.tan(this.camera.fov*Math.PI/360)/this.height*Math.min(this.width,this.height)*.11);const map=this.marker.material.map!,left=markerFacesLeft(facing);map.repeat.x=left?-1:1;map.offset.x=left?1:0;map.updateMatrix();}
     const annotation=!!this.markerAsset&&this.config.markerPresentation!=='occluded';
     this.marker.visible=state.markerOpacity>.1&&!annotation;this.finish.visible=state.phase==='OUTRO'||state.routeProgress>.9;
     if(this.direction){const next=this.timeline.route.segments[state.segment][Math.max(1,state.index)],target=next?this.terrain.world(next):xy,endHeight=this.terrain.meshElevation(target),vector=new T.Vector3(target[0]-xy[0],(endHeight??this.marker.position.y-24)+24-this.marker.position.y,-target[1]+xy[1]),remaining=vector.length();this.direction.visible=state.phase==='ROUTE_REPLAY'&&state.markerOpacity>.1&&remaining>1e-4;if(this.direction.visible){const length=Math.min(remaining,100,this.camera.position.distanceTo(this.marker.position)*.03);this.direction.position.copy(this.marker.position);this.direction.position.y+=8;this.direction.setDirection(vector.normalize());this.direction.setLength(length,Math.min(25,length*.4),Math.min(15,length*.25));}}
@@ -149,9 +155,8 @@ export class TerrainRenderer {
     const layout=annotation&&state.markerOpacity>.1?annotationAt(...anchor,projected.z,w,h,size,[p,u*.24,w-p,h-u*(this.plan.options?.overview!==undefined ? .31 : .29)]):undefined;
     const markerBox:MarkerRect|undefined=layout?[layout.box[0]-size*.07,layout.box[1]-size*.07,layout.box[2]+size*.07,layout.box[3]+size*.24]:undefined;
     if(layout&&this.markerAsset){
-      const target=this.timeline.route.segments[state.segment][Math.max(1,state.index)],next=target?this.terrain.world(target):xy,nextHeight=this.terrain.meshElevation(next),v=new T.Vector3(next[0],(nextHeight??this.marker.position.y-24)+24,-next[1]).project(this.camera);
       const occluded=requiredVisibleAltitude(this.terrain,pose.position,[xy[0],xy[1],this.marker.position.y])>pose.position[2]+.01;
-      ctx.save();ctx.globalAlpha=state.markerOpacity;drawAnnotation(ctx,this.markerAsset,anchor,layout,size,occluded,state.phase==='ROUTE_REPLAY'?[((v.x+1)*w/2)-anchor[0],((1-v.y)*h/2)-anchor[1]]:undefined,this.config.captionMode!=='none');ctx.restore();
+      ctx.save();ctx.globalAlpha=state.markerOpacity;drawAnnotation(ctx,this.markerAsset,anchor,layout,size,occluded,facing,this.config.captionMode!=='none',state.phase==='ROUTE_REPLAY');ctx.restore();
     }
     if(this.config.captionMode==='none'){
       // Keep the segment cut beneath compact credits; never lose attribution in a fade.

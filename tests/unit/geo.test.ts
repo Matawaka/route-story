@@ -14,4 +14,10 @@ describe('actual geography and segment-aware animation', () => {
   });
   it('handles stationary routes and poles without NaN', () => { for (const lat of [0,90,-90]) { const points=[{lon:0,lat},{lon:0,lat}]; expect(fitProjection([points],360,640).project(points[0]).every(Number.isFinite)).toBe(true); expect(new RoutePath([points]).at(.7).point).toEqual(points[0]); } });
   it('keeps the recorded first/last points even with isolated segments', () => { const path = new RoutePath([[{lon:0,lat:0}],[{lon:1,lat:0},{lon:2,lat:0}],[{lon:8,lat:1}]]); expect(path.at(0).point.lon).toBe(0); expect(path.at(1).point.lon).toBe(8); });
+  it('finds a stable local heading at endpoints/duplicates without crossing segments', () => {
+    const p=(lon:number)=>({lon,lat:0}),path=new RoutePath([[p(3),p(3),p(2),p(2)],[p(10)],[p(20),p(21),p(21)]]);
+    expect(path.edgeAt(0,0)).toBe(path.edges[0]);expect(path.edgeAt(0,1)).toBe(path.edges[0]);expect(path.edgeAt(0,3)).toBe(path.edges[0]);
+    expect(path.edgeAt(1,0)).toBeUndefined();expect(path.edgeAt(2,0)).toBe(path.edges[1]);expect(path.edgeAt(2,2)).toBe(path.edges[1]);
+    for(const[segment,index]of [[-1,0],[0,-1],[0,4],[3,0],[0,NaN]])expect(path.edgeAt(segment,index)).toBeUndefined();
+  });
 });

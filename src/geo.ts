@@ -82,4 +82,12 @@ export class RoutePath {
     const t = Math.min(1, Math.max(0, (distance - edge.start) / (edge.end - edge.start)));
     return { point: { lon: wrapDelta(edge.a.lon + wrapDelta(edge.b.lon - edge.a.lon) * t), lat: edge.a.lat + (edge.b.lat - edge.a.lat) * t }, segment: edge.segment, index: edge.index, distance };
   }
+  /** Stable heading edge at start/finish and duplicate points; never cross a gap. */
+  edgeAt(segment: number, index: number): (typeof this.edges)[number] | undefined {
+    if (!Number.isInteger(segment) || !Number.isInteger(index) || segment < 0 || index < 0 || segment >= this.segments.length || index >= this.segments[segment].length) return;
+    const target = Math.max(1,index); let lo = 0, hi = this.edges.length;
+    while (lo < hi) { const mid = (lo + hi) >>> 1, edge = this.edges[mid]; if (edge.segment < segment || (edge.segment === segment && edge.index < target)) lo = mid + 1; else hi = mid; }
+    if (this.edges[lo]?.segment === segment) return this.edges[lo];
+    if (this.edges[lo-1]?.segment === segment) return this.edges[lo-1];
+  }
 }
