@@ -26,8 +26,8 @@ test('native encoder failure closes encoder and temporary canvas resources',asyn
   expect(result.canvasSizes.length).toBeGreaterThan(0);expect(result.canvasSizes.every(([w,h])=>w===0&&h===0)).toBe(true);
 });
 test('invalid import releases visible canvas pixels and the next valid import works',async({page})=>{
-  await page.goto('/');await page.locator('#demo').click();await expect(page.locator('#export')).toBeEnabled();
+  await page.goto('/');await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();
   await page.getByLabel('Выбрать GPX-файл').setInputFiles('tests/fixtures/malformed.gpx');await expect(page.locator('#empty')).toBeVisible();
   await expect(page.locator('#preview')).toHaveAttribute('width','0');await expect(page.locator('#preview')).toHaveAttribute('height','0');
-  await page.locator('#demo').click();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#preview')).toHaveAttribute('width','640');
+  await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#preview')).toHaveAttribute('width','640');
 });

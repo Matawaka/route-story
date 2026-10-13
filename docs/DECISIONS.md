@@ -1,5 +1,10 @@
 # Decisions
 
+## 2026-10-13 — One demo selector after owner visual review
+
+Remove the four redundant demo shortcuts below the route dropdown, including their listeners and obsolete CSS. Keep all existing dropdown choices and contextual Empty recovery actions. Browser and external acceptance automation must use the same actual dropdown, never retain hidden substitute buttons. Export-conflict assertions continue proving that route changes are disabled during export and restored after failure. No renderer or exported-frame changes. Owner approved the visuals and deployment after this correction; exact-main CI and personal protected Pages approval remain mandatory.
+
+
 ## 2026-10-12 — One public controller / Swiss startup / bounded UX recovery
 
 Base actual main d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83; independent codex/unified-route-story-ux, not docsPR18. Main's StoryConfig/StoryTimeline/export pipeline remain authoritative. A small scene-provider reuses existing local regionalPackForRoute and verified Swiss/Sogne loaders, rather than a parallel geography selector. Main owns a discriminated UX state, one preparation AbortController and a separate encoder capability result. Initial Swiss autoplay runs only once; reduced motion prepares static genuine3D, not a silent2D substitution. Imports leaving a regional demo choose the visible existing Auto policy with explicit effective-mode/fallback information.

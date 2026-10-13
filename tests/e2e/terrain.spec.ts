@@ -4,7 +4,7 @@ import {validateVideo} from '../../scripts/validate-video.mjs';
 
 test('real terrain: both LODs/styles/aspects have deterministic ready frames and visible depth-tested routes',async({page,context})=>{
  const external:string[]=[];await context.route('**/*',r=>new URL(r.request().url()).origin==='http://127.0.0.1:4173'?r.continue():(external.push(r.request().url()),r.abort()));
- await page.goto('/');await page.locator('#terrain-demo').click();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#map-detail-note')).toContainText('Kartverket');
+ await page.goto('/');await page.locator('#route-choice').selectOption('sogne');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#map-detail-note')).toContainText('Kartverket');
  const result=await page.evaluate(async()=>{
   const paths=['/src/terrain-renderer.ts','/src/terrain.ts','/src/gpx.ts','/src/story.ts','/src/exporter.ts'];const [{TerrainRenderer},{loadTerrain},{parseGpx},{defaultStoryConfig},{exportVideo}]=await Promise.all(paths.map(p=>import(p))),route=parseGpx(await(await fetch('/samples/terrain-sogne.gpx')).text()),results=[];
   for(const [w,h] of [[640,360],[360,640],[1280,720],[720,1280]])for(const style of ['atlas','night']){
@@ -27,22 +27,22 @@ test('real terrain: both LODs/styles/aspects have deterministic ready frames and
 });
 
 test('3D readiness failures and unsupported coverage preserve explicit 2D recovery',async({page})=>{
- await page.route('**/terrain/sogne-50m.i16',r=>r.fulfill({body:'corrupt'}));await page.goto('/');await page.locator('#terrain-demo').click();await expect(page.locator('#status')).toContainText('DEM повреждён');await expect(page.locator('#export')).toBeDisabled();
+ await page.route('**/terrain/sogne-50m.i16',r=>r.fulfill({body:'corrupt'}));await page.goto('/');await page.locator('#route-choice').selectOption('sogne');await expect(page.locator('#status')).toContainText('DEM повреждён');await expect(page.locator('#export')).toBeDisabled();
  await expect(page.locator('#route-info')).toContainText('721');await page.locator('#camera-mode').selectOption('cinematic');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#route-info')).toContainText('721');
- await page.locator('#demo').click();await expect(page.locator('#export')).toBeEnabled();
+ await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();
  await page.unroute('**/terrain/sogne-50m.i16');await page.locator('#camera-mode').selectOption('terrain');await expect(page.locator('#status')).toContainText('Выберите «Кино · 2D»');await expect(page.locator('#export')).toBeDisabled();
  await page.locator('#camera-mode').selectOption('auto');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#map-detail-note')).toContainText('Используется 2D');
 });
 
 test('unavailable WebGL retains the imported GPX and Auto explains its 2D choice',async({page})=>{
  await page.addInitScript(()=>{const native=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type:string,...args:any[]){if(type==='webgl2'||type==='webgl')return null;return native.call(this,type,...args);} as typeof native;});
- await page.goto('/');await page.locator('#terrain-demo').click();await expect(page.locator('#status')).toContainText('WebGL 2');await expect(page.locator('#route-info')).toContainText('721');await expect(page.locator('#export')).toBeDisabled();
+ await page.goto('/');await page.locator('#route-choice').selectOption('sogne');await expect(page.locator('#status')).toContainText('WebGL 2');await expect(page.locator('#route-info')).toContainText('721');await expect(page.locator('#export')).toBeDisabled();
  await page.locator('#camera-mode').selectOption('auto');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#map-detail-note')).toContainText('Используется 2D');await expect(page.locator('#route-info')).toContainText('721');
 });
 
 test('unsupported H.264 keeps the ready 3D preview and reversible seeking',async({page})=>{
  await page.addInitScript(()=>{Object.defineProperty(window,'VideoEncoder',{value:undefined,configurable:true});});
- await page.goto('/');await page.locator('#terrain-demo').click();await expect(page.locator('#status')).toContainText('WebCodecs');await expect(page.locator('#export')).toBeDisabled();await expect(page.locator('#preview')).toBeVisible();
+ await page.goto('/');await page.locator('#route-choice').selectOption('sogne');await expect(page.locator('#status')).toContainText('WebCodecs');await expect(page.locator('#export')).toBeDisabled();await expect(page.locator('#preview')).toBeVisible();
  await page.locator('#scrub').fill('4');await expect(page.locator('#time')).toContainText('0:04');await page.locator('#scrub').fill('1');await expect(page.locator('#time')).toContainText('0:01');await expect(page.locator('#route-info')).toContainText('721');
 });
 
@@ -65,7 +65,7 @@ test('3D ribbon and minimum-pixel trace keep disconnected segments separate; sta
 });
 
 test('real 3D context loss, successful disposal, cancellation and retry',async({page},testInfo)=>{
- await page.goto('/');await page.locator('#terrain-demo').click();await expect(page.locator('#export')).toBeEnabled();
+ await page.goto('/');await page.locator('#route-choice').selectOption('sogne');await expect(page.locator('#export')).toBeEnabled();
  const loss=await page.evaluate(async()=>{
   const paths=['/src/terrain-renderer.ts','/src/terrain.ts','/src/gpx.ts','/src/story.ts'];const [{TerrainRenderer},{loadTerrain},{parseGpx},{defaultStoryConfig}]=await Promise.all(paths.map(p=>import(p))),route=parseGpx(await(await fetch('/samples/terrain-sogne.gpx')).text()),r=new TerrainRenderer(route,await loadTerrain('compatibility'),640,360,{...defaultStoryConfig(),cameraMode:'terrain'}),canvas=document.createElement('canvas');
   r.gpu.getContext().getExtension('WEBGL_lose_context')!.loseContext();await new Promise(resolve=>setTimeout(resolve,100));let error='';try{r.draw(canvas,10);}catch(e){error=(e as Error).message;}r.dispose();return{error,canvas:[r.gpu.domElement.width,r.gpu.domElement.height],children:r.scene.children.length};

@@ -22,7 +22,7 @@ test('approved colorful raster pixels, alpha, JPEG dimensions and EXIF orientati
 test('owner original JPEG imports locally, keeps its background and exports after cancellation',async({page,context})=>{
  test.skip(!process.env.OWNER_JPEG_PATH,'Opt-in owner JPEG is local, never committed or uploaded.');const external:string[]=[],uploads:string[]=[];
  page.on('request',r=>{if(/^https?:/.test(r.url())&&new URL(r.url()).origin!=='http://127.0.0.1:4173')external.push(r.url());if(r.method()!=='GET')uploads.push(r.url());});
- await page.goto('/');await page.locator('#terrain-demo').click();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#marker')).toHaveValue('traveler');
+ await page.goto('/');await page.locator('#route-choice').selectOption('sogne');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#marker')).toHaveValue('traveler');
  await page.locator('#marker-file').setInputFiles(process.env.OWNER_JPEG_PATH!);await expect(page.locator('#status')).toContainText('JPG загружен. Для прозрачного фона используйте PNG/WebP.');await expect(page.locator('#export')).toBeEnabled();
  await page.locator('#quality').selectOption('compatibility');await expect(page.locator('#export')).toBeEnabled();await page.locator('#duration').selectOption('10');await expect(page.locator('#export')).toBeEnabled();
  await page.locator('#scrub').fill('2');await page.locator('#scrub').dispatchEvent('input');mkdirSync('artifacts/sprint11',{recursive:true});await page.locator('#preview').screenshot({path:'artifacts/sprint11/original-jpeg-preview.png'});
@@ -31,7 +31,7 @@ test('owner original JPEG imports locally, keeps its background and exports afte
 });
 
 test('JPEG notice preserves an unsupported encoder explanation and usable preview',async({page})=>{
- await page.addInitScript(()=>Object.defineProperty(globalThis,'VideoEncoder',{configurable:true,value:undefined}));await page.goto('/');await page.locator('#demo').click();await expect(page.locator('#status')).toContainText('WebCodecs');
+ await page.addInitScript(()=>Object.defineProperty(globalThis,'VideoEncoder',{configurable:true,value:undefined}));await page.goto('/');await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#status')).toContainText('WebCodecs');
  const bytes=await page.evaluate(async()=>{const c=document.createElement('canvas');c.width=c.height=1254;c.getContext('2d')!.fillRect(0,0,1254,1254);const b=await new Promise<Blob>(r=>c.toBlob(b=>r(b!),'image/jpeg'));return Array.from(new Uint8Array(await b.arrayBuffer()));});
  await page.locator('#marker-file').setInputFiles({name:'local.JPG',mimeType:'image/jpeg',buffer:Buffer.from(bytes)});await expect(page.locator('#marker')).toHaveValue('custom');await expect(page.locator('#marker-note')).toContainText('JPG загружен. Для прозрачного фона используйте PNG/WebP.');await expect(page.locator('#status')).toContainText('WebCodecs');await expect(page.locator('#export')).toBeDisabled();await page.locator('#scrub').fill('6');await expect(page.locator('#preview')).toHaveAttribute('data-phase','ROUTE_REPLAY');
 });

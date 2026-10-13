@@ -12,6 +12,8 @@ const cacheClear=async(page:any)=>page.evaluate(async()=>{const path='/src/local
 test('main startup loads true Swiss 3D, all presets and autoplay exactly once',async({page})=>{
   let release:()=>void=()=>{};const gate=new Promise<void>(r=>release=r);await page.route('**/furka-context-5m.i16',async r=>{await gate;try{await r.continue();}catch{}});
   await page.goto('/');await expect(page.locator('#loading')).toBeVisible();await expect(page.locator('#loading-heading')).toHaveText('Подготавливаем 3D-маршрут по Швейцарским Альпам');await expect(page.locator('#route-choice')).toBeEnabled();release();await ready(page);
+  await expect(page.locator('#swiss-demo, #cinematic-demo, #terrain-demo, #demo, .demo-shortcuts')).toHaveCount(0);
+  expect(await page.locator('#route-choice option').evaluateAll(options=>options.map(option=>(option as HTMLOptionElement).value))).toEqual(['empty','furka','sogne','fjords','sample','custom']);
   await expect(page.locator('body')).toHaveAttribute('data-state','PLAYING');
   for(const[id,value]of Object.entries({'route-choice':'furka','camera-mode':'terrain','terrain-surface':'photo','terrain-flight':'corridor','route-color':'grade','replay-pacing':'terrain',marker:'traveler',ratio:'landscape',duration:'20',quality:'standard'}))await expect(page.locator(`#${id}`)).toHaveValue(value);
   await expect(page.locator('#preview')).toHaveAttribute('width','1280');await expect(page.locator('#preview')).toHaveAttribute('height','720');await expect(page.locator('#route-info')).toContainText('не реальная поездка');

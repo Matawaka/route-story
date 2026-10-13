@@ -1,5 +1,13 @@
 # Implementation state
 
+## Owner visual approval / remove duplicate demo shortcuts — 2026-10-13
+
+Continue existing PR20/codex/unified-route-story-ux from e863a661e308c94c45d573dde00ca210ed53cb76; actual main rechecked d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83. Owner approved appearance and public deployment after deleting the four redundant demo shortcuts. Keep one route-choice dropdown and contextual Empty recovery actions. Remove obsolete HTML, listeners and CSS; all acceptance tools now choose the same dropdown. No map, camera, timeline, video, data/source, dependency, package cap or protected-workflow change.
+
+Exact commands: npm.cmd run check with PLAYWRIGHT_CHANNEL=msedge/CI=1/SWISS_BASELINE=1:211unit/20files and TypeScript/Vite PASS; browser51PASS/28intentional opt-in skips/2FAIL due two stale removed-button selectors. Those assertions now check the actual route dropdown (disabled during export, enabled after failure); npx.cmd playwright test --last-failed:2PASS. Unified SWISS_PILOT=1/SWISS_BASELINE=0/UNIFIED_UX_ACCEPTANCE=1/FULL_EXPORT_ACCEPTANCE=1 suite:14PASS, including no duplicate controls, all options, exact seeking, faults/cancelretry and real full20slandscape/30sportrait H.264/24fps FFmpeg decode/preview equivalence. Refreshed normal/compact/video/mobile screenshots from that actual run. Historical video/source measurements below are preserved.
+
+Remote PR20 exact prior e863 CI38291485274 SUCCESS; new commit CI must be inspected after push. Pages environment verified main-only, required human Matawaka, prevent_self_review=false; no pending/running duplicate Pages run found. Public site is still the previous release, not this local candidate. Next: push focused correction, inspect exact-head CI and resolve PR20 merge permission; then exact merged-main push CI, existing manual Pages include_imagery/include_swiss=true, personal environment approval and actual HTTPS acceptance. Do not claim local/PR evidence as public acceptance. Exact new HEAD authoritative via Git. No tag/Release/contest action.
+
 ## PR20 final saved handoff / no publication — 2026-10-12
 
 Runtime source f93edb1b3a6394c3f85c87c03da0aff28fa4c47f, branch codex/unified-route-story-ux; review https://github.com/Matawaka/route-story/pull/20 into verified main d1c2b85f1ebbd2c7d167982b97fc6aa956ea2d83. Final HEAD after this evidence-only commit is authoritative via Git; no runtime edits follow the verified f93 source. Unrelated PR5/8/18 remain independent. Existing public version is unchanged; no merge/deploy/tag/Release/contest message performed.

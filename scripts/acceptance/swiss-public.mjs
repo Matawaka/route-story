@@ -22,6 +22,7 @@ await(remote?callback=>callback(remote):withProductionServer)(async url=>{
     const requests=[];page.on('request',r=>requests.push(new URL(r.url()).pathname));
     const response=await page.goto(url);assert.equal(response.status(),200);assert.equal(await page.evaluate(()=>isSecureContext),true);await ready(page);
     assert.equal(await page.locator('#preview').getAttribute('data-region'),'furka');assert.equal(await page.locator('#preview').getAttribute('data-mode'),'terrain');
+    assert.equal(await page.locator('#swiss-demo, #cinematic-demo, #terrain-demo, #demo, .demo-shortcuts').count(),0,'Demo selection has one dropdown without duplicate shortcuts.');
     for(const[id,value]of Object.entries({'route-choice':'furka','route-color':'grade','replay-pacing':'terrain',marker:'traveler',ratio:'landscape',duration:'20',quality:'standard'}))assert.equal(await page.locator('#'+id).inputValue(),value);
     assert.ok(requests.some(p=>p.includes('/regions/furka/')),'The initial demo intentionally loads its fixed first-party regional pack.');assert.ok((await page.locator('#route-info').textContent()).includes('синтетический'));
     await page.locator('#scrub').fill('5');const before=await page.locator('#preview').evaluate(c=>c.toDataURL());await page.locator('#scrub').fill('1');await page.locator('#scrub').fill('5');assert.equal(await page.locator('#preview').evaluate(c=>c.toDataURL()),before);

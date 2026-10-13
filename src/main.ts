@@ -29,7 +29,7 @@ type Source={name:string;synthetic:boolean;read:(signal:AbortSignal)=>Promise<Ro
 let source:Source|undefined,retryAction:(()=>void)|undefined;
 const busyExport=()=>state.phase==='EXPORTING',busyLoad=()=>state.phase==='LOADING';
 const swissHeading='Подготавливаем 3D-маршрут по Швейцарским Альпам';
-el('swiss-demo').hidden=el('empty-swiss').hidden=!__SWISS_ENABLED__;
+el('empty-swiss').hidden=!__SWISS_ENABLED__;
 choice.querySelector<HTMLOptionElement>('[value="furka"]')!.hidden=!__SWISS_ENABLED__;
 if(!__IMAGERY_ENABLED__){for(const id of ['terrain-surface','terrain-surface-label','terrain-flight','terrain-flight-label'])el(id).hidden=true;}
 if(reducedMotion&&!__SWISS_ENABLED__)control('camera-mode').value='classic';
@@ -55,7 +55,7 @@ function renderState():void{
   button.disabled=!available||loading||exporting||encoder.status!=='supported'||state.phase==='ERROR'&&state.blocking!==false;
   play.disabled=scrub.disabled=!available||loading||exporting;play.textContent=state.phase==='PLAYING'?'Ⅱ':'▶';play.setAttribute('aria-label',state.phase==='PLAYING'?'Пауза':'Воспроизвести');
   title.disabled=!route||exporting;for(const id of selects)control(id).disabled=exporting||loading&&!route;markerFile.disabled=exporting||loading;
-  for(const id of ['file','route-choice','demo','cinematic-demo','terrain-demo','swiss-demo','clear-route','empty-file','empty-swiss','empty-other'])el<HTMLInputElement>(id).disabled=exporting;
+  for(const id of ['file','route-choice','clear-route','empty-file','empty-swiss','empty-other'])el<HTMLInputElement>(id).disabled=exporting;
   for(const card of document.querySelectorAll<HTMLButtonElement>('[data-style]'))card.disabled=exporting||loading;el('facts').hidden=!route;
 }
 function stop():void{cancelAnimationFrame(animationId);animationId=0;if(state.phase==='PLAYING')setState({phase:'PAUSED'});}
@@ -145,7 +145,7 @@ file.addEventListener('change',()=>{const selected=file.files?.[0];file.value=''
   if(source?.synthetic&&control('camera-mode').value==='terrain')control('camera-mode').value='auto';
   choice.value='custom';void importSource({name:'custom',synthetic:false,read:async signal=>{const parsed=await readGpx(selected);signal.throwIfAborted();return parsed;}});});
 choice.addEventListener('change',()=>{if(choice.value==='custom'){file.click();return;}if(choice.value==='empty')clearRoute();else selectDemo(choice.value as 'furka'|'sogne'|'fjords'|'sample');});
-for(const [id,name] of [['demo','sample'],['cinematic-demo','fjords'],['terrain-demo','sogne'],['swiss-demo','furka'],['empty-swiss','furka']] as const)el(id).addEventListener('click',()=>selectDemo(name));
+el('empty-swiss').addEventListener('click',()=>selectDemo('furka'));
 el('clear-route').addEventListener('click',clearRoute);el('empty-file').addEventListener('click',()=>file.click());el('empty-other').addEventListener('click',showSettings);el('change-route').addEventListener('click',showSettings);
 el('explanations').addEventListener('click',()=>setView(view==='normal'?'compact':'normal'));el('video-only').addEventListener('click',()=>setView(view==='video'?'normal':'video'));
 el('show-settings').addEventListener('click',()=>{const open=document.body.dataset.settings!=='open';document.body.dataset.settings=open?'open':'closed';el('show-settings').setAttribute('aria-expanded',String(open));if(open)choice.focus();});

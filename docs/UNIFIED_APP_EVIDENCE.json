@@ -176,7 +176,7 @@
       }
     ]
   },
-  "publication": "PENDING separate owner approval, exact merged-main CI, protected human environment review and new HTTPS acceptance",
+  "publication": "PENDING PR20 merge approval, new exact-main CI, required human environment review and actual HTTPS acceptance; owner deployment authorization recorded 2026-10-13",
   "affectedLegacyTitleSuite": {
     "failed": 0,
     "passed": 8,
@@ -189,5 +189,37 @@
     "status": "SUCCESS",
     "url": "https://github.com/Matawaka/route-story/actions/runs/38286746831",
     "latestHead": "PENDING after final evidence push"
+  },
+  "ownerReview": {
+    "date": "2026-10-13",
+    "visuals": "APPROVED",
+    "deployment": "AUTHORIZED after removing four duplicate shortcuts",
+    "correction": "Single route-choice dropdown; no duplicate demo controls",
+    "tests": {
+      "unitPassed": 211,
+      "unitFiles": 20,
+      "build": "PASS",
+      "routineInitial": {
+        "passed": 51,
+        "failed": 2,
+        "skipped": 28,
+        "reason": "Two stale selectors for removed demo button; corrected to actual dropdown without weakening assertions"
+      },
+      "focusedRerun": {
+        "passed": 2,
+        "failed": 0
+      },
+      "unified": {
+        "passed": 14,
+        "failed": 0,
+        "fullLandscapeSeconds": 20,
+        "fullPortraitSeconds": 30
+      }
+    },
+    "priorExactHeadCi": {
+      "head": "e863a661e308c94c45d573dde00ca210ed53cb76",
+      "status": "SUCCESS",
+      "url": "https://github.com/Matawaka/route-story/actions/runs/38291485274"
+    }
   }
 }

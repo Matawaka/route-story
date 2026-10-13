@@ -23,7 +23,7 @@ test('production bundle stays on its own origin, supports mobile and retains no 
   await context.route('**/*', r => { const url = new URL(r.request().url()); if (url.origin !== 'http://127.0.0.1:4174') { external.push(url.href); return r.abort(); } return r.continue(); });
   await context.routeWebSocket(/.*/, ws => { if (!ws.url().startsWith('ws://127.0.0.1:4174')) external.push(ws.url()); ws.close(); });
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto('http://127.0.0.1:4174/'); await page.getByRole('button', { name: /Открыть учебный/ }).click(); await expect(page.locator('#export')).toBeEnabled();
+  await page.goto('http://127.0.0.1:4174/'); await page.locator('#route-choice').selectOption('sample'); await expect(page.locator('#export')).toBeEnabled();
   await page.getByLabel('Длительность видео').selectOption('10'); await expect(page.locator('#export')).toBeEnabled();
   const notice = await page.request.get('http://127.0.0.1:4174/THIRD_PARTY_NOTICES.md'); expect(notice.ok()).toBe(true); expect(await notice.text()).toContain('MPL-2.0');
   const license = await page.request.get('http://127.0.0.1:4174/licenses/MEDIABUNNY-MPL-2.0.txt'); expect(license.ok()).toBe(true); expect(await license.text()).toContain('Mozilla Public License');
@@ -42,7 +42,7 @@ test('production bundle stays on its own origin, supports mobile and retains no 
 
 test('invalid GPX clears stale preview; metadata remains inert text', async ({ page }) => {
   const requests: string[] = []; page.on('request', r => { if (r.url().includes('evil.test')) requests.push(r.url()); });
-  await page.goto('/'); await page.getByRole('button', {name:/Открыть учебный/}).click(); await expect(page.locator('#export')).toBeEnabled();
+  await page.goto('/'); await page.locator('#route-choice').selectOption('sample'); await expect(page.locator('#export')).toBeEnabled();
   await page.getByLabel('Выбрать GPX-файл').setInputFiles('tests/fixtures/malformed.gpx'); await expect(page.locator('#status')).toHaveClass(/error/); await expect(page.locator('#empty')).toBeVisible(); await expect(page.locator('#export')).toBeDisabled();
   await page.getByLabel('Выбрать GPX-файл').setInputFiles({name:'evil.gpx',mimeType:'application/xml',buffer:Buffer.from('<!DOCTYPE gpx SYSTEM "https://evil.test/schema"><gpx/>')});
   await expect(page.locator('#status')).toContainText('DTD'); expect(requests).toEqual([]);
@@ -52,7 +52,7 @@ test('invalid GPX clears stale preview; metadata remains inert text', async ({ p
 
 test('unsupported encoder receives actionable error while map still works', async ({ page }) => {
   await page.addInitScript(() => { Object.defineProperty(window,'VideoEncoder',{value:undefined,configurable:true}); });
-  await page.goto('/'); await page.getByRole('button',{name:/Открыть учебный/}).click(); await expect(page.locator('#preview')).toBeVisible(); await expect(page.locator('#status')).toContainText('WebCodecs'); await expect(page.locator('#export')).toBeDisabled();
+  await page.goto('/'); await page.locator('#route-choice').selectOption('sample'); await expect(page.locator('#preview')).toBeVisible(); await expect(page.locator('#status')).toContainText('WebCodecs'); await expect(page.locator('#export')).toBeDisabled();
 });
 
 test('real encoder resources close after cancellation and renderer failure', async ({ page }) => {

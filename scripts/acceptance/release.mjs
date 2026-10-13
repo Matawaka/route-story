@@ -44,7 +44,7 @@ async function accept(url){
    const body=await res.body();assert.equal(body.length,file.bytes);assert.equal(createHash('sha256').update(body).digest('hex'),file.sha256);
   }
   report.packageHashesVerified=manifest.files.length;
-  await page.locator('#demo').click();await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#route-info')).toContainText('синтетический');
+  await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#route-info')).toContainText('синтетический');
   await page.locator('#scrub').fill('3');const first=await page.locator('#preview').evaluate(c=>c.toDataURL());
   await page.locator('#scrub').fill('19');await page.locator('#scrub').fill('3');assert.equal(await page.locator('#preview').evaluate(c=>c.toDataURL()),first);
   await page.locator('#play').click();await page.waitForTimeout(150);await page.locator('#play').click();assert.ok(Number(await page.locator('#scrub').inputValue())>3);
@@ -85,7 +85,7 @@ async function accept(url){
    report.outputs.push({name:example.name,source:example.file,sourceBytes:input.length,sourceSha256:createHash('sha256').update(input).digest('hex'),points:(input.toString().match(/<trkpt\b/g)||[]).length,title:example.title,style:example.style,aspect:example.aspect,quality:'standard',phases,exportMilliseconds,encoder:await page.evaluate(()=>window.releaseEncoderConfigs.at(-1)),video,nativePlayback});
    if(example.aspect==='portrait'){await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await page.screenshot({path:`${directory}/${smoke?'smoke-':''}portrait-layout.png`,fullPage:true});await page.setViewportSize({width:1280,height:900});}
   }
-  const unsupported=await context.newPage();await unsupported.addInitScript(()=>{Object.defineProperty(window,'VideoEncoder',{value:undefined,configurable:true});});await unsupported.goto(url);await unsupported.locator('#demo').click();await expect(unsupported.locator('#preview')).toBeVisible();await expect(unsupported.locator('#export')).toBeDisabled();await expect(unsupported.locator('#status')).toContainText('WebCodecs');await unsupported.close();report.unsupportedEncoder='VERIFIED simulated unavailable API';
+  const unsupported=await context.newPage();await unsupported.addInitScript(()=>{Object.defineProperty(window,'VideoEncoder',{value:undefined,configurable:true});});await unsupported.goto(url);await unsupported.locator('#route-choice').selectOption('sample');await expect(unsupported.locator('#preview')).toBeVisible();await expect(unsupported.locator('#export')).toBeDisabled();await expect(unsupported.locator('#status')).toContainText('WebCodecs');await unsupported.close();report.unsupportedEncoder='VERIFIED simulated unavailable API';
   const storage=await page.evaluate(async()=>({local:localStorage.length,session:sessionStorage.length,databases:await indexedDB.databases(),caches:await caches.keys(),cookies:document.cookie}));
   assert.deepEqual(storage,{local:0,session:0,databases:[],caches:[],cookies:''});assert.deepEqual(await context.cookies(),[]);
   await page.reload();
