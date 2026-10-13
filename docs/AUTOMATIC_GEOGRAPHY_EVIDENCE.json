@@ -1,0 +1,989 @@
+{
+  "schema": 1,
+  "date": "2026-10-13",
+  "status": "VERIFIED LOCAL / NOT DEPLOYED",
+  "baseCommit": "1c7e5a078472981308d90abef1ee13a7f521038a",
+  "privateGpxCommitted": false,
+  "originalCogChecksums": "Full original COG hashes unavailable with bounded Range retrieval; derived JPEG/height SHA-256 verified; formats/CRS/no-data validated over HTTPS",
+  "physicalDevices": "NOT TESTED for this new mechanism",
+  "browserNativeMemory": "Sampled OS memory, not an exact peak or GPU VRAM; browser caches and asynchronous GC affect retained memory",
+  "repeatStatistics": "Single final sample per configuration, not medians; some proof runs overlapped routine checks on the same machine",
+  "results": [
+    {
+      "case": "mont-blanc",
+      "synthetic": false,
+      "sourceCommit": "b60ff10278b028e9dd571457f9a5f351ba727039",
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "physicalDevice": false,
+      "distance": "159,67 км",
+      "segments": "1",
+      "geography": {
+        "schema": 1,
+        "provider": "Earth Search Sentinel-2 + Planetary Computer Copernicus DEM",
+        "photoSources": [
+          {
+            "id": "S2A_31TGM_20250530_0_L2A",
+            "epsg": 32631,
+            "date": "2025-05-30T10:38:24.359000Z",
+            "cloud": 0.003816,
+            "kind": "photo",
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/T/GM/2025/5/S2A_31TGM_20250530_0_L2A/TCI.tif",
+            "resolution": 10
+          },
+          {
+            "id": "S2A_31TGL_20250530_0_L2A",
+            "epsg": 32631,
+            "date": "2025-05-30T10:38:39.079000Z",
+            "cloud": 0.004532,
+            "kind": "photo",
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/T/GL/2025/5/S2A_31TGL_20250530_0_L2A/TCI.tif",
+            "resolution": 10
+          },
+          {
+            "id": "S2A_32TLS_20250808_1_L2A",
+            "epsg": 32632,
+            "date": "2025-08-08T10:38:19.363000Z",
+            "cloud": 0.004884,
+            "kind": "photo",
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/T/LS/2025/8/S2A_32TLS_20250808_1_L2A/TCI.tif",
+            "resolution": 10
+          },
+          {
+            "id": "S2A_32TLR_20250709_2_L2A",
+            "epsg": 32632,
+            "date": "2025-07-09T10:38:37.530000Z",
+            "cloud": 0.034353,
+            "kind": "photo",
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/T/LR/2025/7/S2A_32TLR_20250709_2_L2A/TCI.tif",
+            "resolution": 10
+          }
+        ],
+        "demSources": [
+          {
+            "id": "Copernicus_DSM_COG_10_N46_00_E007_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N46_00_E007_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          },
+          {
+            "id": "Copernicus_DSM_COG_10_N46_00_E006_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N46_00_E006_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          },
+          {
+            "id": "Copernicus_DSM_COG_10_N45_00_E007_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N45_00_E007_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          },
+          {
+            "id": "Copernicus_DSM_COG_10_N45_00_E006_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N45_00_E006_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          }
+        ],
+        "sourceResolutionMeters": 10,
+        "demResolutionMeters": 30,
+        "derivedImageSpacingMeters": 50,
+        "derivedDemSpacingMeters": 120,
+        "areaKm2": 4326.336,
+        "downloadBytes": 54651519,
+        "requests": 124,
+        "preparationMs": 36101.40000000596,
+        "imageBytes": 675314,
+        "imagePixels": 1731648,
+        "demVertices": 301539,
+        "imageSha256": "61245cf7f061887c8370234a8a1afafcdc7f155184fc8588eb49f77a7cb44264",
+        "demSha256": "a6f7e3c8b26fd294767adf1d4671dfb8e494d2a38f40f4b026473651b9ade901",
+        "snowFraction": 0.21723525797390694,
+        "cloudFraction": 0.00017902021657981298,
+        "routeCloudFraction": 0.00019175455417066154,
+        "cloudCheck": "SCL at every prepared texel; no-data/saturation rejected, clear classes preferred; ≤2% scene / ≤1% sampled route corridor cloudy or uncertain. Different dates may be mosaicked.",
+        "verticalDatum": "EGM2008"
+      },
+      "outputs": [
+        {
+          "file": "mont-blanc/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "64033eb0bfa7240eff2a74f113c8f8c5",
+          "lastFrameHash": "3ad1feb01d2417d57f6fb3dbd60af84d",
+          "bytes": 12974065,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 2164.1742999999988,
+          "sha256": "5f7a93f1379701f097f43de4196f55704378462b2ac3a7a51ef8484a7275f047",
+          "minimumGrayRange": 92,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        },
+        {
+          "file": "mont-blanc/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "3538cb95988c88d2575325f4babc4ba9",
+          "lastFrameHash": "a491f2bba7834b05e0f2dd44392072f0",
+          "bytes": 19090749,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 2899.3642000000036,
+          "sha256": "d9c3ff958ff2e9bd95b9c943fc355852eb6969e118c31cc53284cb409ee00ca8",
+          "minimumGrayRange": 62,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        }
+      ],
+      "nativeMemory": {
+        "method": "OS Get-Process WorkingSet64/PrivateMemorySize64, unique child PIDs from isolated browser CDP SystemInfo; sampled during exports at 750ms, not an exact peak; working sets may share pages",
+        "samples": [
+          {
+            "phase": "before-import",
+            "workingSetBytes": 484237312,
+            "privateBytes": 320258048,
+            "processCount": 8,
+            "timestamp": 1791892849546
+          },
+          {
+            "phase": "prepared",
+            "workingSetBytes": 818733056,
+            "privateBytes": 685297664,
+            "processCount": 6,
+            "timestamp": 1791892887487
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 950726656,
+            "privateBytes": 923557888,
+            "processCount": 6,
+            "timestamp": 1791892890781
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 999960576,
+            "privateBytes": 980721664,
+            "processCount": 6,
+            "timestamp": 1791892891520
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 1124196352,
+            "privateBytes": 1038946304,
+            "processCount": 8,
+            "timestamp": 1791892898757
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 1139245056,
+            "privateBytes": 1051623424,
+            "processCount": 8,
+            "timestamp": 1791892899529
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 1091215360,
+            "privateBytes": 993189888,
+            "processCount": 8,
+            "timestamp": 1791892900242
+          },
+          {
+            "phase": "after-export-cancel-retry",
+            "workingSetBytes": 1000833024,
+            "privateBytes": 834740224,
+            "processCount": 8,
+            "timestamp": 1791892916899
+          },
+          {
+            "phase": "after-route-disposal",
+            "workingSetBytes": 962981888,
+            "privateBytes": 815763456,
+            "processCount": 8,
+            "timestamp": 1791892917215
+          }
+        ],
+        "maximumSamplePrivateBytes": 1051623424,
+        "maximumSampleWorkingSetBytes": 1139245056
+      },
+      "gpuMemory": "NOT MEASURED",
+      "javascriptHeap": "NOT MEASURED",
+      "cancelRetry": true,
+      "externalRequestsBeforeConsent": 0,
+      "externalMethods": [
+        "GET"
+      ],
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "indexed": 0
+      }
+    },
+    {
+      "case": "malerweg",
+      "synthetic": false,
+      "sourceCommit": "b60ff10278b028e9dd571457f9a5f351ba727039",
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "physicalDevice": false,
+      "distance": "114,73 км",
+      "segments": "7",
+      "geography": {
+        "schema": 1,
+        "provider": "Earth Search Sentinel-2 + Planetary Computer Copernicus DEM",
+        "photoSources": [
+          {
+            "id": "S2A_33UVS_20250812_0_L2A",
+            "epsg": 32633,
+            "date": "2025-08-12T10:16:50.575000Z",
+            "cloud": 0.000637,
+            "kind": "photo",
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/33/U/VS/2025/8/S2A_33UVS_20250812_0_L2A/TCI.tif",
+            "resolution": 10
+          }
+        ],
+        "demSources": [
+          {
+            "id": "Copernicus_DSM_COG_10_N51_00_E014_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N51_00_E014_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          },
+          {
+            "id": "Copernicus_DSM_COG_10_N51_00_E013_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N51_00_E013_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          },
+          {
+            "id": "Copernicus_DSM_COG_10_N50_00_E014_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N50_00_E014_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          },
+          {
+            "id": "Copernicus_DSM_COG_10_N50_00_E013_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N50_00_E013_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          }
+        ],
+        "sourceResolutionMeters": 10,
+        "demResolutionMeters": 30,
+        "derivedImageSpacingMeters": 30,
+        "derivedDemSpacingMeters": 80,
+        "areaKm2": 1290.3936,
+        "downloadBytes": 27586868,
+        "requests": 48,
+        "preparationMs": 18218.59999999404,
+        "imageBytes": 446233,
+        "imagePixels": 1434432,
+        "demVertices": 202539,
+        "imageSha256": "4594976d498da5e02e0f68d8cb9adc291fcf1cd26ed721668c129f2832e35c68",
+        "demSha256": "150f71d83ae315b66a86db651b1f9f7642f95f9292587d29e0d34b0d872cd8f9",
+        "snowFraction": 0,
+        "cloudFraction": 0.0006567059295944318,
+        "routeCloudFraction": 0.0016357688113413304,
+        "cloudCheck": "SCL at every prepared texel; no-data/saturation rejected, clear classes preferred; ≤2% scene / ≤1% sampled route corridor cloudy or uncertain. Different dates may be mosaicked.",
+        "verticalDatum": "EGM2008"
+      },
+      "outputs": [
+        {
+          "file": "malerweg/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "c194fc9091aa74e422cfea8a4e214632",
+          "lastFrameHash": "d1fbe586f802cf849c25da4eb103e830",
+          "bytes": 13192219,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 1930.7679000000026,
+          "sha256": "8d8b427025e1dd89126fd8714fdb3f8cbdd5f831703ca9b48b2b5046d139329d",
+          "minimumGrayRange": 36,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        },
+        {
+          "file": "malerweg/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "cae57b1aad7660ee24b50b7f628f27a0",
+          "lastFrameHash": "5c55c0be943ee73837125860174d2b3f",
+          "bytes": 19499944,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 2317.7806999999993,
+          "sha256": "4697b568620875cd112f0d95f20e884115194faf16e69c1f1ae2518b03b9761f",
+          "minimumGrayRange": 48,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        }
+      ],
+      "nativeMemory": {
+        "method": "OS Get-Process WorkingSet64/PrivateMemorySize64, unique child PIDs from isolated browser CDP SystemInfo; sampled during exports at 750ms, not an exact peak; working sets may share pages",
+        "samples": [
+          {
+            "phase": "before-import",
+            "workingSetBytes": 488665088,
+            "privateBytes": 321339392,
+            "processCount": 8,
+            "timestamp": 1791892919389
+          },
+          {
+            "phase": "prepared",
+            "workingSetBytes": 791363584,
+            "privateBytes": 630366208,
+            "processCount": 8,
+            "timestamp": 1791892939217
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 963141632,
+            "privateBytes": 905854976,
+            "processCount": 8,
+            "timestamp": 1791892941986
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 1016467456,
+            "privateBytes": 959692800,
+            "processCount": 8,
+            "timestamp": 1791892942681
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 1082077184,
+            "privateBytes": 953581568,
+            "processCount": 9,
+            "timestamp": 1791892949258
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 1099501568,
+            "privateBytes": 970604544,
+            "processCount": 9,
+            "timestamp": 1791892949981
+          },
+          {
+            "phase": "after-export-cancel-retry",
+            "workingSetBytes": 993177600,
+            "privateBytes": 805531648,
+            "processCount": 8,
+            "timestamp": 1791892964973
+          },
+          {
+            "phase": "after-route-disposal",
+            "workingSetBytes": 967663616,
+            "privateBytes": 802934784,
+            "processCount": 8,
+            "timestamp": 1791892965279
+          }
+        ],
+        "maximumSamplePrivateBytes": 970604544,
+        "maximumSampleWorkingSetBytes": 1099501568
+      },
+      "gpuMemory": "NOT MEASURED",
+      "javascriptHeap": "NOT MEASURED",
+      "cancelRetry": true,
+      "externalRequestsBeforeConsent": 0,
+      "externalMethods": [
+        "GET"
+      ],
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "indexed": 0
+      }
+    },
+    {
+      "case": "china-1",
+      "synthetic": true,
+      "sourceCommit": "b60ff10278b028e9dd571457f9a5f351ba727039",
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "physicalDevice": false,
+      "distance": "1,31 км",
+      "segments": "1",
+      "geography": {
+        "schema": 1,
+        "provider": "Earth Search Sentinel-2 + Planetary Computer Copernicus DEM",
+        "photoSources": [
+          {
+            "id": "S2B_48SVE_20250831_0_L2A",
+            "epsg": 32648,
+            "date": "2025-08-31T03:58:20.355000Z",
+            "cloud": 0.000007,
+            "kind": "photo",
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/48/S/VE/2025/8/S2B_48SVE_20250831_0_L2A/TCI.tif",
+            "resolution": 10
+          },
+          {
+            "id": "S2B_48SWE_20250510_0_L2A",
+            "epsg": 32648,
+            "date": "2025-05-10T03:48:21.384000Z",
+            "cloud": 0.582947,
+            "kind": "photo",
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/48/S/WE/2025/5/S2B_48SWE_20250510_0_L2A/TCI.tif",
+            "resolution": 10
+          }
+        ],
+        "demSources": [
+          {
+            "id": "Copernicus_DSM_COG_10_N35_00_E105_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N35_00_E105_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          },
+          {
+            "id": "Copernicus_DSM_COG_10_N35_00_E104_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N35_00_E104_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          }
+        ],
+        "sourceResolutionMeters": 10,
+        "demResolutionMeters": 30,
+        "derivedImageSpacingMeters": 10,
+        "derivedDemSpacingMeters": 30,
+        "areaKm2": 161.7408,
+        "downloadBytes": 40218501,
+        "requests": 40,
+        "preparationMs": 19876.5,
+        "imageBytes": 559558,
+        "imagePixels": 1617408,
+        "demVertices": 180561,
+        "imageSha256": "c6fc2a63ce889a1a7e400669427d220cd064d1c80efd830af92bc8ad260c7e71",
+        "demSha256": "355e1878ac1e1d8135b91eb2b5d75571d9702d3824f5b76900decb1f37ba5298",
+        "snowFraction": 0,
+        "cloudFraction": 0.0002250514403292181,
+        "routeCloudFraction": 0,
+        "cloudCheck": "SCL at every prepared texel; no-data/saturation rejected, clear classes preferred; ≤2% scene / ≤1% sampled route corridor cloudy or uncertain. Different dates may be mosaicked.",
+        "verticalDatum": "EGM2008"
+      },
+      "outputs": [
+        {
+          "file": "china-1/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "ddde712cb056266767de74e3090b23b5",
+          "lastFrameHash": "12d1ca03b40a3fb8db957bb4f9e4d56f",
+          "bytes": 13107142,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 1692.6329000000005,
+          "sha256": "eae26c31fc9224cff9acd078796558863e29f1892b663f9bfaef4935cb664951",
+          "minimumGrayRange": 52,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        },
+        {
+          "file": "china-1/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "9e01b7421f4a9086c84f0de891f127f2",
+          "lastFrameHash": "c8d7b021957742351ca7cbe1dd72553e",
+          "bytes": 19332288,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 2295.8222000000023,
+          "sha256": "4f0c7abadd61d5a3a3770b3c7a24dff54402825051e67c2e1c217b489acfb906",
+          "minimumGrayRange": 59,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        }
+      ],
+      "nativeMemory": {
+        "method": "OS Get-Process WorkingSet64/PrivateMemorySize64, unique child PIDs from isolated browser CDP SystemInfo; sampled during exports at 750ms, not an exact peak; working sets may share pages",
+        "samples": [
+          {
+            "phase": "before-import",
+            "workingSetBytes": 482103296,
+            "privateBytes": 321990656,
+            "processCount": 8,
+            "timestamp": 1791892967231
+          },
+          {
+            "phase": "prepared",
+            "workingSetBytes": 749051904,
+            "privateBytes": 604499968,
+            "processCount": 8,
+            "timestamp": 1791892988575
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 906719232,
+            "privateBytes": 867540992,
+            "processCount": 8,
+            "timestamp": 1791892991303
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 1006415872,
+            "privateBytes": 895459328,
+            "processCount": 9,
+            "timestamp": 1791892998105
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 1022472192,
+            "privateBytes": 910868480,
+            "processCount": 9,
+            "timestamp": 1791892998856
+          },
+          {
+            "phase": "after-export-cancel-retry",
+            "workingSetBytes": 997625856,
+            "privateBytes": 836268032,
+            "processCount": 8,
+            "timestamp": 1791893013519
+          },
+          {
+            "phase": "after-route-disposal",
+            "workingSetBytes": 979197952,
+            "privateBytes": 848814080,
+            "processCount": 8,
+            "timestamp": 1791893013813
+          }
+        ],
+        "maximumSamplePrivateBytes": 910868480,
+        "maximumSampleWorkingSetBytes": 1022472192
+      },
+      "gpuMemory": "NOT MEASURED",
+      "javascriptHeap": "NOT MEASURED",
+      "cancelRetry": true,
+      "externalRequestsBeforeConsent": 0,
+      "externalMethods": [
+        "GET"
+      ],
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "indexed": 0
+      }
+    },
+    {
+      "case": "china-2",
+      "synthetic": true,
+      "sourceCommit": "b60ff10278b028e9dd571457f9a5f351ba727039",
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "physicalDevice": false,
+      "distance": "1,30 км",
+      "segments": "1",
+      "geography": {
+        "schema": 1,
+        "provider": "Earth Search Sentinel-2 + Planetary Computer Copernicus DEM",
+        "photoSources": [
+          {
+            "id": "S2C_48SUF_20250707_0_L2A",
+            "epsg": 32648,
+            "date": "2025-07-07T03:58:31.664000Z",
+            "cloud": 0.087099,
+            "kind": "photo",
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/48/S/UF/2025/7/S2C_48SUF_20250707_0_L2A/TCI.tif",
+            "resolution": 10
+          }
+        ],
+        "demSources": [
+          {
+            "id": "Copernicus_DSM_COG_10_N36_00_E103_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N36_00_E103_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          }
+        ],
+        "sourceResolutionMeters": 10,
+        "demResolutionMeters": 30,
+        "derivedImageSpacingMeters": 10,
+        "derivedDemSpacingMeters": 30,
+        "areaKm2": 160.992,
+        "downloadBytes": 30593122,
+        "requests": 25,
+        "preparationMs": 16358.40000000596,
+        "imageBytes": 555934,
+        "imagePixels": 1609920,
+        "demVertices": 179727,
+        "imageSha256": "f3414f190465afe5d95f098800f9752fa3ac24536798ef62a96024b352fefc33",
+        "demSha256": "60b3cabdba14d10f4d183dc6227c4783ce63223869ca941b867f9fec81eccd9a",
+        "snowFraction": 0,
+        "cloudFraction": 0.00016211985688729876,
+        "routeCloudFraction": 0,
+        "cloudCheck": "SCL at every prepared texel; no-data/saturation rejected, clear classes preferred; ≤2% scene / ≤1% sampled route corridor cloudy or uncertain. Different dates may be mosaicked.",
+        "verticalDatum": "EGM2008"
+      },
+      "outputs": [
+        {
+          "file": "china-2/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "2d1c3855c673900422dfa04326f5fbbe",
+          "lastFrameHash": "4d5d1cd756564f102d6de1772d43e54d",
+          "bytes": 13010095,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 1718.4989999999998,
+          "sha256": "52107a5c0047428f5c21f1e6b64be550aaeee9a81633dd6ea47ed033270be250",
+          "minimumGrayRange": 133,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        },
+        {
+          "file": "china-2/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "5daa821245307867c45475d6a388b6f8",
+          "lastFrameHash": "5cc535c3006a49783ad26902b7feb3d6",
+          "bytes": 19289566,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 2369.1048999999985,
+          "sha256": "91f46d2a5c7f4c29e32923687a3c82cd5820fe2d250ea1c3f9d5152c3e3f47ef",
+          "minimumGrayRange": 101,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        }
+      ],
+      "nativeMemory": {
+        "method": "OS Get-Process WorkingSet64/PrivateMemorySize64, unique child PIDs from isolated browser CDP SystemInfo; sampled during exports at 750ms, not an exact peak; working sets may share pages",
+        "samples": [
+          {
+            "phase": "before-import",
+            "workingSetBytes": 481325056,
+            "privateBytes": 323387392,
+            "processCount": 8,
+            "timestamp": 1791893015600
+          },
+          {
+            "phase": "prepared",
+            "workingSetBytes": 761475072,
+            "privateBytes": 619339776,
+            "processCount": 8,
+            "timestamp": 1791893033114
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 882212864,
+            "privateBytes": 839806976,
+            "processCount": 8,
+            "timestamp": 1791893035749
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 1004204032,
+            "privateBytes": 880652288,
+            "processCount": 9,
+            "timestamp": 1791893042641
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 1028923392,
+            "privateBytes": 903405568,
+            "processCount": 9,
+            "timestamp": 1791893043386
+          },
+          {
+            "phase": "after-export-cancel-retry",
+            "workingSetBytes": 1027862528,
+            "privateBytes": 849592320,
+            "processCount": 8,
+            "timestamp": 1791893058290
+          },
+          {
+            "phase": "after-route-disposal",
+            "workingSetBytes": 1013293056,
+            "privateBytes": 845529088,
+            "processCount": 8,
+            "timestamp": 1791893058587
+          }
+        ],
+        "maximumSamplePrivateBytes": 903405568,
+        "maximumSampleWorkingSetBytes": 1028923392
+      },
+      "gpuMemory": "NOT MEASURED",
+      "javascriptHeap": "NOT MEASURED",
+      "cancelRetry": true,
+      "externalRequestsBeforeConsent": 0,
+      "externalMethods": [
+        "GET"
+      ],
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "indexed": 0
+      }
+    },
+    {
+      "case": "china-3",
+      "synthetic": true,
+      "sourceCommit": "b60ff10278b028e9dd571457f9a5f351ba727039",
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "physicalDevice": false,
+      "distance": "1,24 км",
+      "segments": "1",
+      "geography": {
+        "schema": 1,
+        "provider": "Earth Search Sentinel-2 + Planetary Computer Copernicus DEM",
+        "photoSources": [
+          {
+            "id": "S2B_45TVK_20250904_0_L2A",
+            "epsg": 32645,
+            "date": "2025-09-04T05:16:21.614000Z",
+            "cloud": 0.001599,
+            "kind": "photo",
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/45/T/VK/2025/9/S2B_45TVK_20250904_0_L2A/TCI.tif",
+            "resolution": 10
+          }
+        ],
+        "demSources": [
+          {
+            "id": "Copernicus_DSM_COG_10_N44_00_E086_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N44_00_E086_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          },
+          {
+            "id": "Copernicus_DSM_COG_10_N44_00_E085_00_DEM",
+            "href": "https://elevationeuwest.blob.core.windows.net/copernicus-dem/COP30_hh/Copernicus_DSM_COG_10_N44_00_E085_00_DEM.tif",
+            "epsg": 4326,
+            "kind": "dem",
+            "date": "2021-04-22T00:00:00Z",
+            "resolution": 30
+          }
+        ],
+        "sourceResolutionMeters": 10,
+        "demResolutionMeters": 30,
+        "derivedImageSpacingMeters": 10,
+        "derivedDemSpacingMeters": 30,
+        "areaKm2": 160.2432,
+        "downloadBytes": 22448331,
+        "requests": 24,
+        "preparationMs": 31286.60000000894,
+        "imageBytes": 574942,
+        "imagePixels": 1602432,
+        "demVertices": 178893,
+        "imageSha256": "e03a44ecd3d8c469432e4ee77d86835fb6c2ac30e381e851ccecc6cb16e2673c",
+        "demSha256": "62010494d6cd315e46db8f54b4758025b1b0efdb5fcf1db5254c738ab24e244f",
+        "snowFraction": 0,
+        "cloudFraction": 0.007859303858135634,
+        "routeCloudFraction": 0,
+        "cloudCheck": "SCL at every prepared texel; no-data/saturation rejected, clear classes preferred; ≤2% scene / ≤1% sampled route corridor cloudy or uncertain. Different dates may be mosaicked.",
+        "verticalDatum": "EGM2008"
+      },
+      "outputs": [
+        {
+          "file": "china-3/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "70d527b26491b1364d60c80c724865f0",
+          "lastFrameHash": "fb1f76eee4114e4638176c9ff1291449",
+          "bytes": 13319505,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 1703.6984000000011,
+          "sha256": "0ec1a784d7ea7c7ebc7689d5a47354a7eda827e8e3b8f7a9f031f7c0a6f06718",
+          "minimumGrayRange": 113,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        },
+        {
+          "file": "china-3/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "dff7648ac78671c5d87651d1d0072588",
+          "lastFrameHash": "3f75805d35b49df4ad086a40633f2650",
+          "bytes": 19243231,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 2212.470100000006,
+          "sha256": "359fe6d197696b9ad511ecc879b303353b96511600221a60f65bf0099adfd755",
+          "minimumGrayRange": 92,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        }
+      ],
+      "nativeMemory": {
+        "method": "OS Get-Process WorkingSet64/PrivateMemorySize64, unique child PIDs from isolated browser CDP SystemInfo; sampled during exports at 750ms, not an exact peak; working sets may share pages",
+        "samples": [
+          {
+            "phase": "before-import",
+            "workingSetBytes": 479363072,
+            "privateBytes": 317972480,
+            "processCount": 8,
+            "timestamp": 1791893060355
+          },
+          {
+            "phase": "prepared",
+            "workingSetBytes": 698703872,
+            "privateBytes": 579366912,
+            "processCount": 6,
+            "timestamp": 1791893092824
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 815308800,
+            "privateBytes": 803504128,
+            "processCount": 6,
+            "timestamp": 1791893095490
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 962199552,
+            "privateBytes": 867819520,
+            "processCount": 8,
+            "timestamp": 1791893102301
+          },
+          {
+            "phase": "during-export",
+            "workingSetBytes": 983969792,
+            "privateBytes": 887533568,
+            "processCount": 8,
+            "timestamp": 1791893103060
+          },
+          {
+            "phase": "after-export-cancel-retry",
+            "workingSetBytes": 983015424,
+            "privateBytes": 828760064,
+            "processCount": 8,
+            "timestamp": 1791893118843
+          },
+          {
+            "phase": "after-route-disposal",
+            "workingSetBytes": 960745472,
+            "privateBytes": 799109120,
+            "processCount": 8,
+            "timestamp": 1791893119143
+          }
+        ],
+        "maximumSamplePrivateBytes": 887533568,
+        "maximumSampleWorkingSetBytes": 983969792
+      },
+      "gpuMemory": "NOT MEASURED",
+      "javascriptHeap": "NOT MEASURED",
+      "cancelRetry": true,
+      "externalRequestsBeforeConsent": 0,
+      "externalMethods": [
+        "GET"
+      ],
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "indexed": 0
+      }
+    }
+  ]
+}

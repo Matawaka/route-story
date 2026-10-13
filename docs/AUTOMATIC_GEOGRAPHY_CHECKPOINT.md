@@ -1,5 +1,7 @@
 # Automatic photographic terrain — paused checkpoint
 
+Historical pause checkpoint, superseded by the resumed implementation on 2026-10-13: runtime `b60ff10278b028e9dd571457f9a5f351ba727039`, PR26, actual two GPX/three synthetic China preparations and full MP4 evidence. Continue using IMPLEMENTATION_STATE.md and AUTOMATIC_GEOGRAPHY.md; do not restart this initial spike or infer deployment permission.
+
 Owner explicitly requested a pause on 2026-10-13 with 1% Codex capacity remaining. Resume the existing branch, not a new implementation. Nothing has been merged, deployed, tagged or published.
 
 - Branch: `codex/automatic-photographic-terrain`.

@@ -28,6 +28,12 @@
 
 ## Приёмка и память
 
+Runtime SHA `b60ff10278b028e9dd571457f9a5f351ba727039`; [PR26](https://github.com/Matawaka/route-story/pull/26), [successful runtime CI](https://github.com/Matawaka/route-story/actions/runs/38394423985). Локально263unitPASS, TypeScript/VitePASS,62routine browserPASS/37explicit skips,5новых opt-in failuresPASS, clean install/audit0. Финальный documentation-only HEAD проверяется отдельно, эти результаты относятся к указанному runtime.
+
+Ниже — настоящий независимо декодированный кадр первой китайской сцены. География Sentinel/Copernicus настоящая; короткий маршрут специально синтетический, не поездка человека. Встроенный rider сохранён, источники подписаны в кадре. Это evidence в документации, не новый публикуемый региональный пакет.
+
+![Синтетический китайский тест на настоящей фотографии и DEM](evidence/automatic-geography-china-1.png)
+
 Локально на Edge155.0.4283.45 / Windows10.0.26200 автоматически подготовлены реальные пользовательские Mont Blanc/Malerweg и три независимых синтетических китайских области. Для каждой получены20s16:9 и30s9:16 Standard H.264 MP4, independently decoded FFmpeg/ffprobe, exact pre-encode/preview/reverse-seek equality, all-frame nonblank/PTS/changing checks, cancel/retry и отсутствие внешних запросов во время экспорта. GPX и видео владельца находятся только в ignored artifacts; подробные агрегированные значения — AUTOMATIC_GEOGRAPHY_EVIDENCE.json.
 
 Источник подготавливался15–38секунд, скачано22–55MB в отдельных измеренных запусках. Это не медианы и не SLA. Сумма private memory изолированного браузера в отдельных экспортных выборках достигает примерно0,8–1,0GiB. Измерение Windows Get-Process по уникальным PID собственного браузера/CDP включает browser/renderer/media/GPU-process RAM; не означает GPU VRAM. Working set может учитывать общие страницы. Период750мс не ловит гарантированно точный пик. JS heap/VRAM отдельно NOT MEASURED. Один цикл не доказывает отсутствие утечек; retained memory после удаления маршрута включает обычные браузерные/кодековые кеши. Физические Xiaomi/MacBook и маломощный ноутбук для нового механизма NOT TESTED. До публичного включения нужны такие проверки;2D остаётся доступным.
