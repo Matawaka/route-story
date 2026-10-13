@@ -1,5 +1,9 @@
 # Decisions
 
+## 2026-10-13 — Owner-authorized PR26 publication through the existing workflow
+
+Following successful local visual review, the owner explicitly approved merge/public deployment. The old manual Pages build would omit BUILD_AUTO_GEOGRAPHY; add one default-false include_automatic_geography input and corresponding explicit release-package mode. Retain candidate mode separately; release.json records approval only for release mode, never for a developer candidate. Keep the same main-only exact-SHA/main-push-CI gate, action pins, least privilege and reviewerMatawaka. Combined approved package remains≤9MiB, decoder addon≤512KiB; no new maps/hosting/paid service/tag/GitHub Release. Anonymous HTTPS smoke verifies the built privacy-consent control and exact four allowed data origins without provider requests; full consented public preparation/export remains an additional local check. Physical mobile60s/source-decoding resource limits remain unverified. No private GPX-derived videos are published.
+
 ## 2026-10-13 — Long-route stability and bounded minute video
 
 Owner specifically requested calmer winding-route camera, fewer short-turn marker reflections and a minute option. Use smoothed north-up tracking only for3D tracks>5km, preserving shorter reviewed cinematic plans and all350m/LOS/corridor/source-resolution guards. Gaze/camera are smoothed within segments; original route/marker is not. Heading uses100–250m distance chords and a15% horizontal dead zone with binary segment-bound lookup, never prior playback frames. Extend bounded enum to60s/1440frames, preserving24FPS/resolution/bitrate; explicit minute-only48MiB payload is required for5Mbps60s, old32MiB bound unchanged.

@@ -5,7 +5,9 @@ import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
 const root=resolve('dist'),files=[],imageryCandidate=process.argv.includes('--imagery-candidate'),imageryRelease=process.argv.includes('--imagery-release'),imageryPack=imageryCandidate||imageryRelease;
 const swissPack=process.argv.includes('--swiss-release');if(swissPack)assert.equal(process.env.BUILD_SWISS_PACK,'1','Swiss pack requires the owner-authorized opt-in build');
-const geographyCandidate=process.argv.includes('--automatic-geography-candidate');if(geographyCandidate)assert.equal(process.env.BUILD_AUTO_GEOGRAPHY,'1','Automatic geography is a separately reviewed opt-in candidate');
+const geographyCandidate=process.argv.includes('--automatic-geography-candidate'),geographyRelease=process.argv.includes('--automatic-geography-release'),geographyPack=geographyCandidate||geographyRelease;
+assert.ok(!(geographyCandidate&&geographyRelease),'choose automatic geography candidate or owner-authorized release, never both');
+if(geographyPack)assert.equal(process.env.BUILD_AUTO_GEOGRAPHY,'1','Automatic geography requires an explicit build opt-in');
 assert.ok(!(imageryCandidate&&imageryRelease),'choose candidate or owner-authorized imagery release, never both');
 if(imageryPack)assert.equal(process.env.BUILD_IMAGERY_PACK,'1','photo package requires explicit build opt-in');
 function walk(dir,prefix=''){for(const name of readdirSync(dir)){const file=join(dir,name),relative=prefix+name,stat=lstatSync(file);assert.ok(!stat.isSymbolicLink(),`No links in release package: ${relative}`);if(stat.isDirectory())walk(file,relative+'/');else files.push(relative);}}
@@ -23,11 +25,11 @@ if(imageryPack){
  assert.ok(pixels<=3000000&&bytes<=2*1024*1024);
 }
 for(const name of fixed)assert.ok(files.includes(name),`Required public file ${name}`);
-for(const file of files)assert.ok(fixed.includes(file)||file==='release.json'||/^assets\/[a-zA-Z0-9_-]+\.(js|css)$/.test(file)||geographyCandidate&&/^assets\/pako\.esm-[a-zA-Z0-9_-]+\.js$/.test(file),`Unexpected file in public package: ${file}`);
+for(const file of files)assert.ok(fixed.includes(file)||file==='release.json'||/^assets\/[a-zA-Z0-9_-]+\.(js|css)$/.test(file)||geographyPack&&/^assets\/pako\.esm-[a-zA-Z0-9_-]+\.js$/.test(file),`Unexpected file in public package: ${file}`);
 const html=readFileSync(join(root,'index.html'),'utf8');
 const geographicConnect="connect-src 'self' https://earth-search.aws.element84.com https://planetarycomputer.microsoft.com https://sentinel-cogs.s3.us-west-2.amazonaws.com https://elevationeuwest.blob.core.windows.net;";
-if(geographyCandidate)assert.ok(html.includes(geographicConnect),'exact reviewed geography origins, no wildcard');
-const checkedHtml=geographyCandidate?html.replace(geographicConnect,"connect-src 'self';"):html;
+if(geographyPack)assert.ok(html.includes(geographicConnect),'exact reviewed geography origins, no wildcard');
+const checkedHtml=geographyPack?html.replace(geographicConnect,"connect-src 'self';"):html;
 assert.ok(html.includes('http-equiv="Content-Security-Policy"'));assert.ok(!/unsafe-inline|unsafe-eval|https?:\/\//.test(checkedHtml),'restrictive HTML; external geography only in explicit consented candidate');
 assert.ok(!/(?:src|href)="\//.test(html),'HTML assets must support repository subpath');
 assert.ok(html.includes("connect-src 'self'")&&html.includes("object-src 'none'"));
@@ -38,10 +40,10 @@ for(const file of fixed)if(file!=='index.html'&&file!=='swiss-pilot.html'){
 }
 const sourceCommit=process.env.BUILD_COMMIT||execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',windowsHide:true}).trim();assert.match(sourceCommit,/^[a-f0-9]{40}$/);
 const entries=files.filter(f=>f!=='release.json').sort().map(path=>{const data=readFileSync(join(root,path));return{path,bytes:data.length,sha256:createHash('sha256').update(data).digest('hex')};});
-const totalBytes=entries.reduce((n,e)=>n+e.bytes,0),photoBytes=entries.filter(e=>e.path.startsWith('imagery/')).reduce((n,e)=>n+e.bytes,0),swissBytes=entries.filter(e=>e.path.startsWith('regions/furka/')).reduce((n,e)=>n+e.bytes,0),addonBytes=geographyCandidate?entries.filter(e=>/^assets\/(geographic-preparation|raw|deflate|packbits|webimage|basedecoder|lzw|jpeg|pako\.esm|zstd|lerc)-/.test(e.path)).reduce((n,e)=>n+e.bytes,0):0,packageLimitBytes=((swissPack?9:imageryPack?6:5)+(geographyCandidate&&!swissPack?.5:0))*1024*1024;
+const totalBytes=entries.reduce((n,e)=>n+e.bytes,0),photoBytes=entries.filter(e=>e.path.startsWith('imagery/')).reduce((n,e)=>n+e.bytes,0),swissBytes=entries.filter(e=>e.path.startsWith('regions/furka/')).reduce((n,e)=>n+e.bytes,0),addonBytes=geographyPack?entries.filter(e=>/^assets\/(geographic-preparation|raw|deflate|packbits|webimage|basedecoder|lzw|jpeg|pako\.esm|zstd|lerc)-/.test(e.path)).reduce((n,e)=>n+e.bytes,0):0,packageLimitBytes=((swissPack?9:imageryPack?6:5)+(geographyPack&&!swissPack?.5:0))*1024*1024;
 assert.ok(addonBytes<=512*1024&&totalBytes-photoBytes-swissBytes-addonBytes<=5*1024*1024&&photoBytes<=2*1024*1024+16384&&swissBytes<=2200000,'bounded baseline and reviewed regional photo packs; candidate decoder addon ≤512KiB, no video/private files');
 const version=JSON.parse(readFileSync('package.json')).version;
-const manifest=JSON.stringify({schema:1,app:'Route Story',version,sourceCommit,totalBytes,...(imageryPack?{imageryPack:'sogne-sentinel-adaptive',publicationApproved:imageryRelease,...(imageryCandidate?{candidate:'photo-prototype'}:{}),packageLimitBytes,baselineBytes:totalBytes-photoBytes-swissBytes-addonBytes,photoBytes}:{}),...(swissPack?{regionalPacks:['furka'],swissBytes,packageLimitBytes}:{}),...(geographyCandidate?{automaticGeography:'experimental-candidate',automaticGeographyPublicationApproved:false,addonBytes,addonLimitBytes:512*1024,packageLimitBytes}:{}),files:entries},null,2)+'\n';
+const manifest=JSON.stringify({schema:1,app:'Route Story',version,sourceCommit,totalBytes,...(imageryPack?{imageryPack:'sogne-sentinel-adaptive',publicationApproved:imageryRelease,...(imageryCandidate?{candidate:'photo-prototype'}:{}),packageLimitBytes,baselineBytes:totalBytes-photoBytes-swissBytes-addonBytes,photoBytes}:{}),...(swissPack?{regionalPacks:['furka'],swissBytes,packageLimitBytes}:{}),...(geographyPack?{automaticGeography:geographyRelease?'experimental':'experimental-candidate',automaticGeographyPublicationApproved:geographyRelease,addonBytes,addonLimitBytes:512*1024,packageLimitBytes}:{}),files:entries},null,2)+'\n';
 assert.ok(Buffer.byteLength(manifest)<=16384&&totalBytes+Buffer.byteLength(manifest)<=packageLimitBytes,'complete public package including manifest exceeds reviewed limit');
 writeFileSync(join(root,'release.json'),manifest);
 console.log(JSON.stringify({sourceCommit,version,totalBytes,manifestBytes:Buffer.byteLength(manifest),packageLimitBytes,publicFiles:entries.length,imageryRelease}));
