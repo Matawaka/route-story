@@ -110,5 +110,5 @@ export function drawMarker(ctx:CanvasRenderingContext2D,asset:MarkerAsset,x:numb
   // Keep human/custom artwork upright. A separate cue follows the actual edge;
   // no interpolated bearing or arrow is drawn across a disconnected segment.
   if(showDirectionCue&&direction&&direction.every(Number.isFinite)&&Math.hypot(...direction)>1e-6){const angle=Math.atan2(direction[1],direction[0]);ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.beginPath();ctx.moveTo(size*.36,-size*.11);ctx.lineTo(size*.53,0);ctx.lineTo(size*.36,size*.11);ctx.strokeStyle='#102c37';ctx.lineWidth=size*.1;ctx.lineCap=ctx.lineJoin='round';ctx.stroke();ctx.strokeStyle='#fff1ce';ctx.lineWidth=size*.04;ctx.stroke();ctx.restore();}
-  ctx.save();ctx.translate(x,y);if(markerFacesLeft(direction))ctx.scale(-1,1);ctx.drawImage(asset.canvas,-size/2,-size,size,size);ctx.restore();
+  ctx.save();try{ctx.translate(x,y);if(markerFacesLeft(direction))ctx.scale(-1,1);ctx.drawImage(asset.canvas,-size/2,-size,size,size);}finally{ctx.restore();}
 }

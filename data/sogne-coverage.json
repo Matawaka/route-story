@@ -1,0 +1,9 @@
+{
+  "sourceManifest": "public/terrain/sogne.json",
+  "sourceId": "kartverket-dtm10-2020-sogne",
+  "origin": [6.2, 61.28],
+  "westMeters": -15000,
+  "southMeters": -20000,
+  "eastMeters": 15000,
+  "northMeters": 20000
+}
