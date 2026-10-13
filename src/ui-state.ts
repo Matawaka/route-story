@@ -1,4 +1,5 @@
 import { ResourceError } from './local-resource';
+import { GeographicError } from './geographic-plan';
 export type UiErrorCategory = 'offline' | 'timeout' | 'resource' | 'integrity' | 'coverage' | 'gpx' | 'graphics' | 'memory' | 'codec' | 'export' | 'configuration';
 export interface UiError { category: UiErrorCategory; message: string; code: string }
 export type UiState =
@@ -9,6 +10,7 @@ export type UiState =
   | {phase: 'ERROR'; error: UiError; blocking?:boolean};
 export type ViewMode = 'normal' | 'compact' | 'video';
 export function uiError(error: unknown, context: 'gpx' | 'scene' | 'export' | 'configuration'): UiError {
+  if(error instanceof GeographicError)return{category:error.code==='timeout'?'timeout':error.code==='integrity'?'integrity':error.code==='resources'?'memory':'resource',message:error.message,code:`geography/${error.code}`};
   if (error instanceof ResourceError) {
     const names = {terrain: 'модель рельефа', image: 'спутниковая карта', map: 'карта', route: 'демонстрационный GPX', marker: 'картинка путешественника'};
     const text = error.category === 'offline' ? 'Нет интернет-соединения. Выберите локальный GPX или попробуйте снова после подключения.'

@@ -38,6 +38,9 @@ async function accept(url){
   const manifestResponse=await context.request.get(url+'release.json');assert.equal(manifestResponse.status(),200);const manifest=await manifestResponse.json();
   assert.equal(manifest.version,expectedVersion);assert.match(manifest.sourceCommit,/^[a-f0-9]{40}$/);if(process.env.EXPECTED_COMMIT)assert.equal(manifest.sourceCommit,process.env.EXPECTED_COMMIT);
   report.sourceCommit=manifest.sourceCommit;report.version=manifest.version;report.packageBytes=manifest.totalBytes;
+  const connect=report.csp.meta.match(/(?:^|;)\s*connect-src\s+([^;]+)/)?.[1].trim().split(/\s+/);
+  assert.deepEqual(connect,manifest.automaticGeography?["'self'",'https://earth-search.aws.element84.com','https://planetarycomputer.microsoft.com','https://sentinel-cogs.s3.us-west-2.amazonaws.com','https://elevationeuwest.blob.core.windows.net']:["'self'"],'only reviewed data origins; no script/CDN expansion');
+  if(process.env.EXPECTED_AUTO_GEOGRAPHY==='1')assert.equal(manifest.automaticGeographyPublicationApproved,true,'approved automatic geography must be present in the deployed build');
   for(const file of manifest.files){
    assert.ok(!file.path.startsWith('/')&&!file.path.includes('..'),'local manifest path');
    const res=await context.request.get(url+file.path);assert.equal(res.status(),200);assert.equal(new URL(res.url()).origin,base.origin);
@@ -86,6 +89,16 @@ async function accept(url){
    if(example.aspect==='portrait'){await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await page.screenshot({path:`${directory}/${smoke?'smoke-':''}portrait-layout.png`,fullPage:true});await page.setViewportSize({width:1280,height:900});}
   }
   const unsupported=await context.newPage();await unsupported.addInitScript(()=>{Object.defineProperty(window,'VideoEncoder',{value:undefined,configurable:true});});await unsupported.goto(url);await unsupported.locator('#route-choice').selectOption('sample');await expect(unsupported.locator('#preview')).toBeVisible();await expect(unsupported.locator('#export')).toBeDisabled();await expect(unsupported.locator('#status')).toContainText('WebCodecs');await unsupported.close();report.unsupportedEncoder='VERIFIED simulated unavailable API';
+  if(manifest.automaticGeography){
+   // This bounded smoke verifies the actual production opt-in and privacy gate,
+   // without relying on provider availability or sending a route in routine CI.
+   const input=readFileSync('tests/fixtures/metadata-links.gpx');
+   await page.locator('#file').setInputFiles({name:'synthetic-consent.gpx',mimeType:'application/gpx+xml',buffer:input});
+   await expect(page.locator('#geography-consent')).toBeVisible();await expect(page.locator('#geography-consent')).toContainText('GPX, точки, имя файла');await expect(page.locator('#find-geography')).toBeEnabled();
+   await expect(page.locator('#duration option[value="60"]')).toHaveCount(1);
+   await page.locator('#keep-local').click();await expect(page.locator('#geography-consent')).toBeHidden();await expect(page.locator('#export')).toBeEnabled();await page.locator('#scrub').fill('5');await expect(page.locator('#preview')).toBeVisible();
+   report.automaticGeography={publicationApproved:manifest.automaticGeographyPublicationApproved,areaConsent:'VERIFIED; declined with usable local preview',externalRequestsBeforeConsent:0,minuteOption:true,liveProviderPreparation:'NOT TESTED by this bounded smoke'};
+  }
   const storage=await page.evaluate(async()=>({local:localStorage.length,session:sessionStorage.length,databases:await indexedDB.databases(),caches:await caches.keys(),cookies:document.cookie}));
   assert.deepEqual(storage,{local:0,session:0,databases:[],caches:[],cookies:''});assert.deepEqual(await context.cookies(),[]);
   await page.reload();

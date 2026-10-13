@@ -60,16 +60,32 @@ export function fitProjection(segments: RoutePoint[][], width: number, height: n
 export class RoutePath {
   readonly edges: { a: RoutePoint; b: RoutePoint; start: number; end: number; segment: number; index: number }[] = [];
   readonly total: number;
+  private readonly segmentRanges: {first:number;last:number;start:number;end:number}[] = [];
   constructor(readonly segments: RoutePoint[][]) {
     let distance = 0;
     segments.forEach((points, segment) => {
+      const first=this.edges.length,start=distance;
       for (let index = 1; index < points.length; index++) {
         const length = haversine(points[index - 1], points[index]);
         if (length > 0) this.edges.push({ a: points[index - 1], b: points[index], start: distance, end: distance + length, segment, index });
         distance += length;
       }
+      this.segmentRanges.push({first,last:this.edges.length-1,start,end:distance});
     });
     this.total = distance;
+  }
+  /** A distance-window chord suppresses tiny zigzags without changing the actual marker point.
+   * Binary searches stay inside one original segment, including exact endpoints and duplicates. */
+  headingPoints(segment:number,index:number,distance?:number):readonly [RoutePoint,RoutePoint]|undefined {
+    const edge=this.edgeAt(segment,index),range=this.segmentRanges[segment];if(!edge||!range)return;
+    const center=Math.min(range.end,Math.max(range.start,distance??(edge.start+edge.end)/2));
+    const radius=Math.min(.125,Math.max(.05,(range.end-range.start)*.005)); // 100–250 m full window
+    const local=(d:number):RoutePoint=>{
+      let lo=range.first,hi=range.last;while(lo<hi){const m=(lo+hi)>>>1;if(this.edges[m].end<d)lo=m+1;else hi=m;}
+      const e=this.edges[lo],t=Math.min(1,Math.max(0,(d-e.start)/(e.end-e.start)));
+      return {lat:e.a.lat+(e.b.lat-e.a.lat)*t,lon:wrapDelta(e.a.lon+wrapDelta(e.b.lon-e.a.lon)*t)};
+    };
+    return [local(Math.max(range.start,center-radius)),local(Math.min(range.end,center+radius))];
   }
   at(progress: number): { point: RoutePoint; segment: number; index: number; distance: number } {
     const fraction = Math.min(1, Math.max(0, progress));

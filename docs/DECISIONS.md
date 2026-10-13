@@ -1,5 +1,23 @@
 # Decisions
 
+## 2026-10-13 — Owner-authorized PR26 publication through the existing workflow
+
+Following successful local visual review, the owner explicitly approved merge/public deployment. The old manual Pages build would omit BUILD_AUTO_GEOGRAPHY; add one default-false include_automatic_geography input and corresponding explicit release-package mode. Retain candidate mode separately; release.json records approval only for release mode, never for a developer candidate. Keep the same main-only exact-SHA/main-push-CI gate, action pins, least privilege and reviewerMatawaka. Combined approved package remains≤9MiB, decoder addon≤512KiB; no new maps/hosting/paid service/tag/GitHub Release. Anonymous HTTPS smoke verifies the built privacy-consent control and exact four allowed data origins without provider requests; full consented public preparation/export remains an additional local check. Physical mobile60s/source-decoding resource limits remain unverified. No private GPX-derived videos are published.
+
+## 2026-10-13 — Long-route stability and bounded minute video
+
+Owner specifically requested calmer winding-route camera, fewer short-turn marker reflections and a minute option. Use smoothed north-up tracking only for3D tracks>5km, preserving shorter reviewed cinematic plans and all350m/LOS/corridor/source-resolution guards. Gaze/camera are smoothed within segments; original route/marker is not. Heading uses100–250m distance chords and a15% horizontal dead zone with binary segment-bound lookup, never prior playback frames. Extend bounded enum to60s/1440frames, preserving24FPS/resolution/bitrate; explicit minute-only48MiB payload is required for5Mbps60s, old32MiB bound unchanged.
+
+Exact-frame regression exposed a rare1-level background difference; do not introduce a pixel tolerance. Disable framebuffer dithering, composite the real current RGBA frame/marker/credits in a fixed CPU canvas, copy final bytes to preview/export. Keep only bounded current-frame buffers and dispose them. This sacrifices export speed for reproducible output; measured20/30s times rose materially and physical mobile minute-mode remains unverified. Historical measurements remain intact; CAMERA_STABILITY_EVIDENCE contains separate actual results. No deployment/merge permission or new map-pack approval inferred.
+
+## 2026-10-13 — Consented browser-only generic photographic terrain candidate
+
+Use real Earth Search Sentinel-2 RGB/SCL COG windows and Planetary Computer Copernicus DSM rather than manually constructing another list of regions. Browser CORS/HTTP206 were actually verified; direct AWS DEM CORS failed. No VPS/key/payment is needed for the tested path. Keep first-party Furka/Sogne precedence and require fresh approximate-area consent for each user import. GPX/points/labels/file names stay local; no source requests during encoding.
+
+Bound one prepared regional scene by55km span,64MiB download/180s/1200requests/two concurrent requests and original grid/texture/MP4 limits. Source no-data fraction participates in candidate ranking; acquire coverage before alternate cloud observations. SCL policy≤2% scene/≤1% route corridor is disclosed, source10m differs from derived10/30/50m imagery and30/80/120m mesh. DSM EGM2008 is not GPX altitude or bare-earth road data. All timestamp camera states pass before export; generic65° FOV and finite texel-scale bisection retain350m/LOS/80km bounds, legacy46° views stay unchanged.
+
+10 full independently decoded MP4s from two actual owner GPX and three explicitly synthetic China scenes validate the initial implementation. These are local results, not a public deployment or mobile certification. Browser native private memory approached1GiB in samples; physical-device acceptance remains required. BUILD_AUTO_GEOGRAPHY is opt-in; candidate decoder≤512KiB is separately measured, old5/6/9MiB builds and protected workflow remain intact. No merge/release/deploy permission is inferred from previous PR approvals. Detailed evidence and limitations: AUTOMATIC_GEOGRAPHY.md / AUTOMATIC_GEOGRAPHY_EVIDENCE.json.
+
 ## 2026-10-13 — First-user instructions, covered choices and upright marker reflection
 
 Owner requested a welcome before initial demo playback. Use a dismissible inline Russian guide with four steps, start/upload/close and a reusable «Как пользоваться» button. Initial Swiss preparation remains background work; playback waits acceptance, reduced-motion remains static. Explicit user input cancels pending initial playback, so ownGPX cannot be overwritten by a late demo. Guide/view state stays outside StoryConfig/export and storage.

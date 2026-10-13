@@ -4,11 +4,11 @@ import os from 'node:os';
 // @ts-expect-error Node-only independent video validator
 import { validateVideo } from '../../scripts/validate-video.mjs';
 
-test('10/20/30-second labels and phases support reversible keyboard seeking', async ({page}) => {
+test('10/20/30/60-second labels and phases support reversible keyboard seeking', async ({page}) => {
   await page.goto('/');await page.locator('#route-choice').selectOption('sample');await expect(page.locator('#export')).toBeEnabled();
-  for(const seconds of [10,20,30]) {
+  for(const seconds of [10,20,30,60]) {
     await page.getByLabel('Длительность видео').selectOption(String(seconds));await expect(page.locator('#scrub')).toHaveAttribute('max',String(seconds));
-    await page.locator('#scrub').fill('0');await expect(page.locator('#preview')).toHaveAttribute('data-phase','INTRO');await expect(page.locator('#time')).toHaveText(`0:00 / 0:${seconds}`);
+    await page.locator('#scrub').fill('0');await expect(page.locator('#preview')).toHaveAttribute('data-phase','INTRO');await expect(page.locator('#time')).toHaveText(`0:00 / ${seconds===60?'1:00':`0:${seconds}`}`);
     await page.locator('#scrub').fill('3');await expect(page.locator('#preview')).toHaveAttribute('data-phase','ROUTE_REPLAY');const first=await page.locator('#preview').evaluate((c:HTMLCanvasElement)=>c.toDataURL());
     await page.locator('#scrub').fill(String(seconds));await expect(page.locator('#preview')).toHaveAttribute('data-phase','OUTRO');
     await page.locator('#scrub').fill('3');expect(await page.locator('#preview').evaluate((c:HTMLCanvasElement)=>c.toDataURL())).toBe(first);
@@ -36,8 +36,8 @@ test('export snapshot ignores mutation and reproduces the preview frame', async 
   expect(result.matched).toBe(true);expect(result.frames).toBe(240);expect(result.bytes).toBeGreaterThan(1000);
 });
 
-test('UI cancellation restores controls and a subsequent export succeeds', async ({page})=>{
-  await page.goto('/');await page.locator('#route-choice').selectOption('sample');await page.getByLabel('Длительность видео').selectOption('30');await expect(page.locator('#export')).toBeEnabled();
+for(const duration of [30,60])test(`UI cancellation at ${duration}s restores controls and a subsequent export succeeds`, async ({page})=>{
+  await page.goto('/');await page.locator('#route-choice').selectOption('sample');await page.getByLabel('Длительность видео').selectOption(String(duration));await expect(page.locator('#export')).toBeEnabled();
   const downloads:string[]=[];page.on('download',d=>downloads.push(d.suggestedFilename()));await page.locator('#export').click();await expect(page.locator('#cancel')).toBeVisible();
   for(const id of ['duration','quality','ratio','file','route-choice','scrub','story-title'])await expect(page.locator(`#${id}`)).toBeDisabled();
   await page.locator('#cancel').click();await expect(page.locator('#status')).toHaveText('Экспорт отменён.');await expect(page.locator('#export')).toBeEnabled();expect(downloads).toEqual([]);

@@ -169,7 +169,7 @@ export class RouteRenderer {
       }
     }
     const marker = (point: RoutePoint, solid = false) => {
-      if(solid&&this.markerAsset){const [x,y]=this.projection.project(point),direction=routeMarkerDirection(this.timeline.path,state.segment,state.index,this.projection.project),size=markerSize(this.config,unit),layout=annotationAt(x,y,0,w,h,size,[pad,h*.23,w-pad,h*.78]);if(layout)drawAnnotation(ctx,this.markerAsset,[x,y],layout,size,false,direction,true,state.phase==='ROUTE_REPLAY');return;}
+      if(solid&&this.markerAsset){const [x,y]=this.projection.project(point),direction=routeMarkerDirection(this.timeline.path,state.segment,state.index,this.projection.project,state.travelledKm),size=markerSize(this.config,unit),layout=annotationAt(x,y,0,w,h,size,[pad,h*.23,w-pad,h*.78]);if(layout)drawAnnotation(ctx,this.markerAsset,[x,y],layout,size,false,direction,true,state.phase==='ROUTE_REPLAY');return;}
       const [x, y] = this.projection.project(point);
       ctx.beginPath(); ctx.arc(x, y, unit / 65, 0, Math.PI * 2); ctx.fillStyle = solid ? colors.line : colors.water; ctx.fill();
       ctx.strokeStyle = colors.ink; ctx.lineWidth = 1.5; ctx.stroke();

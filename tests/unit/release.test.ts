@@ -16,6 +16,14 @@ describe('release authorization refuses unsafe contexts before network access',(
 });
 
 describe('photo publication package requires an explicit bounded build',()=>{
+ it('rejects simultaneous automatic geography candidate and release modes',()=>{
+  const result=spawnSync(process.execPath,['scripts/package-release.mjs','--automatic-geography-candidate','--automatic-geography-release'],{encoding:'utf8',windowsHide:true,env:{...process.env,BUILD_AUTO_GEOGRAPHY:'1'}});
+  expect(result.status).not.toBe(0);expect(result.stderr).toContain('never both');
+ });
+ it('rejects automatic geography publication without its build opt-in',()=>{
+  const result=spawnSync(process.execPath,['scripts/package-release.mjs','--automatic-geography-release'],{encoding:'utf8',windowsHide:true,env:{...process.env,BUILD_AUTO_GEOGRAPHY:'0'}});
+  expect(result.status).not.toBe(0);expect(result.stderr).toContain('explicit build opt-in');
+ });
  it('rejects simultaneous candidate and publication modes',()=>{
   const result=spawnSync(process.execPath,['scripts/package-release.mjs','--imagery-candidate','--imagery-release'],{encoding:'utf8',windowsHide:true,env:{...process.env,BUILD_IMAGERY_PACK:'1'}});
   expect(result.status).not.toBe(0);expect(result.stderr).toContain('never both');

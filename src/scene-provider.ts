@@ -14,17 +14,28 @@ import type {MarkerAsset} from './marker';
 import {localBytes,abortable,ResourceError} from './local-resource';
 declare const __SWISS_ENABLED__:boolean;
 declare const __IMAGERY_ENABLED__:boolean;
+declare const __AUTO_GEOGRAPHY_ENABLED__:boolean;
 export type SceneRenderer=RouteRenderer|TerrainRenderer;
-export interface PreparedScene {renderer:SceneRenderer; region:'furka'|'sogne'|'global'; credit:string; detail:string; notice?:string}
+export interface PreparedScene {renderer:SceneRenderer; region:'furka'|'sogne'|'global'|'discovered'; credit:string; detail:string; notice?:string; geographicEvidence?:import('./geographic-preparation').GeographicEvidence}
 let land:Promise<Land>|undefined;
 function loadLand(signal:AbortSignal):Promise<Land>{
   if(!land)land=localBytes(`${import.meta.env.BASE_URL}maps/ne_110m_land.geojson`,{kind:'map',limit:4*1024*1024})
     .then(bytes=>JSON.parse(new TextDecoder().decode(bytes)) as Land).catch(error=>{land=undefined;throw error;});
   return abortable(land,signal);
 }
-export async function prepareScene(route:Route,requested:Readonly<StoryConfig>,signal:AbortSignal,stage:(name:string)=>void,custom?:MarkerAsset):Promise<PreparedScene>{
+export async function prepareScene(route:Route,requested:Readonly<StoryConfig>,signal:AbortSignal,stage:(name:string)=>void,custom?:MarkerAsset,geographicConsent=false):Promise<PreparedScene>{
   const settings=exportSettings(requested);let config=requested,notice:string|undefined;
   const available=sceneAvailability(route,__SWISS_ENABLED__,__IMAGERY_ENABLED__);
+  if(__AUTO_GEOGRAPHY_ENABLED__&&geographicConsent&&!available.terrain&&(config.cameraMode==='terrain'||config.cameraMode==='auto')){
+    const {prepareDiscoveredGeography,prepareDiscoveredTerrain}=await import('./geographic-preparation');
+    const prepared=config.terrainSurface==='photo'?await prepareDiscoveredGeography(route,signal,stage):{terrain:await prepareDiscoveredTerrain(route,signal,stage),imagery:undefined,evidence:undefined};let next:TerrainRenderer|undefined;
+    try{const readyMarker=config.marker==='traveler'?await loadTraveler(signal):custom;config=validateStoryConfig({...config,cameraMode:'terrain'});stage('Подготавливаем 3D-рельеф · проверяем безопасную камеру');
+      const {TerrainRenderer}=await import('./terrain-renderer');signal.throwIfAborted();next=new TerrainRenderer(route,prepared.terrain,settings.width,settings.height,config,prepared.imagery,readyMarker);signal.throwIfAborted();
+      const {getTerrainCameraStateAt}=await import('./terrain-camera');
+      for(let frame=0;frame<=config.durationSeconds*settings.fps;frame++){if(frame%48===0){await new Promise(resolve=>setTimeout(resolve,0));signal.throwIfAborted();}getTerrainCameraStateAt(frame/settings.fps,next.plan);}
+      const e=prepared.evidence;return{renderer:next,region:'discovered',credit:prepared.terrain.manifest.attribution+(prepared.imagery?' · '+prepared.imagery.manifest.attribution:''),detail:e?`Sentinel-2: источник 10 м / подготовленный слой ${e.derivedImageSpacingMeters} м; даты снимков ${prepared.imagery!.manifest.acquiredDate}. Copernicus DSM ${e.demResolutionMeters} м / сетка ${e.derivedDemSpacingMeters} м · EGM2008 · охват ${Math.round(e.areaKm2)} км². Загружено ${(e.downloadBytes/1048576).toFixed(1)} МиБ. Облачные/неопределённые пиксели у маршрута: ${(e.routeCloudFraction*100).toFixed(2)}%. Это обзорная фотокарта, без детализации отдельных улиц.`:`Copernicus DSM ${prepared.terrain.manifest.sourceResolutionMeters} м / сетка ${prepared.terrain.level.spacingMeters} м · EGM2008 · настоящие высоты, без фотографии.`,geographicEvidence:e};
+    }catch(error){next?.dispose();if(!next)prepared.imagery?.dispose();throw error;}
+  }
   if(config.cameraMode==='terrain'||config.cameraMode==='auto'){
     if(!available.terrain){if(config.cameraMode==='terrain')throw Error('Картографической информации выбранной местности нет: DEM недоступен. Выберите обзорную карту 2D.');notice=available.notice;config=validateStoryConfig({...requested,cameraMode:'cinematic'});}
     else if(config.terrainSurface==='photo'&&!available.photo)throw Error('Фотокарты выбранной местности нет в этой сборке. Выберите поверхность DEM или обзорную карту 2D.');

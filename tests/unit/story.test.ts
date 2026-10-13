@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { defaultStoryConfig, exportSettings, formatVideoTime, regressionStoryConfig, validateStoryConfig, videoFilename } from '../../src/story';
+import { defaultStoryConfig, exportSettings, formatVideoTime, regressionStoryConfig, validateStoryConfig, videoFilename, videoByteLimit } from '../../src/story';
 import { StoryTimeline } from '../../src/timeline';
 import { routeMetrics } from '../../src/geo';
 import type { Route } from '../../src/route';
@@ -9,7 +9,13 @@ describe('bounded immutable story configuration', () => {
   it('defaults to 20s with two-second intro/outro', () => { expect(defaultStoryConfig().durationSeconds).toBe(20); expect(defaultStoryConfig().introSeconds).toBe(2); expect(Object.isFrozen(defaultStoryConfig())).toBe(true); });
   it.each([undefined,'full','none'] as const)('validates caption mode %s without changing export bounds', captionMode=>{const config=validateStoryConfig({...defaultStoryConfig(),captionMode});expect(config.captionMode).toBe(captionMode??'full');expect(Object.isFrozen(config)).toBe(true);expect(exportSettings(config)).toEqual(exportSettings(defaultStoryConfig()));});
   it.each([false,0,'hide','evil',null])('rejects invalid caption mode %s', captionMode=>{expect(()=>validateStoryConfig({...defaultStoryConfig(),captionMode} as never)).toThrow('подписей');});
-  it.each([10,20,30] as const)('accepts %is and exact frame counts', durationSeconds => { expect(exportSettings({ ...defaultStoryConfig(), durationSeconds }).frameCount).toBe(durationSeconds*24); });
+  it.each([10,20,30,60] as const)('accepts %is and exact frame counts', durationSeconds => { expect(exportSettings({ ...defaultStoryConfig(), durationSeconds }).frameCount).toBe(durationSeconds*24); });
+  it('bounds the minute preset without increasing shorter exports or changing encoding quality',()=>{
+    const minute={...defaultStoryConfig(),durationSeconds:60 as const,qualityPreset:'standard' as const};
+    expect(exportSettings(minute)).toMatchObject({frameCount:1440,fps:24,bitrate:5_000_000,width:1280,height:720});
+    expect(videoByteLimit(minute)).toBe(48*1024*1024);expect(videoByteLimit(defaultStoryConfig())).toBe(32*1024*1024);expect(formatVideoTime(60)).toBe('1:00');
+    expect(()=>validateStoryConfig({...minute,durationSeconds:61} as never)).toThrow();
+  });
   it.each([NaN,Infinity,-1,0,4,9,31,1000])('rejects public duration %s', duration => { expect(()=>validateStoryConfig({...defaultStoryConfig(),durationSeconds:duration as 20},false)).toThrow(); });
   it.each([NaN,Infinity,-1,4])('rejects invalid intro/outro %s', value => { expect(()=>validateStoryConfig({...defaultStoryConfig(),introSeconds:value})).toThrow(); expect(()=>validateStoryConfig({...defaultStoryConfig(),outroSeconds:value})).toThrow(); });
   it('rejects a timeline without replay space', () => { expect(()=>validateStoryConfig({...regressionStoryConfig(),introSeconds:2,outroSeconds:2})).toThrow(); });
@@ -20,7 +26,7 @@ describe('bounded immutable story configuration', () => {
 });
 describe('shared deterministic timeline', () => {
   it('caption visibility never changes geographic or phase state',()=>{const full=new StoryTimeline(route,defaultStoryConfig()),clean=new StoryTimeline(route,{...defaultStoryConfig(),captionMode:'none'});for(const time of [0,2,6,10,18,20,6])expect(clean.at(time)).toEqual(full.at(time));});
-  it.each([10,20,30] as const)('has exact intro/replay/outro boundaries for %is', durationSeconds => {
+  it.each([10,20,30,60] as const)('has exact intro/replay/outro boundaries for %is', durationSeconds => {
     const t=new StoryTimeline(route,{...defaultStoryConfig(),durationSeconds});
     expect(t.at(0)).toMatchObject({phase:'INTRO',routeProgress:0,point:segments[0][0],travelledKm:0});
     expect(t.at(2)).toMatchObject({phase:'ROUTE_REPLAY',routeProgress:0}); expect(t.at(durationSeconds-2)).toMatchObject({phase:'OUTRO',routeProgress:1,point:segments[1][1]});

@@ -1,0 +1,11 @@
+import {describe,it,expect,vi,afterEach} from 'vitest';
+import {GeographicNetwork,geographicUrl} from '../../src/geographic-network';
+afterEach(()=>vi.unstubAllGlobals());
+const url='https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/32/T/LS/example/TCI.tif';
+describe('consented source boundaries and resource limits',()=>{
+ it.each(['http://localhost/a','https://127.0.0.1/a','https://evil.example/a','https://earth-search.aws.element84.com/other','https://user:pass@earth-search.aws.element84.com/v1/search',url+'#fragment'])('rejects an unreviewed source %s',value=>expect(()=>geographicUrl(value)).toThrow());
+ it('does not download a full TIFF when Range is ignored',async()=>{const fetch=vi.fn(async()=>new Response(new Uint8Array(8),{status:200}));vi.stubGlobal('fetch',fetch);const net=new GeographicNetwork(new AbortController().signal,()=>{});await expect(net.bytesFrom(url,[0,7])).rejects.toThrow('огромный');expect(net.bytes).toBe(0);});
+ it('validates exact returned bytes and omits identifiers, cookies and referrer',async()=>{const fetch=vi.fn(async(_url:string,_options:RequestInit)=>new Response(new Uint8Array(8),{status:206}));vi.stubGlobal('fetch',fetch);const net=new GeographicNetwork(new AbortController().signal,()=>{}),result=await net.bytesFrom(url,[0,7]);expect(result.bytes.length).toBe(8);expect(fetch.mock.calls[0][1]).toMatchObject({headers:{Range:'bytes=0-7'},credentials:'omit',referrerPolicy:'no-referrer',redirect:'error',cache:'no-store'});expect(net.bytes).toBe(8);});
+ it('rejects partial or excessive response and reserved URL paths',async()=>{vi.stubGlobal('fetch',async()=>new Response(new Uint8Array(7),{status:206}));await expect(new GeographicNetwork(new AbortController().signal,()=>{}).bytesFrom(url,[0,7])).rejects.toThrow('неполный');await expect(new GeographicNetwork(new AbortController().signal,()=>{}).bytesFrom(url,[0,9*1024*1024])).rejects.toThrow('безопасный');});
+ it('never starts a request after cancellation',async()=>{const fetch=vi.fn();vi.stubGlobal('fetch',fetch);const c=new AbortController();c.abort();await expect(new GeographicNetwork(c.signal,()=>{}).bytesFrom(url,[0,7])).rejects.toThrow();expect(fetch).not.toHaveBeenCalled();});
+});

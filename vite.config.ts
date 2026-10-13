@@ -2,9 +2,10 @@ import { defineConfig } from 'vite';
 import { copyFileSync, cpSync, mkdirSync, readdirSync, readFileSync } from 'node:fs';
 export default defineConfig(({command})=>({
   publicDir:command==='serve'?'public':false,
-  define:{__IMAGERY_ENABLED__:JSON.stringify(command==='serve'||process.env.BUILD_IMAGERY_PACK==='1'),__SWISS_ENABLED__:JSON.stringify(command==='serve'?process.env.SWISS_BASELINE!=='1':process.env.BUILD_SWISS_PACK==='1'),__SWISS_PUBLIC__:JSON.stringify(command==='build'?process.env.BUILD_SWISS_PACK==='1':process.env.SWISS_PILOT!=='1')},
+  define:{__AUTO_GEOGRAPHY_ENABLED__:JSON.stringify(process.env.BUILD_AUTO_GEOGRAPHY==='1'),__IMAGERY_ENABLED__:JSON.stringify(command==='serve'||process.env.BUILD_IMAGERY_PACK==='1'),__SWISS_ENABLED__:JSON.stringify(command==='serve'?process.env.SWISS_BASELINE!=='1':process.env.BUILD_SWISS_PACK==='1'),__SWISS_PUBLIC__:JSON.stringify(command==='build'?process.env.BUILD_SWISS_PACK==='1':process.env.SWISS_PILOT!=='1')},
   base: './', server: { watch: { ignored: ['**/artifacts/**', '**/.reference/**', '**/test-results/**'] } },
   plugins: [
+    {name:'consented-geography-csp',transformIndexHtml:html=>process.env.BUILD_AUTO_GEOGRAPHY==='1'?html.replace("connect-src 'self';","connect-src 'self' https://earth-search.aws.element84.com https://planetarycomputer.microsoft.com https://sentinel-cogs.s3.us-west-2.amazonaws.com https://elevationeuwest.blob.core.windows.net;"):html},
     {name:'developer-swiss-pilot',apply:'serve',configureServer(server){
       if(process.env.SWISS_PILOT!=='1')return;
       const allowed=new Set(['furka-2m.i16','furka-50m.i16','furka-high-overview.jpg','furka-high-detail.jpg','furka-low-overview.jpg','furka-low-detail.jpg','furka-synthetic.gpx']);

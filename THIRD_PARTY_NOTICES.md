@@ -16,6 +16,16 @@ Bundled `public/maps/ne_110m_land.geojson` (138,160 bytes), unmodified 1:110m la
 
 v1.1 cinematic mode additionally bundles derived `maps/world-50m.json` (2,413,275 bytes) and `maps/fjords-10m.json` (124,200 bytes): global 1:50m land/lakes/rivers; western Norway [3.5,59,9,62.5] 1:10m land/coast/lakes/rivers/populated-place labels. Same pinned Natural Earth revision and public-domain terms. Exact original source URLs/SHA-256 and generated file hashes/counts are in docs/GEOGRAPHY_SOURCES.json. Reproduce with `node scripts/build-geography.mjs`. Unused properties are removed; coordinates are rounded to six decimals; regional features are clipped geometrically without inventing coastline along clipping edges. This remains generalised geography, without streets, terrain elevations or worldwide local detail. Geographic labels are actual sourced anchors, never inferred visited places. No OSM-derived asset is bundled.
 
+## Automatic geography candidate — dependency and data notices
+
+The opt-in automatic-geography candidate bundles geotiff.js 3.0.5 and proj4js 2.22.0 under MIT, with their locked transitive dependency notices in `licenses/GEOGRAPHIC_DEPENDENCIES.txt`. They are local application code, never runtime CDN scripts. Unmodified package sources are identified in that notice. Legacy builds omit the geographic decoder chunks.
+
+Downloaded Sentinel-2 L2A RGB/SCL are governed by the [Copernicus Sentinel legal notice](https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice). Derived imagery/videos retain `Contains modified Copernicus Sentinel data` followed by verified acquisition year(s). Cloud masks are quality estimates, not a guarantee of cloud-free ground; dates may be mosaicked. No imagery is relicensed as application MIT.
+
+Copernicus DEM GLO-30/GLO-90 are DSMs with documented EGM2008 heights, under the [Copernicus DEM licenses](https://dataspace.copernicus.eu/sites/default/files/media/files/2025-06/copernicus_contributing_mission_data_access_v2_cop_dem_licenses.pdf). Modified terrain/video retains the complete provider notice, including DLR, Airbus, European Union and ESA. The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM. No endorsement is implied. Derived height grids remain subject to those conditions; subsequent recipients must retain them. These data are not public domain and do not become MIT licensed.
+
+Earth Search and Microsoft Planetary Computer supply metadata/data access after explicit approximate-area consent. No paid account, subscription key or application backend is required in the tested path. Public short-lived read tickets remain in memory only and are never distributed in reports or code. Availability, CORS and rate limits are provider-dependent; worldwide or physical-mobile compatibility is not claimed.
+
 ## Three.js 0.186.1 — MIT
 
 Unmodified, locally bundled terrain engine. Copyright © 2010–2026 three.js authors. Full notice: licenses/THREE-MIT.txt. Source: https://github.com/mrdoob/three.js/tree/r186 and exact npm distribution https://registry.npmjs.org/three/-/three-0.186.1.tgz. Loaded only when 3D is selected. No runtime CDN. MapLibre remains an ignored feasibility tool, not a distributed dependency.

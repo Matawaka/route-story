@@ -2,7 +2,7 @@ export type VisualStyle = 'atlas' | 'night';
 export type AspectRatio = 'landscape' | 'portrait';
 export type QualityPreset = 'compatibility' | 'standard';
 export type CameraMode = 'cinematic' | 'classic' | 'terrain' | 'auto';
-export type StoryDuration = 4 | 10 | 20 | 30;
+export type StoryDuration = 4 | 10 | 20 | 30 | 60;
 export interface StoryConfig {
   readonly durationSeconds: StoryDuration;
   readonly introSeconds: number;
@@ -26,9 +26,12 @@ export interface StoryConfig {
 export const TITLE_LIMIT = 200;
 export const FPS = 24;
 export const MAX_VIDEO_BYTES = 32 * 1024 * 1024;
+/** The owner-requested minute preset retains 720p/5 Mbps; shorter presets keep their old bound. */
+export const MAX_MINUTE_VIDEO_BYTES = 48 * 1024 * 1024;
+export const videoByteLimit = (config: StoryConfig) => config.durationSeconds === 60 ? MAX_MINUTE_VIDEO_BYTES : MAX_VIDEO_BYTES;
 
 export function validateStoryConfig(input: StoryConfig, allowRegression = true): Readonly<StoryConfig> {
-  if (!input || ![10, 20, 30, ...(allowRegression ? [4] : [])].includes(input.durationSeconds)) throw new Error('Длительность видео: только 10, 20 или 30 секунд.');
+  if (!input || ![10, 20, 30, 60, ...(allowRegression ? [4] : [])].includes(input.durationSeconds)) throw new Error('Длительность видео: только 10, 20, 30 или 60 секунд.');
   for (const seconds of [input.introSeconds, input.outroSeconds]) {
     if (!Number.isFinite(seconds) || seconds < 0 || seconds > 3) throw new Error('Вступление и финал: от 0 до 3 секунд.');
   }
