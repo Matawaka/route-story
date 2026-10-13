@@ -50,6 +50,16 @@ test('invalid GPX clears stale preview; metadata remains inert text', async ({ p
   await expect(page.locator('#route-info')).toContainText('<img'); expect(await page.locator('#route-info img').count()).toBe(0); await expect(page.locator('#metric-value')).toHaveText('2');
 });
 
+test('standard GPX links are ignored metadata: import/seek works without DOM links, network or storage', async ({page}) => {
+  const external:string[]=[];page.on('request',r=>{if(r.url().includes('example.invalid'))external.push(r.url());});
+  await page.goto('/');await page.getByLabel('Выбрать GPX-файл').setInputFiles('tests/fixtures/metadata-links.gpx');
+  await expect(page.locator('#export')).toBeEnabled();await expect(page.locator('#segments')).toHaveText('2');
+  await expect(page.locator('#story-title')).toHaveValue('Синтетический GPX со ссылками');await expect(page.locator('#metric-value')).toHaveText('10 м');
+  await page.locator('#scrub').fill('5');const frame=await page.locator('#preview').evaluate(c=>(c as HTMLCanvasElement).toDataURL());await page.locator('#scrub').fill('1');await page.locator('#scrub').fill('5');
+  expect(await page.locator('#preview').evaluate(c=>(c as HTMLCanvasElement).toDataURL())).toBe(frame);expect(await page.locator('a[href*="example.invalid"]').count()).toBe(0);
+  expect(external).toEqual([]);expect(await page.evaluate(async()=>[localStorage.length,sessionStorage.length,(await indexedDB.databases()).length])).toEqual([0,0,0]);
+});
+
 test('unsupported encoder receives actionable error while map still works', async ({ page }) => {
   await page.addInitScript(() => { Object.defineProperty(window,'VideoEncoder',{value:undefined,configurable:true}); });
   await page.goto('/'); await page.locator('#route-choice').selectOption('sample'); await expect(page.locator('#preview')).toBeVisible(); await expect(page.locator('#status')).toContainText('WebCodecs'); await expect(page.locator('#export')).toBeDisabled();

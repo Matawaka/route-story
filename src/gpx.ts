@@ -60,7 +60,10 @@ export function parseGpx(xml: string, fallbackName = 'Мой маршрут'): R
   const stack: Element[] = [root];
   while (stack.length) {
     const element = stack.pop()!;
-    if (['script', 'svg', 'iframe', 'object', 'embed', 'style', 'link', 'image'].includes(element.localName.toLowerCase())) throw new Error('Исполняемое содержимое в GPX запрещено.');
+    // GPX <link> is inert metadata, not an HTML stylesheet/import element.
+    // We extract only route fields below; never render, follow or fetch its URL.
+    const gpxLink = element.localName === 'link' && element.namespaceURI === root.namespaceURI;
+    if (!gpxLink && ['script', 'svg', 'iframe', 'object', 'embed', 'style', 'link', 'image'].includes(element.localName.toLowerCase())) throw new Error('Исполняемое содержимое в GPX запрещено.');
     for (const attribute of Array.from(element.attributes)) if (/^on/i.test(attribute.localName) || /^\s*(?:javascript|vbscript|data):/i.test(attribute.value)) throw new Error('Небезопасное содержимое в GPX.');
     if (['trkpt', 'rtept', 'wpt'].includes(element.localName)) {
       if (++points > MAX_POINTS) throw new Error('Максимум 50 000 точек. Файл не обрезан.');

@@ -21,6 +21,20 @@ describe('GPX import', () => {
   it.each(['NaN', 'Infinity', '', '0x10', '181'])('rejects invalid longitude %s', lon => { expect(() => parseGpx(gpx(`<trkpt lon="${lon}" lat="0"/>`))).toThrow(); });
   it.each(['<notgpx/>', '<gpx/>', '<gpx xmlns="https://evil.test"><rte><rtept lon="0" lat="0"/></rte></gpx>', '<!DOCTYPE gpx SYSTEM "https://evil.test"><gpx/>', '<!DOCTYPE gpx [<!ENTITY x "bomb">]><gpx/>', '<gpx><script>alert(1)</script></gpx>', '<gpx><svg/></gpx>', '<gpx onclick="evil()"/>'])('rejects dangerous/empty input %#', xml => { expect(() => parseGpx(xml)).toThrow(); });
   it('treats encoded HTML metadata as inert text', () => { const r = parseGpx('<gpx><metadata><name>&lt;script&gt;hello&lt;/script&gt;</name></metadata><rte><rtept lon="0" lat="0"/></rte></gpx>'); expect(r.name).toBe('<script>hello</script>'); });
+  it('ignores standard GPX metadata/track/point links without changing route fields', () => {
+    const linked = parseGpx(fixture('metadata-links.gpx'));
+    const original = parseGpx(fixture('metadata-links.gpx').replace(/<link\b[^>]*>[\s\S]*?<\/link>/g, ''));
+    expect(linked).toEqual(original); expect(linked.segments.map(s => s.length)).toEqual([2,2]);
+    expect(linked.pointCount).toBe(4); expect(linked.name).toBe('Синтетический GPX со ссылками');
+    expect(JSON.stringify(linked)).not.toContain('example.invalid');
+  });
+  it('accepts prefixed GPX link metadata while preserving namespace checks', () => {
+    const r = parseGpx('<g:gpx xmlns:g="http://www.topografix.com/GPX/1/1"><g:metadata><g:link href="https://example.invalid/route"><g:text>Источник</g:text></g:link></g:metadata><g:rte><g:rtept lon="0" lat="0"/></g:rte></g:gpx>');
+    expect(r.pointCount).toBe(1); expect(JSON.stringify(r)).not.toContain('example.invalid');
+  });
+  it.each(['<link xmlns="http://www.w3.org/1999/xhtml" href="https://example.invalid/style"/>', '<link href="javascript:alert(1)"/>', '<link href="data:text/html,evil"/>', '<link href="https://example.invalid" onclick="evil()"/>', '<link href="https://example.invalid"><script>evil()</script></link>', '<script>evil()</script>', '<svg/>'])('still rejects executable/unsafe content in a route with valid points %#', content => {
+    expect(() => parseGpx(`<gpx xmlns="http://www.topografix.com/GPX/1/1"><metadata>${content}</metadata><trk><trkseg><trkpt lon="0" lat="0"/><trkpt lon="1" lat="0"/></trkseg></trk></gpx>`)).toThrow(/Исполняемое|Небезопасное/);
+  });
   it.each(['2026-02-30T00:00:00Z', 'yesterday', '2026-01-01T24:00:00Z', ''])('rejects invalid time %s', time => { expect(() => parseGpx(gpx(`<trkpt lon="0" lat="0"><time>${time}</time></trkpt>`))).toThrow(); });
   it('rejects over 50,000 points and accepts the exact limit without truncation', () => { const p = '<trkpt lon="0" lat="0"/>'; expect(parseGpx(gpx(p.repeat(MAX_POINTS))).pointCount).toBe(MAX_POINTS); expect(() => parseGpx(gpx(p.repeat(MAX_POINTS + 1)))).toThrow(/50 000/); });
   it('rejects files over 10 MiB before reading', async () => { const f = new File([new Uint8Array(MAX_BYTES + 1)], 'big.gpx'); await expect(readGpx(f)).rejects.toThrow(/10 МиБ/); });
