@@ -5,7 +5,7 @@ import { haversine, wrapDelta } from './geo';
 import { clipRing,clipLine } from './map-geometry';
 import type { GeographyPack } from './geography';
 import { formatDistance, metricLabel, type Land } from './renderer';
-import { drawMarker, type MarkerAsset } from './marker';
+import { routeMarkerDirection, type MarkerAsset } from './marker';
 import { annotationAt, drawAnnotation, markerSize } from './marker-annotation';
 import { drawVideoCredits } from './video-credits';
 
@@ -148,7 +148,7 @@ export class CinematicRenderer {
       ctx.save();ctx.globalAlpha=leading?state.markerOpacity:1;
       if(leading){ctx.strokeStyle=colors.line;ctx.lineWidth=unit*.002;ctx.beginPath();ctx.arc(x,y,radius*(1.9+.25*Math.sin(state.timeSeconds*Math.PI*2)),0,Math.PI*2);ctx.globalAlpha*=.45;ctx.stroke();ctx.globalAlpha=state.markerOpacity;}
       if(label==='Финиш'&&state.phase==='OUTRO'){ctx.strokeStyle=colors.line;ctx.lineWidth=unit*.003;ctx.beginPath();ctx.arc(x,y,radius*(1.5+ease(state.outroProgress)),0,Math.PI*2);ctx.stroke();}
-      if(leading&&this.markerAsset){const next=this.timeline.route.segments[state.segment][Math.max(1,state.index)],target=next?cameraProject(this.plan.world(next),camera,this.plan):[x,y],size=markerSize(this.timeline.config,unit),layout=annotationAt(x,y,0,w,h,size,[pad,h*.23,w-pad,h*.78]);if(layout)drawAnnotation(ctx,this.markerAsset,[x,y],layout,size,false,state.phase==='ROUTE_REPLAY'?[target[0]-x,target[1]-y]:undefined);}
+      if(leading&&this.markerAsset){const direction=routeMarkerDirection(this.timeline.path,state.segment,state.index,p=>cameraProject(this.plan.world(p),camera,this.plan)),size=markerSize(this.timeline.config,unit),layout=annotationAt(x,y,0,w,h,size,[pad,h*.23,w-pad,h*.78]);if(layout)drawAnnotation(ctx,this.markerAsset,[x,y],layout,size,false,direction,true,state.phase==='ROUTE_REPLAY');}
       else{ctx.fillStyle=leading?colors.line:colors.panel;ctx.strokeStyle=colors.ink;ctx.lineWidth=unit*.0025;ctx.beginPath();ctx.arc(x,y,radius,0,Math.PI*2);ctx.fill();ctx.stroke();}
       if(label&&this.timeline.config.captionMode!=='none'){ctx.font=`600 ${unit*.026}px system-ui`;ctx.textAlign='left';ctx.textBaseline='middle';const tw=ctx.measureText(label).width,lx=Math.min(w-pad-tw,Math.max(pad,x+unit*.025));let ly=Math.max(h*.20+unit*.025,Math.min(h*.85-unit*.025,y+(label==='Старт'?unit*.04:-unit*.04))),box:Bounds=[lx-unit*.008,ly-unit*.022,lx+tw+unit*.008,ly+unit*.022];
         if(occupied.some(b=>intersects(box,b))){ly=Math.max(h*.20+unit*.025,Math.min(h*.85-unit*.025,ly+unit*.07));box=[box[0],ly-unit*.022,box[2],ly+unit*.022];}

@@ -1,4 +1,6 @@
 import type { StoryConfig } from './story';
+import type { RoutePath } from './geo';
+import type { RoutePoint } from './route';
 export const MARKER_LIMITS = Object.freeze({ bytes: 2 * 1024 * 1024, inputSide: 2048, pixels: 4_000_000, textureSide: 256 });
 const invalid = () => Error('Маркер: статический PNG, WebP или JPG до 2 МиБ, 2048 × 2048 и 4 млн пикселей. SVG и анимация не принимаются.');
 /** Check signature AND declared dimensions before invoking any image decoder. */
@@ -93,9 +95,20 @@ export function prepareMarker(kind: StoryConfig['marker'], custom?: MarkerAsset)
   }
   return new MarkerAsset(canvas);
 }
-export function drawMarker(ctx:CanvasRenderingContext2D,asset:MarkerAsset,x:number,y:number,size:number,direction?:readonly [number,number]):void {
+export function markerFacesLeft(direction?:readonly[number,number]):boolean {
+  if (!direction || !direction.every(Number.isFinite)) return false;
+  const length=Math.hypot(...direction);
+  // A tiny relative dead zone avoids horizontal reflection from vertical rounding noise.
+  return length>1e-6 && direction[0]<-length*.001;
+}
+export function routeMarkerDirection(path:RoutePath,segment:number,index:number,project:(point:RoutePoint)=>readonly[number,number]):readonly[number,number]|undefined {
+  const edge=path.edgeAt(segment,index);if(!edge)return;
+  const a=project(edge.a),b=project(edge.b),direction=[b[0]-a[0],b[1]-a[1]] as const;
+  return direction.every(Number.isFinite)&&Math.hypot(...direction)>1e-6?direction:undefined;
+}
+export function drawMarker(ctx:CanvasRenderingContext2D,asset:MarkerAsset,x:number,y:number,size:number,direction?:readonly [number,number],showDirectionCue=true):void {
   // Keep human/custom artwork upright. A separate cue follows the actual edge;
   // no interpolated bearing or arrow is drawn across a disconnected segment.
-  if(direction&&Math.hypot(...direction)>1e-6){const angle=Math.atan2(direction[1],direction[0]);ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.beginPath();ctx.moveTo(size*.36,-size*.11);ctx.lineTo(size*.53,0);ctx.lineTo(size*.36,size*.11);ctx.strokeStyle='#102c37';ctx.lineWidth=size*.1;ctx.lineCap=ctx.lineJoin='round';ctx.stroke();ctx.strokeStyle='#fff1ce';ctx.lineWidth=size*.04;ctx.stroke();ctx.restore();}
-  ctx.drawImage(asset.canvas,x-size/2,y-size,size,size);
+  if(showDirectionCue&&direction&&direction.every(Number.isFinite)&&Math.hypot(...direction)>1e-6){const angle=Math.atan2(direction[1],direction[0]);ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.beginPath();ctx.moveTo(size*.36,-size*.11);ctx.lineTo(size*.53,0);ctx.lineTo(size*.36,size*.11);ctx.strokeStyle='#102c37';ctx.lineWidth=size*.1;ctx.lineCap=ctx.lineJoin='round';ctx.stroke();ctx.strokeStyle='#fff1ce';ctx.lineWidth=size*.04;ctx.stroke();ctx.restore();}
+  ctx.save();ctx.translate(x,y);if(markerFacesLeft(direction))ctx.scale(-1,1);ctx.drawImage(asset.canvas,-size/2,-size,size,size);ctx.restore();
 }

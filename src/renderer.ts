@@ -4,7 +4,7 @@ import { StoryTimeline } from './timeline';
 import { CinematicRenderer } from './cinematic';
 import type { CinematicGeography } from './geography';
 import { regressionStoryConfig, type StoryConfig, type VisualStyle } from './story';
-import { prepareMarker, drawMarker, type MarkerAsset } from './marker';
+import { prepareMarker, routeMarkerDirection, type MarkerAsset } from './marker';
 import { annotationAt, drawAnnotation, intersectsMarker, markerSize } from './marker-annotation';
 import { drawVideoCredits } from './video-credits';
 export type { VisualStyle } from './story';
@@ -169,7 +169,7 @@ export class RouteRenderer {
       }
     }
     const marker = (point: RoutePoint, solid = false) => {
-      if(solid&&this.markerAsset){const [x,y]=this.projection.project(point),next=this.route.segments[state.segment][Math.max(1,state.index)],target=next?this.projection.project(next):[x,y],size=markerSize(this.config,unit),layout=annotationAt(x,y,0,w,h,size,[pad,h*.23,w-pad,h*.78]);if(layout)drawAnnotation(ctx,this.markerAsset,[x,y],layout,size,false,state.phase==='ROUTE_REPLAY'?[target[0]-x,target[1]-y]:undefined);return;}
+      if(solid&&this.markerAsset){const [x,y]=this.projection.project(point),direction=routeMarkerDirection(this.timeline.path,state.segment,state.index,this.projection.project),size=markerSize(this.config,unit),layout=annotationAt(x,y,0,w,h,size,[pad,h*.23,w-pad,h*.78]);if(layout)drawAnnotation(ctx,this.markerAsset,[x,y],layout,size,false,direction,true,state.phase==='ROUTE_REPLAY');return;}
       const [x, y] = this.projection.project(point);
       ctx.beginPath(); ctx.arc(x, y, unit / 65, 0, Math.PI * 2); ctx.fillStyle = solid ? colors.line : colors.water; ctx.fill();
       ctx.strokeStyle = colors.ink; ctx.lineWidth = 1.5; ctx.stroke();
