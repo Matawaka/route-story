@@ -1,0 +1,509 @@
+{
+  "schema": 1,
+  "date": "2026-10-13",
+  "status": "VERIFIED LOCAL / NOT DEPLOYED",
+  "runtimeCommit": "60344e6f933f1c629b28e8a3b3ff5a66df8d6896",
+  "beforeCameraCommit": "9eca4e2777d6d4d1a8e5c09375c9aaf2ecac140f",
+  "frameCriterion": "Exact uncompressed decoded RGBA equality, no channel tolerance; lossy MP4 independently decoded separately",
+  "physicalDevices": "NOT TESTED for this new minute/pixel pipeline",
+  "gpuVram": "NOT MEASURED",
+  "javascriptHeap": "NOT MEASURED",
+  "performanceLimitations": "Single samples, not medians; some jobs overlapped routine checks. Before/after timings are observations, not a controlled performance benchmark. Longer operation sets prevent a like-for-like native-memory/leak conclusion.",
+  "privateGpxCommitted": false,
+  "privateRouteScreenshotsCommitted": false,
+  "results": [
+    {
+      "case": "mont-blanc",
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "physicalDevice": false,
+      "outputs": [
+        {
+          "file": "artifacts/automatic-geography/mont-blanc-final-retry/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "fefb8b0fd6295946a6c66bcb7f976504",
+          "lastFrameHash": "65c1a7f329580d4689025e0caa6bc208",
+          "bytes": 12853080,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 8484.396500000003,
+          "sha256": "be63c4f78005e032ff3032fc255afb217dd6851c99bf35594ec3c1b855cad354",
+          "minimumGrayRange": 90,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0,
+          "camera": {
+            "before": {
+              "maximumYawDegreesPerFrame": 28.171642624161223,
+              "p95YawDegreesPerFrame": 10.156705322218386,
+              "minimumClearanceMeters": 12200.038619995117
+            },
+            "after": {
+              "maximumYawDegreesPerFrame": 0,
+              "p95YawDegreesPerFrame": 0,
+              "minimumClearanceMeters": 15714.783098449709
+            },
+            "sameRouteTerrainTimestamp": true,
+            "stableFollow": true
+          }
+        },
+        {
+          "file": "artifacts/automatic-geography/mont-blanc-final-retry/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "e31511d6a1c9ac1b7d612ba365083e5e",
+          "lastFrameHash": "0581560514cc5065c315cd2b786d99b6",
+          "bytes": 18998061,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 12588.670400000003,
+          "sha256": "1bfd42b8ef0ecabd00469c903fcfcf7d8b9b66a5570e7f5171fc99dc93a4499f",
+          "minimumGrayRange": 59,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0,
+          "camera": {
+            "before": {
+              "maximumYawDegreesPerFrame": 20.627148422363348,
+              "p95YawDegreesPerFrame": 6.533866784115617,
+              "minimumClearanceMeters": 19890.019152241148
+            },
+            "after": {
+              "maximumYawDegreesPerFrame": 0,
+              "p95YawDegreesPerFrame": 0,
+              "minimumClearanceMeters": 27756.151841201783
+            },
+            "sameRouteTerrainTimestamp": true,
+            "stableFollow": true
+          }
+        },
+        {
+          "file": "artifacts/automatic-geography/mont-blanc-final-retry/atlas-60s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 60,
+          "decodedFrames": 1440,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 1440,
+          "firstFrameHash": "fefb8b0fd6295946a6c66bcb7f976504",
+          "lastFrameHash": "74ce46400a337b4c1f18070596473643",
+          "bytes": 37708899,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 24306.927200000006,
+          "sha256": "ad146833ae78092b92cfb7381b4958f0711be3ed2a286619059c56dfeb7368f4",
+          "minimumGrayRange": 90,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0,
+          "camera": {
+            "before": {
+              "maximumYawDegreesPerFrame": 9.37038930624351,
+              "p95YawDegreesPerFrame": 3.4355703534920394,
+              "minimumClearanceMeters": 12061.902919769287
+            },
+            "after": {
+              "maximumYawDegreesPerFrame": 0,
+              "p95YawDegreesPerFrame": 0,
+              "minimumClearanceMeters": 15689.783098449709
+            },
+            "sameRouteTerrainTimestamp": true,
+            "stableFollow": true
+          }
+        },
+        {
+          "file": "artifacts/automatic-geography/mont-blanc-final-retry/night-60s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 60,
+          "decodedFrames": 1440,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 1440,
+          "firstFrameHash": "87a7f355cd7bb732ae81cba5d77432ab",
+          "lastFrameHash": "a4d98c60fed29397aa11b7a3b906fc5b",
+          "bytes": 37887193,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 23957.79430000001,
+          "sha256": "bc5ba4f4cf232ea1fb07c133e96080b0dda977c65a16b4690b1435ba82da6274",
+          "minimumGrayRange": 60,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0,
+          "camera": {
+            "before": {
+              "maximumYawDegreesPerFrame": 9.37038930624351,
+              "p95YawDegreesPerFrame": 3.4355703534920394,
+              "minimumClearanceMeters": 19890.019152241315
+            },
+            "after": {
+              "maximumYawDegreesPerFrame": 0,
+              "p95YawDegreesPerFrame": 0,
+              "minimumClearanceMeters": 27731.151841201783
+            },
+            "sameRouteTerrainTimestamp": true,
+            "stableFollow": true
+          }
+        }
+      ],
+      "preparationMs": 91820.90000000596,
+      "downloadBytes": 54651519,
+      "derivedImageSpacingMeters": 50,
+      "derivedDemSpacingMeters": 120,
+      "maximumSampledPrivateBytes": 1158021120,
+      "memoryMethod": "OS Get-Process WorkingSet64/PrivateMemorySize64, unique child PIDs from isolated browser CDP SystemInfo; sampled during exports at 750ms, not an exact peak; working sets may share pages",
+      "recoveredFailures": [
+        {
+          "state": "ERROR",
+          "status": "Слишком долгая загрузка географических данных. Можно повторить."
+        }
+      ],
+      "cancelRetry": true,
+      "retry": {
+        "file": "artifacts/automatic-geography/mont-blanc-final-retry/retry-30s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 720,
+        "height": 1280,
+        "duration": 30,
+        "decodedFrames": 720,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 720,
+        "firstFrameHash": "e31511d6a1c9ac1b7d612ba365083e5e",
+        "lastFrameHash": "0581560514cc5065c315cd2b786d99b6",
+        "bytes": 18998047,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "sha256": "3dfc41e517b4a81befedf2f3e80ba75071cbdaefeee17fcd869de60d11aa4652"
+      },
+      "previousRuntime": "b60ff10278b028e9dd571457f9a5f351ba727039",
+      "previousOutputs": [
+        {
+          "file": "mont-blanc/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "64033eb0bfa7240eff2a74f113c8f8c5",
+          "lastFrameHash": "3ad1feb01d2417d57f6fb3dbd60af84d",
+          "bytes": 12974065,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 2164.1742999999988,
+          "sha256": "5f7a93f1379701f097f43de4196f55704378462b2ac3a7a51ef8484a7275f047",
+          "minimumGrayRange": 92,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        },
+        {
+          "file": "mont-blanc/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "3538cb95988c88d2575325f4babc4ba9",
+          "lastFrameHash": "a491f2bba7834b05e0f2dd44392072f0",
+          "bytes": 19090749,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 2899.3642000000036,
+          "sha256": "d9c3ff958ff2e9bd95b9c943fc355852eb6969e118c31cc53284cb409ee00ca8",
+          "minimumGrayRange": 62,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        }
+      ],
+      "externalRequestsBeforeConsent": 0,
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "indexed": 0
+      }
+    },
+    {
+      "case": "malerweg",
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "physicalDevice": false,
+      "outputs": [
+        {
+          "file": "artifacts/automatic-geography/malerweg-final/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "ccf5d5bbc7017b35d019229dd2468902",
+          "lastFrameHash": "bbedd0eb2b431a1724c58749f7ea59f2",
+          "bytes": 13144104,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 9581.675499999998,
+          "sha256": "74555abe6ddd284e316495f0c5407bcddae146fb60ad7cf8af2fab8047b13412",
+          "minimumGrayRange": 38,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0,
+          "camera": {
+            "before": {
+              "maximumYawDegreesPerFrame": 24.807315335634485,
+              "p95YawDegreesPerFrame": 16.29419511260744,
+              "minimumClearanceMeters": 6815.23755368704
+            },
+            "after": {
+              "maximumYawDegreesPerFrame": 0,
+              "p95YawDegreesPerFrame": 0,
+              "minimumClearanceMeters": 8886.110610205718
+            },
+            "sameRouteTerrainTimestamp": true,
+            "stableFollow": true
+          }
+        },
+        {
+          "file": "artifacts/automatic-geography/malerweg-final/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "997591b1b86412877f7b2158eb718e67",
+          "lastFrameHash": "01399ade1367839ac9dc6373ea4f955a",
+          "bytes": 19374940,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 13957.625199999995,
+          "sha256": "28e056c11107a4f9670542db629058e9249ec294a6342b8976bfdc3ada6bfdf0",
+          "minimumGrayRange": 47,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0,
+          "camera": {
+            "before": {
+              "maximumYawDegreesPerFrame": 20.22538556288805,
+              "p95YawDegreesPerFrame": 9.544059954576824,
+              "minimumClearanceMeters": 13680.463631591301
+            },
+            "after": {
+              "maximumYawDegreesPerFrame": 0,
+              "p95YawDegreesPerFrame": 0,
+              "minimumClearanceMeters": 16286.809624360143
+            },
+            "sameRouteTerrainTimestamp": true,
+            "stableFollow": true
+          }
+        },
+        {
+          "file": "artifacts/automatic-geography/malerweg-final/atlas-60s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 60,
+          "decodedFrames": 1440,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 1440,
+          "firstFrameHash": "ccf5d5bbc7017b35d019229dd2468902",
+          "lastFrameHash": "ee3ad4d8dd9395828d05b0c878dc399b",
+          "bytes": 38141347,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 26063.426399999997,
+          "sha256": "81e265ddb8b3c6b1f365ab850575d88420b0217c567959ab67dc1a02bd5b8ec1",
+          "minimumGrayRange": 38,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0,
+          "camera": {
+            "before": {
+              "maximumYawDegreesPerFrame": 10.900952644158906,
+              "p95YawDegreesPerFrame": 4.753909230941304,
+              "minimumClearanceMeters": 6815.23755368704
+            },
+            "after": {
+              "maximumYawDegreesPerFrame": 0,
+              "p95YawDegreesPerFrame": 0,
+              "minimumClearanceMeters": 8886.110610205718
+            },
+            "sameRouteTerrainTimestamp": true,
+            "stableFollow": true
+          }
+        },
+        {
+          "file": "artifacts/automatic-geography/malerweg-final/night-60s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 60,
+          "decodedFrames": 1440,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 1440,
+          "firstFrameHash": "997591b1b86412877f7b2158eb718e67",
+          "lastFrameHash": "496e3d918ad2341c493fa5374928bf36",
+          "bytes": 38126149,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 24732.80199999998,
+          "sha256": "c83adaeb9d8e2dc2a1b2ca381c9611705d106da21e6fb5f6d0de555495d226b7",
+          "minimumGrayRange": 46,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0,
+          "camera": {
+            "before": {
+              "maximumYawDegreesPerFrame": 10.900952644158906,
+              "p95YawDegreesPerFrame": 4.753909230941304,
+              "minimumClearanceMeters": 13680.463631591421
+            },
+            "after": {
+              "maximumYawDegreesPerFrame": 0,
+              "p95YawDegreesPerFrame": 0,
+              "minimumClearanceMeters": 16285.809624360143
+            },
+            "sameRouteTerrainTimestamp": true,
+            "stableFollow": true
+          }
+        }
+      ],
+      "preparationMs": 22996.59999999404,
+      "downloadBytes": 27799858,
+      "derivedImageSpacingMeters": 30,
+      "derivedDemSpacingMeters": 80,
+      "maximumSampledPrivateBytes": 1040068608,
+      "memoryMethod": "OS Get-Process WorkingSet64/PrivateMemorySize64, unique child PIDs from isolated browser CDP SystemInfo; sampled during exports at 750ms, not an exact peak; working sets may share pages",
+      "recoveredFailures": [],
+      "cancelRetry": true,
+      "retry": {
+        "file": "artifacts/automatic-geography/malerweg-final/retry-30s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 720,
+        "height": 1280,
+        "duration": 30,
+        "decodedFrames": 720,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 720,
+        "firstFrameHash": "997591b1b86412877f7b2158eb718e67",
+        "lastFrameHash": "01399ade1367839ac9dc6373ea4f955a",
+        "bytes": 19374940,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "sha256": "862f584d8f4cd0196d233b93d8d19975ba42e5d8d14afc4e6856648894081b90"
+      },
+      "previousRuntime": "b60ff10278b028e9dd571457f9a5f351ba727039",
+      "previousOutputs": [
+        {
+          "file": "malerweg/atlas-20s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "decodedFrames": 480,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 480,
+          "firstFrameHash": "c194fc9091aa74e422cfea8a4e214632",
+          "lastFrameHash": "d1fbe586f802cf849c25da4eb103e830",
+          "bytes": 13192219,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 1930.7679000000026,
+          "sha256": "8d8b427025e1dd89126fd8714fdb3f8cbdd5f831703ca9b48b2b5046d139329d",
+          "minimumGrayRange": 36,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        },
+        {
+          "file": "malerweg/night-30s.mp4",
+          "container": "mov,mp4,m4a,3gp,3g2,mj2",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "width": 720,
+          "height": 1280,
+          "duration": 30,
+          "decodedFrames": 720,
+          "fps": "24/1",
+          "frameTimestampsVerified": true,
+          "distinctFrames": 720,
+          "firstFrameHash": "cae57b1aad7660ee24b50b7f628f27a0",
+          "lastFrameHash": "5c55c0be943ee73837125860174d2b3f",
+          "bytes": 19499944,
+          "validator": "Independent FFmpeg + ffprobe",
+          "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+          "exportDownloadMilliseconds": 2317.7806999999993,
+          "sha256": "4697b568620875cd112f0d95f20e884115194faf16e69c1f1ae2518b03b9761f",
+          "minimumGrayRange": 48,
+          "previewExportPixelParity": true,
+          "reverseSeekPixelParity": true,
+          "externalRequestsDuringExport": 0
+        }
+      ],
+      "externalRequestsBeforeConsent": 0,
+      "storage": {
+        "local": 0,
+        "session": 0,
+        "indexed": 0
+      }
+    }
+  ]
+}
