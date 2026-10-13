@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Route Story synthetic regression" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Синтетический GPX со ссылками</name>
+    <desc>Искусственные координаты; не реальная поездка.</desc>
+    <link href="https://example.invalid/route"><text>Источник</text><type>text/html</type></link>
+  </metadata>
+  <trk>
+    <link href="https://example.invalid/track"><text>Сведения о треке</text></link>
+    <trkseg>
+      <trkpt lon="0" lat="0"><ele>10</ele><time>2026-01-01T00:00:00Z</time><link href="https://example.invalid/point"><text>Точка</text></link></trkpt>
+      <trkpt lon="0.01" lat="0"><ele>20</ele><time>2026-01-01T00:01:00Z</time></trkpt>
+    </trkseg>
+    <trkseg>
+      <trkpt lon="0.02" lat="0"><ele>30</ele></trkpt>
+      <trkpt lon="0.03" lat="0"><ele>20</ele></trkpt>
+    </trkseg>
+  </trk>
+</gpx>
