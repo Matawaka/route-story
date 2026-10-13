@@ -1,0 +1,172 @@
+{
+  "date": "2026-10-13",
+  "status": "VERIFIED",
+  "sourceCommit": "3119cee84fd0ed435c766b40b4543cfcfe3abaa2",
+  "url": "https://matawaka.github.io/route-story/",
+  "mergedPr": "https://github.com/Matawaka/route-story/pull/23",
+  "mainCi": "https://github.com/Matawaka/route-story/actions/runs/38351395832",
+  "pages": "https://github.com/Matawaka/route-story/actions/runs/38352617587",
+  "workflowJobs": [
+    {
+      "name": "build",
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy",
+      "conclusion": "success"
+    },
+    {
+      "name": "https-acceptance",
+      "conclusion": "success"
+    }
+  ],
+  "personalEnvironmentApproval": true,
+  "localValidation": {
+    "unitPassed": 229,
+    "unitFiles": 20,
+    "build": "PASS",
+    "browserPassed": 57,
+    "browserExplicitOptInSkips": 30,
+    "browserFailed": 0,
+    "auditVulnerabilities": 0
+  },
+  "originalFiles": {
+    "rawDataPublished": false,
+    "localChecks": [
+      {
+        "case": "owner-file-1",
+        "bytes": 95708,
+        "points": 1360,
+        "segments": 1,
+        "sourcePoints": 1360,
+        "coordinatesElevationTimesIdentical": true,
+        "ignoredMetadataLinks": 1,
+        "uiImport": true,
+        "exactReverseSeeking": true
+      },
+      {
+        "case": "owner-file-2",
+        "bytes": 91662,
+        "points": 1300,
+        "segments": 7,
+        "sourcePoints": 1300,
+        "coordinatesElevationTimesIdentical": true,
+        "ignoredMetadataLinks": 1,
+        "uiImport": true,
+        "exactReverseSeeking": true
+      }
+    ],
+    "publicChecks": [
+      {
+        "case": "owner-file-1",
+        "points": 1360,
+        "segments": 1,
+        "uiImport": true,
+        "exactReverseSeeking": true,
+        "mode": "cinematic",
+        "region": "global"
+      },
+      {
+        "case": "owner-file-2",
+        "points": 1300,
+        "segments": 7,
+        "uiImport": true,
+        "exactReverseSeeking": true,
+        "mode": "cinematic",
+        "region": "global"
+      }
+    ],
+    "publicUnsafeScriptRejected": true,
+    "external": [],
+    "errors": [],
+    "browser": "155.0.4283.45"
+  },
+  "videoAcceptance": {
+    "status": "VERIFIED",
+    "url": "https://matawaka.github.io/route-story/",
+    "sourceCommit": "3119cee84fd0ed435c766b40b4543cfcfe3abaa2",
+    "publicHttps": true,
+    "browser": "155.0.4283.45",
+    "os": "Windows_NT 10.0.26200",
+    "physicalDevice": false,
+    "manifestHashes": 31,
+    "packageBytes": 7977601,
+    "metaCsp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'",
+    "httpCspHeader": null,
+    "cancelRetry": true,
+    "reverseSeekingExact": true,
+    "sogneCredits": [
+      "© Kartverket · CC BY 4.0 · cropped/resampled",
+      "Contains modified Copernicus Sentinel data 2025"
+    ],
+    "unsupportedEncoderKeepsPreview": true,
+    "storageEmpty": true,
+    "external": [],
+    "errors": [],
+    "bad": [],
+    "outputs": [
+      {
+        "file": "artifacts/video-captions/public/atlas-20s-clean.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 1280,
+        "height": 720,
+        "duration": 20,
+        "decodedFrames": 480,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 480,
+        "firstFrameHash": "ad06908e88dff138fe2b5bd5eba85cc2",
+        "lastFrameHash": "84dd37b83e6f8636c5b0d6785d790b12",
+        "bytes": 13030539,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "sourceCommit": "3119cee84fd0ed435c766b40b4543cfcfe3abaa2",
+        "captionMode": "none",
+        "publicHttps": true,
+        "exportMs": 1971.2132999999994,
+        "exactPreviewExport": true,
+        "decodedMeanAbsoluteError": 2.7508485243055554,
+        "minimumGeographicFrameVariance": 483.5908969832057,
+        "sourceCredits": [
+          "© swisstopo",
+          "© swisstopo · SWISSIMAGE 2023"
+        ],
+        "sha256": "fca5c7eb3c391e59763667e709f051f2b410190791a8e920ddd5dac4bc06f5bc"
+      },
+      {
+        "file": "artifacts/video-captions/public/night-30s-clean.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "Constrained Baseline",
+        "width": 720,
+        "height": 1280,
+        "duration": 30,
+        "decodedFrames": 720,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 720,
+        "firstFrameHash": "4dfed3eb1c1e2ad673851a05bfb5de22",
+        "lastFrameHash": "7f9314a887014018f3aeee780e7c7350",
+        "bytes": 19157575,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "sourceCommit": "3119cee84fd0ed435c766b40b4543cfcfe3abaa2",
+        "captionMode": "none",
+        "publicHttps": true,
+        "exportMs": 2323.021399999998,
+        "exactPreviewExport": true,
+        "decodedMeanAbsoluteError": 1.872976707175926,
+        "minimumGeographicFrameVariance": 287.20133293999703,
+        "sourceCredits": [
+          "© swisstopo",
+          "© swisstopo · SWISSIMAGE 2023"
+        ],
+        "sha256": "9c74b02ee9314f262ebbd450cdce42bd961f7c0e08c2aaec0d32afef14b763bc"
+      }
+    ],
+    "nativeMemory": "NOT MEASURED",
+    "gpuMemory": "NOT MEASURED"
+  }
+}

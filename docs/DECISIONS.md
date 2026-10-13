@@ -1,5 +1,9 @@
 # Decisions
 
+## 2026-10-13 — GPX parser publication independently verified
+
+Owner approved PR23 merge/publication and personally reviewed SAME Pages38352617587; exact-main3119cee CI and all HTTPS jobs SUCCESS. Original local uploads verified anonymously through the public UI with no route upload/storage or metadata fetch. Keep public evidence sanitised to numbered test cases/counts; raw GPX and coordinates stay outside Git. Preserve older local/public caption acceptance rather than replacing historical hashes with regenerated output. No inferred worldwide photo3D coverage: both tested private routes use explicit Cinematic2D/global fallback. This handover does not authorize merging itself, tags/Release or another deployment.
+
 ## 2026-10-13 — Standard GPX links are inert metadata
 
 The official [GPX1.1 schema](https://www.topografix.com/GPX/1/1/) defines link metadata for files/tracks/points. A global blacklist accidentally treated the owner's standard metadata link as an executable HTML link. Exempt only exact lowercase link in the accepted GPX namespace from that element-name blacklist; parse only existing route fields and discard the link/URL. Do not fetch metadata or introduce anchor elements. Continue scanning children/attributes, rejecting actual scripts, foreign HTML links, SVG, event handlers, unsafe URL protocols, DTD/entities and invalid coordinates. Validate original files locally without publishing their data; reproduce the failure with a synthetic fixture. This correction needs its own reviewed PR and owner merge/deploy approval.

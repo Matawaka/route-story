@@ -233,5 +233,14 @@
     "pages": "https://github.com/Matawaka/route-story/actions/runs/38348908938",
     "workflowStatus": "SUCCESS build/deploy/https-acceptance",
     "humanEnvironmentApproval": true
+  },
+  "followingParserPublication": {
+    "date": "2026-10-13",
+    "status": "VERIFIED",
+    "sourceCommit": "3119cee84fd0ed435c766b40b4543cfcfe3abaa2",
+    "url": "https://matawaka.github.io/route-story/",
+    "pages": "https://github.com/Matawaka/route-story/actions/runs/38352617587",
+    "evidence": "GPX_IMPORT_EVIDENCE.json",
+    "captionConfigUnchanged": true
   }
 }

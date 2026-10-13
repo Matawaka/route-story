@@ -1,5 +1,15 @@
 # Implementation state
 
+## GPX correction publicly VERIFIED — 2026-10-13
+
+Production3119cee84fd0ed435c766b40b4543cfcfe3abaa2, PR23 merged with owner authorization; exact-mainCI38351395832 SUCCESS229unit/20files/build/57browserPASS/30explicit skips. SAME protected Pages38352617587 finished build/deploy/https-acceptance SUCCESS after owner's personal review. Actual deploy output https://matawaka.github.io/route-story/ matches release.json/31file hashes. No second run, newtag/Release/contest action or unrelated merge.
+
+Public original-file proof artifacts/gpx-links/public-files-proof.mjs VERIFIED on Edge155.0.4283.45:all1360/1segment and1300/7segments import and exact reverse seeking; genuine script rejected then valid import recovers; no metadata URL/third-party/request/upload/storage/errors. Full original coordinates/elevation/time were verified locally against source as below, no source files or coordinates published. Both actual uploaded routes truthfully use Cinematic2D/global because approved photographic DEM packs do not cover their complete extents; no synthetic relocation or invented terrain.
+
+Additional actual HTTPS clean-video proof artifacts/video-captions/public-proof.mjs with EXPECTED_COMMIT3119cee VERIFIED:20s1280×720480frames13030539B,1971.2ms export/download/save;30s720×1280720frames19157575B,2323.0ms same boundary excluding independent FFmpeg. These are single observed runs, not controlled comparative benchmarks. H.26424fps, allframes/PTS/changing/nonblank geography decoded, exact preview/pre-encode parity; decodedMAE2.751/1.873. New actual hashes and sanitised public/local case summaries in GPX_IMPORT_EVIDENCE.json; historical previous publication results preserved in VIDEO_CAPTIONS_EVIDENCE.json. Cancel/retry/unsupported-codec preview/legal Swiss+Sogne credits/no storage/375px layout/31hashes pass. Package payload7977601B excluding release.json; production9MiB allowlist passed. MetaCSP verified, HTTP CSP header absent. New physical/native/GPU tests NOTTESTED/NOTMEASURED.
+
+Handover branch codex/gpx-publication-handover from acceptedmain3119cee, checkpoint3aafe70 then evidence-only final HEAD authoritative via Git. No runtime edits or automatic merge/deploy from this documentation branch. GPX publication task complete; next new owner request is deterministic left-facing marker reflection in a separate branch from actual main.
+
 ## GPX correction merged / protected publication waiting — 2026-10-13
 
 Owner explicitly authorized PR23 merge and deployment. Reviewed f064c5a0f4714f99d9728c6408a0c709025218aa exact PRCI38350800959 SUCCESS; merged with history as main3119cee84fd0ed435c766b40b4543cfcfe3abaa2, tree equality confirmed. Exact main-pushCI38351395832 SUCCESS:clean installation,229unit/20files,TypeScript/Vite build,57browserPASS/30explicit opt-in skips/0FAIL. Runtime e954e472; owner-provided originals remain local, complete geometry/elevation/time and1360/1segment+1300/7segments/UI/seek proven as below. No unsafe XML is admitted and no metadata link is fetched.
