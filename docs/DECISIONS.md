@@ -1,5 +1,10 @@
 # Decisions
 
+## 2026-10-13 — Verified unified HTTPS publication
+
+Owner-authorized PR20 merged as 1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba; successful exact-main CI precedes one manual protected Pages deployment. Owner personally approved environment; actual deploy page_url https://matawaka.github.io/route-story/, entire build/deploy/HTTPS workflow SUCCESS. Independent full public20slandscape/30sportrait H.264 proof complements routine10s smoke; browser/OS and source/hashes are recorded separately rather than copying old local video hashes. Keep meta CSP limitation explicit, current physical-device/memory observations unmeasured, and this evidence-only handover independently reviewable. No automatic documentation merge or redeployment.
+
+
 ## 2026-10-13 — Authorized unified release through the existing protected workflow
 
 Owner approved the unified visuals, requested one dropdown without duplicate shortcuts, then explicitly authorized merging PR20 and deployment. Merge commit 1d303aba4ca3d1ca94e4bb0aa35e8c629aef88ba preserves history and the exact tested3439a2a tree. Successful main-push acceptance is separately verified before dispatch. Reuse manual Pages with both approved packs, no permission/branch/reviewer/cap changes. Personal github-pages review remains required; deployed output URL plus actual HTTPS/MP4 acceptance establish publication, not build success. Keep this documentation-only handover independently reviewable; no tag, Release, resubmission or automatic documentation merge.
