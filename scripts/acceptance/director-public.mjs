@@ -1,0 +1,32 @@
+import {chromium} from '@playwright/test';
+import {mkdirSync,readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+import ffmpeg from 'ffmpeg-static';
+import {withProductionServer} from './production.mjs';
+import {validateVideo} from '../validate-video.mjs';
+
+// Real production DOM/encoder input, no source imports or private route queries.
+const directory=process.env.ACCEPTANCE_DIR||'artifacts/director-public';mkdirSync(directory,{recursive:true});
+const expected=process.env.EXPECTED_COMMIT;assert.match(expected??'',/^[a-f0-9]{40}$/);
+const report={status:'PENDING',sourceCommit:expected,publicHttps:false,outputs:[],physicalMobile:'NOT TESTED'};
+async function accept(url){
+ const base=new URL(url),browser=await chromium.launch({channel:process.env.PLAYWRIGHT_CHANNEL||'msedge'});report.url=url;report.publicHttps=base.protocol==='https:';report.browser=browser.version();
+ try{const context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await context.newPage(),unexpected=[],errors=[];
+  await context.route('**/*',r=>{const u=new URL(r.request().url());if(['data:','blob:'].includes(u.protocol))return r.continue();if(u.origin!==base.origin||!u.pathname.startsWith(base.pathname)||r.request().method()!=='GET'){unexpected.push(u.origin);return r.abort();}return r.continue();});await context.routeWebSocket(/.*/,ws=>{unexpected.push('WebSocket');ws.close();});page.on('pageerror',e=>errors.push(e.message));
+  await page.addInitScript(()=>{const Native=window.VideoFrame;window.VideoFrame=class extends Native{constructor(source,options){super(source,options);if(source instanceof HTMLCanvasElement&&options?.timestamp===window.__directorTimestamp)window.__directorSource=source.toDataURL();}};});
+  assert.equal((await page.goto(url)).status(),200);assert.equal(await page.evaluate(()=>isSecureContext),true);const manifest=await(await page.request.get(new URL('release.json',base).href)).json();assert.equal(manifest.sourceCommit,expected);assert.ok(manifest.regionalPacks.includes('furka'));assert.equal(manifest.automaticGeographyPublicationApproved,true);
+  await page.locator('#welcome-close').click();const ready=()=>page.waitForFunction(()=>!document.querySelector('#export').disabled,undefined,{timeout:90000}),change=async(id,value)=>{await page.locator(id).selectOption(value);await ready();};await ready();await change('#route-choice','furka');await change('#quality','standard');await change('#camera-mode','director');await change('#video-captions','full');
+  for(const[aspect,duration,width,height]of[['landscape',20,1280,720],['portrait',30,720,1280]]){
+   await change('#ratio',aspect);await change('#duration',String(duration));await page.locator(`[data-style="${aspect==='landscape'?'atlas':'night'}"]`).click();await ready();assert.equal(await page.locator('#preview').getAttribute('data-mode'),'director');assert.match(await page.locator('#map-detail-note').textContent(),/непрерывный коридор проверены/);
+   const time=duration/2;await page.locator('#scrub').fill(String(time));const reference=await page.locator('#preview').evaluate(c=>c.toDataURL());await page.locator('#scrub').fill('1');await page.locator('#scrub').fill(String(time));assert.equal(await page.locator('#preview').evaluate(c=>c.toDataURL()),reference,'exact reverse seeking');await page.evaluate(timestamp=>{window.__directorTimestamp=timestamp;window.__directorSource=undefined;},time*1000000);
+   const download=page.waitForEvent('download',{timeout:300000}),failure=page.waitForFunction(()=>document.body.dataset.state==='ERROR',undefined,{timeout:300000}).then(async()=>{throw Error(await page.locator('#status').textContent());}),start=performance.now();await page.locator('#export').click();const file=`${directory}/${aspect}-${duration}s.mp4`;await(await Promise.race([download,failure])).saveAs(file);await ready();assert.equal(await page.evaluate(()=>window.__directorSource),reference,'exact production preview/actual encoder PNG');
+   const validation=validateVideo(file,width,height,duration),gray=spawnSync(ffmpeg,['-v','error','-i',file,'-vf','crop=iw*.8:ih*.5:iw*.1:ih*.25,scale=32:18,format=gray','-f','rawvideo','-'],{windowsHide:true,maxBuffer:2*1024*1024});assert.equal(gray.status,0);assert.equal(gray.stderr.length,0);assert.equal(gray.stdout.length,duration*24*576);let minimum=255;for(let i=0;i<gray.stdout.length;i+=576){const f=gray.stdout.subarray(i,i+576),spread=Math.max(...f)-Math.min(...f);minimum=Math.min(minimum,spread);assert.ok(spread>=8,'nonblank geographic map at every frame');}
+   report.outputs.push({...validation,sha256:createHash('sha256').update(readFileSync(file)).digest('hex'),milliseconds:performance.now()-start,exactPreviewPreencode:true,exactReverseSeek:true,minimumMapSpread:minimum,directorSelected:true});
+  }
+  await page.screenshot({path:`${directory}/director-ui.png`,fullPage:true});await page.locator('#export').click();await page.waitForFunction(()=>document.querySelector('#export-progress').value>0);await page.locator('#cancel').click();await page.waitForFunction(()=>document.body.dataset.state==='CANCELLED');await ready();report.cancel='PASS';await change('#duration','10');const retry=page.waitForEvent('download');await page.locator('#export').click();const file=`${directory}/retry-10s.mp4`;await(await retry).saveAs(file);await ready();report.retry=validateVideo(file,720,1280,10);
+  assert.deepEqual(unexpected,[]);assert.deepEqual(errors,[]);assert.deepEqual(await page.evaluate(async()=>[localStorage.length,sessionStorage.length,(await indexedDB.databases()).length]),[0,0,0]);report.externalRequests=0;report.routePersistence=false;report.status='VERIFIED';
+ }finally{await browser.close();}
+}
+try{if(process.env.APP_URL){const u=new URL(process.env.APP_URL);assert.equal(u.protocol,'https:');assert.ok(!u.username&&!u.password&&!u.search&&!u.hash&&u.pathname.endsWith('/'));await accept(u.href);}else await withProductionServer(accept);}catch(error){report.status='FAILED';report.error=error.stack;process.exitCode=1;}finally{writeFileSync(`${directory}/acceptance.json`,JSON.stringify(report,null,2));console.log(JSON.stringify({status:report.status,sourceCommit:expected,publicHttps:report.publicHttps,outputs:report.outputs.map(v=>({width:v.width,height:v.height,frames:v.decodedFrames,bytes:v.bytes})),error:report.error}));}
