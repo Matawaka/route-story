@@ -1,5 +1,15 @@
 # Implementation state
 
+## MVP1.6 segment-cut velocity correction — 2026-10-14
+
+Real4f6a2fb final candidate A/B videos independently decoded: Furka1080p20land/30portrait, ownerMontBlanc30portrait andMalerweg30portrait; Furka4K10s both aspects real-file/cancel-retry. Source/DEM/route/config identities match within each A/B pair, no encoding-time external requests, exact same-size source pixels. New markerOutside/occluded/uncovered0. Furka yaw284.68→4.09/7.86deg/s; MontBlanc oldyaw0/new4.86; Malerweg oldyaw0/new9.78. Do not imply long-route yaw improved from0.
+
+Malerweg's new camera maximum acceleration79,740m/s² exceeded old52,289m/s²; traced to forcing zero velocity at the start of each deliberate disconnected-segment edit. Preserve discrete geographical cuts, but use one-sided own-segment tangents there; no artificial stop/start between ordinary views. Whole resulting curves are re-proved with unchanged safety, no gap interpolation. New dedicated regression+all director tests27PASS; TypeScript/buildPASS. Actual affected videos and final suite must be regenerated/rechecked before acceptance. Raw prior reports remain historical; no merge/deploy/tag/Release.
+
+## MVP1.6 road framing checkpoint — 2026-10-14
+
+Runtime4f6a2fb51a5aca91055ab9df37454438ac3b4edc, same draftPR29/base main554fc7f...; no merge/deploy/tag/Release. Corrected exact8m LOS ramp, stable per-segment lateral bias/north-up global lookahead and complete road-reference interval framing. Shared A/B legend row no longer overlaps distance; final caption says “Итог маршрута”. Source coordinates, source caps,350m clearance and full coverage unchanged.302unit/26files+TypeScript/build PASS. Opt-in real terrain/director UI browser3PASS/26.8s including actual4s MP4 decode, unsupported encoder preview, cancellation/retry and context loss. Final exact-runtime video queue in progress; aggregate/evidence next. Untracked owner MP4 untouched.
+
 ## MVP1.6 resumed / continuous-proof correction — 2026-10-14
 
 Owner resumed328848b; branch codex/cinematic-camera-director remains based on main554fc7f24f762f6438da0c506a60c6c79258cbae. Main/Pages CI stillSUCCESS; PR28 documentation remains separate and succeeded. Fetch had one transient TLS error; live GitHub API confirmed unchanged main. No merge/deploy/tag/Release forMVP1.6.

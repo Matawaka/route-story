@@ -180,7 +180,13 @@ function curveFor(keys:readonly DirectorKey[],i:number,field:'position'|'target'
   const a=keys[i],b=keys[i+1],dt=b.time-a.time;
   const tangent=(at:number):V=>{
     const key=keys[at],prev=keys[at-1],next=keys[at+1];
-    if(!prev||!next||prev.segment!==key.segment||next.segment!==key.segment)return[0,0,0];
+    if(!prev||!next)return[0,0,0];
+    // A segment cut is an edit, not a stop: one-sided tangents avoid forcing
+    // the next road shot to accelerate from rest in a tiny distance allocation.
+    // These controls belong ONLY to their own segment and are fully re-proved.
+    if(prev.segment!==key.segment&&next.segment===key.segment)return scale(sub(next[field],key[field]),1/(next.time-key.time));
+    if(next.segment!==key.segment&&prev.segment===key.segment)return scale(sub(key[field],prev[field]),1/(key.time-prev.time));
+    if(prev.segment!==key.segment||next.segment!==key.segment)return[0,0,0];
     const d=scale(sub(next[field],prev[field]),1/(next.time-prev.time)),limit=Math.min(norm(sub(key[field],prev[field]))/(key.time-prev.time),norm(sub(next[field],key[field]))/(next.time-key.time));
     return norm(d)>limit?scale(d,limit/norm(d)):d;
   };
