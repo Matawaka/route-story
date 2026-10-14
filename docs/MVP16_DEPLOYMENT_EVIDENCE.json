@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "state": "WAITING FOR REQUIRED HUMAN ENVIRONMENT REVIEW",
+  "productionTarget": "4dd38163ec2c898db14d35fc516129b9fd4be456",
+  "reviewedPrHead": "547b2e66db7be270701f41ef6b0cc97cee3c04fd",
+  "pr29": "MERGED",
+  "ownerMergeDeploymentAuthorized": true,
+  "mainCI": {
+    "id": 38559460254,
+    "status": "SUCCESS"
+  },
+  "pages": {
+    "includeSwiss": true,
+    "url": "https://github.com/Matawaka/route-story/actions/runs/38560776521",
+    "build": "SUCCESS",
+    "requiredReviewer": "Matawaka",
+    "includeAutomaticGeography": true,
+    "deploy": "waiting",
+    "includeImagery": true,
+    "id": 38560776521
+  },
+  "publicHttpsAcceptance": "PENDING",
+  "directorPublicFullMp4": "PENDING",
+  "localProductionDirectorAcceptance": "VERIFIED",
+  "localFullFrames": [
+    480,
+    720
+  ],
+  "localProductionPackageBytes": 8519086,
+  "tagsAndReleaseChanged": false
+}

@@ -1,5 +1,9 @@
 # Implementation state
 
+## MVP1.6 protected deployment waiting — 2026-10-14
+
+Exactmain4dd38163ec2c898db14d35fc516129b9fd4be456 acceptance38559460254 SUCCESS/9m3s. Rechecked main unchanged/no competing pendingPages run, dispatched ONCE existing pages.yml main with reviewed_sha exact4dd3816, approve_publication=true and include_imagery/include_swiss/include_automatic_geography=true. Newrun38560776521 https://github.com/Matawaka/route-story/actions/runs/38560776521: buildSUCCESS/31s (exactSHA/CI gate,303units,build,publiconly package/hashes andartifact upload), deployWAITING forgithub-pages reviewerMatawaka. Pending-deployments API independently confirms required personal reviewer; no bypass attempted. Owner action requested in app:Review deployments→github-pages→Approve deployment. PublicHTTPS and newdirector public20/30sMP4 remainPENDING until deployment+independent verification; local proof preserved. Draft handoverPR30 https://github.com/Matawaka/route-story/pull/30 records status/script without modifying productionmain or protectedworkflow. Publication approval alreadyreceived; no duplicate dispatch, no tag/Release, no branch deletion, private/ownerMP4 untouched.
+
 ## MVP1.6 owner-authorized merge / Pages preparation — 2026-10-14
 
 Owner explicitly reported successful review and authorized merge/deployment. Reconciled PR29 exact547b2e66db7be270701f41ef6b0cc97cee3c04fd OPEN/CLEAN/non-draft and exactCI38555063215 SUCCESS. Required github-pages reviewerMatawaka/main-only policy and Pages sourceworkflow/HTTPS enforced verified; no pending deployment. Merged with native merge commit/no branch deletion/no force: PR29 MERGED at2026-10-14T11:50:45Z, main4dd38163ec2c898db14d35fc516129b9fd4be456. Its tree equals reviewed547b2e6. Exact main-push acceptance38559460254 started; must finish SUCCESS before dispatch. Other docsPRs remain separate. No tag/Release authorization inferred.
