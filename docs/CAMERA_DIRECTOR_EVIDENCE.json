@@ -1,0 +1,897 @@
+{
+  "schema": 1,
+  "status": "LOCAL VIDEO-VERIFIED CANDIDATE; OWNER REVIEW REQUIRED; NOT DEPLOYED",
+  "generatedUtc": "2026-10-14T11:10:33.562Z",
+  "headAtAggregation": "3fe75d03cfb1fd1a9ba6fda394ee6697086e26e9",
+  "base": "554fc7f24f762f6438da0c506a60c6c79258cbae",
+  "pr": "https://github.com/Matawaka/route-story/pull/29",
+  "physicalMacAndroidIos": "NOT TESTED",
+  "nativeSavePicker": "NOT TESTED",
+  "gpu": "RTX 3090 / Edge / Direct3D11 (observed desktop only)",
+  "notes": [
+    "Private owner tracks were prepared through existing consented automatic geography, without manual new regional packs.",
+    "A/B is same route/DEM/image/config/encoder; only camera mode changes. Identical hashes checked locally and private fingerprints omitted here.",
+    "Independent complete FFmpeg/ffprobe decoding, all timestamps/frame counts, nonblank changing geography, equal-resolution preencode pixels and quality-independent geometry/time verified.",
+    "Pose metrics are measured at 24fps; separate interval certificate proves continuous safety. Metrics do not replace human visual review.",
+    "Threshold >30deg/s is a reported diagnostic, not a product safety limit or comfort certification.",
+    "Cubic C1 continuity is not C2 continuity; discrete cuts remain at disconnected GPX segments.",
+    "Old long-route camera already has zero yaw. New optional revealing views may rotate slightly; no claim that all angular measures improved.",
+    "Native/private process memory uses one-second OS samples of an isolated browser, not GPU VRAM, JS heap, portable peak/leak proof or mobile acceptance.",
+    "Synthetic Furka and Sogne demonstrations are not actual human journeys. No geographic retouching, new source detail or viewer-retention claim.",
+    "Earlier rejected/fallback/intermediate artifacts remain ignored and recorded in the journal, not silently counted as director success."
+  ],
+  "reports": [
+    {
+      "label": "furka",
+      "privateRoute": false,
+      "sourceCommit": "ab29fb67ef3426e4e4e93e93e089aa040936fbc8",
+      "artifactsPublished": false,
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "quality": "fullhd",
+      "stream": false,
+      "preparationMilliseconds": 1044.8712,
+      "source": "© swisstopo · SWISSIMAGE / swissALTI3D · Фурка · DEM 5 м из источника 2 м · LV95/LN02 · высоты 1:1. Фото: обзор 3 м / участок 0,5 м; нативный класс 10/25 см не установлен. Экспериментальный регион: физические устройства ещё не проверены.",
+      "memory": {
+        "method": "Windows Get-Process private bytes/working set summed for unique PIDs of isolated browser/CDP; 1s samples, not exact peaks, working sets may share pages; not GPU VRAM",
+        "samples": 53,
+        "maximumSampledPrivateBytes": 1016643584,
+        "maximumSampledWorkingSetBytes": 1195438080,
+        "scope": "whole A/B or regression session; not a per-camera allocation or exact peak",
+        "gpuVram": "NOT MEASURED",
+        "jsHeap": "NOT MEASURED"
+      },
+      "cancel": "PASS",
+      "retry": {
+        "duration": 10,
+        "frames": 240,
+        "width": 1080,
+        "height": 1920,
+        "independentlyDecoded": true
+      },
+      "pairs": [
+        {
+          "width": 1920,
+          "height": 1080,
+          "duration": 20,
+          "identicalSceneAndEncoding": true,
+          "onlyCameraChanges": true
+        },
+        {
+          "width": 1080,
+          "height": 1920,
+          "duration": 30,
+          "identicalSceneAndEncoding": true,
+          "onlyCameraChanges": true
+        }
+      ],
+      "videos": [
+        {
+          "file": "terrain-landscape-20s.mp4",
+          "sha256": "74f9ef9e7431e21e68acd565c5bd3f5a4deb62a732540a93f4009ab62419dc8f",
+          "privateArtifact": false,
+          "width": 1920,
+          "height": 1080,
+          "duration": 20,
+          "frames": 480,
+          "distinctFrames": 480,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "High",
+          "encoder": "avc1.640028",
+          "bytes": 26747878,
+          "applicationExportMilliseconds": 10197,
+          "exportDownloadMilliseconds": 10747.4247,
+          "meanWallMillisecondsPerFrame": 22.390468124999998,
+          "minimumMapSpread": 105,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "terrain",
+            "markerOutsideSafeArea": 9,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 0,
+            "minimumClearanceMeters": 505.018386444563,
+            "maximumVirtualSpeedMetersPerSecond": 715.9025165355573,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 11807.883381071408,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 210.56514347722305,
+              "p95": 1228.2468496326844,
+              "rms": 1010.6472088793133,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 284.67549939362107,
+            "stepsOver30DegreesPerSecond": 81
+          }
+        },
+        {
+          "file": "director-landscape-20s.mp4",
+          "sha256": "f6e0b458f536b7a35f8f7b269fd93484dfa6af44ea931e67aff4139b0a16571a",
+          "privateArtifact": false,
+          "width": 1920,
+          "height": 1080,
+          "duration": 20,
+          "frames": 480,
+          "distinctFrames": 480,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "High",
+          "encoder": "avc1.640028",
+          "bytes": 25977389,
+          "applicationExportMilliseconds": 9958.59999999404,
+          "exportDownloadMilliseconds": 10386.061099999999,
+          "meanWallMillisecondsPerFrame": 21.637627291666664,
+          "minimumMapSpread": 102,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "director",
+            "markerOutsideSafeArea": 0,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 0,
+            "minimumClearanceMeters": 616.3576019756201,
+            "maximumVirtualSpeedMetersPerSecond": 94.02967673976306,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 180.47822220622595,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 23.407064957568778,
+              "p95": 121.97997196096424,
+              "rms": 55.22530025030781,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 4.091750042901367,
+            "stepsOver30DegreesPerSecond": 0,
+            "status": "selected",
+            "reason": "Кино · Автоматический режиссёр: допустимые ракурсы и непрерывный коридор проверены.",
+            "preparationMilliseconds": 355.80000001192093,
+            "proofIntervals": 2106,
+            "candidates": 39,
+            "rejected": {},
+            "proofBudget": 30000,
+            "keys": 15,
+            "shotKinds": [
+              "establishing",
+              "smooth-follow",
+              "scenic-side",
+              "curve-showcase",
+              "finale"
+            ]
+          }
+        },
+        {
+          "file": "terrain-portrait-30s.mp4",
+          "sha256": "8853944dfa9c68113c2d6eb05cafc3eee99823969e0da100691e549e79608e67",
+          "privateArtifact": false,
+          "width": 1080,
+          "height": 1920,
+          "duration": 30,
+          "frames": 720,
+          "distinctFrames": 720,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "High",
+          "encoder": "avc1.640028",
+          "bytes": 39477078,
+          "applicationExportMilliseconds": 16483,
+          "exportDownloadMilliseconds": 17033.540300000008,
+          "meanWallMillisecondsPerFrame": 23.65769486111112,
+          "minimumMapSpread": 71,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "terrain",
+            "markerOutsideSafeArea": 0,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 0,
+            "minimumClearanceMeters": 505.3767137582381,
+            "maximumVirtualSpeedMetersPerSecond": 844.7448577995497,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 5848.936975087362,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 65.5614506224606,
+              "p95": 1191.8677134564819,
+              "rms": 578.0370339569942,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 284.67549939362107,
+            "stepsOver30DegreesPerSecond": 95
+          }
+        },
+        {
+          "file": "director-portrait-30s.mp4",
+          "sha256": "ce68298c0729a6000cd19d8ad4fcf4804dc94729e00e35234b20693d59066e7b",
+          "privateArtifact": false,
+          "width": 1080,
+          "height": 1920,
+          "duration": 30,
+          "frames": 720,
+          "distinctFrames": 720,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "High",
+          "encoder": "avc1.640028",
+          "bytes": 37505801,
+          "applicationExportMilliseconds": 14177.800000011921,
+          "exportDownloadMilliseconds": 15699.7494,
+          "meanWallMillisecondsPerFrame": 21.8052075,
+          "minimumMapSpread": 74,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "director",
+            "markerOutsideSafeArea": 0,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 0,
+            "minimumClearanceMeters": 684.308591007481,
+            "maximumVirtualSpeedMetersPerSecond": 85.43283350194392,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 157.76270415346653,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 21.319232668113948,
+              "p95": 107.61292081291487,
+              "rms": 45.55901380378518,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 7.857068516155778,
+            "stepsOver30DegreesPerSecond": 0,
+            "status": "selected",
+            "reason": "Кино · Автоматический режиссёр: допустимые ракурсы и непрерывный коридор проверены.",
+            "preparationMilliseconds": 1016.9000000059605,
+            "proofIntervals": 5414,
+            "candidates": 114,
+            "rejected": {
+              "source-detail-at-first-scale": 1
+            },
+            "proofBudget": 30000,
+            "keys": 21,
+            "shotKinds": [
+              "establishing",
+              "smooth-follow",
+              "scenic-side",
+              "mountain-reveal",
+              "curve-showcase",
+              "finale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "mont-blanc",
+      "privateRoute": true,
+      "sourceCommit": "ab29fb67ef3426e4e4e93e93e089aa040936fbc8",
+      "artifactsPublished": false,
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "quality": "fullhd",
+      "stream": false,
+      "preparationMilliseconds": 39178.9799,
+      "source": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved · Contains modified Copernicus Sentinel data 2025 · Sentinel-2: источник 10 м / подготовленный слой 50 м; даты снимков 2025-05-30, 2025-07-09, 2025-08-08. Copernicus DSM 30 м / сетка 120 м · EGM2008 · охват 4326 км². Загружено 52.1 МиБ. Облачные/неопределённые пиксели у маршрута: 0.02%. Это обзорная фотокарта, без детализации отдельных улиц.",
+      "memory": {
+        "method": "Windows Get-Process private bytes/working set summed for unique PIDs of isolated browser/CDP; 1s samples, not exact peaks, working sets may share pages; not GPU VRAM",
+        "samples": 33,
+        "maximumSampledPrivateBytes": 1171472384,
+        "maximumSampledWorkingSetBytes": 1383788544,
+        "scope": "whole A/B or regression session; not a per-camera allocation or exact peak",
+        "gpuVram": "NOT MEASURED",
+        "jsHeap": "NOT MEASURED"
+      },
+      "cancel": "PASS",
+      "retry": {
+        "duration": 10,
+        "frames": 240,
+        "width": 1080,
+        "height": 1920,
+        "independentlyDecoded": true
+      },
+      "pairs": [
+        {
+          "width": 1080,
+          "height": 1920,
+          "duration": 30,
+          "identicalSceneAndEncoding": true,
+          "onlyCameraChanges": true
+        }
+      ],
+      "videos": [
+        {
+          "privateArtifact": true,
+          "width": 1080,
+          "height": 1920,
+          "duration": 30,
+          "frames": 720,
+          "distinctFrames": 720,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "High",
+          "encoder": "avc1.640028",
+          "bytes": 38888475,
+          "applicationExportMilliseconds": 15567.200000017881,
+          "exportDownloadMilliseconds": 16292.4948,
+          "meanWallMillisecondsPerFrame": 22.628465000000002,
+          "minimumMapSpread": 69,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "terrain",
+            "markerOutsideSafeArea": 0,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 0,
+            "minimumClearanceMeters": 27756.151841201783,
+            "maximumVirtualSpeedMetersPerSecond": 35174.29298286869,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 70224.6050874981,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 10897.706732771947,
+              "p95": 50262.74726741911,
+              "rms": 21825.179552746562,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 0,
+            "stepsOver30DegreesPerSecond": 0
+          }
+        },
+        {
+          "privateArtifact": true,
+          "width": 1080,
+          "height": 1920,
+          "duration": 30,
+          "frames": 720,
+          "distinctFrames": 720,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "High",
+          "encoder": "avc1.640028",
+          "bytes": 38880965,
+          "applicationExportMilliseconds": 15135.59999999404,
+          "exportDownloadMilliseconds": 15745.641099999993,
+          "meanWallMillisecondsPerFrame": 21.868945972222214,
+          "minimumMapSpread": 127,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "director",
+            "markerOutsideSafeArea": 0,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 0,
+            "minimumClearanceMeters": 27046.857440792824,
+            "maximumVirtualSpeedMetersPerSecond": 7538.002380301071,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 20824.532712597098,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 2210.57140904648,
+              "p95": 8601.702994149602,
+              "rms": 4171.590220145485,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 4.860817425837922,
+            "stepsOver30DegreesPerSecond": 0,
+            "status": "selected",
+            "reason": "Кино · Автоматический режиссёр: допустимые ракурсы и непрерывный коридор проверены.",
+            "preparationMilliseconds": 1047.4000000059605,
+            "proofIntervals": 16284,
+            "candidates": 57,
+            "rejected": {},
+            "proofBudget": 30000,
+            "keys": 21,
+            "shotKinds": [
+              "establishing",
+              "smooth-follow",
+              "scenic-side",
+              "curve-showcase",
+              "finale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "malerweg",
+      "privateRoute": true,
+      "sourceCommit": "ab29fb67ef3426e4e4e93e93e089aa040936fbc8",
+      "artifactsPublished": false,
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "quality": "fullhd",
+      "stream": false,
+      "preparationMilliseconds": 21669.9951,
+      "source": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved · Contains modified Copernicus Sentinel data 2025 · Sentinel-2: источник 10 м / подготовленный слой 30 м; даты снимков 2025-08-12. Copernicus DSM 30 м / сетка 80 м · EGM2008 · охват 1290 км². Загружено 27.4 МиБ. Облачные/неопределённые пиксели у маршрута: 0.16%. Это обзорная фотокарта, без детализации отдельных улиц.",
+      "memory": {
+        "method": "Windows Get-Process private bytes/working set summed for unique PIDs of isolated browser/CDP; 1s samples, not exact peaks, working sets may share pages; not GPU VRAM",
+        "samples": 29,
+        "maximumSampledPrivateBytes": 1069506560,
+        "maximumSampledWorkingSetBytes": 1293950976,
+        "scope": "whole A/B or regression session; not a per-camera allocation or exact peak",
+        "gpuVram": "NOT MEASURED",
+        "jsHeap": "NOT MEASURED"
+      },
+      "cancel": "PASS",
+      "retry": {
+        "duration": 10,
+        "frames": 240,
+        "width": 1080,
+        "height": 1920,
+        "independentlyDecoded": true
+      },
+      "pairs": [
+        {
+          "width": 1080,
+          "height": 1920,
+          "duration": 30,
+          "identicalSceneAndEncoding": true,
+          "onlyCameraChanges": true
+        }
+      ],
+      "videos": [
+        {
+          "privateArtifact": true,
+          "width": 1080,
+          "height": 1920,
+          "duration": 30,
+          "frames": 720,
+          "distinctFrames": 720,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "High",
+          "encoder": "avc1.640028",
+          "bytes": 39731181,
+          "applicationExportMilliseconds": 14341.300000011921,
+          "exportDownloadMilliseconds": 14999.776299999998,
+          "meanWallMillisecondsPerFrame": 20.833022638888885,
+          "minimumMapSpread": 22,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "terrain",
+            "markerOutsideSafeArea": 42,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 36,
+            "minimumClearanceMeters": 16286.809624360143,
+            "maximumVirtualSpeedMetersPerSecond": 33973.62527827512,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 52289.03886670469,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 6515.519895538754,
+              "p95": 44553.449830550824,
+              "rms": 16405.503108440193,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 0,
+            "stepsOver30DegreesPerSecond": 0
+          }
+        },
+        {
+          "privateArtifact": true,
+          "width": 1080,
+          "height": 1920,
+          "duration": 30,
+          "frames": 720,
+          "distinctFrames": 720,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "High",
+          "encoder": "avc1.640028",
+          "bytes": 39654149,
+          "applicationExportMilliseconds": 14414,
+          "exportDownloadMilliseconds": 14934.880399999995,
+          "meanWallMillisecondsPerFrame": 20.742889444444437,
+          "minimumMapSpread": 22,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "director",
+            "markerOutsideSafeArea": 0,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 0,
+            "minimumClearanceMeters": 16491.87319835611,
+            "maximumVirtualSpeedMetersPerSecond": 6757.243072302315,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 56218.98157505702,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 1285.6162417417447,
+              "p95": 6193.175715945388,
+              "rms": 5070.195527351304,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 9.782378333473389,
+            "stepsOver30DegreesPerSecond": 0,
+            "status": "selected",
+            "reason": "Кино · Автоматический режиссёр: допустимые ракурсы и непрерывный коридор проверены.",
+            "preparationMilliseconds": 964.2999999821186,
+            "proofIntervals": 15175,
+            "candidates": 90,
+            "rejected": {},
+            "proofBudget": 30000,
+            "keys": 32,
+            "shotKinds": [
+              "establishing",
+              "smooth-follow",
+              "scenic-side",
+              "curve-showcase",
+              "finale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "furka",
+      "privateRoute": false,
+      "sourceCommit": "ab29fb67ef3426e4e4e93e93e089aa040936fbc8",
+      "artifactsPublished": false,
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "quality": "ultra",
+      "stream": true,
+      "preparationMilliseconds": 1137.9985,
+      "source": "© swisstopo · SWISSIMAGE / swissALTI3D · Фурка · DEM 5 м из источника 2 м · LV95/LN02 · высоты 1:1. Фото: обзор 3 м / участок 0,5 м; нативный класс 10/25 см не установлен. Экспериментальный регион: физические устройства ещё не проверены.",
+      "memory": {
+        "method": "Windows Get-Process private bytes/working set summed for unique PIDs of isolated browser/CDP; 1s samples, not exact peaks, working sets may share pages; not GPU VRAM",
+        "samples": 38,
+        "maximumSampledPrivateBytes": 1492414464,
+        "maximumSampledWorkingSetBytes": 1638256640,
+        "scope": "whole A/B or regression session; not a per-camera allocation or exact peak",
+        "gpuVram": "NOT MEASURED",
+        "jsHeap": "NOT MEASURED"
+      },
+      "cancel": "PASS",
+      "retry": {
+        "duration": 10,
+        "frames": 240,
+        "width": 2160,
+        "height": 3840,
+        "independentlyDecoded": true
+      },
+      "pairs": [],
+      "videos": [
+        {
+          "file": "landscape-10s.mp4",
+          "sha256": "da7ce2970a977e31e852259e37471f6135543ec5a5e6ddea4f755cc3a23cf3cf",
+          "privateArtifact": false,
+          "width": 3840,
+          "height": 2160,
+          "duration": 10,
+          "frames": 240,
+          "distinctFrames": 240,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "High",
+          "encoder": "avc1.640033",
+          "bytes": 36095976,
+          "applicationExportMilliseconds": 18844.5,
+          "exportDownloadMilliseconds": 19519.5996,
+          "meanWallMillisecondsPerFrame": 81.331665,
+          "minimumMapSpread": 119,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "director",
+            "markerOutsideSafeArea": 0,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 0,
+            "minimumClearanceMeters": 615.9060169304412,
+            "maximumVirtualSpeedMetersPerSecond": 274.5790011216396,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 899.6326973569635,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 90.8785363606086,
+              "p95": 527.745554727019,
+              "rms": 223.4330694269319,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 17.45719638749597,
+            "stepsOver30DegreesPerSecond": 0,
+            "status": "selected",
+            "reason": "Кино · Автоматический режиссёр: допустимые ракурсы и непрерывный коридор проверены.",
+            "preparationMilliseconds": 360.40000000596046,
+            "proofIntervals": 2006,
+            "candidates": 27,
+            "rejected": {},
+            "proofBudget": 30000,
+            "keys": 11,
+            "shotKinds": [
+              "establishing",
+              "smooth-follow",
+              "mountain-reveal",
+              "finale"
+            ]
+          }
+        },
+        {
+          "file": "portrait-10s.mp4",
+          "sha256": "f2051922a23d0e75e34d4dde07e61f7f586ddde138cfefca514efc070efc733b",
+          "privateArtifact": false,
+          "width": 2160,
+          "height": 3840,
+          "duration": 10,
+          "frames": 240,
+          "distinctFrames": 240,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "High",
+          "encoder": "avc1.640033",
+          "bytes": 34680104,
+          "applicationExportMilliseconds": 17354.09999999404,
+          "exportDownloadMilliseconds": 17836.4311,
+          "meanWallMillisecondsPerFrame": 74.31846291666668,
+          "minimumMapSpread": 86,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "director",
+            "markerOutsideSafeArea": 0,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 0,
+            "minimumClearanceMeters": 688.6884225238832,
+            "maximumVirtualSpeedMetersPerSecond": 252.83043009583528,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 823.080094507252,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 112.9951802923151,
+              "p95": 540.651251536716,
+              "rms": 244.8392122808227,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 30.82592006383493,
+            "stepsOver30DegreesPerSecond": 3,
+            "status": "selected",
+            "reason": "Кино · Автоматический режиссёр: допустимые ракурсы и непрерывный коридор проверены.",
+            "preparationMilliseconds": 1068.199999988079,
+            "proofIntervals": 5593,
+            "candidates": 54,
+            "rejected": {
+              "source-detail-at-first-scale": 1
+            },
+            "proofBudget": 30000,
+            "keys": 11,
+            "shotKinds": [
+              "establishing",
+              "smooth-follow",
+              "mountain-reveal",
+              "finale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "sogne",
+      "privateRoute": false,
+      "sourceCommit": "ab29fb67ef3426e4e4e93e93e089aa040936fbc8",
+      "artifactsPublished": false,
+      "browser": "155.0.4283.45",
+      "os": "Windows_NT 10.0.26200",
+      "quality": "standard",
+      "stream": false,
+      "preparationMilliseconds": 1301.2798,
+      "source": "© Kartverket · CC BY 4.0 · Contains modified Copernicus Sentinel data 2025 · Согне-фьорд · DEM 50 м · высоты 1:1; вертикальный датум источника не указан. Contains modified Copernicus Sentinel data 2025. Фото: общий слой 40 м / участок 10 м · снимок 27.09.2025.",
+      "memory": {
+        "method": "Windows Get-Process private bytes/working set summed for unique PIDs of isolated browser/CDP; 1s samples, not exact peaks, working sets may share pages; not GPU VRAM",
+        "samples": 18,
+        "maximumSampledPrivateBytes": 959791104,
+        "maximumSampledWorkingSetBytes": 1166790656,
+        "scope": "whole A/B or regression session; not a per-camera allocation or exact peak",
+        "gpuVram": "NOT MEASURED",
+        "jsHeap": "NOT MEASURED"
+      },
+      "cancel": "PASS",
+      "retry": {
+        "duration": 10,
+        "frames": 240,
+        "width": 720,
+        "height": 1280,
+        "independentlyDecoded": true
+      },
+      "pairs": [],
+      "videos": [
+        {
+          "file": "landscape-20s.mp4",
+          "sha256": "e2d408ff469cb59b605d89e66a63b1ce7935f5e17d1e1d109b0c2b47a17538ac",
+          "privateArtifact": false,
+          "width": 1280,
+          "height": 720,
+          "duration": 20,
+          "frames": 480,
+          "distinctFrames": 480,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "encoder": "avc1.42001f",
+          "bytes": 13100310,
+          "applicationExportMilliseconds": 8468.800000011921,
+          "exportDownloadMilliseconds": 8922.085200000001,
+          "meanWallMillisecondsPerFrame": 18.5876775,
+          "minimumMapSpread": 77,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "terrain",
+            "markerOutsideSafeArea": 37,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 46,
+            "minimumClearanceMeters": 2551.061029708804,
+            "maximumVirtualSpeedMetersPerSecond": 22992.270157029827,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 190950.77848125165,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 1083.5188571751712,
+              "p95": 32419.541472031524,
+              "rms": 15966.096259721045,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 0,
+            "stepsOver30DegreesPerSecond": 0
+          }
+        },
+        {
+          "file": "portrait-20s.mp4",
+          "sha256": "bfc327f000f3d6dfc22eaebfc23768841cab1024bb627c71c26fc2a9a4d6e545",
+          "privateArtifact": false,
+          "width": 720,
+          "height": 1280,
+          "duration": 20,
+          "frames": 480,
+          "distinctFrames": 480,
+          "fps": "24/1",
+          "codec": "h264",
+          "profile": "Constrained Baseline",
+          "encoder": "avc1.42001f",
+          "bytes": 13231231,
+          "applicationExportMilliseconds": 8489.699999988079,
+          "exportDownloadMilliseconds": 8854.655200000001,
+          "meanWallMillisecondsPerFrame": 18.447198333333336,
+          "minimumMapSpread": 76,
+          "sourcePixelsEqual": true,
+          "geometricTimeIdentity": true,
+          "encodingTimeExternalRequests": 0,
+          "camera": {
+            "mode": "terrain",
+            "markerOutsideSafeArea": 0,
+            "occluded": 0,
+            "uncoveredUsefulMapArea": 0,
+            "minimumClearanceMeters": 2551.061029708804,
+            "maximumVirtualSpeedMetersPerSecond": 36147.28242187366,
+            "maximumVirtualAccelerationMetersPerSecondSquared": 190950.77848125165,
+            "sampledAccelerationMetersPerSecondSquared": {
+              "median": 1083.5188571751712,
+              "p95": 51000.936495861075,
+              "rms": 20839.698111497277,
+              "scope": "24fps finite differences within same segment, including intro/outro; not continuous jerk or recorded speed"
+            },
+            "maximumAngularDegreesPerSecond": 0,
+            "stepsOver30DegreesPerSecond": 0
+          }
+        }
+      ]
+    }
+  ],
+  "checks": {
+    "runtime": "ab29fb67ef3426e4e4e93e93e089aa040936fbc8",
+    "cleanInstall": {
+      "command": "npm.cmd ci --prefix artifacts/director-clean-install",
+      "packages": 88,
+      "seconds": 28,
+      "auditVulnerabilities": 0
+    },
+    "routine": {
+      "command": "PLAYWRIGHT_CHANNEL=msedge npm.cmd run check",
+      "unitPassed": 303,
+      "unitFiles": 26,
+      "typescriptBuild": "PASS",
+      "browserPassed": 71,
+      "browserSkipped": 38,
+      "browserFailed": 0
+    },
+    "extended": {
+      "command": "PLAYWRIGHT_CHANNEL=msedge BUILD_AUTO_GEOGRAPHY=1 SWISS_BASELINE=0 DIRECTOR_ACCEPTANCE=1 AUTOMATIC_GEOGRAPHY_ACCEPTANCE=1 UNIFIED_UX_ACCEPTANCE=1 npx.cmd playwright test tests/e2e/camera-director.spec.ts tests/e2e/automatic-geography.spec.ts tests/e2e/unified.spec.ts tests/e2e/marker-facing.spec.ts",
+      "passed": 26,
+      "failed": 0,
+      "historicalFailure": "Two obsolete draw-hook parity assertions failed, reproduced alone; corrected to observe actual VideoFrame encoder input with unchanged exact PNG equality. Full extended rerun passed.",
+      "reportedDuration": "1.3m"
+    },
+    "finalDirectorBrowser": {
+      "passed": 3,
+      "failed": 0,
+      "seconds": 21.7,
+      "syntheticPairDecodedFramesEach": 96
+    },
+    "productionSubpath": {
+      "status": "VERIFIED",
+      "publicHttps": false,
+      "files": 45,
+      "durationEach": 10,
+      "decodedFramesEach": 240,
+      "newPublicDeployment": false
+    },
+    "packages": {
+      "includingManifest": true,
+      "baselineBytes": 5042068,
+      "baselineCap": 5242880,
+      "sogneBytes": 6047597,
+      "sogneCap": 6291456,
+      "combinedBytes": 8519132,
+      "combinedCap": 9437184
+    },
+    "runtimeCI": {
+      "status": "SUCCESS",
+      "sha": "ab29fb67ef3426e4e4e93e93e089aa040936fbc8",
+      "url": "https://github.com/Matawaka/route-story/actions/runs/38548562072"
+    },
+    "finalDocumentationAndTestHeadCI": "inspect GitHub actual final head; not inferred from runtime CI"
+  },
+  "nativeSwissSourceProof": {
+    "date": "2026-10-14T11:10:32.310054+00:00",
+    "applicationRuntime": [
+      "ab29fb67ef3426e4e4e93e93e089aa040936fbc8"
+    ],
+    "sourceSha256": "39e921185084991484a666b625104e86df4b31f7b04fc1f3f1865116b1d38929",
+    "nativeSpacingMeters": 2,
+    "sourceBytes": 9000000,
+    "method": "Whole cubic control-hull native cell ceiling; exact native triangular gaze+marker LOS at every24fps timestamp/endpoints. Not a new continuous-native-LOS interval claim.",
+    "reports": [
+      {
+        "aspect": "landscape",
+        "duration": 20,
+        "quality": "fullhd",
+        "result": "PASS",
+        "continuousCubicLegs": 14,
+        "posesIncludingEndpoints": 481,
+        "minimumNativeHullClearanceMeters": 600.3501176811387,
+        "minimumNativeTriangleLosMeters": 21.534087660390014
+      },
+      {
+        "aspect": "portrait",
+        "duration": 30,
+        "quality": "fullhd",
+        "result": "PASS",
+        "continuousCubicLegs": 20,
+        "posesIncludingEndpoints": 721,
+        "minimumNativeHullClearanceMeters": 674.633939893205,
+        "minimumNativeTriangleLosMeters": 21.398419247379252
+      },
+      {
+        "aspect": "landscape",
+        "duration": 10,
+        "quality": "ultra",
+        "result": "PASS",
+        "continuousCubicLegs": 10,
+        "posesIncludingEndpoints": 241,
+        "minimumNativeHullClearanceMeters": 595.7835241839921,
+        "minimumNativeTriangleLosMeters": 22.5160325261902
+      },
+      {
+        "aspect": "portrait",
+        "duration": 10,
+        "quality": "ultra",
+        "result": "PASS",
+        "continuousCubicLegs": 10,
+        "posesIncludingEndpoints": 241,
+        "minimumNativeHullClearanceMeters": 673.5622224035419,
+        "minimumNativeTriangleLosMeters": 22.5160325261902
+      }
+    ]
+  },
+  "syntheticCiComparison": [
+    {
+      "mode": "follow",
+      "width": 640,
+      "height": 360,
+      "duration": 4,
+      "frames": 96,
+      "bytes": 476272,
+      "sha256": "7fb6dd8c5b7595cb4e34349cb135fd5d7075cf24a13dd226eaecb9d4b22aead9",
+      "scope": "Synthetic Sogne DEM-only 4s/360p CI comparison; not full photographic acceptance"
+    },
+    {
+      "mode": "director",
+      "width": 640,
+      "height": 360,
+      "duration": 4,
+      "frames": 96,
+      "bytes": 652773,
+      "sha256": "ca7777c8e4d4cf4a6a0281823d8cdab44f0b0f6a339beed6a1ac43de48becf93",
+      "scope": "Synthetic Sogne DEM-only 4s/360p CI comparison; not full photographic acceptance"
+    }
+  ]
+}

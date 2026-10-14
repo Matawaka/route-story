@@ -1,7 +1,7 @@
 export type VisualStyle = 'atlas' | 'night';
 export type AspectRatio = 'landscape' | 'portrait';
 export type QualityPreset = 'compatibility' | 'standard' | 'fullhd' | 'ultra';
-export type CameraMode = 'cinematic' | 'classic' | 'terrain' | 'auto';
+export type CameraMode = 'cinematic' | 'classic' | 'terrain' | 'auto' | 'director';
 export type StoryDuration = 4 | 10 | 20 | 30 | 60;
 export interface StoryConfig {
   readonly durationSeconds: StoryDuration;
@@ -50,7 +50,7 @@ export function validateStoryConfig(input: StoryConfig, allowRegression = true):
   if (input.durationSeconds - input.introSeconds - input.outroSeconds < 1) throw new Error('Для повтора маршрута должна оставаться хотя бы 1 секунда.');
   if (typeof input.title !== 'string' || !input.title.trim() || input.title.length > TITLE_LIMIT || /[\u0000-\u001f\u007f]/.test(input.title)) throw new Error(`Название: от 1 до ${TITLE_LIMIT} символов, без управляющих знаков.`);
   if (!['atlas', 'night'].includes(input.visualStyle) || !['landscape', 'portrait'].includes(input.aspectRatio) || !['compatibility', 'standard', 'fullhd', 'ultra'].includes(input.qualityPreset)) throw new Error('Неизвестный стиль, формат или качество видео.');
-  if (input.cameraMode !== undefined && !['cinematic', 'classic', 'terrain', 'auto'].includes(input.cameraMode)) throw new Error('Неизвестный режим камеры.');
+  if (input.cameraMode !== undefined && !['cinematic', 'classic', 'terrain', 'auto', 'director'].includes(input.cameraMode)) throw new Error('Неизвестный режим камеры.');
   if(input.terrainSurface!==undefined&&!['dem','photo'].includes(input.terrainSurface))throw Error('Неизвестная поверхность рельефа.');
   if(input.terrainFlight!==undefined&&!['conservative','corridor'].includes(input.terrainFlight))throw Error('Неизвестный режим 3D-пролёта.');
   if(input.routeColor!==undefined&&!['plain','grade'].includes(input.routeColor))throw Error('Неизвестный цвет пути.');

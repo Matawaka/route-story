@@ -1,5 +1,7 @@
 # Terrain camera and decoded-video acceptance
 
+MVP 1.6 adds a separately reviewable optional director with complete cubic-trajectory proofs, independent portrait framing and an unchanged 350 m/LOS/no-data policy. See [CAMERA_DIRECTOR.md](CAMERA_DIRECTOR.md) and [CAMERA_DIRECTOR_EVIDENCE.json](CAMERA_DIRECTOR_EVIDENCE.json) for current source/video evidence. The following Sprint 8 measurements remain historical; they are not reused as acceptance of the new director or of physical mobile devices.
+
 Local owner-review candidate, 2026-10-09. Application acceptance commit `0edebbf31db8c32f1c7e1dbeeac4f1b812bb8562`, based on Sprint 7 `a704f67269478190d4c38a77400ed4a04b0faea1`. [Stacked PR #7](https://github.com/Matawaka/route-story/pull/7) targets PR #6. Stable main/tag/site v1.0.0 are unchanged. No new public HTTPS deployment or physical-mobile acceptance is claimed.
 
 ## Actual videos
