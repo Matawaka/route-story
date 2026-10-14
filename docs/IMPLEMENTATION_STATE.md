@@ -1,5 +1,9 @@
 # Implementation state
 
+## MVP1.6 independent native2m safeguard — 2026-10-14
+
+Evidence/test head3fe75d03cfb1fd1a9ba6fda394ee6697086e26e9 exactCI38553483455 SUCCESS, public synthetic artifact11887902463 (25,318,733B) available. Public release.json rechecked still554fc7f...; no public update. Application runtime remainsab29fb6. New developer-only native verifier reproduces all4actual exportedFurka plans with exact key identity, derives actual cubic controls and checks WHOLE Bernstein hulls against all original2m float-source cell maxima. Pinned9MB referenceSHA39e921... unchanged/outsideGit and never sent tobrowser/GPU. Native350m minima600.35/674.63/595.78/673.56m for1080p20land/30portrait and4K10bothaspects PASS. Exact native triangle LOS of gaze AND marker at all481/721/241/241poses/endpoints PASS; minimum21.40–22.52m, original8m ramp retained. Runtime continuousLOS remains certified against rendered5m mesh; do not claim new continuousnativeLOS proof. Native first probe on plaintextLICENSE lacked Vite globals; corrected to normal actual app initialization, no production changes. Reproscripts director-native.mjs and verify-director-native.py, aggregate evidence updated. Final followup evidence-headCI still must be inspected; do not infer it from3fe checks. No merge/deployment/tag/Release or resource-limit increase.
+
 ## MVP1.6 final local video / regression handover — 2026-10-14
 
 Application runtimeab29fb67ef3426e4e4e93e93e089aa040936fbc8, based on actualmain554fc7f24f762f6438da0c506a60c6c79258cbae; draftPR29 https://github.com/Matawaka/route-story/pull/29. Runtime CI38548562072 SUCCESS. Final evidence/docs/test-observer commit follows; inspect its actual HEAD/CI, do not infer success from runtime CI. No merge/deploy/tag/Release, protectedPages unchanged. Internal package stays1.2.0-rc.1; MVP1.6 names the feature candidate.

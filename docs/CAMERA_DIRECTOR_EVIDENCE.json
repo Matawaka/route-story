@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "status": "LOCAL VIDEO-VERIFIED CANDIDATE; OWNER REVIEW REQUIRED; NOT DEPLOYED",
-  "generatedUtc": "2026-10-14T10:59:58.721Z",
-  "headAtAggregation": "ab29fb67ef3426e4e4e93e93e089aa040936fbc8",
+  "generatedUtc": "2026-10-14T11:10:33.562Z",
+  "headAtAggregation": "3fe75d03cfb1fd1a9ba6fda394ee6697086e26e9",
   "base": "554fc7f24f762f6438da0c506a60c6c79258cbae",
   "pr": "https://github.com/Matawaka/route-story/pull/29",
   "physicalMacAndroidIos": "NOT TESTED",
@@ -819,6 +819,58 @@
       "url": "https://github.com/Matawaka/route-story/actions/runs/38548562072"
     },
     "finalDocumentationAndTestHeadCI": "inspect GitHub actual final head; not inferred from runtime CI"
+  },
+  "nativeSwissSourceProof": {
+    "date": "2026-10-14T11:10:32.310054+00:00",
+    "applicationRuntime": [
+      "ab29fb67ef3426e4e4e93e93e089aa040936fbc8"
+    ],
+    "sourceSha256": "39e921185084991484a666b625104e86df4b31f7b04fc1f3f1865116b1d38929",
+    "nativeSpacingMeters": 2,
+    "sourceBytes": 9000000,
+    "method": "Whole cubic control-hull native cell ceiling; exact native triangular gaze+marker LOS at every24fps timestamp/endpoints. Not a new continuous-native-LOS interval claim.",
+    "reports": [
+      {
+        "aspect": "landscape",
+        "duration": 20,
+        "quality": "fullhd",
+        "result": "PASS",
+        "continuousCubicLegs": 14,
+        "posesIncludingEndpoints": 481,
+        "minimumNativeHullClearanceMeters": 600.3501176811387,
+        "minimumNativeTriangleLosMeters": 21.534087660390014
+      },
+      {
+        "aspect": "portrait",
+        "duration": 30,
+        "quality": "fullhd",
+        "result": "PASS",
+        "continuousCubicLegs": 20,
+        "posesIncludingEndpoints": 721,
+        "minimumNativeHullClearanceMeters": 674.633939893205,
+        "minimumNativeTriangleLosMeters": 21.398419247379252
+      },
+      {
+        "aspect": "landscape",
+        "duration": 10,
+        "quality": "ultra",
+        "result": "PASS",
+        "continuousCubicLegs": 10,
+        "posesIncludingEndpoints": 241,
+        "minimumNativeHullClearanceMeters": 595.7835241839921,
+        "minimumNativeTriangleLosMeters": 22.5160325261902
+      },
+      {
+        "aspect": "portrait",
+        "duration": 10,
+        "quality": "ultra",
+        "result": "PASS",
+        "continuousCubicLegs": 10,
+        "posesIncludingEndpoints": 241,
+        "minimumNativeHullClearanceMeters": 673.5622224035419,
+        "minimumNativeTriangleLosMeters": 22.5160325261902
+      }
+    ]
   },
   "syntheticCiComparison": [
     {
