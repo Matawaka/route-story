@@ -1,5 +1,7 @@
 # Cinematic v1.1 release candidate
 
+Current optional MVP 1.6 camera work is documented in [CAMERA_DIRECTOR.md](CAMERA_DIRECTOR.md), with independently decoded A/B results in [CAMERA_DIRECTOR_EVIDENCE.json](CAMERA_DIRECTOR_EVIDENCE.json). It extends the existing terrain provider/timeline/renderer; it does not replace the earlier 2D architecture. The v1.1 notes below are historical, not the current public release or deployment state.
+
 This branch builds on immutable v1.0.0 main `5f39332b7358949d248da6b2f99ba445ee1b41e8`; PR #5's separate publication documentation is not included. It changes visual output, not the video pipeline or user-data policy. It requires owner visual review before merge or publication.
 
 ## Camera and frame identity

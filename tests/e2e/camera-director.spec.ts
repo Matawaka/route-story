@@ -1,7 +1,8 @@
 import{test,expect}from'@playwright/test';
 import{validateVideo}from'../../scripts/validate-video.mjs';
+import{mkdirSync}from'node:fs';
 
-test('director on real terrain keeps exact seek/export pixels, depth and disposal',async({page,context},testInfo)=>{
+test('director on real terrain keeps exact seek/export pixels, depth and disposal',async({page,context})=>{
  const external:string[]=[];await context.route('**/*',r=>new URL(r.request().url()).origin==='http://127.0.0.1:4173'?r.continue():(external.push(r.request().url()),r.abort()));await page.goto('/');
  const pending=page.waitForEvent('download');const result=await page.evaluate(async()=>{
   const [{TerrainRenderer},{loadTerrain},{parseGpx},{defaultStoryConfig},{exportVideo},{routeMetrics}]=await Promise.all(['/src/terrain-renderer.ts','/src/terrain.ts','/src/gpx.ts','/src/story.ts','/src/exporter.ts','/src/geo.ts'].map(p=>import(p)));
@@ -14,7 +15,10 @@ test('director on real terrain keeps exact seek/export pixels, depth and disposa
   }return results;
  });
  for(const r of result){expect(r.selected).toBe('selected');expect(r.seek).toBe(true);expect(r.depth).toBe(true);expect(r.disposed).toBe(true);}expect(result[0].parity).toBe(true);expect(external).toEqual([]);
- const download=await pending,path=testInfo.outputPath('director-4s.mp4');await download.saveAs(path);expect(validateVideo(path,640,360,4).decodedFrames).toBe(96);expect(result).toHaveLength(4);
+ const folder='artifacts/director-ci';mkdirSync(folder,{recursive:true});const download=await pending,path=`${folder}/director-4s.mp4`;await download.saveAs(path);expect(validateVideo(path,640,360,4).decodedFrames).toBe(96);expect(result).toHaveLength(4);
+ // Public CI evidence is synthetic and bounded: same route/DEM/config, old
+ // camera versus director, with two independently decodable actual MP4s.
+ const baselineDownload=page.waitForEvent('download');await page.evaluate(async()=>{const[{TerrainRenderer},{loadTerrain},{parseGpx},{defaultStoryConfig},{exportVideo},{routeMetrics}]=await Promise.all(['/src/terrain-renderer.ts','/src/terrain.ts','/src/gpx.ts','/src/story.ts','/src/exporter.ts','/src/geo.ts'].map(p=>import(p))),loaded=parseGpx(await(await fetch('/samples/terrain-sogne.gpx')).text()),segments=[loaded.segments[0].slice(250,280)],route={...loaded,segments,...routeMetrics(segments),name:'Synthetic local Sogne comparison'},config={...defaultStoryConfig(route.name),cameraMode:'terrain',durationSeconds:4,introSeconds:0,outroSeconds:0,qualityPreset:'compatibility',aspectRatio:'landscape',visualStyle:'atlas'},renderer=new TerrainRenderer(route,await loadTerrain('compatibility'),640,360,config);try{const blob=await exportVideo({config,draw:(c:HTMLCanvasElement,t:number)=>renderer.draw(c,t)}),a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download='follow-4s.mp4';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}finally{renderer.dispose();}});await(await baselineDownload).saveAs(`${folder}/follow-4s.mp4`);expect(validateVideo(`${folder}/follow-4s.mp4`,640,360,4).decodedFrames).toBe(96);expect(external).toEqual([]);
 });
 
 test('director preparation aborts before allocating GPU resources and retries',async({page})=>{
