@@ -1,0 +1,213 @@
+{
+  "status": "VERIFIED PUBLIC PREVIEW",
+  "productionCommit": "554fc7f24f762f6438da0c506a60c6c79258cbae",
+  "mainCI": "https://github.com/Matawaka/route-story/actions/runs/38499038350",
+  "pagesRun": "https://github.com/Matawaka/route-story/actions/runs/38499501932",
+  "pagesAttempt": 2,
+  "pagesResult": "SUCCESS",
+  "publicAcceptance": {
+    "status": "VERIFIED",
+    "url": "https://matawaka.github.io/route-story/",
+    "sourceCommit": "554fc7f24f762f6438da0c506a60c6c79258cbae",
+    "browser": "155.0.4283.45",
+    "os": "Windows_NT 10.0.26200",
+    "outputs": [
+      {
+        "file": "artifacts/mvp15-publication/furka-atlas-fullhd-20s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "High",
+        "width": 1920,
+        "height": 1080,
+        "duration": 20,
+        "decodedFrames": 480,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 480,
+        "firstFrameHash": "e6151ad636e6294142d1989528aa019a",
+        "lastFrameHash": "05d1793b044c779950fb9d114f401157",
+        "bytes": 26749102,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "sha256": "52fc9ce1772f379295034e1546fa42961e0b0c962a4d2dfd9ade078d52279cda",
+        "exportDownloadMilliseconds": 8772.816000000003,
+        "minimumMapSpread": 105,
+        "encoder": {
+          "codec": "avc1.640028",
+          "width": 1920,
+          "height": 1080,
+          "displayWidth": 1920,
+          "displayHeight": 1080,
+          "bitrate": 10000000,
+          "bitrateMode": "variable",
+          "alpha": "discard",
+          "framerate": 24,
+          "avc": {
+            "format": "avc"
+          }
+        },
+        "exactPreviewReverseSeek": true
+      },
+      {
+        "file": "artifacts/mvp15-publication/furka-night-4k-30s.mp4",
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "profile": "High",
+        "width": 2160,
+        "height": 3840,
+        "duration": 30,
+        "decodedFrames": 720,
+        "fps": "24/1",
+        "frameTimestampsVerified": true,
+        "distinctFrames": 720,
+        "firstFrameHash": "ca2ac0e7a237dc1f67e57c23ee45049d",
+        "lastFrameHash": "db6fba16b0ff196d17918b99bf30adef",
+        "bytes": 102008855,
+        "validator": "Independent FFmpeg + ffprobe",
+        "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+        "sha256": "0af80886ec2db3893422ef225af69072a4872e3510b1855808d202091f8c2ce5",
+        "exportDownloadMilliseconds": 40716.908599999995,
+        "minimumMapSpread": 80,
+        "encoder": {
+          "codec": "avc1.640033",
+          "width": 2160,
+          "height": 3840,
+          "displayWidth": 2160,
+          "displayHeight": 3840,
+          "bitrate": 25000000,
+          "bitrateMode": "variable",
+          "alpha": "discard",
+          "framerate": 24,
+          "avc": {
+            "format": "avc"
+          }
+        },
+        "exactPreviewReverseSeek": true
+      }
+    ],
+    "errors": [],
+    "external": [],
+    "bad": [],
+    "packageVersion": "1.2.0-rc.1",
+    "manifestHashes": 45,
+    "requestsDuringEncoding": [],
+    "storage": "empty"
+  },
+  "release": {
+    "assets": [
+      {
+        "browser_download_url": "https://github.com/Matawaka/route-story/releases/download/v1.5.0-preview.1/furka-atlas-fullhd-20s.mp4",
+        "name": "furka-atlas-fullhd-20s.mp4",
+        "size": 26749102
+      },
+      {
+        "browser_download_url": "https://github.com/Matawaka/route-story/releases/download/v1.5.0-preview.1/furka-atlas-fullhd-20s.mp4.validation.json",
+        "name": "furka-atlas-fullhd-20s.mp4.validation.json",
+        "size": 607
+      },
+      {
+        "browser_download_url": "https://github.com/Matawaka/route-story/releases/download/v1.5.0-preview.1/furka-night-4k-30s.mp4",
+        "name": "furka-night-4k-30s.mp4",
+        "size": 102008855
+      },
+      {
+        "browser_download_url": "https://github.com/Matawaka/route-story/releases/download/v1.5.0-preview.1/furka-night-4k-30s.mp4.validation.json",
+        "name": "furka-night-4k-30s.mp4.validation.json",
+        "size": 604
+      },
+      {
+        "browser_download_url": "https://github.com/Matawaka/route-story/releases/download/v1.5.0-preview.1/furka-synthetic.gpx",
+        "name": "furka-synthetic.gpx",
+        "size": 1730
+      },
+      {
+        "browser_download_url": "https://github.com/Matawaka/route-story/releases/download/v1.5.0-preview.1/LICENSE",
+        "name": "LICENSE",
+        "size": 1095
+      },
+      {
+        "browser_download_url": "https://github.com/Matawaka/route-story/releases/download/v1.5.0-preview.1/public-high-resolution.json",
+        "name": "public-high-resolution.json",
+        "size": 2833
+      },
+      {
+        "browser_download_url": "https://github.com/Matawaka/route-story/releases/download/v1.5.0-preview.1/SHA256SUMS.txt",
+        "name": "SHA256SUMS.txt",
+        "size": 747
+      },
+      {
+        "browser_download_url": "https://github.com/Matawaka/route-story/releases/download/v1.5.0-preview.1/THIRD_PARTY_NOTICES.md",
+        "name": "THIRD_PARTY_NOTICES.md",
+        "size": 11065
+      }
+    ],
+    "html_url": "https://github.com/Matawaka/route-story/releases/tag/v1.5.0-preview.1",
+    "prerelease": true,
+    "published_at": "2026-10-14T02:27:32Z",
+    "tag_name": "v1.5.0-preview.1",
+    "target_commitish": "554fc7f24f762f6438da0c506a60c6c79258cbae"
+  },
+  "independentlyDownloadedAssets": [
+    {
+      "name": "furka-atlas-fullhd-20s.mp4",
+      "bytes": 26749102,
+      "sha256": "52fc9ce1772f379295034e1546fa42961e0b0c962a4d2dfd9ade078d52279cda",
+      "downloadedMatch": true
+    },
+    {
+      "name": "furka-atlas-fullhd-20s.mp4.validation.json",
+      "bytes": 607,
+      "sha256": "6662799d5d4cd42cd376047674aa4b49fdfb28cab6c56ccf2b66a15533ded5ca",
+      "downloadedMatch": true
+    },
+    {
+      "name": "furka-night-4k-30s.mp4",
+      "bytes": 102008855,
+      "sha256": "0af80886ec2db3893422ef225af69072a4872e3510b1855808d202091f8c2ce5",
+      "downloadedMatch": true
+    },
+    {
+      "name": "furka-night-4k-30s.mp4.validation.json",
+      "bytes": 604,
+      "sha256": "057c12000efb1a21ae4467ca9a9a69c2f6b250b6dc2cfc2c7f49575240e55855",
+      "downloadedMatch": true
+    },
+    {
+      "name": "furka-synthetic.gpx",
+      "bytes": 1730,
+      "sha256": "c04ccf8e1ae91720a67e4df11f80429fc99dc36a3922b9c22913d61e8ead6cea",
+      "downloadedMatch": true
+    },
+    {
+      "name": "LICENSE",
+      "bytes": 1095,
+      "sha256": "4aabaef5b4806626780237bcdc36441dd2a988027e4f44016a4f1312d71adb80",
+      "downloadedMatch": true
+    },
+    {
+      "name": "public-high-resolution.json",
+      "bytes": 2833,
+      "sha256": "964050d714fb62def2250e5c564c957f099afe02f4d35c96998a242ef4e6ffe5",
+      "downloadedMatch": true
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "bytes": 747,
+      "sha256": "20e9f6abbd4426c21eb1c1960d249af9d708fae8facbf2fa7fe52184daa1ad1c",
+      "downloadedMatch": true
+    },
+    {
+      "name": "THIRD_PARTY_NOTICES.md",
+      "bytes": 11065,
+      "sha256": "d95d29e736839ebe36ad3647c5ddb1f82dd9d18f396e61c8ce409ae02e12ead2",
+      "downloadedMatch": true
+    }
+  ],
+  "limitations": [
+    "Physical macOS/Android/iOS 4K NOT TESTED",
+    "Native file-save picker UI NOT TESTED",
+    "4K60 requires supported file streaming",
+    "Public timings are single observations; no native/GPU memory measurement in this public run",
+    "Internal package version remains 1.2.0-rc.1; feature prerelease tag is v1.5.0-preview.1"
+  ]
+}

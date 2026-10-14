@@ -1,6 +1,6 @@
 # Full HD / 4K export candidate — MVP 1.5
 
-Development branch: `codex/full-hd-4k-export`, base main `1826118db1e72a7284dfdb24a447cad7adf98537`. New modes require owner review before merge/deployment. Existing protected Pages workflow is unchanged. This document describes implementation; final measured acceptance belongs in the accompanying evidence file, not inferred support for every browser.
+Developed on `codex/full-hd-4k-export` from main `1826118db1e72a7284dfdb24a447cad7adf98537`; owner approved PR27 merge/publication. Production commit `554fc7f24f762f6438da0c506a60c6c79258cbae` is live with successful HTTPS acceptance and [MVP1.5 Preview Release](https://github.com/Matawaka/route-story/releases/tag/v1.5.0-preview.1). Existing protected Pages workflow is unchanged. This document describes implementation; original local measurements remain in HIGH_RESOLUTION_EVIDENCE.json and new public-site/asset verification in [HIGH_RESOLUTION_PUBLICATION.json](HIGH_RESOLUTION_PUBLICATION.json). Neither establishes support for every browser.
 
 | Preset | Landscape / portrait | FPS | Configured bitrate | Status |
 | --- | --- | --- | --- | --- |
