@@ -36,6 +36,7 @@ export class RouteRenderer {
   private readonly endpointLabels!: { text: string; x: number; y: number; width: number }[];
   private paintedEdges = 0;
   private readonly markerAsset?: MarkerAsset;
+  atResolution(config:StoryConfig,width:number,height:number):RouteRenderer{return new RouteRenderer(this.route,this.land,width,height,this.style,config,this.markerAsset);}
   constructor(readonly route: Route, readonly land: Land, readonly width: number, readonly height: number, readonly style: VisualStyle, config?: StoryConfig, customMarker?: MarkerAsset) {
     this.base = document.createElement('canvas'); this.base.width = width; this.base.height = height;
     this.highlight = document.createElement('canvas'); this.highlight.width = width; this.highlight.height = height;

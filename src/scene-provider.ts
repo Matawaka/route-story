@@ -2,7 +2,7 @@
  * conservative, local region-selection interface; no coordinate requests. */
 import type {Route} from './route';
 import type {StoryConfig} from './story';
-import {exportSettings,validateStoryConfig} from './story';
+import {previewSettings,validateStoryConfig} from './story';
 import {RouteRenderer,type Land} from './renderer';
 import type {TerrainRenderer} from './terrain-renderer';
 import {loadTerrain} from './terrain';
@@ -24,7 +24,7 @@ function loadLand(signal:AbortSignal):Promise<Land>{
   return abortable(land,signal);
 }
 export async function prepareScene(route:Route,requested:Readonly<StoryConfig>,signal:AbortSignal,stage:(name:string)=>void,custom?:MarkerAsset,geographicConsent=false):Promise<PreparedScene>{
-  const settings=exportSettings(requested);let config=requested,notice:string|undefined;
+  const settings=previewSettings(requested);let config=requested,notice:string|undefined;
   const available=sceneAvailability(route,__SWISS_ENABLED__,__IMAGERY_ENABLED__);
   if(__AUTO_GEOGRAPHY_ENABLED__&&geographicConsent&&!available.terrain&&(config.cameraMode==='terrain'||config.cameraMode==='auto')){
     const {prepareDiscoveredGeography,prepareDiscoveredTerrain}=await import('./geographic-preparation');

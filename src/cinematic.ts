@@ -28,6 +28,7 @@ export class CinematicRenderer {
   private readonly routeBase:HTMLCanvasElement;
   private readonly routeTrace:HTMLCanvasElement;
   private readonly cacheScale:number;
+  private readonly directRoutes:boolean;
   private paintedChunks=0;
   private readonly title:string;
   private readonly metric:string;
@@ -80,13 +81,16 @@ export class CinematicRenderer {
         this.chunks.push({path,bounds:boundsOf(points.slice(start,end+1)),segment,startIndex:start,endIndex:end});
       }
     });
+    // Higher resolutions redraw precomputed vector paths: no two 10k-wide
+    // zoom caches or upscaled low-resolution route bitmap for 4K.
+    this.directRoutes=Math.min(width,height)>720;
     this.cacheScale=this.plan.overviewScale*this.plan.maxZoom;
     this.routeBase=document.createElement('canvas');this.routeTrace=document.createElement('canvas');
-    for(const c of [this.routeBase,this.routeTrace]){c.width=Math.ceil(width*this.plan.maxZoom);c.height=Math.ceil(height*this.plan.maxZoom);}
+    for(const c of [this.routeBase,this.routeTrace]){c.width=this.directRoutes?1:Math.ceil(width*this.plan.maxZoom);c.height=this.directRoutes?1:Math.ceil(height*this.plan.maxZoom);}
     const base=this.cacheContext(this.routeBase),colors=cinematicPalette[timeline.config.visualStyle],unit=Math.min(width,height);
     base.lineCap=base.lineJoin='round';base.strokeStyle=colors.halo;base.lineWidth=unit*.021/this.cacheScale;
-    for(const c of this.chunks)base.stroke(c.path);
-    base.strokeStyle=colors.track;base.lineWidth=unit*.0065/this.cacheScale;for(const c of this.chunks)base.stroke(c.path);
+    if(!this.directRoutes)for(const c of this.chunks)base.stroke(c.path);
+    base.strokeStyle=colors.track;base.lineWidth=unit*.0065/this.cacheScale;if(!this.directRoutes)for(const c of this.chunks)base.stroke(c.path);
     this.titleFamily=timeline.config.visualStyle==='atlas'?'Georgia, serif':'system-ui';
     const measure=document.createElement('canvas').getContext('2d')!;measure.font=`650 ${unit*.058}px ${this.titleFamily}`;
     const points=Array.from(timeline.config.title),length=points.length;
@@ -124,6 +128,12 @@ export class CinematicRenderer {
     // Two bounded route surfaces prepared at the maximum destination zoom. No map bitmap
     // is enlarged. Fixed chunk order reproduces exact direct/backward seek pixels.
     const next=this.chunks.findIndex(c=>c.segment>state.segment||(c.segment===state.segment&&c.endIndex>=state.index)),target=state.routeProgress===1||next===-1?this.chunks.length:next;
+    if(this.directRoutes){
+      ctx.save();ctx.translate(w/2,(this.plan.safe[1]+this.plan.safe[3])/2);ctx.scale(camera.scale,camera.scale);ctx.translate(-camera.center[0],-camera.center[1]);
+      ctx.strokeStyle=colors.halo;ctx.lineWidth=unit*.021/camera.scale;for(const c of this.chunks)if(visible(c.bounds))ctx.stroke(c.path);
+      ctx.strokeStyle=colors.track;ctx.lineWidth=unit*.0065/camera.scale;for(const c of this.chunks)if(visible(c.bounds))ctx.stroke(c.path);
+      ctx.strokeStyle=colors.line;ctx.lineWidth=unit*.0115/camera.scale;for(let i=0;i<target;i++)if(visible(this.chunks[i].bounds))ctx.stroke(this.chunks[i].path);ctx.restore();
+    }else{
     const trace=this.cacheContext(this.routeTrace);
     if(target<this.paintedChunks){trace.resetTransform();trace.clearRect(0,0,this.routeTrace.width,this.routeTrace.height);this.cacheContext(this.routeTrace);this.paintedChunks=0;}
     trace.lineCap=trace.lineJoin='round';trace.strokeStyle=colors.line;trace.lineWidth=unit*.0115/this.cacheScale;
@@ -132,12 +142,13 @@ export class CinematicRenderer {
     ctx.drawImage(this.routeBase,offsetX,offsetY,this.routeBase.width*factor,this.routeBase.height*factor);
     if(this.timeline.config.visualStyle==='night'){ctx.save();ctx.globalAlpha=.2;ctx.shadowColor=colors.line;ctx.shadowBlur=unit*.012;ctx.drawImage(this.routeTrace,offsetX,offsetY,this.routeTrace.width*factor,this.routeTrace.height*factor);ctx.restore();}
     ctx.drawImage(this.routeTrace,offsetX,offsetY,this.routeTrace.width*factor,this.routeTrace.height*factor);
+    }
     const chunk=this.chunks[target];
     if(state.routeProgress<1&&chunk?.segment===state.segment&&chunk.startIndex<state.index){
       const path=new Path2D();path.moveTo(...this.points[state.segment][chunk.startIndex]);
       for(let i=chunk.startIndex+1;i<state.index;i++){const a=this.points[state.segment][i-1],b=this.points[state.segment][i];if(Math.abs(b[0]-a[0])>180*this.plan.cos)path.moveTo(...b);else path.lineTo(...b);}
       const point=this.plan.world(state.point),previous=this.points[state.segment][Math.max(0,state.index-1)];if(Math.abs(point[0]-previous[0])<=180*this.plan.cos)path.lineTo(...point);
-      ctx.save();ctx.translate(w/2,(this.plan.safe[1]+this.plan.safe[3])/2);ctx.scale(camera.scale,camera.scale);ctx.translate(-camera.center[0],-camera.center[1]);ctx.strokeStyle=colors.line;ctx.lineWidth=unit*.0115/this.cacheScale;ctx.lineCap=ctx.lineJoin='round';ctx.stroke(path);ctx.restore();
+      ctx.save();ctx.translate(w/2,(this.plan.safe[1]+this.plan.safe[3])/2);ctx.scale(camera.scale,camera.scale);ctx.translate(-camera.center[0],-camera.center[1]);ctx.strokeStyle=colors.line;ctx.lineWidth=unit*.0115/(this.directRoutes?camera.scale:this.cacheScale);ctx.lineCap=ctx.lineJoin='round';ctx.stroke(path);ctx.restore();
     }
     const occupied:Bounds[]=[];
     if(this.markerAsset&&state.markerOpacity>.1){const [x,y]=cameraProject(this.plan.world(state.point),camera,this.plan),s=markerSize(this.timeline.config,unit),layout=annotationAt(x,y,0,w,h,s,[pad,h*.23,w-pad,h*.78]);if(layout)occupied.push([layout.box[0]-s*.1,layout.box[1]-s*.1,layout.box[2]+s*.1,layout.box[3]+s*.1]);}

@@ -68,7 +68,9 @@
         <label class="field-label" for="duration">Длительность видео</label>
         <select id="duration"><option value="10">10 секунд</option><option value="20" selected>20 секунд</option><option value="30">30 секунд</option><option value="60">1 минута · 60 секунд</option></select>
         <label class="field-label" for="quality">Качество видео</label>
-        <select id="quality"><option value="compatibility">Совместимое · 360p</option><option value="standard">Стандартное · 720p</option></select>
+          <select id="quality"><option value="compatibility">Экономичный · 360p</option><option value="standard">Стандартный · 720p</option><option value="fullhd">Высокий · Full HD 1080p</option><option value="ultra">Максимальный · Ultra HD 4K</option></select>
+          <p id="quality-note" class="privacy">24 кадра/с. Размер оценивается перед экспортом.</p>
+          <label id="direct-file-label" for="direct-file" hidden><input id="direct-file" type="checkbox">Записывать MP4 сразу в выбранный файл</label>
       </section>
       <p class="privacy auxiliary">Файл обрабатывается в памяти браузера. Без отправки на сервер и сохранения ваших маршрутов.</p>
     </aside>
