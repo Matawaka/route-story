@@ -30,7 +30,7 @@ export async function prepareScene(route:Route,requested:Readonly<StoryConfig>,s
     const {prepareDiscoveredGeography,prepareDiscoveredTerrain}=await import('./geographic-preparation');
     const prepared=config.terrainSurface==='photo'?await prepareDiscoveredGeography(route,signal,stage):{terrain:await prepareDiscoveredTerrain(route,signal,stage),imagery:undefined,evidence:undefined};let next:TerrainRenderer|undefined;
     try{const readyMarker=config.marker==='traveler'?await loadTraveler(signal):custom;config=validateStoryConfig({...config,cameraMode:config.cameraMode==='director'?'director':'terrain'});stage('Подготавливаем 3D-рельеф · проверяем безопасную камеру');
-      const {TerrainRenderer}=await import('./terrain-renderer');signal.throwIfAborted();next=new TerrainRenderer(route,prepared.terrain,settings.width,settings.height,config,prepared.imagery,readyMarker);signal.throwIfAborted();
+      const {prepareTerrainRenderer}=await import('./terrain-renderer');signal.throwIfAborted();next=await prepareTerrainRenderer(route,prepared.terrain,settings.width,settings.height,config,prepared.imagery,readyMarker,undefined,signal);signal.throwIfAborted();
       const {getTerrainCameraStateAt}=await import('./terrain-camera');
       for(let frame=0;frame<=config.durationSeconds*settings.fps;frame++){if(frame%48===0){await new Promise(resolve=>setTimeout(resolve,0));signal.throwIfAborted();}getTerrainCameraStateAt(frame/settings.fps,next.plan);}
       const e=prepared.evidence;return{renderer:next,region:'discovered',credit:prepared.terrain.manifest.attribution+(prepared.imagery?' · '+prepared.imagery.manifest.attribution:''),detail:e?`Sentinel-2: источник 10 м / подготовленный слой ${e.derivedImageSpacingMeters} м; даты снимков ${prepared.imagery!.manifest.acquiredDate}. Copernicus DSM ${e.demResolutionMeters} м / сетка ${e.derivedDemSpacingMeters} м · EGM2008 · охват ${Math.round(e.areaKm2)} км². Загружено ${(e.downloadBytes/1048576).toFixed(1)} МиБ. Облачные/неопределённые пиксели у маршрута: ${(e.routeCloudFraction*100).toFixed(2)}%. Это обзорная фотокарта, без детализации отдельных улиц.`:`Copernicus DSM ${prepared.terrain.manifest.sourceResolutionMeters} м / сетка ${prepared.terrain.level.spacingMeters} м · EGM2008 · настоящие высоты, без фотографии.`,geographicEvidence:e,notice:next.plan.director?.diagnostics.reason};
@@ -47,7 +47,7 @@ export async function prepareScene(route:Route,requested:Readonly<StoryConfig>,s
     try{
       stage('Получаем модель рельефа · проверяем целостность данных');
       const swiss=available.region==='furka'?await import('./swiss-pilot'):undefined;
-      const terrain=swiss?await swiss.loadSwissTerrain(false,signal,'extended'):await loadTerrain(config.qualityPreset,signal);
+      const terrain=swiss?await swiss.loadSwissTerrain(false,signal,'extended'):await loadTerrain(config.cameraMode==='director'?'standard':config.qualityPreset,signal);
       if(!terrain.routeCoverage(route)||(config.cameraMode==='auto'&&terrain.routeReliefMeters(route)<100))throw Error('Маршрут вне полного покрытия DEM или без выразительного рельефа.');
       config=validateStoryConfig({...config,cameraMode:config.cameraMode==='director'?'director':'terrain'});
       if(config.terrainSurface==='photo'){
@@ -55,8 +55,9 @@ export async function prepareScene(route:Route,requested:Readonly<StoryConfig>,s
         imagery=swiss?await swiss.loadSwissImagery(false,signal,'extended'):await loadImagery(signal);
       }
       stage('Подготавливаем 3D-сцену · проверяем безопасный пролёт');
-      const {TerrainRenderer}=await import('./terrain-renderer');signal.throwIfAborted();
-      next=new TerrainRenderer(route,terrain,settings.width,settings.height,config,imagery,readyMarker,swiss?.swissCameraOptions('route'));
+      const {prepareTerrainRenderer}=await import('./terrain-renderer');signal.throwIfAborted();
+      if(config.cameraMode==='director')stage('Выбираем выразительные ракурсы · проверяем непрерывную безопасность');
+      next=await prepareTerrainRenderer(route,terrain,settings.width,settings.height,config,imagery,readyMarker,swiss?.swissCameraOptions('route'),signal);
       swiss?.validateSwissFrames(next);signal.throwIfAborted();
       return{renderer:next,region:swiss?'furka':'sogne',credit:swiss?'© swisstopo · SWISSIMAGE / swissALTI3D':'© Kartverket · CC BY 4.0'+(imagery?' · Contains modified Copernicus Sentinel data 2025':''),
         notice:next.plan.director?.diagnostics.reason,

@@ -61,6 +61,9 @@ export function terrainCorridorDeficit(terrain:TerrainDataset,a:TerrainPosePoint
   return Math.max(0,deficit);
 }
 export function createTerrainCameraPlan(timeline:StoryTimeline,terrain:TerrainDataset,width:number,height:number,options?:TerrainCameraOptions,sourceDetailMeters?:number):TerrainCameraPlan{
+  // Director composition is planned at one canonical 720p reference even for
+  // a 360p export. Output pixels do not select different scenes or zoom.
+  if(timeline.config.cameraMode==='director'){const aspect=width/height;if(!Number.isFinite(aspect)||aspect<=0)throw Error('Некорректный формат камеры.');if(aspect>=1){height=720;width=720*aspect;}else{width=720;height=720/aspect;}}
   const discovered=terrain.manifest.id==='discovered-copernicus-dem',fieldOfView=discovered?65:46;
   const stableFollow=timeline.path.total>5;
   if(sourceDetailMeters!==undefined&&(!discovered||!Number.isFinite(sourceDetailMeters)||sourceDetailMeters<10||sourceDetailMeters>100))throw Error('Непроверенный предел детализации источника.');

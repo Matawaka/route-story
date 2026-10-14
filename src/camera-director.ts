@@ -48,7 +48,7 @@ class MeshProof {
   }
   rectangle(b:readonly number[],needCeiling=false):number|undefined {
     const t=this.terrain,m=t.manifest,s=t.level.spacingMeters,w=t.level.width,h=t.level.height;
-    if(b.some(v=>!Number.isFinite(v))||b[0]<m.westMeters||b[1]<m.southMeters||b[2]>m.eastMeters||b[3]>m.northMeters)return;
+    if(b.some(v=>!Number.isFinite(v))||b[2]<b[0]||b[3]<b[1]||b[0]<m.westMeters||b[1]<m.southMeters||b[2]>m.eastMeters||b[3]>m.northMeters)return;
     const x0=Math.max(0,Math.floor((b[0]-m.westMeters)/s)),x1=Math.min(w-1,Math.floor((b[2]-m.westMeters)/s)+1),y0=Math.max(0,Math.floor((b[1]-m.southMeters)/s)),y1=Math.min(h-1,Math.floor((b[3]-m.southMeters)/s)+1),p=this.missing,stride=w+1;
     if(p[(y1+1)*stride+x1+1]-p[y0*stride+x1+1]-p[(y1+1)*stride+x0]+p[y0*stride+x0])return;
     if(!needCeiling)return 0;let ceiling=-Infinity;
@@ -58,6 +58,16 @@ class MeshProof {
     const t=this.terrain,w=t.level.width,s=t.level.spacingMeters,m=t.manifest,x0=Math.max(0,Math.floor((b[0]-m.westMeters)/s)),x1=Math.min(w-2,Math.floor((b[2]-m.westMeters)/s)),y0=Math.max(0,Math.floor((b[1]-m.southMeters)/s)),y1=Math.min(t.level.height-2,Math.floor((b[3]-m.southMeters)/s));
     if((x1-x0+1)*(y1-y0+1)>256)return this.slope;let result=0;
     for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const i=y*w+x,[a,b,c,d]=[t.heights[i],t.heights[i+1],t.heights[i+w],t.heights[i+w+1]];if([a,b,c,d].includes(m.noData))return this.slope;result=Math.max(result,Math.hypot(b-a,c-a)/s,Math.hypot(d-c,d-b)/s);}return result;
+  }
+  gradientRange(b:readonly number[]):readonly [number,number,number,number] {
+    const t=this.terrain,w=t.level.width,s=t.level.spacingMeters,m=t.manifest,x0=Math.min(w-2,Math.max(0,Math.floor((b[0]-m.westMeters)/s))),x1=Math.min(w-2,Math.floor((b[2]-m.westMeters)/s)),y0=Math.min(t.level.height-2,Math.max(0,Math.floor((b[1]-m.southMeters)/s))),y1=Math.min(t.level.height-2,Math.floor((b[3]-m.southMeters)/s));
+    if((x1-x0+1)*(y1-y0+1)>256)return[-this.slope,-this.slope,this.slope,this.slope];
+    let lowX=Infinity,lowY=Infinity,highX=-Infinity,highY=-Infinity;
+    for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){
+      const i=y*w+x,[a,bh,c,d]=[t.heights[i],t.heights[i+1],t.heights[i+w],t.heights[i+w+1]],fx0=Math.max(0,(b[0]-m.westMeters)/s-x),fy0=Math.max(0,(b[1]-m.southMeters)/s-y),fx1=Math.min(1,(b[2]-m.westMeters)/s-x),fy1=Math.min(1,(b[3]-m.southMeters)/s-y),gradients:number[][]=[];
+      if(fx0+fy0<=1)gradients.push([(bh-a)/s,(c-a)/s]);if(fx1+fy1>=1)gradients.push([(d-c)/s,(d-bh)/s]);
+      for(const [dx,dy]of gradients){lowX=Math.min(lowX,dx);lowY=Math.min(lowY,dy);highX=Math.max(highX,dx);highY=Math.max(highY,dy);}
+    }return[lowX,lowY,highX,highY];
   }
 }
 
@@ -83,9 +93,15 @@ function minimumRayClearance(t:TerrainDataset,eye:V,target:V):number {
     const p=lerp(target,eye,f),ground=t.meshElevation([p[0],p[1]]);if(ground===undefined)return-Infinity;clearance=Math.min(clearance,p[2]-ground);
   }return clearance;
 }
-function lineBound(proof:MeshProof,eye:V,target:V,re:V,rt:V):boolean {
+function lineBound(proof:MeshProof,eye:V,target:V,re:V,rt:V,groundAnchor=false):boolean {
   const all=[eye[0]-re[0],eye[1]-re[1],eye[0]+re[0],eye[1]+re[1]],tb=[target[0]-rt[0],target[1]-rt[1],target[0]+rt[0],target[1]+rt[1]],box=[Math.min(all[0],tb[0]),Math.min(all[1],tb[1]),Math.max(all[2],tb[2]),Math.max(all[3],tb[3])];
   if(proof.rectangle(box)===undefined)return false;
+  // Ground-anchored marker height moves WITH the mesh. Near its endpoint the
+  // clearance is exactly 24m, not two independent altitude uncertainties.
+  // The terrain's Lipschitz cone proves all rays outright when their minimum
+  // climb exceeds the maximum mesh slope, even on a very long GPX.
+  const gap=groundAnchor?24:target[2]-rt[2]-(proof.rectangle(tb,true)??Infinity),climb=eye[2]-re[2]-target[2]-rt[2],distance=Math.hypot(eye[0]-target[0],eye[1]-target[1])+xyNorm(re)+xyNorm(rt);
+  if(gap>1e-6&&climb>=proof.slope*distance)return true;
   // Lipschitz terrain slopes and endpoint movement bound EVERY intervening
   // ray, not just the midpoint. Positive margin survives continuous motion.
   const margin=Math.max(re[2]+proof.slope*xyNorm(re),rt[2]+proof.slope*xyNorm(rt));
@@ -104,13 +120,13 @@ function coverageBound(proof:MeshProof,eye:V,target:V,re:V,rt:V,base:TerrainCame
     const low=(eye[2]-re[2]-proof.terrain.min)/(down+error),high=(eye[2]+re[2]-proof.terrain.min)/(down-error);if(low<=0)return false;
     for(const time of [low,high])for(const signX of [-1,1])for(const signY of [-1,1])points.push([eye[0]+ray[0]*time+signX*(re[0]+error*time),eye[1]+ray[1]*time+signY*(re[1]+error*time),proof.terrain.min]);
   }
-  const b=bounds(points);if(proof.rectangle(b)!==undefined)return true;
+  const eyeCorners:V[]=[];for(const x of [-1,1])for(const y of [-1,1])for(const z of [-1,1])eyeCorners.push([eye[0]+x*re[0],eye[1]+y*re[1],eye[2]+z*re[2]]);
+  const b=bounds([...points,...eyeCorners]);if(proof.rectangle(b)!==undefined)return true;
   // A real mountain boundary may intercept all rays above the minimum plane.
   // The convex hull of ALL uncertain eyes/plane corners bounds the complete
   // moving ray pyramid. Every side intersection is bounded by vertex pairs;
   // boundary-grid minima prove a surface hit before leaving the data extent.
-  const t=proof.terrain,m=t.manifest,s=t.level.spacingMeters,vertices=[...points];
-  for(const x of [-1,1])for(const y of [-1,1])for(const z of [-1,1])vertices.push([eye[0]+x*re[0],eye[1]+y*re[1],eye[2]+z*re[2]]);
+  const t=proof.terrain,m=t.manifest,s=t.level.spacingMeters,vertices=[...points,...eyeCorners];
   if(proof.rectangle([Math.max(b[0],m.westMeters),Math.max(b[1],m.southMeters),Math.min(b[2],m.eastMeters),Math.min(b[3],m.northMeters)])===undefined)return false;
   for(const [axis,value,lower] of [[0,m.westMeters,true],[0,m.eastMeters,false],[1,m.southMeters,true],[1,m.northMeters,false]] as const){
     if(points.every(p=>lower?p[axis]>=value:p[axis]<=value))continue;
@@ -132,13 +148,28 @@ function framingBound(eye:V,gaze:V,marker:V,re:V,rg:V,rm:V,base:TerrainCameraPla
 }
 function projectionDetailBound(proof:MeshProof,eye:V,gaze:V,marker:V,re:V,rg:V,rm:V,base:TerrainCameraPlan,spacing:number):boolean {
   const d=sub(gaze,eye),len=norm(d),variation=norm(add(re,rg));if(len<=variation)return false;
-  const f=scale(d,1/len),df=2*variation/(len-variation),delta=sub(marker,eye),depth=f.reduce((n,v,i)=>n+v*delta[i],0)-norm(add(re,rm))-df*(norm(delta)+norm(add(re,rm)));
-  // Each real source edge has 3D length <= spacing*sqrt(1+maxSlope²).
-  // Perspective Jacobian norm <= scale/depth*(1+radius/depth).
-  const slope=proof.localSlope([marker[0]-rm[0]-spacing,marker[1]-rm[1]-spacing,marker[0]+rm[0]+spacing,marker[1]+rm[1]+spacing]),edge=spacing*Math.hypot(1,slope),closest=depth-edge;if(closest<=0)return false;
-  const centerDepth=f.reduce((n,v,i)=>n+v*delta[i],0),transverse=Math.sqrt(Math.max(0,norm(delta)**2-centerDepth**2))+norm(add(re,rm))+df*norm(delta)+edge;
-  const value=base.height/2/Math.tan((base.fov??46)*Math.PI/360)*edge/closest*Math.hypot(1,transverse/closest);
-  return value<=2;
+  const f=scale(d,1/len),df=2*variation/(len-variation),horizontal=xyNorm(f);if(horizontal<=df)return false;
+  const right:V=[f[1]/horizontal,-f[0]/horizontal,0],dr=2*df/(horizontal-df),up:V=[f[2]*right[1],-f[2]*right[0],f[1]*right[0]-f[0]*right[1]],du=df+dr;
+  const ground:V=[marker[0],marker[1],marker[2]-24],delta=sub(ground,eye),rd=norm(add(re,rm)),dot=(a:V,b:V)=>a.reduce((n,v,i)=>n+v*b[i],0),depth=dot(f,delta),depthError=rd+df*(norm(delta)+rd),minimumDepth=depth-depthError;
+  if(minimumDepth<=0)return false;
+  const box=[ground[0]-rm[0]-spacing,ground[1]-rm[1]-spacing,ground[0]+rm[0]+spacing,ground[1]+rm[1]+spacing];if(proof.rectangle(box)===undefined)return false;
+  const markerBox=[ground[0]-rm[0],ground[1]-rm[1],ground[0]+rm[0],ground[1]+rm[1]],gradient=proof.gradientRange(markerBox),pixelScale=base.height/2/Math.tan((base.fov??46)*Math.PI/360);
+  for(const offset of [[spacing,0],[0,spacing]]){
+    const q:TerrainXY=[ground[0]+offset[0],ground[1]+offset[1]],height=proof.terrain.meshElevation(q);if(height===undefined)return false;
+    const other=proof.gradientRange([markerBox[0]+offset[0],markerBox[1]+offset[1],markerBox[2]+offset[0],markerBox[3]+offset[1]]);if([...gradient,...other].some(v=>!Number.isFinite(v)))return false;
+    const difference=Math.hypot(Math.max(Math.abs(other[0]-gradient[2]),Math.abs(other[2]-gradient[0])),Math.max(Math.abs(other[1]-gradient[3]),Math.abs(other[3]-gradient[1]))),edgeHeightError=difference*xyNorm(rm);
+    const edge:V=[offset[0],offset[1],height-ground[2]],ez=dot(f,edge),ezError=df*norm(edge)+(1+df)*edgeHeightError,denominator=minimumDepth*(minimumDepth+ez-ezError);if(denominator<=0)return false;
+    let squared=0;
+    for(const [axis,error] of [[right,dr],[up,du]] as const){
+      const ep=dot(axis,edge),pp=dot(axis,delta),epError=error*norm(edge)+(1+error)*edgeHeightError,ppError=rd+error*(norm(delta)+rd);
+      // Exact perspective difference numerator retains foreshortening of the
+      // actual east/north surface edge. Perturbation errors cover EVERY pose
+      // and both moving mesh endpoints within this interval.
+      const numerator=ep*depth-pp*ez,numeratorError=epError*(Math.abs(depth)+depthError)+Math.abs(ep)*depthError+ppError*(Math.abs(ez)+ezError)+Math.abs(pp)*ezError;
+      squared+=(Math.abs(numerator)+numeratorError)**2;
+    }
+    if(pixelScale*Math.sqrt(squared)/denominator>2)return false;
+  }return true;
 }
 
 function rawPose(seconds:number,leg:Leg,base:TerrainCameraPlan):TerrainCameraState {
@@ -172,17 +203,17 @@ function analyze(base:TerrainCameraPlan,progress:number){
 /** Bounded, explainable shot selection. Every accepted cubic is certified via
  * its complete Bernstein hull + Lipschitz interval proofs before it is exposed.
  * Proof failure keeps the existing camera; it never relaxes 350m/LOS/no-data. */
-function buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>|undefined,boost:number):DirectorPlan {
+function* buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>|undefined,boost:number,budget:number):Generator<void,DirectorPlan> {
   const start=performance.now(),safe=DIRECTOR_SAFE_AREAS[base.aspect<1?'portrait':'landscape'],diagnostics:DirectorDiagnostics={status:'fallback',reason:'',preparationMilliseconds:0,candidates:0,rejected:{},proofIntervals:0,proofBudget:BUDGET,maximumMeshSlope:0,maximumWorldSpeed:0,keys:[],safeArea:safe,coverage:'previous-mode'};
   const fallback=(reason:string):DirectorPlan=>{diagnostics.reason=reason;diagnostics.preparationMilliseconds=performance.now()-start;return{diagnostics,at(){throw Error('Fallback director has no trajectory');}};};
   const reject=(reason:string)=>diagnostics.rejected[reason]=(diagnostics.rejected[reason]??0)+1;
   if(!base.timeline.path.total)return fallback('Неподвижный маршрут: сохранена спокойная камера.');
   if(base.timeline.route.segments.length>8)return fallback('Слишком много независимых сегментов для ограниченного режиссёрского плана; сохранено прежнее сопровождение.');
   const proof=new MeshProof(base.terrain),speed=worldSpeedBound(base);diagnostics.maximumMeshSlope=proof.slope;diagnostics.maximumWorldSpeed=speed;
-  const spacing=base.sourceDetailMeters??base.options?.detailSpacingMeters;
+  const spacing=base.sourceDetailMeters??base.options?.detailSpacingMeters??imagery?.spacingMeters;
   // Use only prepared metadata. No new resources or network requests.
   if(imagery&&(imagery.bounds[0]>base.terrain.manifest.westMeters||imagery.bounds[1]>base.terrain.manifest.southMeters||imagery.bounds[2]<base.terrain.manifest.eastMeters||imagery.bounds[3]<base.terrain.manifest.northMeters))return fallback('Фотография не покрывает полный режиссёрский коридор.');
-  const count=base.timeline.config.durationSeconds===10?8:base.timeline.config.durationSeconds===20?12:base.timeline.config.durationSeconds===30?18:24,progresses=new Set(Array.from({length:count+1},(_,i)=>i/count));
+  const desired=base.timeline.config.durationSeconds===10?8:base.timeline.config.durationSeconds===20?12:base.timeline.config.durationSeconds===30?18:24,segments=new Set(base.timeline.path.edges.map(e=>e.segment)).size,phaseKeys=Number(base.timeline.config.introSeconds>0)+Number(base.timeline.config.outroSeconds>0),count=Math.min(desired,MAX_KEYS-1-2*Math.max(0,segments-1)-phaseKeys),progresses=new Set(Array.from({length:count+1},(_,i)=>i/count));
   let previous=0;for(const e of base.timeline.path.edges)if(e.segment!==previous){previous=e.segment;progresses.add(e.start/base.timeline.path.total);progresses.add(Math.max(0,e.start/base.timeline.path.total-1e-10));}
   if(progresses.size>MAX_KEYS)return fallback('Превышен ограниченный бюджет сцен; сохранено прежнее сопровождение.');
   const samples=[...progresses].sort((a,b)=>a-b).map(p=>analyze(base,p)),keys:DirectorKey[]=[],portrait=base.aspect<1,regional=!!base.terrain.manifest.regionalProjection,replay=base.timeline.config.durationSeconds-base.timeline.config.introSeconds-base.timeline.config.outroSeconds;
@@ -200,12 +231,12 @@ function buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>|
     const event=events.find(e=>Math.abs(e.progress-s.progress)<.15),weight=event?Math.cos((s.progress-event.progress)/.15*Math.PI/2)**2:0;
     const heading=regional?(portrait?-.32:.48)*side:0,back=regional?(portrait?290:240):2400,offset=(regional?back*.35*side:back*(portrait?.10:.15)*side)+weight*back*(portrait?.10:.22)*side,eyeXY=bound(anchor[0]+Math.sin(heading)*back+offset,anchor[1]-Math.cos(heading)*back);
     const ahead=portrait?back*.10:back*.04,gazeXY=bound(anchor[0]+s.dx*ahead,anchor[1]+s.dy*ahead),gh=base.terrain.meshElevation(gazeXY);if(gh===undefined)return fallback('Опережающий взгляд вне полного DEM.');
-    let eye:V=[...eyeXY,Math.max(base.terrain.ceiling(eyeXY)!+350,h+(regional?420:1800)+s.relief*.06+weight*(event&&event.curvature>.45?0:regional?60:200))];
+    let eye:V=[...eyeXY,Math.max(base.minimumAltitude,base.terrain.ceiling(eyeXY)!+350,h+(regional?420:1800)+s.relief*.06+weight*(event&&event.curvature>.45?0:regional?60:200))];
     const target:V=[...gazeXY,gh+50],marker:V=[...s.xy,base.terrain.meshElevation(s.xy)!+24];
     eye=[eye[0],eye[1],Math.max(requiredVisibleAltitude(base.terrain,eye,target),requiredVisibleAltitude(base.terrain,eye,marker))+40];
     if(spacing){for(let guard=0;guard<16&&!projectionDetailBound(proof,eye,target,marker,[0,0,0],[0,0,0],[0,0,0],base,spacing*1.15);guard++)eye=[eye[0],eye[1],target[2]+(eye[2]-target[2])*1.1];}
     eye=[eye[0],eye[1],target[2]+(eye[2]-target[2])*boost];
-    if(base.sourceDetailMeters){let guard=0;while(terrainTexelFootprint(base.terrain,eye,target,s.xy,base.width,base.height,base.sourceDetailMeters,base.fov??46)>1.4&&guard++<24)eye=[eye[0],eye[1],eye[2]*1.10];}
+    if(base.sourceDetailMeters){let guard=0;while(terrainTexelFootprint(base.terrain,eye,target,s.xy,base.width,base.height,base.sourceDetailMeters,base.fov??46)>1.8&&guard++<24)eye=[eye[0],eye[1],eye[2]*1.10];}
     const time=base.timeline.config.introSeconds+(base.timeline.config.replayPacing==='terrain'?base.timeline.dynamics.timeProgressAt(s.progress):s.progress)*replay;
     const expressive:ShotKind=weight>.5?(event!.curvature>.45?'curve-showcase':'mountain-reveal'):weight>.1?'scenic-side':'smooth-follow';
     const variants=[0,.10,-.10],candidates:DirectorKey[]=[];
@@ -219,6 +250,7 @@ function buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>|
   }
   if(base.timeline.config.introSeconds){const first=keys[0],p:V=[first.position[0],first.position[1],first.position[2]+(regional?120:800)];keys.unshift({...first,time:0,kind:'establishing',position:p,reason:'Локальный обзор настоящего ландшафта; без вылета за покрытие'});}
   if(base.timeline.config.outroSeconds){const last=keys.at(-1)!;keys.push({...last,time:base.timeline.config.durationSeconds,kind:'finale',position:[last.position[0],last.position[1],last.position[2]+(regional?120:800)],reason:'Плавное раскрытие пройденного участка'});}
+  if(keys.length>MAX_KEYS)return fallback('Превышен полный бюджет сцен с вступлением и финалом; сохранено прежнее сопровождение.');
   // Lift each COMPLETE control hull above all crossed cells, including intro
   // and outro. Raising key z values preserves the resulting curve's convex
   // bound. Rebuild and verify rather than assume its endpoints are sufficient.
@@ -240,27 +272,44 @@ function buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>|
     const ceiling=proof.rectangle(bounds(leg.eye),true);if(ceiling===undefined||Math.min(...leg.eye.map(p=>p[2]))<ceiling+350-1e-6)return fallback('Не доказана непрерывная высота кривой камеры.');
     const stack=[{eye:leg.eye,gaze:leg.gaze,a:leg.start,b:leg.end,depth:0}];
     while(stack.length){
-      const part=stack.pop()!;if(++diagnostics.proofIntervals>BUDGET)return fallback('Проверка режиссёрского коридора достигла ограниченного бюджета; сохранено прежнее сопровождение.');
+      const part=stack.pop()!;if(diagnostics.proofIntervals>=budget)return fallback('Проверка режиссёрского коридора достигла ограниченного бюджета; сохранено прежнее сопровождение.');diagnostics.proofIntervals++;
+      if(diagnostics.proofIntervals%128===0)yield;
       const mid=(part.a+part.b)/2,eye=curveAt(part.eye,.5),gaze=curveAt(part.gaze,.5),re=radius(part.eye,eye),rg=radius(part.gaze,gaze),state=base.timeline.at(mid),xy=base.terrain.world(state.point),ground=base.terrain.meshElevation(xy);if(ground===undefined)return fallback('Нет полного DEM у фактического маркера.');
       const marker:V=[...xy,ground+24],p0=base.timeline.at(part.a).routeProgress,p1=base.timeline.at(part.b).routeProgress,r=speed*Math.max(Math.abs(state.routeProgress-p0),Math.abs(p1-state.routeProgress)),rm:V=[r,r,proof.slope*Math.SQRT2*r];
-      const fit=framingBound(eye,gaze,marker,re,rg,rm,base),cover=coverageBound(proof,eye,gaze,re,rg,base),los=lineBound(proof,eye,gaze,re,rg)&&lineBound(proof,eye,marker,re,rm),detail=!spacing||projectionDetailBound(proof,eye,gaze,marker,re,rg,rm,base,spacing);
+      const fit=framingBound(eye,gaze,marker,re,rg,rm,base),cover=coverageBound(proof,eye,gaze,re,rg,base),los=lineBound(proof,eye,gaze,re,rg)&&lineBound(proof,eye,marker,re,rm,true),detail=!spacing||projectionDetailBound(proof,eye,gaze,marker,re,rg,rm,base,spacing);
       if(fit&&cover&&los&&detail)continue;
-      if(part.depth>=18){diagnostics.failedInterval={start:part.a,end:part.b,eye,gaze,marker,fit,cover,los,detail};const reason=!cover?'photographic-coverage':!fit?'continuous-marker-framing':!los?'continuous-line-of-sight':'source-detail';reject(reason);return fallback(`Не доказан ${reason}; сохранено прежнее сопровождение.`);}
+      diagnostics.failedInterval={start:part.a,end:part.b,eye,gaze,marker,fit,cover,los,detail};
+      if(part.depth>=18){const reason=!cover?'photographic-coverage':!fit?'continuous-marker-framing':!los?'continuous-line-of-sight':'source-detail',label={'photographic-coverage':'полный охват фотографии','continuous-marker-framing':'читаемое положение маркера','continuous-line-of-sight':'непрерывная видимость','source-detail':'допустимая детализация фотографии'}[reason];reject(reason);return fallback(`Не доказан ${label}; сохранено прежнее сопровождение.`);}
       const [e0,e1]=split(part.eye),[g0,g1]=split(part.gaze);stack.push({eye:e1,gaze:g1,a:mid,b:part.b,depth:part.depth+1},{eye:e0,gaze:g0,a:part.a,b:mid,depth:part.depth+1});
     }legs.push(leg);
   }
-  diagnostics.status='selected';diagnostics.reason='Кино · Автоматический режиссёр: допустимые ракурсы и непрерывный коридор проверены.';diagnostics.keys=keys.map(k=>Object.freeze({...k,position:Object.freeze([...k.position]) as unknown as V,target:Object.freeze([...k.target]) as unknown as V}));diagnostics.coverage='continuous-conservative';diagnostics.preparationMilliseconds=performance.now()-start;
-  return{diagnostics,at(seconds:number){if(!Number.isFinite(seconds))throw Error('Некорректное время камеры.');const time=clamp(seconds,0,base.timeline.config.durationSeconds);let lo=0,hi=legs.length-1;while(lo<hi){const m=(lo+hi+1)>>>1;if(legs[m].start<=time)lo=m;else hi=m-1;}const leg=legs[lo];if(leg.cut){const s=base.timeline.at(time),key=s.segment===keys[lo].segment?keys[lo]:keys[lo+1],fixed:Leg={...leg,eye:[key.position,key.position,key.position,key.position],gaze:[key.target,key.target,key.target,key.target]};return rawPose(time,fixed,base);}return rawPose(time,leg,base);}};
+  delete diagnostics.failedInterval;diagnostics.status='selected';diagnostics.reason='Кино · Автоматический режиссёр: допустимые ракурсы и непрерывный коридор проверены.';diagnostics.keys=keys.map(k=>Object.freeze({...k,position:Object.freeze([...k.position]) as unknown as V,target:Object.freeze([...k.target]) as unknown as V}));diagnostics.coverage='continuous-conservative';diagnostics.preparationMilliseconds=performance.now()-start;
+  return{diagnostics,at:directorAt(base,legs,keys)};
 }
-export function createCameraDirector(base:TerrainCameraPlan,imagery?:Readonly<ImageryManifest>):DirectorPlan {
+/** Only the frozen poses/keys survive preparation; the prefix grid, gradients,
+ * candidate scratch arrays and proof stack cannot be retained by this closure. */
+function directorAt(base:TerrainCameraPlan,legs:readonly Leg[],keys:readonly DirectorKey[]):DirectorPlan['at'] {
+  const immutableLegs=Object.freeze(legs.map(l=>Object.freeze({...l,eye:Object.freeze(l.eye.map(v=>Object.freeze([...v]) as unknown as V)) as unknown as Curve,gaze:Object.freeze(l.gaze.map(v=>Object.freeze([...v]) as unknown as V)) as unknown as Curve}))),immutableKeys=Object.freeze(keys.map(k=>Object.freeze({...k,position:Object.freeze([...k.position]) as unknown as V,target:Object.freeze([...k.target]) as unknown as V})));
+  return(seconds:number)=>{if(!Number.isFinite(seconds))throw Error('Некорректное время камеры.');const time=clamp(seconds,0,base.timeline.config.durationSeconds);let lo=0,hi=immutableLegs.length-1;while(lo<hi){const m=(lo+hi+1)>>>1;if(immutableLegs[m].start<=time)lo=m;else hi=m-1;}const leg=immutableLegs[lo];if(leg.cut){const s=base.timeline.at(time),key=s.segment===immutableKeys[lo].segment?immutableKeys[lo]:immutableKeys[lo+1],fixed:Leg={...leg,eye:[key.position,key.position,key.position,key.position],gaze:[key.target,key.target,key.target,key.target]};return rawPose(time,fixed,base);}return rawPose(time,leg,base);};
+}
+function* directorSteps(base:TerrainCameraPlan,imagery?:Readonly<ImageryManifest>):Generator<void,DirectorPlan> {
   const start=performance.now();let plan:DirectorPlan;
-  try{plan=buildDirector(base,imagery,1);}catch(error){
+  try{plan=yield* buildDirector(base,imagery,1,BUDGET);
+    // Both attempts share ONE proof budget. Recheck the whole wider trajectory.
+    if(plan.diagnostics.status==='fallback'&&plan.diagnostics.rejected['source-detail']){
+      const previous=plan.diagnostics;plan=yield* buildDirector(base,imagery,1.25,BUDGET-previous.proofIntervals);plan.diagnostics.rejected['source-detail-at-first-scale']=1;plan.diagnostics.proofIntervals+=previous.proofIntervals;plan.diagnostics.candidates+=previous.candidates;
+    }
+  }catch(error){
     if(!(error instanceof Error)||!(/DEM|доступн|ракурс|камер|детализац|проекц/.test(error.message)))throw error;
     return{diagnostics:{status:'fallback',reason:'Для режиссёрского ракурса нет полного безопасного DEM; сохранено прежнее сопровождение.',preparationMilliseconds:performance.now()-start,candidates:0,rejected:{'terrain-validation':1},proofIntervals:0,proofBudget:BUDGET,maximumMeshSlope:0,maximumWorldSpeed:0,keys:[],safeArea:DIRECTOR_SAFE_AREAS[base.aspect<1?'portrait':'landscape'],coverage:'previous-mode'},at(){throw Error('Fallback director has no trajectory');}};
   }
-  // A bound can find a steeper source edge BETWEEN keys. One controlled wider
-  // composition is re-proved completely; no relaxed source-detail threshold.
-  if(plan.diagnostics.status==='fallback'&&plan.diagnostics.rejected['source-detail']){
-    const previous=plan.diagnostics;plan=buildDirector(base,imagery,1.25);plan.diagnostics.rejected['source-detail-at-first-scale']=1;plan.diagnostics.proofIntervals+=previous.proofIntervals;plan.diagnostics.candidates+=previous.candidates;
-  }plan.diagnostics.preparationMilliseconds=performance.now()-start;return plan;
+  plan.diagnostics.preparationMilliseconds=performance.now()-start;return plan;
+}
+export function createCameraDirector(base:TerrainCameraPlan,imagery?:Readonly<ImageryManifest>):DirectorPlan {
+  const steps=directorSteps(base,imagery);let result=steps.next();while(!result.done)result=steps.next();return result.value;
+}
+/** Same deterministic algorithm; scheduling changes responsiveness, never poses.
+ * Cancellation happens before any GPU allocation or publication of this plan. */
+export async function prepareCameraDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>|undefined,signal:AbortSignal):Promise<DirectorPlan> {
+  const steps=directorSteps(base,imagery);try{signal.throwIfAborted();let result=steps.next();while(!result.done){await new Promise(resolve=>setTimeout(resolve,0));signal.throwIfAborted();result=steps.next();}signal.throwIfAborted();return result.value;}finally{steps.return(undefined as never);}
 }

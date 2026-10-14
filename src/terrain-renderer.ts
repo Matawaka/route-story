@@ -5,13 +5,26 @@ import { TerrainDataset,type TerrainXY } from './terrain';
 import { haversine,wrapDelta } from './geo';
 import { metricLabel,formatDistance } from './renderer';
 import type { Route } from './route';
-import type { StoryConfig } from './story';
+import {validateStoryConfig,type StoryConfig} from './story';
 import {imageryUV,imageryCoversTerrain,imageryDetailWeight,projectedDetailWeight,type PreparedImagery} from './imagery';
 import { RouteDynamics, GRADE_STYLES } from './route-dynamics';
 import { prepareMarker, markerFacesLeft, type MarkerAsset } from './marker';
 import { annotationAt, drawAnnotation, intersectsMarker, markerSize, type MarkerRect } from './marker-annotation';
 import { drawVideoCredits } from './video-credits';
-import {createCameraDirector} from './camera-director';
+import {createCameraDirector,prepareCameraDirector} from './camera-director';
+import type {TerrainCameraPlan} from './terrain-camera';
+
+function terrainTimeline(route:Route,terrain:TerrainDataset,config:StoryConfig):StoryTimeline {
+  const regional=!!terrain.manifest.regionalProjection,needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';
+  return new StoryTimeline(route,config,needsDynamics?new RouteDynamics(route,{name:`DEM ${regional?'swisstopo':terrain.manifest.id==='discovered-copernicus-dem'?'Copernicus DSM':'Kartverket'} (${terrain.level.spacingMeters} м)`,spacingMeters:terrain.level.spacingMeters,covers:r=>terrain.routeCoverage(r),elevation:p=>terrain.sampleElevation(p.lat,p.lon)}):undefined);
+}
+export async function prepareTerrainRenderer(route:Route,terrain:TerrainDataset,width:number,height:number,config:StoryConfig,imagery:PreparedImagery|undefined,marker:MarkerAsset|undefined,cameraOptions:TerrainCameraOptions|undefined,signal:AbortSignal):Promise<TerrainRenderer> {
+  signal.throwIfAborted();let ready:TerrainCameraPlan|undefined;
+  if(config.cameraMode==='director'){
+    const timeline=terrainTimeline(route,terrain,config);ready=createTerrainCameraPlan(timeline,terrain,width,height,cameraOptions,terrain.manifest.id==='discovered-copernicus-dem'?imagery?.manifest.spacingMeters:undefined);
+    ready.director=await prepareCameraDirector(ready,imagery?.manifest,signal);
+  }signal.throwIfAborted();return new TerrainRenderer(route,terrain,width,height,config,imagery,marker,cameraOptions,ready);
+}
 
 /** Bounded genuine DEM mesh; one WebGL surface, synchronously captured into the
  * existing Canvas/WebCodecs pipeline. Optional resident regional photo texture;
@@ -43,9 +56,11 @@ export class TerrainRenderer {
   private frameImage?:ImageData;
   private readonly frameCanvas=document.createElement('canvas');
   private outputTarget?:T.WebGLRenderTarget;
-  constructor(route:Route,readonly terrain:TerrainDataset,public width:number,public height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset,cameraOptions?:TerrainCameraOptions){
-    const begin=performance.now(),regional=!!terrain.manifest.regionalProjection,needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';this.timeline=new StoryTimeline(route,config,needsDynamics?new RouteDynamics(route,{name:`DEM ${regional?'swisstopo':terrain.manifest.id==='discovered-copernicus-dem'?'Copernicus DSM':'Kartverket'} (${terrain.level.spacingMeters} м)`,spacingMeters:terrain.level.spacingMeters,covers:r=>terrain.routeCoverage(r),elevation:p=>terrain.sampleElevation(p.lat,p.lon)}):undefined);this.config=this.timeline.config;
-    try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height,cameraOptions,terrain.manifest.id==='discovered-copernicus-dem'?imagery?.manifest.spacingMeters:undefined);if(config.cameraMode==='director')this.plan.director=createCameraDirector(this.plan,imagery?.manifest);}catch(error){imagery?.dispose();throw error;}
+  constructor(route:Route,readonly terrain:TerrainDataset,public width:number,public height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset,cameraOptions?:TerrainCameraOptions,readyPlan?:TerrainCameraPlan){
+    const begin=performance.now(),regional=!!terrain.manifest.regionalProjection;
+    if(readyPlan&&(readyPlan.timeline.route!==route||readyPlan.terrain!==terrain||Math.abs(readyPlan.aspect-width/height)>1e-9||JSON.stringify(readyPlan.timeline.config)!==JSON.stringify(validateStoryConfig(config))))throw Error('Режиссёрский план относится к другой сцене.');
+    this.timeline=readyPlan?.timeline??terrainTimeline(route,terrain,config);this.config=this.timeline.config;
+    try{this.plan=readyPlan??createTerrainCameraPlan(this.timeline,terrain,width,height,cameraOptions,terrain.manifest.id==='discovered-copernicus-dem'?imagery?.manifest.spacingMeters:undefined);if(config.cameraMode==='director'&&!readyPlan)this.plan.director=createCameraDirector(this.plan,imagery?.manifest);}catch(error){imagery?.dispose();throw error;}
     const canvas=document.createElement('canvas');
     try{this.gpu=new T.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:false,powerPreference:'default'});}
     catch{imagery?.dispose();throw Error('На этом устройстве недоступен WebGL 2 для рельефа. Выберите «Кино · 2D».');}

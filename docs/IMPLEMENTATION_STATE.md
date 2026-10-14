@@ -1,5 +1,15 @@
 # Implementation state
 
+## MVP1.6 resumed / continuous-proof correction — 2026-10-14
+
+Owner resumed328848b; branch codex/cinematic-camera-director remains based on main554fc7f24f762f6438da0c506a60c6c79258cbae. Main/Pages CI stillSUCCESS; PR28 documentation remains separate and succeeded. Fetch had one transient TLS error; live GitHub API confirmed unchanged main. No merge/deploy/tag/Release forMVP1.6.
+
+Replaced overly broad source-pixel slope norm with interval-bounded exact east/north perspective differences. Bounded gradient DIFFERENCES cover moving pixel endpoints; continuous≤2px limit remains. Both retries share30,000proof intervals; totalkeys≤32 including cuts/intro/outro. Canonical720p planning for director also covers360p, unchanged old modes. Ground-anchor terrain-height correlation gives a rigorous LOS slope-cone shortcut for long tracks. Coverage now checks no-data throughout the full eye-to-plane hull. Generator scheduling yields every128nodes; same deterministic poses, cancellation before GPU construction; compact immutable pose closure cannot retain proof scratch grid. Source quality guard reserves1.8px instead of needlessly zooming out to1.4px; full2px proof remains mandatory.
+
+Actual new Furka fullHD20slandscape25,980,046B/8.40s and30sportrait37,549,849B/13.14s independently decoded, exact same-resolution source pixels, no encoding-time external calls, cancel/retryPASS. Both directorSELECTED; markerOutside0; max angular speed4.09/15.07deg/s vs previous camera284.68deg/s in comparable exports. Earlier portrait fallback artifact retained as historical failure. Raw ignored artifacts/high-resolution/director-furka-final-{a,b}-fullhd. These are single observed exports, not portable timings; final source will be rechecked after last proof refinements.
+
+Current whole unit suite301PASS/26files, buildPASS, audit0. New browser2PASS/1opt-in skip, plus realSwissUI1PASS cancellation/retry/portrait/old-mode recovery. Mathematical/code review still ongoing. MontBlanc first actual30s A/B exported but B correctly fell back on proof budget; second attempt failed full-photo coverage and is NOT accepted. Improved current real-source probe SELECTED with17,814intervals/~1.07s preparation; source50m derivedSentinel and coveringDSM unchanged. Actual accepted new-camera MontBlanc/Malerweg MP4s,4K,Sogne/full browser suite/package bounds/contact sheets/evidence still pending. Private route/evidence/images stay ignored; no source region upload beyond previously authorized rounded-area requests.
+
 ## MVP1.6 paused at owner request — 2026-10-14
 
 Owner requested pause because usage limits are ending. New branch codex/cinematic-camera-director starts from actual production main554fc7f24f762f6438da0c506a60c6c79258cbae. Other open documentation PRs including28 remain separate; no merge/deploy/tag/Release for this task. Main exact CI38499038350 and Pages38499501932 were SUCCESS at reconciliation. New source checkpoint is the commit containing this journal entry; obtain exact HEAD via git, not a self-referential hash.
