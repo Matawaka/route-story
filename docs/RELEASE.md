@@ -1,5 +1,13 @@
 # Release preparation and publication
 
+## Published MVP 1.5 Preview — 2026-10-14
+
+[Route Story MVP 1.5 — Full HD / 4K Preview](https://github.com/Matawaka/route-story/releases/tag/v1.5.0-preview.1) is an owner-authorized prerelease at `554fc7f24f762f6438da0c506a60c6c79258cbae`. PR27 is merged. [Exact-main CI](https://github.com/Matawaka/route-story/actions/runs/38499038350) and [Pages + public HTTPS acceptance](https://github.com/Matawaka/route-story/actions/runs/38499501932) passed. The first Pages attempt was correctly refused while main CI was still running; attempt2 of the same run succeeded after CI and the owner's personal environment approval. No protection was weakened.
+
+Actual live URL: https://matawaka.github.io/route-story/. Additional real public exports: [Atlas Full HD20s](https://github.com/Matawaka/route-story/releases/download/v1.5.0-preview.1/furka-atlas-fullhd-20s.mp4) and [Night portrait4K30s](https://github.com/Matawaka/route-story/releases/download/v1.5.0-preview.1/furka-night-4k-30s.mp4), with complete independent decoding. All9Release assets were downloaded again and SHA256-matched. See [public evidence](HIGH_RESOLUTION_PUBLICATION.json); older local evidence remains separate.
+
+This is a Preview, not a claim of universal4K/device support. Internal package version is still1.2.0-rc.1, explicitly disclosed; the new tag identifies the reviewed feature milestone. Stablev1.0.0 is unchanged. Physical macOS/mobile4K and the native save-picker UI remain NOT TESTED. No new competition submission occurred. Older preparation checkpoints below are historical.
+
 ## Current photo publication checkpoint — 2026-10-09
 
 Public https://matawaka.github.io/route-story/ currently serves accepted main8f4d0f665d3f6df7f9fdef0d356a33310d2800ab, version1.1.0-rc.1, DEM-only. Existing protected run37962492130 and anonymous HTTPS/full20–30s3D acceptance succeeded. v1.0.0 tag/assets remain immutable. The older release-preparation text below is retained as historical procedure/evidence.

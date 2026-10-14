@@ -1,5 +1,17 @@
 # Implementation state
 
+## MVP1.5 authorized public Preview — 2026-10-14
+
+Owner explicitly approved PR27 merge, public deployment and GitHub Release update, then requested the title "Route Story MVP 1.5 — Full HD / 4K Preview". Actual PR27 MERGED at production main554fc7f24f762f6438da0c506a60c6c79258cbae; exact main-push CI38499038350 SUCCESS. Historical candidate authorization statements below are superseded for this release only. This documentation branch codex/mvp15-publication-handover is based on that production commit; current documentation HEAD is authoritative via git. Unrelated open PRs untouched.
+
+Diagnosed Pages38499501932 attempt1: exact-main guard ran02:09:10UTC before CI completed02:12:22UTC. No code defect; no protection/workflow change. Re-ran failed jobs of the SAME run after verifying main success; owner personally approved github-pages. Attempt2 build/deploy/https-acceptance allSUCCESS. Actual deploy-pages URL https://matawaka.github.io/route-story/ verified anonymously;45manifest hashes and exact sourceCommit match. No duplicate dispatch or environment bypass.
+
+Additional public-site test `node artifacts/mvp15-publication/public-high-resolution.mjs` VERIFIED on Windows10.0.26200/Edge155.0.4283.45: real Furka Atlas20s1920×1080/480frames/26,749,102B/8.77s; Night30s2160×3840/720frames/102,008,855B/40.72s. Both H.264High24FPS, exactPTS/all-frame independent FFmpeg+ffprobe decode, changing/nonblank map, reverse-seek equality,720p preview, zero encoding-time network requests and empty storage. Single export/download samples, not benchmarks for other devices. Actual decoded representative frames visually reviewed. Public videos are synthetic fixture outputs; private GPX/videos never uploaded.
+
+Published prerelease https://github.com/Matawaka/route-story/releases/tag/v1.5.0-preview.1 at exactly554fc7f... (tag API verified), date2026-10-14T02:27:32Z. v1.0.0 unchanged. Package version remains1.2.0-rc.1, explicitly disclosed in release notes; MVP1.5 is the feature milestone. All9published assets independently downloaded with `gh release download` and SHA256 matched finalized files, including2MP4/reports/public proof/syntheticGPX/licenses/checksums. Machine-readable evidence in HIGH_RESOLUTION_PUBLICATION.json; raw logs/script/screenshots/files ignored under artifacts/mvp15-publication. A transient GitHub metadata TLS timeout recovered via REST; asset checks and final URL verification succeeded.
+
+No pending deployment or release action. Physical macOS/Android/iOS4K and native save-picker UI remain NOT TESTED;4K60s requires streaming; observed native memory is not JS heap or VRAM. Documentation-only PR next; do not auto-merge or redeploy this handover. Competition submission is not repeated.
+
 ## MVP1.5 final local delivery evidence —2026-10-14
 
 Branch codex/full-hd-4k-export, runtime d45a4716586e3a614ef706cda6e96ad7917158b6, draft PR27 https://github.com/Matawaka/route-story/pull/27. Exact runtime CI https://github.com/Matawaka/route-story/actions/runs/38456631912 SUCCESS; previous b753 CI failure/message and its correction preserved below. Stable main/public source1826118... unchanged; no new merge/deploy/tag/Release or protected workflow edits. Package version stays1.2.0-rc.1; MVP1.5 identifies this feature candidate, not a published semantic-version tag.

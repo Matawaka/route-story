@@ -1,5 +1,11 @@
 # Decisions
 
+## 2026-10-14 — Owner-authorized MVP1.5 Preview publication
+
+PR27 merged at554fc7f24f762f6438da0c506a60c6c79258cbae with successful exact-main CI. A prematurely dispatched Pages run correctly failed the CI gate; rerun its failed jobs only after success, retain main-only/human-review protection and inspect real HTTPS acceptance. The same run38499501932 attempt2 succeeded after owner's personal approval; no workflow or application fix was needed.
+
+Owner requested the release title "Route Story MVP 1.5 — Full HD / 4K Preview". Publish a separate prerelease tagv1.5.0-preview.1 at that exact deployed commit; preservev1.0.0 and disclose the unchanged internal1.2.0-rc.1 package version. Publish only newly public-site-generated syntheticFurka examples and independently verified assets; never expose private MontBlanc/Malerweg data. All9downloaded assets matched SHA256. This authorizes no future unrelated merge/deployment; physical4K/native picker limitations remain explicit.
+
 ## 2026-10-14 — MVP1.5 explicit high-resolution export with a bounded current-frame pipeline
 
 Owner requested1080p/4K, overriding the earlier no4K candidate exclusion for this separate feature only. Preserve360p1.5Mbps/720p5Mbps and old32/48MiB limits; new1080p10Mbps/4K25Mbps use their own bounded file policy. Preview/camera reference remains≤720p; output resolution never changes physical camera, original GPX, elevations/grades/time or permits tighter source-detail zoom. Reuse the current3D context/ready assets and restore preview after success/error/cancellation. New high-resolution single-sample target avoids a4K multisampled swap chain; direct CPU composition-canvas encoding removes one frame copy. Old preset antialiasing/raster backend stays unchanged.2D higher resolutions redraw prepared vectors instead of massive maximum-zoom caches.
