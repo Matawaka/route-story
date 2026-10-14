@@ -11,6 +11,7 @@ import { RouteDynamics, GRADE_STYLES } from './route-dynamics';
 import { prepareMarker, markerFacesLeft, type MarkerAsset } from './marker';
 import { annotationAt, drawAnnotation, intersectsMarker, markerSize, type MarkerRect } from './marker-annotation';
 import { drawVideoCredits } from './video-credits';
+import {createCameraDirector} from './camera-director';
 
 /** Bounded genuine DEM mesh; one WebGL surface, synchronously captured into the
  * existing Canvas/WebCodecs pipeline. Optional resident regional photo texture;
@@ -44,7 +45,7 @@ export class TerrainRenderer {
   private outputTarget?:T.WebGLRenderTarget;
   constructor(route:Route,readonly terrain:TerrainDataset,public width:number,public height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset,cameraOptions?:TerrainCameraOptions){
     const begin=performance.now(),regional=!!terrain.manifest.regionalProjection,needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';this.timeline=new StoryTimeline(route,config,needsDynamics?new RouteDynamics(route,{name:`DEM ${regional?'swisstopo':terrain.manifest.id==='discovered-copernicus-dem'?'Copernicus DSM':'Kartverket'} (${terrain.level.spacingMeters} м)`,spacingMeters:terrain.level.spacingMeters,covers:r=>terrain.routeCoverage(r),elevation:p=>terrain.sampleElevation(p.lat,p.lon)}):undefined);this.config=this.timeline.config;
-    try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height,cameraOptions,terrain.manifest.id==='discovered-copernicus-dem'?imagery?.manifest.spacingMeters:undefined);}catch(error){imagery?.dispose();throw error;}
+    try{this.plan=createTerrainCameraPlan(this.timeline,terrain,width,height,cameraOptions,terrain.manifest.id==='discovered-copernicus-dem'?imagery?.manifest.spacingMeters:undefined);if(config.cameraMode==='director')this.plan.director=createCameraDirector(this.plan,imagery?.manifest);}catch(error){imagery?.dispose();throw error;}
     const canvas=document.createElement('canvas');
     try{this.gpu=new T.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:false,powerPreference:'default'});}
     catch{imagery?.dispose();throw Error('На этом устройстве недоступен WebGL 2 для рельефа. Выберите «Кино · 2D».');}

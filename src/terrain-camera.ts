@@ -1,6 +1,7 @@
 import type { StoryTimeline, StoryPhase } from './timeline';
 import type { TerrainDataset, TerrainXY } from './terrain';
 import { ease } from './camera';
+import type {DirectorPlan} from './camera-director';
 export type TerrainPosePoint=readonly [number,number,number]; // east, north, height metres
 export interface TerrainCameraState {
   position:TerrainPosePoint; target:TerrainPosePoint; bearing:number; pitch:number; roll:0;
@@ -12,7 +13,7 @@ export interface TerrainCameraOptions {
   overview:'reference'|'route'; detailSpacingMeters:.5; maximumTexelPixels:2;
 }
 interface Shot { progress:number; segment:number; position:TerrainPosePoint; target:TerrainPosePoint; relief:number }
-export interface TerrainCameraPlan { terrain:TerrainDataset; timeline:StoryTimeline; shots:Shot[]; overview:Shot; minimumAltitude:number; aspect:number; flight:'conservative'|'corridor'; width:number;height:number;options?:Readonly<TerrainCameraOptions>;fov?:number;sourceDetailMeters?:number;stableFollow?:boolean }
+export interface TerrainCameraPlan { terrain:TerrainDataset; timeline:StoryTimeline; shots:Shot[]; overview:Shot; minimumAltitude:number; aspect:number; flight:'conservative'|'corridor'; width:number;height:number;options?:Readonly<TerrainCameraOptions>;fov?:number;sourceDetailMeters?:number;stableFollow?:boolean;director?:DirectorPlan }
 const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 const pointMix=(a:TerrainPosePoint,b:TerrainPosePoint,t:number):TerrainPosePoint=>t===0?a:t===1?b:[mix(a[0],b[0],t),mix(a[1],b[1],t),mix(a[2],b[2],t)];
 const clamp=(n:number,a:number,b:number)=>Math.min(b,Math.max(a,n));
@@ -173,6 +174,7 @@ export function terrainFrameCoverage(terrain:TerrainDataset,pose:TerrainCameraSt
   return{complete:true,minimumMarginMeters:margin,corners};
 }
 export function getTerrainCameraStateAt(seconds:number,plan:TerrainCameraPlan):TerrainCameraState{
+  if(plan.director?.diagnostics.status==='selected')return plan.director.at(seconds);
   const state=plan.timeline.at(seconds);let lo=0,hi=plan.shots.length-2;while(lo<hi){const middle=Math.ceil((lo+hi)/2);if(plan.shots[middle].progress<=state.routeProgress)lo=middle;else hi=middle-1;}const a=plan.shots[lo],b=plan.shots[lo+1];
   const at=plan.terrain.world(state.point),target:TerrainPosePoint=[...at,plan.terrain.meshElevation(at)!+24];
   const fraction=clamp((state.routeProgress-a.progress)/(b.progress-a.progress),0,1),shot=a.segment===b.segment?{position:pointMix(a.position,b.position,fraction),target:plan.stableFollow?pointMix(a.target,b.target,fraction):target}:state.segment===a.segment?a:b;

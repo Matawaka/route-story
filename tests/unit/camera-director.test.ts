@@ -1,0 +1,45 @@
+import {describe,it,expect} from 'vitest';
+import{TerrainDataset,type TerrainManifest}from'../../src/terrain';
+import{StoryTimeline}from'../../src/timeline';
+import{defaultStoryConfig,previewSettings}from'../../src/story';
+import{routeMetrics}from'../../src/geo';
+import{createTerrainCameraPlan,getTerrainCameraStateAt,requiredVisibleAltitude,projectTerrainPoint,terrainFrameCoverage}from'../../src/terrain-camera';
+import{createCameraDirector,DIRECTOR_SAFE_AREAS}from'../../src/camera-director';
+import type{Route}from'../../src/route';
+function fixture(shape:(x:number,y:number)=>number=()=>300,origin:[number,number]=[6.2,61.28]){
+ const level={file:'synthetic.i16',spacingMeters:100,width:201,height:201,bytes:80802,sha256:'synthetic',noDataCount:0};
+ const manifest:TerrainManifest={id:'synthetic',origin,westMeters:-10000,southMeters:-10000,eastMeters:10000,northMeters:10000,lods:[level],noData:-32768,minElevation:0,maxElevation:9000,verticalScale:1,units:'metres',verticalDatum:'synthetic',sourceCrs:'synthetic',sourceResolutionMeters:100,attribution:'synthetic fixture'};
+ return new TerrainDataset(manifest,level,Int16Array.from({length:201*201},(_,i)=>Math.round(shape((i%201)*100-10000,Math.floor(i/201)*100-10000))));
+}
+function route(t:TerrainDataset,segments:number[][][]):Route {const points=segments.map(s=>s.map(p=>t.geographic([p[0],p[1]])));return{segments:points,...routeMetrics(points),name:'Synthetic director regression'};}
+function plan(t:TerrainDataset,r:Route,width=720,height=1280,duration:10|20|30|60=30){const p=createTerrainCameraPlan(new StoryTimeline(r,{...defaultStoryConfig(),aspectRatio:width<height?'portrait':'landscape',durationSeconds:duration,cameraMode:'director',terrainFlight:'corridor'}),t,width,height);p.director=createCameraDirector(p);return p;}
+describe('bounded deterministic camera director',()=>{
+ for(const duration of [10,20,30,60] as const)it(`creates a duration-aware proven plan ${duration}s`,()=>{
+  const t=fixture(),r=route(t,[[[-1400,-1000],[-700,-200],[0,0],[700,600],[1400,1000]]]),p=plan(t,r,720,1280,duration);expect(p.director!.diagnostics.status).toBe('selected');
+  expect(p.director!.diagnostics.keys.length).toBeLessThanOrEqual(32);expect(p.director!.diagnostics.keys[0].kind).toBe('establishing');expect(p.director!.diagnostics.keys.at(-1)!.kind).toBe('finale');expect(p.director!.diagnostics.proofIntervals).toBeLessThanOrEqual(30000);
+  const middle=getTerrainCameraStateAt(duration/2,p);getTerrainCameraStateAt(duration,p);getTerrainCameraStateAt(.01,p);expect(getTerrainCameraStateAt(duration/2,p)).toEqual(middle);expect(()=>getTerrainCameraStateAt(NaN,p)).toThrow();
+ });
+ it('proves cubic clearance and LOS BETWEEN video timestamps, including intro/outro',()=>{
+  const t=fixture((x,y)=>300+Math.max(0,250*(1-Math.abs(x-300)/900))*Math.exp(-y*y/1200000)),r=route(t,[[[-1500,-1000],[-500,0],[200,500],[1500,1200]]]),p=plan(t,r);expect(p.director!.diagnostics.status).toBe('selected');
+  for(let i=0;i<=601;i++){const time=30*i/601,c=getTerrainCameraStateAt(time,p),s=p.timeline.at(time),xy=t.world(s.point),marker=[...xy,t.meshElevation(xy)!+24] as const;expect(c.clearance).toBeGreaterThanOrEqual(350-1e-6);expect(requiredVisibleAltitude(t,c.position,c.target)).toBeCloseTo(c.position[2],6);expect(requiredVisibleAltitude(t,c.position,marker)).toBeCloseTo(c.position[2],6);expect(terrainFrameCoverage(t,c,720,1280).complete).toBe(true);const [x,y]=projectTerrainPoint(marker,c.position,c.target,720,1280);expect(x/720).toBeGreaterThan(.18);expect(x/720).toBeLessThan(.82);expect(y/1280).toBeGreaterThan(.27);expect(y/1280).toBeLessThan(.70);}
+ });
+ it('keeps C1 camera position and gaze at all ordinary joins',()=>{
+  const t=fixture(),p=plan(t,route(t,[[[-1400,-1000],[-700,-200],[0,0],[700,600],[1400,1000]]]));expect(p.director!.diagnostics.status).toBe('selected');
+  for(const k of p.director!.diagnostics.keys.slice(1,-1)){const dt=1e-4,a=getTerrainCameraStateAt(k.time-dt,p),b=getTerrainCameraStateAt(k.time,p),c=getTerrainCameraStateAt(k.time+dt,p);for(const field of ['position','target'] as const)for(let axis=0;axis<3;axis++)expect(Math.abs((b[field][axis]-a[field][axis])/dt-(c[field][axis]-b[field][axis])/dt)).toBeLessThan(.3);}
+ });
+ it('portrait is independently composed, while quality-only changes keep identical poses',()=>{
+  const t=fixture(),r=route(t,[[[-900,-1200],[0,0],[900,1200]]]),portrait=plan(t,r),landscape=plan(t,r,1280,720);expect(portrait.director!.diagnostics.status).toBe('selected');expect(landscape.director!.diagnostics.status).toBe('selected');expect(getTerrainCameraStateAt(15,portrait).position).not.toEqual(getTerrainCameraStateAt(15,landscape).position);
+  for(const qualityPreset of ['standard','fullhd','ultra'] as const){const config={...portrait.timeline.config,qualityPreset},size=previewSettings(config),p=createTerrainCameraPlan(new StoryTimeline(r,config),t,size.width,size.height);p.director=createCameraDirector(p);expect(getTerrainCameraStateAt(15,p)).toEqual(getTerrainCameraStateAt(15,portrait));}
+  expect(DIRECTOR_SAFE_AREAS.portrait.marker).not.toEqual(DIRECTOR_SAFE_AREAS.landscape.marker);
+ });
+ for(const name of ['sharp turn','micro zigzags','straight','serpentine','valley','ridge','plain'] as const)it(`handles ${name} without random/history-dependent state`,()=>{
+  const t=fixture((x,y)=>name==='valley'?300+Math.abs(x)*.03:name==='ridge'?300+500*Math.exp(-x*x/800000):300),points=name==='micro zigzags'?Array.from({length:1001},(_,i)=>[i%2?10:-10,-2000+i*4]):name==='serpentine'?Array.from({length:50},(_,i)=>[Math.sin(i*.3)*500,-1500+i*60]):name==='sharp turn'?[[-1000,-1000],[0,0],[-1000,1000]]:[[-1000,-1500],[0,0],[1000,1500]],r=route(t,[points]),source=JSON.stringify(r),p=plan(t,r);const a=getTerrainCameraStateAt(13.123,p);getTerrainCameraStateAt(29,p);getTerrainCameraStateAt(2,p);expect(getTerrainCameraStateAt(13.123,p)).toEqual(a);expect(JSON.stringify(r)).toBe(source);expect(a.position.every(Number.isFinite)).toBe(true);if(p.director!.diagnostics.status==='selected')expect(a.clearance).toBeGreaterThanOrEqual(350);else expect(p.director!.diagnostics.reason).toContain('сохран');
+ });
+ it('cuts independent segments with no interpolated journey across the gap',()=>{
+  const t=fixture(),r=route(t,[[[-2000,-1500],[-1000,-1500]],[[1000,1500],[2000,1500]]]),p=plan(t,r),cut=2+26*p.timeline.path.edges[1].start/p.timeline.path.total,a=getTerrainCameraStateAt(cut-.001,p),b=getTerrainCameraStateAt(cut+.001,p);expect(a.segment).toBe(0);expect(b.segment).toBe(1);expect(a.target[1]).toBeLessThan(-1000);expect(b.target[1]).toBeGreaterThan(1000);
+ });
+ it('stationary duplicates retain the existing camera explicitly',()=>{const t=fixture(),p=plan(t,route(t,[[[0,0],[0,0]]]));expect(p.director!.diagnostics.status).toBe('fallback');expect(p.director!.diagnostics.reason).toContain('Неподвижный');for(const time of [0,5,15,30])expect(getTerrainCameraStateAt(time,p).position.every(Number.isFinite)).toBe(true);});
+ it('uses a short antimeridian arc at high latitude without moving original GPX',()=>{const t=fixture(()=>300,[179.98,80]),r=route(t,[[[-900,-1200],[900,1200]]]),original=JSON.stringify(r),p=plan(t,r);expect(getTerrainCameraStateAt(15,p).position.every(Number.isFinite)).toBe(true);expect(JSON.stringify(r)).toBe(original);});
+ it('does not interpolate no-data or accept missing geographic coverage',()=>{const t=fixture(),r=route(t,[[[-1000,-1000],[0,0],[1000,1000]]]),base=createTerrainCameraPlan(new StoryTimeline(r,defaultStoryConfig()),t,720,1280);t.heights[80*201+104]=-32768;const d=createCameraDirector(base);expect(d.diagnostics.status).toBe('fallback');expect(d.diagnostics.reason).toMatch(/DEM|коридор|данн|ракурс/);});
+ it('refuses a photograph that does not cover the prepared terrain',()=>{const t=fixture(),p=plan(t,route(t,[[[-500,-500],[500,500]]]));const d=createCameraDirector(p,{bounds:[-100,-100,100,100]} as never);expect(d.diagnostics.status).toBe('fallback');expect(d.diagnostics.reason).toContain('Фотография');});
+});

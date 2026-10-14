@@ -1,5 +1,9 @@
 # Decisions
 
+## 2026-10-14 — MVP1.6 first camera-director prototype (paused)
+
+Extend existing camera/StoryTimeline/renderer via optional director mode, retain old camera as explicit fallback. Scene analysis is bounded before rendering; no new network sources. New cubic motion cannot inherit endpoint-only linear safety: use Bernstein control-hull clearance, Lipschitz interval LOS/framing/detail and continuous uncertain-ray coverage bounds. Vertical composition has its own direction/look-ahead/safe region at the canonical preview resolution; output resolution never replans the scene. First actual20sFurka landscape director export passed, but30s portrait fell back on a source-detail proof failure; fix and revalidate before claiming acceptance. Owner requested pause for usage limits; checkpoint only, no publication permission for MVP1.6.
+
 ## 2026-10-14 — MVP1.5 explicit high-resolution export with a bounded current-frame pipeline
 
 Owner requested1080p/4K, overriding the earlier no4K candidate exclusion for this separate feature only. Preserve360p1.5Mbps/720p5Mbps and old32/48MiB limits; new1080p10Mbps/4K25Mbps use their own bounded file policy. Preview/camera reference remains≤720p; output resolution never changes physical camera, original GPX, elevations/grades/time or permits tighter source-detail zoom. Reuse the current3D context/ready assets and restore preview after success/error/cancellation. New high-resolution single-sample target avoids a4K multisampled swap chain; direct CPU composition-canvas encoding removes one frame copy. Old preset antialiasing/raster backend stays unchanged.2D higher resolutions redraw prepared vectors instead of massive maximum-zoom caches.

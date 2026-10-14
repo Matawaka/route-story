@@ -60,9 +60,9 @@ function setSceneOptions(id:keyof typeof sceneOptions,allowed:readonly string[],
 function restoreSceneOptions():void{for(const id of Object.keys(sceneOptions) as (keyof typeof sceneOptions)[])setSceneOptions(id,sceneOptions[id].map(o=>o.value),id==='camera-mode'?'cinematic':'dem');}
 function updateSceneOptions():void{
   const discovered=__AUTO_GEOGRAPHY_ENABLED__&&geographicConsent;
-  setSceneOptions('camera-mode',availability?.terrain||discovered?['cinematic','auto','terrain','classic']:['cinematic','classic'],'cinematic');
+  setSceneOptions('camera-mode',availability?.terrain||discovered?['cinematic','auto','terrain','director','classic']:['cinematic','classic'],'cinematic');
   setSceneOptions('terrain-surface',availability?.photo||discovered?['dem','photo']:['dem'],'dem');
-  const active=!!(availability?.terrain||discovered)&&['terrain','auto'].includes(control('camera-mode').value);
+  const active=!!(availability?.terrain||discovered)&&['terrain','auto','director'].includes(control('camera-mode').value);
   for(const id of ['terrain-surface','terrain-surface-label','terrain-flight','terrain-flight-label','route-color','marker-presentation']){el(id).hidden=!active;document.querySelector<HTMLLabelElement>(`label[for="${id}"]`)?.toggleAttribute('hidden',!active);}
   el('coverage-note').textContent=availability?.notice??'';el('coverage-note').hidden=!route||!availability?.notice;
   el('geography-consent').hidden=!__AUTO_GEOGRAPHY_ENABLED__||!route||!!availability?.terrain||geographicConsent||geographyDeclined;
@@ -137,9 +137,9 @@ async function configure(op?:AbortController,autoplay=false):Promise<void>{
     scene=prepared;renderer=prepared.renderer;if(prepared.region==='discovered'){availability={terrain:true,photo:true};updateSceneOptions();}const settings=previewSettings(story);canvas.width=settings.width;canvas.height=settings.height;
     canvas.classList.toggle('portrait',story.aspectRatio==='portrait');canvas.dataset.region=prepared.region;canvas.dataset.mode=renderer.config.cameraMode;canvas.dataset.captions=renderer.config.captionMode;
     scrub.max=String(story.durationSeconds);scrub.value=String(Math.min(Number(scrub.value),story.durationSeconds));el('preview-format').textContent=story.aspectRatio==='portrait'?'9:16':'16:9';
-    el('scene-name').textContent=`${prepared.region==='furka'?'Швейцария · Furka':prepared.region==='sogne'?'Норвегия · Sogne':'Маршрут'} · ${renderer.config.cameraMode==='terrain'?'3D':'2D'}${source?.synthetic?' · демо':''}`;
+    el('scene-name').textContent=`${prepared.region==='furka'?'Швейцария · Furka':prepared.region==='sogne'?'Норвегия · Sogne':'Маршрут'} · ${['terrain','director'].includes(renderer.config.cameraMode??'')?'3D':'2D'}${source?.synthetic?' · демо':''}`;
     el('source-credit').textContent=prepared.credit;el('map-detail-note').textContent=`${prepared.notice??''} ${prepared.credit} · ${prepared.detail}`.trim();
-    el('dynamics-note').textContent=`${renderer.timeline.dynamics.note}. Уклон: красный ↑≥10%, оранжевый ↑≥3%, нейтральный ±3%, светло-зелёный ↓≥3%, зелёный ↓≥10%. ${story.replayPacing==='terrain'?'Стилизованный темп по уклону':'Равномерный темп'} · это не реальная скорость. ${renderer.config.cameraMode==='terrain'?'Цвет 3D-пути соответствует выбранному режиму.':'В 2D путь сохраняет одноцветное оформление.'}`;
+    el('dynamics-note').textContent=`${renderer.timeline.dynamics.note}. Уклон: красный ↑≥10%, оранжевый ↑≥3%, нейтральный ±3%, светло-зелёный ↓≥3%, зелёный ↓≥10%. ${story.replayPacing==='terrain'?'Стилизованный темп по уклону':'Равномерный темп'} · это не реальная скорость. ${['terrain','director'].includes(renderer.config.cameraMode??'')?'Цвет 3D-пути соответствует выбранному режиму.':'В 2D путь сохраняет одноцветное оформление.'}`;
     canvas.setAttribute('aria-label',`История «${story.title}»: карта маршрута со стартом и финишем`);qualityNote();
     if('gpu' in renderer){const gpuCanvas=renderer.gpu.domElement;const lost=()=>{if(operation!==current)return;exportController?.abort(Error('3D-контекст потерян'));current.abort();releaseRenderer();failure(Error('3D-контекст потерян'),'scene');};gpuCanvas.addEventListener('webglcontextlost',lost);contextCleanup=()=>gpuCanvas.removeEventListener('webglcontextlost',lost);}
     stageFor(current,heading)('Готовим предпросмотр');if(!draw())return;setState({phase:'READY',notice:prepared.notice??(autoplay&&reducedMotion?'3D-демо готово. Нажмите ▶ для воспроизведения.':undefined)});
