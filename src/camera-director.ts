@@ -11,7 +11,7 @@ export const DIRECTOR_SAFE_AREAS=Object.freeze({
   landscape:Object.freeze({marker:[.12,.29,.88,.65] as const,geography:[.05,.24,.95,.72] as const}),
   portrait:Object.freeze({marker:[.18,.27,.82,.70] as const,geography:[.05,.24,.95,.72] as const})
 });
-export interface DirectorKey {time:number;progress:number;segment:number;kind:ShotKind;position:V;target:V;reason:string;curvature:number;relief:number}
+export interface DirectorKey {time:number;progress:number;segment:number;kind:ShotKind;position:V;target:V;reason:string;curvature:number;relief:number;sideBias?:number}
 interface Leg {start:number;end:number;segment:number;eye:Curve;gaze:Curve;cut:boolean}
 export interface DirectorDiagnostics {
   status:'selected'|'fallback';reason:string;preparationMilliseconds:number;candidates:number;rejected:Record<string,number>;
@@ -90,7 +90,7 @@ function worldSpeedBound(base:TerrainCameraPlan):number {
 function minimumRayClearance(t:TerrainDataset,eye:V,target:V):number {
   let clearance=Infinity;
   for(const f of terrainRayBreakpoints(t,[target[0],target[1]],[eye[0],eye[1]])){
-    const p=lerp(target,eye,f),ground=t.meshElevation([p[0],p[1]]);if(ground===undefined)return-Infinity;clearance=Math.min(clearance,p[2]-ground);
+    const p=lerp(target,eye,f),ground=t.meshElevation([p[0],p[1]]);if(ground===undefined)return-Infinity;clearance=Math.min(clearance,p[2]-ground-Math.min(8,f*80));
   }return clearance;
 }
 function lineBound(proof:MeshProof,eye:V,target:V,re:V,rt:V,groundAnchor=false):boolean {
@@ -101,7 +101,7 @@ function lineBound(proof:MeshProof,eye:V,target:V,re:V,rt:V,groundAnchor=false):
   // The terrain's Lipschitz cone proves all rays outright when their minimum
   // climb exceeds the maximum mesh slope, even on a very long GPX.
   const gap=groundAnchor?24:target[2]-rt[2]-(proof.rectangle(tb,true)??Infinity),climb=eye[2]-re[2]-target[2]-rt[2],distance=Math.hypot(eye[0]-target[0],eye[1]-target[1])+xyNorm(re)+xyNorm(rt);
-  if(gap>1e-6&&climb>=proof.slope*distance)return true;
+  if(gap>8+1e-6&&climb>=proof.slope*distance)return true;
   // Lipschitz terrain slopes and endpoint movement bound EVERY intervening
   // ray, not just the midpoint. Positive margin survives continuous motion.
   const margin=Math.max(re[2]+proof.slope*xyNorm(re),rt[2]+proof.slope*xyNorm(rt));
@@ -138,12 +138,12 @@ function coverageBound(proof:MeshProof,eye:V,target:V,re:V,rt:V,base:TerrainCame
 }
 /** Project a moving marker conservatively. Bound camera basis, marker delta and
  * perspective division; this checks a whole interval rather than frame samples. */
-function framingBound(eye:V,gaze:V,marker:V,re:V,rg:V,rm:V,base:TerrainCameraPlan):boolean {
+function framingBound(eye:V,gaze:V,marker:V,re:V,rg:V,rm:V,base:TerrainCameraPlan,safe:readonly number[]=DIRECTOR_SAFE_AREAS[base.aspect<1?'portrait':'landscape'].marker):boolean {
   const delta=sub(gaze,eye),len=norm(delta),dv=norm(add(re,rg));if(len<=dv)return false;
   const f=scale(delta,1/len),df=2*dv/(len-dv),horizontal=xyNorm(f);if(horizontal<=df)return false;
   const r:V=[f[1]/horizontal,-f[0]/horizontal,0],dr=2*df/(horizontal-df),u:V=[f[2]*r[1],-f[2]*r[0],f[1]*r[0]-f[0]*r[1]],du=df+dr;
   const d=sub(marker,eye),rd=norm(add(re,rm)),dot=(a:V)=>a.reduce((n,v,i)=>n+v*d[i],0),depth=dot(f),dd=rd+df*(norm(d)+rd);if(depth<=dd)return false;
-  const pixel=projectTerrainPoint(marker,eye,gaze,base.width,base.height,base.fov??46),s=base.height/2/Math.tan((base.fov??46)*Math.PI/360),bx=(rd+dr*(norm(d)+rd)+Math.abs(dot(r))*dd/depth)*s/(depth-dd),by=(rd+du*(norm(d)+rd)+Math.abs(dot(u))*dd/depth)*s/(depth-dd),safe=DIRECTOR_SAFE_AREAS[base.aspect<1?'portrait':'landscape'].marker;
+  const pixel=projectTerrainPoint(marker,eye,gaze,base.width,base.height,base.fov??46),s=base.height/2/Math.tan((base.fov??46)*Math.PI/360),bx=(rd+dr*(norm(d)+rd)+Math.abs(dot(r))*dd/depth)*s/(depth-dd),by=(rd+du*(norm(d)+rd)+Math.abs(dot(u))*dd/depth)*s/(depth-dd);
   return pixel[0]-bx>=base.width*safe[0]&&pixel[0]+bx<=base.width*safe[2]&&pixel[1]-by>=base.height*safe[1]&&pixel[1]+by<=base.height*safe[3];
 }
 function projectionDetailBound(proof:MeshProof,eye:V,gaze:V,marker:V,re:V,rg:V,rm:V,base:TerrainCameraPlan,spacing:number):boolean {
@@ -211,6 +211,7 @@ function* buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>
   if(base.timeline.route.segments.length>8)return fallback('Слишком много независимых сегментов для ограниченного режиссёрского плана; сохранено прежнее сопровождение.');
   const proof=new MeshProof(base.terrain),speed=worldSpeedBound(base);diagnostics.maximumMeshSlope=proof.slope;diagnostics.maximumWorldSpeed=speed;
   const spacing=base.sourceDetailMeters??base.options?.detailSpacingMeters??imagery?.spacingMeters;
+  const ranges=new Map<number,[number,number]>();for(const e of base.timeline.path.edges){const range=ranges.get(e.segment);if(range)range[1]=e.end/base.timeline.path.total;else ranges.set(e.segment,[e.start/base.timeline.path.total,e.end/base.timeline.path.total]);}
   // Use only prepared metadata. No new resources or network requests.
   if(imagery&&(imagery.bounds[0]>base.terrain.manifest.westMeters||imagery.bounds[1]>base.terrain.manifest.southMeters||imagery.bounds[2]<base.terrain.manifest.eastMeters||imagery.bounds[3]<base.terrain.manifest.northMeters))return fallback('Фотография не покрывает полный режиссёрский коридор.');
   const desired=base.timeline.config.durationSeconds===10?8:base.timeline.config.durationSeconds===20?12:base.timeline.config.durationSeconds===30?18:24,segments=new Set(base.timeline.path.edges.map(e=>e.segment)).size,phaseKeys=Number(base.timeline.config.introSeconds>0)+Number(base.timeline.config.outroSeconds>0),count=Math.min(desired,MAX_KEYS-1-2*Math.max(0,segments-1)-phaseKeys),progresses=new Set(Array.from({length:count+1},(_,i)=>i/count));
@@ -224,13 +225,14 @@ function* buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>
     if(events.length>=(base.timeline.config.durationSeconds<=20?1:base.timeline.config.durationSeconds<=30?2:3))break;
   }
   let side=1;const scenic=[...samples].sort((a,b)=>b.relief+b.curvature*250-a.relief-a.curvature*250)[0];side=scenic.preferredSide;
+  const sideBias=new Map<number,number>();
   for(const s of samples){
     const anchor=stableAnchor(base,s.progress,s.segment),h=base.terrain.meshElevation(anchor);if(h===undefined)return fallback('Сглаженный взгляд пересекает отсутствующий DEM.');
     // One regional axis for a segment avoids following every micro-turn. Short
     // winding roads get a genuine side angle; long paths retain calm north-up.
     const event=events.find(e=>Math.abs(e.progress-s.progress)<.15),weight=event?Math.cos((s.progress-event.progress)/.15*Math.PI/2)**2:0;
     const heading=regional?(portrait?-.32:.48)*side:0,back=regional?(portrait?290:240):2400,offset=(regional?back*.35*side:back*(portrait?.10:.15)*side)+weight*back*(portrait?.10:.22)*side,eyeXY=bound(anchor[0]+Math.sin(heading)*back+offset,anchor[1]-Math.cos(heading)*back);
-    const ahead=portrait?back*.10:back*.04,gazeXY=bound(anchor[0]+s.dx*ahead,anchor[1]+s.dy*ahead),gh=base.terrain.meshElevation(gazeXY);if(gh===undefined)return fallback('Опережающий взгляд вне полного DEM.');
+    const ahead=portrait?back*.10:back*.04,dx=regional?s.dx:0,dy=regional?s.dy:1,gazeXY=bound(anchor[0]+dx*ahead,anchor[1]+dy*ahead),gh=base.terrain.meshElevation(gazeXY);if(gh===undefined)return fallback('Опережающий взгляд вне полного DEM.');
     let eye:V=[...eyeXY,Math.max(base.minimumAltitude,base.terrain.ceiling(eyeXY)!+350,h+(regional?420:1800)+s.relief*.06+weight*(event&&event.curvature>.45?0:regional?60:200))];
     const target:V=[...gazeXY,gh+50],marker:V=[...s.xy,base.terrain.meshElevation(s.xy)!+24];
     eye=[eye[0],eye[1],Math.max(requiredVisibleAltitude(base.terrain,eye,target),requiredVisibleAltitude(base.terrain,eye,marker))+40];
@@ -241,12 +243,13 @@ function* buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>
     const expressive:ShotKind=weight>.5?(event!.curvature>.45?'curve-showcase':'mountain-reveal'):weight>.1?'scenic-side':'smooth-follow';
     const variants=[0,.10,-.10],candidates:DirectorKey[]=[];
     for(const shift of variants){diagnostics.candidates++;const position:V=[eye[0]+shift*back,eye[1],eye[2]],pixel=projectTerrainPoint(marker,position,target,base.width,base.height,base.fov??46);
-      if(!base.terrain.contains([position[0],position[1]],30)){reject('camera-coverage');continue;}if(pixel[0]<base.width*safe.marker[0]||pixel[0]>base.width*safe.marker[2]||pixel[1]<base.height*safe.marker[1]||pixel[1]>base.height*safe.marker[3]){reject('marker-safe-area');continue;}
+      if(!base.terrain.contains([position[0],position[1]],30)){reject('camera-coverage');continue;}if(pixel.some(v=>!Number.isFinite(v))||pixel[0]<base.width*safe.marker[0]||pixel[0]>base.width*safe.marker[2]||pixel[1]<base.height*safe.marker[1]||pixel[1]>base.height*safe.marker[3]){reject('marker-safe-area');continue;}
       if(position[2]<base.terrain.ceiling([position[0],position[1]])!+350||minimumRayClearance(base.terrain,position,marker)<=0||minimumRayClearance(base.terrain,position,target)<=0){reject('candidate-clearance-or-visibility');continue;}
-      candidates.push({time,progress:s.progress,segment:s.segment,kind:expressive,position,target,reason:expressive==='curve-showcase'?'Устойчивый изгиб дороги':expressive==='mountain-reveal'?'Выраженный локальный перепад DEM':expressive==='scenic-side'?'Сторона с более низким рельефом и проверенной видимостью':'Сглаженное опережающее сопровождение',curvature:s.curvature,relief:s.relief});}
+      candidates.push({time,progress:s.progress,segment:s.segment,kind:expressive,position,target,reason:expressive==='curve-showcase'?'Устойчивый изгиб дороги':expressive==='mountain-reveal'?'Выраженный локальный перепад DEM':expressive==='scenic-side'?'Сторона с более низким рельефом и проверенной видимостью':'Сглаженное опережающее сопровождение',curvature:s.curvature,relief:s.relief,sideBias:shift});}
     if(!candidates.length)return fallback('Не найден читаемый ракурс маркера; сохранено прежнее сопровождение.');
     // Prefer visible valley side, then smallest screen displacement. No RNG.
-    keys.push(candidates.sort((a,b)=>Math.abs(projectTerrainPoint(marker,a.position,a.target,base.width,base.height,base.fov??46)[0]/base.width-.5)-Math.abs(projectTerrainPoint(marker,b.position,b.target,base.width,base.height,base.fov??46)[0]/base.width-.5))[0]);
+    const previousBias=sideBias.get(s.segment),preferred=candidates.find(k=>k.sideBias===previousBias),selected=preferred??candidates.sort((a,b)=>Math.abs(projectTerrainPoint(marker,a.position,a.target,base.width,base.height,base.fov??46)[0]/base.width-.5)-Math.abs(projectTerrainPoint(marker,b.position,b.target,base.width,base.height,base.fov??46)[0]/base.width-.5))[0];
+    sideBias.set(s.segment,selected.sideBias!);keys.push(selected);
   }
   if(base.timeline.config.introSeconds){const first=keys[0],p:V=[first.position[0],first.position[1],first.position[2]+(regional?120:800)];keys.unshift({...first,time:0,kind:'establishing',position:p,reason:'Локальный обзор настоящего ландшафта; без вылета за покрытие'});}
   if(base.timeline.config.outroSeconds){const last=keys.at(-1)!;keys.push({...last,time:base.timeline.config.durationSeconds,kind:'finale',position:[last.position[0],last.position[1],last.position[2]+(regional?120:800)],reason:'Плавное раскрытие пройденного участка'});}
@@ -276,7 +279,17 @@ function* buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>
       if(diagnostics.proofIntervals%128===0)yield;
       const mid=(part.a+part.b)/2,eye=curveAt(part.eye,.5),gaze=curveAt(part.gaze,.5),re=radius(part.eye,eye),rg=radius(part.gaze,gaze),state=base.timeline.at(mid),xy=base.terrain.world(state.point),ground=base.terrain.meshElevation(xy);if(ground===undefined)return fallback('Нет полного DEM у фактического маркера.');
       const marker:V=[...xy,ground+24],p0=base.timeline.at(part.a).routeProgress,p1=base.timeline.at(part.b).routeProgress,r=speed*Math.max(Math.abs(state.routeProgress-p0),Math.abs(p1-state.routeProgress)),rm:V=[r,r,proof.slope*Math.SQRT2*r];
-      const fit=framingBound(eye,gaze,marker,re,rg,rm,base),cover=coverageBound(proof,eye,gaze,re,rg,base),los=lineBound(proof,eye,gaze,re,rg)&&lineBound(proof,eye,marker,re,rm,true),detail=!spacing||projectionDetailBound(proof,eye,gaze,marker,re,rg,rm,base,spacing);
+      let fit=framingBound(eye,gaze,marker,re,rg,rm,base);
+      const range=ranges.get(state.segment);
+      if(fit&&range){
+        const unit=Math.min(base.width,base.height),window=Math.min(Math.max(50,(spacing??5)*10)/(base.timeline.path.total*1000),(range[1]-range[0])/12),roadSafe=[unit*.075/base.width,unit*.24/base.height,1-unit*.075/base.width,1-unit*(base.options?.overview!==undefined?.31:.29)/base.height];
+        for(const offset of [-window,window]){
+          const progress=(p:number)=>clamp(p+offset,range[0],Math.max(range[0],range[1]-1e-12)),midProgress=progress(state.routeProgress),at=base.timeline.path.at(midProgress),xy=base.terrain.world(at.point),ground=base.terrain.meshElevation(xy);if(ground===undefined){fit=false;break;}
+          const radius=speed*Math.max(Math.abs(midProgress-progress(p0)),Math.abs(progress(p1)-midProgress)),error:V=[radius,radius,proof.slope*Math.SQRT2*radius];
+          if(at.segment!==state.segment||!framingBound(eye,gaze,[...xy,ground+24],re,rg,error,base,roadSafe)){fit=false;break;}
+        }
+      }
+      const cover=coverageBound(proof,eye,gaze,re,rg,base),los=lineBound(proof,eye,gaze,re,rg)&&lineBound(proof,eye,marker,re,rm,true),detail=!spacing||projectionDetailBound(proof,eye,gaze,marker,re,rg,rm,base,spacing);
       if(fit&&cover&&los&&detail)continue;
       diagnostics.failedInterval={start:part.a,end:part.b,eye,gaze,marker,fit,cover,los,detail};
       if(part.depth>=18){const reason=!cover?'photographic-coverage':!fit?'continuous-marker-framing':!los?'continuous-line-of-sight':'source-detail',label={'photographic-coverage':'полный охват фотографии','continuous-marker-framing':'читаемое положение маркера','continuous-line-of-sight':'непрерывная видимость','source-detail':'допустимая детализация фотографии'}[reason];reject(reason);return fallback(`Не доказан ${label}; сохранено прежнее сопровождение.`);}
@@ -296,8 +309,8 @@ function* directorSteps(base:TerrainCameraPlan,imagery?:Readonly<ImageryManifest
   const start=performance.now();let plan:DirectorPlan;
   try{plan=yield* buildDirector(base,imagery,1,BUDGET);
     // Both attempts share ONE proof budget. Recheck the whole wider trajectory.
-    if(plan.diagnostics.status==='fallback'&&plan.diagnostics.rejected['source-detail']){
-      const previous=plan.diagnostics;plan=yield* buildDirector(base,imagery,1.25,BUDGET-previous.proofIntervals);plan.diagnostics.rejected['source-detail-at-first-scale']=1;plan.diagnostics.proofIntervals+=previous.proofIntervals;plan.diagnostics.candidates+=previous.candidates;
+    if(plan.diagnostics.status==='fallback'&&(plan.diagnostics.rejected['source-detail']||plan.diagnostics.rejected['continuous-marker-framing'])){
+      const previous=plan.diagnostics,reason=previous.rejected['source-detail']?'source-detail':'continuous-marker-framing';plan=yield* buildDirector(base,imagery,1.25,BUDGET-previous.proofIntervals);plan.diagnostics.rejected[reason+'-at-first-scale']=1;plan.diagnostics.proofIntervals+=previous.proofIntervals;plan.diagnostics.candidates+=previous.candidates;
     }
   }catch(error){
     if(!(error instanceof Error)||!(/DEM|доступн|ракурс|камер|детализац|проекц/.test(error.message)))throw error;

@@ -58,7 +58,7 @@ export class TerrainRenderer {
   private outputTarget?:T.WebGLRenderTarget;
   constructor(route:Route,readonly terrain:TerrainDataset,public width:number,public height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset,cameraOptions?:TerrainCameraOptions,readyPlan?:TerrainCameraPlan){
     const begin=performance.now(),regional=!!terrain.manifest.regionalProjection;
-    if(readyPlan&&(readyPlan.timeline.route!==route||readyPlan.terrain!==terrain||Math.abs(readyPlan.aspect-width/height)>1e-9||JSON.stringify(readyPlan.timeline.config)!==JSON.stringify(validateStoryConfig(config))))throw Error('Режиссёрский план относится к другой сцене.');
+    if(readyPlan&&(readyPlan.timeline.route!==route||readyPlan.terrain!==terrain||Math.abs(readyPlan.aspect-width/height)>1e-9||JSON.stringify(readyPlan.timeline.config)!==JSON.stringify(validateStoryConfig(config)))){imagery?.dispose();throw Error('Режиссёрский план относится к другой сцене.');}
     this.timeline=readyPlan?.timeline??terrainTimeline(route,terrain,config);this.config=this.timeline.config;
     try{this.plan=readyPlan??createTerrainCameraPlan(this.timeline,terrain,width,height,cameraOptions,terrain.manifest.id==='discovered-copernicus-dem'?imagery?.manifest.spacingMeters:undefined);if(config.cameraMode==='director'&&!readyPlan)this.plan.director=createCameraDirector(this.plan,imagery?.manifest);}catch(error){imagery?.dispose();throw error;}
     const canvas=document.createElement('canvas');
@@ -226,7 +226,7 @@ export class TerrainRenderer {
     const gradient=ctx.createLinearGradient(0,0,0,h*.35);gradient.addColorStop(0,night?'#06111fea':'#173d4be6');gradient.addColorStop(1,'#173d4b00');ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h*.35);
     ctx.fillStyle=ink;ctx.font=`650 ${u*.023}px system-ui`;ctx.fillText('ROUTE STORY  /  TERRAIN',p,p);
     ctx.font=`650 ${u*(state.phase==='INTRO'?.059:.043)}px ${night?'system-ui':'Georgia'}`;ctx.fillText(this.title,p,p+u*.071);
-    ctx.font=`500 ${u*.026}px system-ui`;ctx.fillText(state.phase==='INTRO'?'Реальный рельеф · камера над маршрутом':state.phase==='OUTRO'?'Маршрут целиком':`Сегмент ${state.segment+1} / ${this.timeline.route.segments.length}`,p,p+u*.116);
+    ctx.font=`500 ${u*.026}px system-ui`;ctx.fillText(state.phase==='INTRO'?'Реальный рельеф · камера над маршрутом':state.phase==='OUTRO'?'Итог маршрута':`Сегмент ${state.segment+1} / ${this.timeline.route.segments.length}`,p,p+u*.116);
     if(state.phase!=='ROUTE_REPLAY')for(const [mesh,text] of [[this.start,'Старт'],[this.finish,'Финиш']] as const){
       if(!mesh.visible)continue;const v=mesh.position.clone().project(this.camera),x=(v.x+1)*w/2,y=(1-v.y)*h/2;
       if(v.z>1||x<p||x>w-p||y<u*.25||y>h-u*.28||requiredVisibleAltitude(this.terrain,pose.position,[mesh.position.x,-mesh.position.z,mesh.position.y])>pose.position[2]+.01)continue;
@@ -239,7 +239,7 @@ export class TerrainRenderer {
     ctx.font=`500 ${u*.025}px system-ui`;ctx.fillText(metricLabel(this.timeline.route),p,h-u*.111);
     if(this.config.routeColor==='grade'){
       ctx.font=`600 ${u*.022}px system-ui`;
-      if(this.timeline.dynamics.status==='usable'){const bands=['steepUp','up','flat','down','steepDown'] as const;const labels=['↑ ≥10%','↑ ≥3%','±3%','↓ ≥3%','↓ ≥10%'];const row=this.plan.options ? .25 : .215;bands.forEach((band,i)=>{const x=p+i*(w-p*2)/5;ctx.fillStyle=GRADE_STYLES[band].color;ctx.fillRect(x,h-u*row,u*.012,u*.025);ctx.fillStyle=ink;ctx.fillText(labels[i],x+u*.02,h-u*(row-.022));});}
+      if(this.timeline.dynamics.status==='usable'){const bands=['steepUp','up','flat','down','steepDown'] as const;const labels=['↑ ≥10%','↑ ≥3%','±3%','↓ ≥3%','↓ ≥10%'];const row=this.plan.options ? .25 : .24;bands.forEach((band,i)=>{const x=p+i*(w-p*2)/5;ctx.fillStyle=GRADE_STYLES[band].color;ctx.fillRect(x,h-u*row,u*.012,u*.025);ctx.fillStyle=ink;ctx.fillText(labels[i],x+u*.02,h-u*(row-.022));});}
       else{ctx.fillStyle=ink;ctx.fillText('Уклон не определён · нейтральный путь',p,h-u*.193);}
     }
     ctx.font=`500 ${u*.019}px system-ui`;ctx.fillText(`${this.terrain.manifest.regionalProjection?'© swisstopo · LN02':this.terrain.manifest.id==='discovered-copernicus-dem'?'Copernicus DSM · EGM2008':'© Kartverket · CC BY 4.0'} · DEM ${this.terrain.level.spacingMeters} м · масштаб 1:1`,p,h-u*.063);
