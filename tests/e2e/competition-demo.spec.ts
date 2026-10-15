@@ -18,18 +18,18 @@ test('competition: real UI route style replay editor projects and H264 in both a
  try{
   await page.goto('http://127.0.0.1:4173/');await page.locator('#welcome-close').click();await ready();await stop();
   mark('select synthetic Furka route');await page.locator('#route-choice').selectOption('furka');await ready();await stop();
-  await page.locator('#duration').selectOption('10');await ready();await page.locator('#quality').selectOption('compatibility');await ready();
+  await page.locator('#duration').selectOption('20');await ready();await page.locator('#quality').selectOption('compatibility');await ready();
   mark('choose Atlas style');await page.locator('[data-style="night"]').click();await ready();await page.locator('[data-style="atlas"]').click();await ready();
   await page.locator('#scrub').fill('0');mark('play actual replay');await page.locator('#play').click();
   await page.waitForFunction(()=>Number(document.querySelector<HTMLInputElement>('#scrub')!.value)>2.5);await stop();
   await page.locator('#scrub').fill('5');await page.screenshot({path:dir+'/01-route-replay.png',fullPage:true});
   mark('open storyboard editor');await page.locator('#edit-story').click();await ready();
-  await expect(page.locator('body')).toHaveAttribute('data-montage','edited');await expect(page.locator('#storyboard')).toBeVisible();
+  await expect(page.locator('body')).toHaveAttribute('data-montage','edited');await expect(page.locator('#storyboard')).toBeVisible();await expect(page.locator('.scene-card')).toHaveCount(5);
   await page.locator('.scene-card').nth(2).click();
   await page.waitForFunction(()=>document.querySelector<HTMLSelectElement>('#scene-shot')!.options.length>1&&!document.querySelector<HTMLSelectElement>('#scene-shot')!.disabled,undefined,{timeout:120_000});
   const shot=await page.locator('#scene-shot option').nth(1).getAttribute('value');mark('choose certified shot');await page.locator('#scene-shot').selectOption(shot!);await ready();
-  await page.locator('#scene-duration').fill('4');mark('edit scene time');await page.locator('#apply-scene-duration').click();await ready();
-  const cards=await page.locator('.scene-card').allTextContents();
+  const beforeTime=await page.locator('.scene-card').allTextContents();await page.locator('#scene-duration').fill('7');mark('edit scene time');await page.locator('#apply-scene-duration').click();await ready();
+  const cards=await page.locator('.scene-card').allTextContents();expect(cards).not.toEqual(beforeTime);
   await page.locator('#undo-edit').click();await ready();expect(await page.locator('.scene-card').allTextContents()).not.toEqual(cards);
   await page.locator('#redo-edit').click();await ready();expect(await page.locator('.scene-card').allTextContents()).toEqual(cards);mark('Undo Redo passed');
   await page.locator('#scrub').fill('5');const reference=await page.locator('#preview').evaluate((c:HTMLCanvasElement)=>c.toDataURL());
@@ -38,11 +38,11 @@ test('competition: real UI route style replay editor projects and H264 in both a
   await page.locator('#storyboard').scrollIntoViewIfNeeded();await page.screenshot({path:dir+'/02-storyboard-landscape.png',fullPage:true});
   const save=page.waitForEvent('download');await page.locator('#save-project').click();const projectPath=dir+'/synthetic-furka.rstory.json';await(await save).saveAs(projectPath);
   const project=JSON.parse(readFileSync(projectPath,'utf8'));expect(project.schema).toBe('route-story.project/v1');expect(JSON.stringify(project)).not.toMatch(/"(?:lat|lon|points|segments|url)"/);
-  expect(project.montage.scenes.reduce((n:number,s:any)=>n+s.frames,0)).toBe(240);
+  expect(project.montage.scenes.reduce((n:number,s:any)=>n+s.frames,0)).toBe(480);
   for(const aspect of ['landscape','portrait'] as const){
    if(aspect==='portrait'){await page.locator('#ratio').selectOption(aspect);await ready();await expect(page.locator('#montage-format')).toContainText('9:16');await page.locator('#scrub').fill('5');await page.screenshot({path:dir+'/03-storyboard-portrait.png',fullPage:true});}
-   mark('export actual edited '+aspect+' MP4');const pending=page.waitForEvent('download',{timeout:180_000});await page.locator('#export').click();const file=dir+'/edited-'+aspect+'-10s.mp4';await(await pending).saveAs(file);await ready();
-   await expect(page.locator('#status')).toContainText('MP4 создан');reports.push({...validateVideo(file,aspect==='landscape'?640:360,aspect==='landscape'?360:640,10),sha256:createHash('sha256').update(readFileSync(file)).digest('hex')});
+   mark('export actual edited '+aspect+' MP4');const pending=page.waitForEvent('download',{timeout:180_000});await page.locator('#export').click();const file=dir+'/edited-'+aspect+'-20s.mp4';await(await pending).saveAs(file);await ready();
+   await expect(page.locator('#status')).toContainText('MP4 создан');reports.push({...validateVideo(file,aspect==='landscape'?640:360,aspect==='landscape'?360:640,20),sha256:createHash('sha256').update(readFileSync(file)).digest('hex')});
   }
   await page.reload();await page.locator('#welcome-close').click();await ready();await stop();await page.locator('#project-file').setInputFiles(projectPath);await ready();
   expect(await page.locator('.scene-card').allTextContents()).toEqual(cards);await page.locator('#scrub').fill('5');
