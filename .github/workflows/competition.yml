@@ -1,0 +1,78 @@
+name: Competition synthetic evidence
+on:
+  pull_request:
+    branches: [codex/interactive-storyboard-mvp17]
+permissions:
+  contents: read
+jobs:
+  real-interface:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      PLAYWRIGHT_CHANNEL: msedge
+      STORYBOARD_ACCEPTANCE: '1'
+      UNIFIED_UX_ACCEPTANCE: '1'
+      COMPETITION_DEMO: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.19.0'
+          cache: npm
+      - run: npm.cmd ci
+      - run: npm.cmd run test
+      - run: npm.cmd run build
+      - run: npx.cmd playwright install ffmpeg
+      - run: npx.cmd playwright test tests/e2e/storyboard.spec.ts tests/e2e/competition-demo.spec.ts
+      - run: node scripts/acceptance/competition-media.mjs
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: competition-real-interface
+          path: |
+            artifacts/
+            test-results/
+          retention-days: 14
+  high-resolution:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        quality: [fullhd, ultra]
+    env:
+      PLAYWRIGHT_CHANNEL: msedge
+      SWISS_BASELINE: '0'
+      HIGH_RES_QUALITY: ${{ matrix.quality }}
+      HIGH_RES_DURATIONS: '10'
+      HIGH_RES_CAMERAS: terrain,director
+      HIGH_RES_REQUIRE_DIRECTOR: '1'
+      HIGH_RES_CAPTIONS: full
+      APP_URL: http://127.0.0.1:4196/
+      BUILD_COMMIT: d1b75ca2e5997bf2647b86983f653fa5f8c535f8
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.19.0'
+          cache: npm
+      - run: npm.cmd ci
+      - name: Start existing Vite application
+        shell: pwsh
+        run: |
+          Start-Process -FilePath node -ArgumentList 'node_modules/vite/bin/vite.js','--host','127.0.0.1','--port','4196','--strictPort' -RedirectStandardOutput artifacts-vite.log -RedirectStandardError artifacts-vite-error.log
+          $deadline = (Get-Date).AddSeconds(30)
+          do {
+            try { $response = Invoke-WebRequest http://127.0.0.1:4196/ -UseBasicParsing; if ($response.StatusCode -eq 200) { break } } catch {}
+            Start-Sleep -Milliseconds 500
+          } while ((Get-Date) -lt $deadline)
+          if (!$response -or $response.StatusCode -ne 200) { throw 'Vite failed to start' }
+      - run: node scripts/acceptance/high-resolution.mjs furka competition-furka
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: competition-${{ matrix.quality }}
+          path: |
+            artifacts/
+            artifacts-vite*.log
+          retention-days: 14
