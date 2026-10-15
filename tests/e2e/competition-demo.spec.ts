@@ -44,7 +44,9 @@ test('competition: real UI route style replay editor projects and H264 in both a
    mark('export actual edited '+aspect+' MP4');const pending=page.waitForEvent('download',{timeout:180_000});await page.locator('#export').click();const file=dir+'/edited-'+aspect+'-20s.mp4';await(await pending).saveAs(file);await ready();
    await expect(page.locator('#status')).toContainText('MP4 создан');reports.push({...validateVideo(file,aspect==='landscape'?640:360,aspect==='landscape'?360:640,20),sha256:createHash('sha256').update(readFileSync(file)).digest('hex')});
   }
-  await page.reload();await page.locator('#welcome-close').click();await ready();await stop();await page.locator('#project-file').setInputFiles(projectPath);await ready();
+  await page.reload();await page.locator('#welcome-close').click();await ready();await stop();await page.locator('#project-file').setInputFiles(projectPath);
+  // file.text() is async: the previous automatic route can still be READY here.
+  await expect(page.locator('body')).toHaveAttribute('data-montage','edited',{timeout:120_000});await expect(page.locator('.scene-card')).toHaveCount(5);await ready();
   expect(await page.locator('.scene-card').allTextContents()).toEqual(cards);await page.locator('#scrub').fill('5');
   expect(await page.locator('#preview').evaluate((c:HTMLCanvasElement)=>c.toDataURL())).toBe(reference);mark('project reopened with exact same pixels');
   await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
