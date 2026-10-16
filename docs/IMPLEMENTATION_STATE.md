@@ -1,5 +1,13 @@
 # Implementation state
 
+## Mobile storyboard candidate — 2026-10-16
+
+Owner submitted the competition archive and explicitly chose continuing with a phone-friendly editor, scenes/timeline/controls. Base mainf3e26b3a733a62ef9565dda264fbaeae203a3ddd/mainCI38852391675 SUCCESS; published1.7.0 source9efbc360 remains unchanged. New short-lived branchcodex/mobile-storyboard-mvp18, no new merge/deployment/tag/Release authorization inferred. Source snapshot reconciled by Git blob SHA: all runtime/tests/config matched main; four historical text files refreshed; absent historical docs images and unshipped20mcomparisonJPEG are preserved in remote base tree, never deleted.
+
+Candidate adds previous/next scene with count/time, horizontal selected-card reveal without vertical jump, roving keyboard focus,44px mobile controls/16px inputs, preview/settings jump links and consistent touch landscape layout. Manual scene selection pauses replay. Dedicated abortable alternative-selection operation prevents stale A→B→A proof completions/duplicate options; camera proof thresholds/budgets unchanged. Renderer/exporter/montage model/GPX/project schema/resources/dependencies/caps unchanged. Phone viewport checks reuse real Furka/storyboard and independent MP4 validator; separate read-only workflow captures real screens/recording and checks existing5/6/9MiB packages. See MOBILE_EDITOR.md.
+
+Local Node24 TypeScript syntax-only parse PASS; not a TypeScript typecheck. Exact-source TypeScript/build/unit/browser/touch/project/20sH264/package results PENDING CI. Shell network/socket limitation from previous work remains; no repeated long permission request. Physical phones/native OS picker/newFullHD4K NOT TESTED. No claim that candidate is public.
+
 ## MVP1.7 published / real HTTPS accepted — 2026-10-16 04:35 UTC
 
 Owner-authorized version1.7.0 is LIVE at https://matawaka.github.io/route-story/ . Exact deployed source9efbc360b50e293d09cc8d2ce7fb34b89a171950, main-pushCI38849322196 SUCCESS; app/tree equals reviewed6e713beace41b2943ba7cf7cc64b21f1c7e54375. Main HEAD may advance by this documentation-only PR33; deployed source remains9ef. PR31/32 features are public, none remain PR-only.

@@ -19,6 +19,7 @@
   </section>
   <main class="workspace">
     <aside class="controls">
+      <a id="back-to-preview" class="text-button mobile-jump" href="#story-preview">↑ К видео и монтажу</a>
       <div class="eyebrow auxiliary">ИЗ ТРЕКА В ИСТОРИЮ</div>
       <h1>Ваш маршрут.<br>В движении.</h1>
       <p class="intro auxiliary">Анимируйте маршрут и скачайте MP4. Ваш GPX остаётся на устройстве.</p>
@@ -74,9 +75,9 @@
       </section>
       <p class="privacy auxiliary">Файл обрабатывается в памяти браузера. Без отправки на сервер и сохранения ваших маршрутов.</p>
     </aside>
-    <section class="preview-area" aria-labelledby="preview-title">
+    <section id="story-preview" class="preview-area" tabindex="-1" aria-labelledby="preview-title">
       <div class="preview-heading"><h2 id="preview-title">Предпросмотр</h2><span id="preview-format">16:9</span></div>
-      <div class="view-toolbar"><button id="explanations" class="text-button" aria-pressed="false">Скрыть пояснения</button><button id="video-only" class="text-button" aria-pressed="false">Только видео</button><button id="show-settings" class="text-button" hidden aria-expanded="false">Настройки и маршрут</button><span id="scene-name">Route Story</span></div>
+      <div class="view-toolbar"><button id="explanations" class="text-button" aria-pressed="false">Скрыть пояснения</button><button id="video-only" class="text-button" aria-pressed="false">Только видео</button><button id="show-settings" class="text-button" hidden aria-expanded="false">Настройки и маршрут</button><a id="go-to-settings" class="text-button mobile-jump" href="#route-choice">Настройки и маршрут ↓</a><span id="scene-name">Route Story</span></div>
       <p id="coverage-note" class="coverage-note" role="status" hidden></p>
       <section id="geography-consent" class="coverage-note" hidden aria-labelledby="geography-heading"><h3 id="geography-heading">Найти фотокарту и рельеф</h3><p>Готовой карты этой местности пока нет. Для автоматического поиска Earth Search и Microsoft Planetary Computer получат округлённую область поездки. GPX, точки, имя файла и ваши метки не отправляются. Далее браузер загрузит необходимые фрагменты снимков и DEM. Это экспериментальный режим; покрытие и качество проверяются перед 3D.</p><button id="find-geography" class="text-button">Разрешить поиск и подготовить 3D</button><button id="keep-local" class="text-button">Остаться в локальном 2D</button></section>
       <div class="canvas-stage">
@@ -89,9 +90,10 @@
       <section id="storyboard" class="storyboard" hidden aria-labelledby="storyboard-title">
         <div class="storyboard-heading"><h2 id="storyboard-title">Рассказать по-своему</h2><span id="montage-format"></span><button id="collapse-storyboard" class="text-button">Свернуть монтаж</button></div>
         <p class="montage-help">Выберите эпизод, измените ракурс или время. Весь исходный маршрут сохраняется; темп — художественный.</p>
+        <div class="scene-navigation" role="group" aria-label="Выбор сцены"><button id="previous-scene" class="scene-nav-button" aria-label="Предыдущая сцена" disabled>←</button><p id="scene-position" role="status" aria-live="polite"></p><button id="next-scene" class="scene-nav-button" aria-label="Следующая сцена" disabled>→</button></div>
         <div id="scene-strip" class="scene-strip" role="group" aria-label="Монтажная последовательность"></div>
         <div class="montage-actions"><button id="undo-edit" class="text-button" disabled>↶ Отменить</button><button id="redo-edit" class="text-button" disabled>↷ Повторить</button><button id="reset-montage" class="text-button">Сбросить монтаж</button><button id="save-project" class="text-button">Сохранить проект</button></div>
-        <fieldset id="scene-settings" class="scene-settings"><legend id="selected-scene-name">Эпизод</legend><div><label for="scene-shot">Ракурс · выбранный формат</label><select id="scene-shot" disabled aria-describedby="shot-note"></select><p id="shot-note" class="route-info"></p></div><div><label for="scene-duration">Продолжительность, секунды</label><input id="scene-duration" type="number" min="0.0416666667" step="0.0416666667"><button id="apply-scene-duration" class="text-button">Изменить время</button></div><div class="scene-tools"><button id="preview-scene" class="text-button">▶ Только этот эпизод</button><button id="reset-scene" class="text-button">Вернуть автоматический ракурс</button></div></fieldset>
+        <fieldset id="scene-settings" class="scene-settings"><legend id="selected-scene-name">Эпизод</legend><div><label for="scene-shot">Ракурс · выбранный формат</label><select id="scene-shot" disabled aria-describedby="shot-note"></select><p id="shot-note" class="route-info"></p></div><div><label for="scene-duration">Продолжительность, секунды</label><input id="scene-duration" type="number" inputmode="decimal" min="0.0416666667" step="0.0416666667"><button id="apply-scene-duration" class="text-button">Изменить время</button></div><div class="scene-tools"><button id="preview-scene" class="text-button">▶ Только этот эпизод</button><button id="reset-scene" class="text-button">Вернуть автоматический ракурс</button></div></fieldset>
         <details class="highlight-controls"><summary>Подробнее показать участок маршрута</summary><p>Акцент увеличивает время выбранного участка. Остальные части не исключаются.</p><label for="highlight-start">Начало, % маршрута</label><input id="highlight-start" type="number" min="0" max="99.5" step="0.5" value="35"><label for="highlight-end">Конец, % маршрута</label><input id="highlight-end" type="number" min="0.5" max="100" step="0.5" value="60"><button id="apply-highlight" class="text-button">Выделить участок</button></details>
       </section>
       <p id="montage-status" class="status" role="status" aria-live="polite" hidden></p><button id="cancel-montage" class="text-button" hidden>Отменить подготовку монтажа</button><button id="project-gpx" class="text-button" hidden>Выбрать исходный GPX проекта</button>

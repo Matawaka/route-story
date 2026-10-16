@@ -1,5 +1,7 @@
 # Route Story
 
+Рабочий кандидат следующего этапа: [редактор на телефоне](docs/MOBILE_EDITOR.md) — навигация по сценам, крупные элементы и быстрый переход к настройкам. Публичная 1.7 и её подтверждённые результаты описаны ниже; этот кандидат ещё не опубликован.
+
 **MVP 1.7 — интерактивный монтаж.** Локальное приложение превращает GPX в видео: маршрут → стиль → replay → редактор → H.264 MP4. Русский интерфейс, Vite/TypeScript, Canvas 2D и один существующий WebGL2-контекст для 3D. GPX не отправляется на сервер и не сохраняется в браузерном хранилище.
 
 [Публичный сайт](https://matawaka.github.io/route-story/) · [версия и SHA публикации](https://matawaka.github.io/route-story/release.json). **1.7.0 с редактором опубликована 16 октября** после слияния [PR #31](https://github.com/Matawaka/route-story/pull/31) и [PR #32](https://github.com/Matawaka/route-story/pull/32). Опубликован проверенный main `9efbc360b50e293d09cc8d2ce7fb34b89a171950`: [main CI](https://github.com/Matawaka/route-story/actions/runs/38849322196) и [защищённая публикация с настоящей HTTPS-приёмкой](https://github.com/Matawaka/route-story/actions/runs/38850162841) SUCCESS. [Итог приёмки и медиа](docs/MVP17_EVIDENCE.json).
