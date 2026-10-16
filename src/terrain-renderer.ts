@@ -13,6 +13,8 @@ import { annotationAt, drawAnnotation, intersectsMarker, markerSize, type Marker
 import { drawVideoCredits } from './video-credits';
 import {createCameraDirector,prepareCameraDirector} from './camera-director';
 import type {TerrainCameraPlan} from './terrain-camera';
+import {isPreparedMontage,type PreparedMontage} from './montage-camera';
+import type {StoryState} from './timeline';
 
 function terrainTimeline(route:Route,terrain:TerrainDataset,config:StoryConfig):StoryTimeline {
   const regional=!!terrain.manifest.regionalProjection,needsDynamics=config.routeColor==='grade'||config.replayPacing==='terrain';
@@ -56,6 +58,14 @@ export class TerrainRenderer {
   private frameImage?:ImageData;
   private readonly frameCanvas=document.createElement('canvas');
   private outputTarget?:T.WebGLRenderTarget;
+  private montage?:PreparedMontage;
+  /** Snapshot is replaced atomically after CPU proof, never GPU recreation. */
+  setMontage(snapshot?:PreparedMontage):void {
+    if(snapshot&&(!isPreparedMontage(snapshot)||snapshot.playback.timeline!==this.timeline||snapshot.aspect!==this.plan.aspect||snapshot.director.diagnostics.status!=='selected'))throw Error('Монтаж не проверен для текущей сцены.');
+    this.montage=snapshot;
+  }
+  get montageSnapshot():PreparedMontage|undefined{return this.montage;}
+  stateAt(seconds:number):StoryState{return this.montage?.playback.at(seconds)??this.timeline.at(seconds);}
   constructor(route:Route,readonly terrain:TerrainDataset,public width:number,public height:number,config:StoryConfig,readonly imagery?:PreparedImagery,customMarker?:MarkerAsset,cameraOptions?:TerrainCameraOptions,readyPlan?:TerrainCameraPlan){
     const begin=performance.now(),regional=!!terrain.manifest.regionalProjection;
     if(readyPlan&&(readyPlan.timeline.route!==route||readyPlan.terrain!==terrain||Math.abs(readyPlan.aspect-width/height)>1e-9||JSON.stringify(readyPlan.timeline.config)!==JSON.stringify(validateStoryConfig(config)))){imagery?.dispose();throw Error('Режиссёрский план относится к другой сцене.');}
@@ -178,7 +188,7 @@ export class TerrainRenderer {
   private renderFrame(seconds:number):void{
     const canvas=this.frameCanvas;
     if(this.disposed||this.lost||this.gpu.getContext().isContextLost())throw Error('3D-контекст потерян. Переключите камеру на 2D или выберите 3D повторно.');
-    const state=this.timeline.at(seconds),pose=getTerrainCameraStateAt(seconds,this.plan),night=this.config.visualStyle==='night';
+    const state=this.stateAt(seconds),pose=this.montage?this.montage.director.at(this.montage.playback.sourceTime(seconds)):getTerrainCameraStateAt(seconds,this.plan),night=this.config.visualStyle==='night';
     this.camera.position.set(pose.position[0],pose.position[2],-pose.position[1]);this.camera.up.set(0,1,0);this.camera.lookAt(pose.target[0],pose.target[2],-pose.target[1]);
     this.camera.updateMatrixWorld();
     if(this.imagery){this.camera.updateMatrixWorld();this.viewProjection.multiplyMatrices(this.camera.projectionMatrix,this.camera.matrixWorldInverse);this.frustum.setFromProjectionMatrix(this.viewProjection);const visible=!!this.detailBox&&this.frustum.intersectsBox(this.detailBox);this.detailWeight.value=this.imagery.manifest.detailSelection?projectedDetailWeight(this.imagery.manifest,terrainTexelFootprint(this.terrain,pose.position,pose.target,this.terrain.world(state.point),this.width,this.height,this.imagery.manifest.detail!.spacingMeters),visible):imageryDetailWeight(this.imagery.manifest,Math.hypot(...pose.position.map((v,i)=>v-pose.target[i])),pose.fov,this.height,visible);}
@@ -251,7 +261,7 @@ export class TerrainRenderer {
   dispose():void{
     this.framePixels=new Uint8Array(0);this.frameImage=undefined;
     this.frameCanvas.width=this.frameCanvas.height=0;
-    if(this.disposed)return;this.disposed=true;this.outputTarget?.dispose();this.outputTarget=undefined;for(const resource of this.disposables)resource.dispose();this.scene.clear();
+    if(this.disposed)return;this.disposed=true;this.montage=undefined;this.outputTarget?.dispose();this.outputTarget=undefined;for(const resource of this.disposables)resource.dispose();this.scene.clear();
     if(this.gpu){this.gpu.domElement.removeEventListener('webglcontextlost',this.onLost);if(!this.gpu.getContext().isContextLost())this.gpu.forceContextLoss();this.gpu.dispose();this.gpu.domElement.width=this.gpu.domElement.height=0;}
   }
 }

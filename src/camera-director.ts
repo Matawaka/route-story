@@ -20,6 +20,8 @@ export interface DirectorDiagnostics {
   failedInterval?:{start:number;end:number;eye:V;gaze:V;marker:V;fit:boolean;cover:boolean;los:boolean;detail:boolean};
 }
 export interface DirectorPlan {diagnostics:DirectorDiagnostics;at(seconds:number):TerrainCameraState}
+/** Optional editor choices. Defaults are absent, preserving MVP1.6 poses. */
+export interface DirectorEdit {readonly segment:number;readonly from:number;readonly to:number;readonly kind:ShotKind}
 const BUDGET=30000,MAX_KEYS=32;
 const add=(a:V,b:V):V=>a.map((v,i)=>v+b[i]) as unknown as V;
 const scale=(a:V,s:number):V=>a.map(v=>v*s) as unknown as V;
@@ -209,7 +211,7 @@ function analyze(base:TerrainCameraPlan,progress:number){
 /** Bounded, explainable shot selection. Every accepted cubic is certified via
  * its complete Bernstein hull + Lipschitz interval proofs before it is exposed.
  * Proof failure keeps the existing camera; it never relaxes 350m/LOS/no-data. */
-function* buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>|undefined,boost:number,budget:number):Generator<void,DirectorPlan> {
+function* buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>|undefined,boost:number,budget:number,edits:readonly DirectorEdit[]=[]):Generator<void,DirectorPlan> {
   const start=performance.now(),safe=DIRECTOR_SAFE_AREAS[base.aspect<1?'portrait':'landscape'],diagnostics:DirectorDiagnostics={status:'fallback',reason:'',preparationMilliseconds:0,candidates:0,rejected:{},proofIntervals:0,proofBudget:BUDGET,maximumMeshSlope:0,maximumWorldSpeed:0,keys:[],safeArea:safe,coverage:'previous-mode'};
   const fallback=(reason:string):DirectorPlan=>{diagnostics.reason=reason;diagnostics.preparationMilliseconds=performance.now()-start;return{diagnostics,at(){throw Error('Fallback director has no trajectory');}};};
   const reject=(reason:string)=>diagnostics.rejected[reason]=(diagnostics.rejected[reason]??0)+1;
@@ -259,6 +261,23 @@ function* buildDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>
   }
   if(base.timeline.config.introSeconds){const first=keys[0],p:V=[first.position[0],first.position[1],first.position[2]+(regional?120:800)];keys.unshift({...first,time:0,kind:'establishing',position:p,reason:'Локальный обзор настоящего ландшафта; без вылета за покрытие'});}
   if(base.timeline.config.outroSeconds){const last=keys.at(-1)!;keys.push({...last,time:base.timeline.config.durationSeconds,kind:'finale',position:[last.position[0],last.position[1],last.position[2]+(regional?120:800)],reason:'Плавное раскрытие пройденного участка'});}
+  // An edited camera is re-proved as ONE complete plan, including neighboring
+  // C1 transitions. No concatenation of independently safe but incompatible poses.
+  for(const edit of edits){
+    if(!Number.isSafeInteger(edit.segment)||!Number.isFinite(edit.from)||!Number.isFinite(edit.to)||edit.from<0||edit.to>1||edit.to<edit.from)throw Error('Некорректный участок редактирования камеры.');
+    for(const key of keys){
+      if(key.segment!==edit.segment)continue;
+      if(edit.kind==='establishing'||edit.kind==='finale'){
+        if(key.kind===edit.kind)key.position=[key.position[0],key.position[1],key.position[2]+(regional?90:300)];
+        continue;
+      }
+      if(key.time<=base.timeline.config.introSeconds||key.time>=base.timeline.config.durationSeconds-base.timeline.config.outroSeconds||key.progress<=edit.from||key.progress>=edit.to)continue;
+      const weight=Math.sin(Math.PI*(key.progress-edit.from)/(edit.to-edit.from))**2,amount=regional?65:450;
+      const sideShift=edit.kind==='scenic-side'?amount:edit.kind==='curve-showcase'?-amount*.65:edit.kind==='smooth-follow'?-amount*.25:0;
+      const lift=edit.kind==='mountain-reveal'?(regional?100:350):edit.kind==='smooth-follow'?35:0;
+      key.position=[key.position[0]+weight*sideShift*side,key.position[1],key.position[2]+weight*lift];key.kind=edit.kind;key.reason='Выбранный пользователем ракурс; полный коридор и переходы проверяются заново';
+    }
+  }
   if(keys.length>MAX_KEYS)return fallback('Превышен полный бюджет сцен с вступлением и финалом; сохранено прежнее сопровождение.');
   // Lift each COMPLETE control hull above all crossed cells, including intro
   // and outro. Raising key z values preserves the resulting curve's convex
@@ -311,12 +330,12 @@ function directorAt(base:TerrainCameraPlan,legs:readonly Leg[],keys:readonly Dir
   const immutableLegs=Object.freeze(legs.map(l=>Object.freeze({...l,eye:Object.freeze(l.eye.map(v=>Object.freeze([...v]) as unknown as V)) as unknown as Curve,gaze:Object.freeze(l.gaze.map(v=>Object.freeze([...v]) as unknown as V)) as unknown as Curve}))),immutableKeys=Object.freeze(keys.map(k=>Object.freeze({...k,position:Object.freeze([...k.position]) as unknown as V,target:Object.freeze([...k.target]) as unknown as V})));
   return(seconds:number)=>{if(!Number.isFinite(seconds))throw Error('Некорректное время камеры.');const time=clamp(seconds,0,base.timeline.config.durationSeconds);let lo=0,hi=immutableLegs.length-1;while(lo<hi){const m=(lo+hi+1)>>>1;if(immutableLegs[m].start<=time)lo=m;else hi=m-1;}const leg=immutableLegs[lo];if(leg.cut){const s=base.timeline.at(time),key=s.segment===immutableKeys[lo].segment?immutableKeys[lo]:immutableKeys[lo+1],fixed:Leg={...leg,eye:[key.position,key.position,key.position,key.position],gaze:[key.target,key.target,key.target,key.target]};return rawPose(time,fixed,base);}return rawPose(time,leg,base);};
 }
-function* directorSteps(base:TerrainCameraPlan,imagery?:Readonly<ImageryManifest>):Generator<void,DirectorPlan> {
+function* directorSteps(base:TerrainCameraPlan,imagery?:Readonly<ImageryManifest>,edits:readonly DirectorEdit[]=[]):Generator<void,DirectorPlan> {
   const start=performance.now();let plan:DirectorPlan;
-  try{plan=yield* buildDirector(base,imagery,1,BUDGET);
+  try{plan=yield* buildDirector(base,imagery,1,BUDGET,edits);
     // Both attempts share ONE proof budget. Recheck the whole wider trajectory.
     if(plan.diagnostics.status==='fallback'&&(plan.diagnostics.rejected['source-detail']||plan.diagnostics.rejected['continuous-marker-framing'])){
-      const previous=plan.diagnostics,reason=previous.rejected['source-detail']?'source-detail':'continuous-marker-framing';plan=yield* buildDirector(base,imagery,1.25,BUDGET-previous.proofIntervals);plan.diagnostics.rejected[reason+'-at-first-scale']=1;plan.diagnostics.proofIntervals+=previous.proofIntervals;plan.diagnostics.candidates+=previous.candidates;
+      const previous=plan.diagnostics,reason=previous.rejected['source-detail']?'source-detail':'continuous-marker-framing';plan=yield* buildDirector(base,imagery,1.25,BUDGET-previous.proofIntervals,edits);plan.diagnostics.rejected[reason+'-at-first-scale']=1;plan.diagnostics.proofIntervals+=previous.proofIntervals;plan.diagnostics.candidates+=previous.candidates;
     }
   }catch(error){
     if(!(error instanceof Error)||!(/DEM|доступн|ракурс|камер|детализац|проекц/.test(error.message)))throw error;
@@ -329,6 +348,7 @@ export function createCameraDirector(base:TerrainCameraPlan,imagery?:Readonly<Im
 }
 /** Same deterministic algorithm; scheduling changes responsiveness, never poses.
  * Cancellation happens before any GPU allocation or publication of this plan. */
-export async function prepareCameraDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>|undefined,signal:AbortSignal):Promise<DirectorPlan> {
-  const steps=directorSteps(base,imagery);try{signal.throwIfAborted();let result=steps.next();while(!result.done){await new Promise(resolve=>setTimeout(resolve,0));signal.throwIfAborted();result=steps.next();}signal.throwIfAborted();return result.value;}finally{steps.return(undefined as never);}
+export async function prepareCameraDirector(base:TerrainCameraPlan,imagery:Readonly<ImageryManifest>|undefined,signal:AbortSignal,edits:readonly DirectorEdit[]=[]):Promise<DirectorPlan> {
+  if(edits.length>24)throw Error('Превышено количество монтажных сцен.');
+  const steps=directorSteps(base,imagery,edits);try{signal.throwIfAborted();let result=steps.next();while(!result.done){await new Promise(resolve=>setTimeout(resolve,0));signal.throwIfAborted();result=steps.next();}signal.throwIfAborted();return result.value;}finally{steps.return(undefined as never);}
 }

@@ -5,6 +5,7 @@ import os from 'node:os';
 import assert from 'node:assert/strict';
 import {withProductionServer} from './production.mjs';
 import {validateVideo} from '../validate-video.mjs';
+import {acceptStoryboard} from './storyboard-release.mjs';
 
 // Opt-in acceptance of the real production UI, locally or at the published URL.
 // No source-module imports, route uploads, account session or fake exporter.
@@ -106,6 +107,7 @@ async function accept(url){
    // A fresh session intentionally restores the public demo, never the last
    // private GPX. Keep the original empty assertion for the baseline build.
    await expect(page.locator('#preview')).toHaveAttribute('data-region','furka',{timeout:60000});await expect(page.locator('#route-choice')).toHaveValue('furka');await expect(page.locator('#route-info')).toContainText('синтетический');await expect(page.locator('#route-info')).not.toContainText(examples.at(-1).title);
+   if(Number(manifest.version.split('.')[1])>=7)report.storyboard=await acceptStoryboard(page,directory);
   }else{await expect(page.locator('#empty')).toBeVisible();await expect(page.locator('#export')).toBeDisabled();}
   assert.deepEqual(unexpected,[]);assert.deepEqual(badResponses,[]);assert.deepEqual(errors,[]);assert.ok(requests.some(r=>r.path.endsWith('/maps/ne_110m_land.geojson')));
   report.privacy={storage,unexpectedRequests:unexpected,badResponses,pageErrors:errors,firstPartyBrowserRequests:requests.length,routeLostOnReload:true};report.status='VERIFIED';
