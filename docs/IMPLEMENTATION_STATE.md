@@ -1,6 +1,11 @@
 # Implementation state
 
-## MVP1.7 completion candidate — 2026-10-16
+## MVP1.7 application accepted / publication preparation — 2026-10-16
+
+Application runtime0f544f083fa63688312c00b54e46b7f843981259: exactCI38844686969 SUCCESS319unit/28files+TS/build+72browserPASS/41opt-in skips. Edited real10s/240frame FullHD BOTH aspects and4K BOTH aspects PASS in38844686984; real pointer cancel/retry, exact same-size preview/preencode/reverse seek, oneGPU, project reload, external/errors0. Locally re-decoded FullHD and4K with systemFFmpeg8 against original CI file hashes. Old4K failures remain historical, not silently deleted.
+
+First full production recording hit420s total test budget, retry exact source launched; per-file180s and all frame/safety assertions unchanged. Follow-up only acceptance/docs adds step timestamps and600s aggregate recording budget for slow virtual GPU, retains20min job and existing resource/proof/time thresholds. Protected Pages workflow unchanged. Existing release.mjs now invokes real built/HTTPS storyboard UI smoke for version1.7: shot/time/UndoRedo/draft preservation/aspects/project fresh reload and exact pixels, while retaining package/CSP/hash/privacy/automatic MP4 checks. Application/dependencies/lock unchanged from accepted0f source. New acceptance-only exact-head results must be inspected before merging; publication already explicitly authorized after finished acceptance.
+
 
 Headless 4K test explicitly chooses existing allowed 10s bounded memory export: quality selection otherwise defaults to real OS picker and does not begin encoding in headless UI. Existing high-resolution acceptance already sets this preference; no fake picker or relaxed cancellation/frame assertion. Native picker remains NOT TESTED.
 

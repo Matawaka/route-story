@@ -11,6 +11,8 @@ on:
       - 'index.html'
       - 'tests/e2e/storyboard-high-resolution.spec.ts'
       - 'scripts/acceptance/mvp17-production.mjs'
+      - 'scripts/acceptance/release.mjs'
+      - 'scripts/acceptance/storyboard-release.mjs'
       - 'package*.json'
 permissions:
   contents: read

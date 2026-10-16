@@ -5,12 +5,12 @@ import {validateVideo} from '../../scripts/validate-video.mjs';
 
 test('competition: real UI route style replay editor projects and H264 in both aspects',async({browser})=>{
  test.skip(process.env.COMPETITION_DEMO!=='1','Synthetic competition recording is opt-in');
- test.setTimeout(420_000);
+ test.setTimeout(600_000);
  const dir='artifacts/competition';mkdirSync(dir,{recursive:true});
  const base=process.env.MVP17_PRODUCTION_URL??'http://127.0.0.1:4173/';
  const context=await browser.newContext({viewport:{width:1440,height:1000},recordVideo:{dir,size:{width:1440,height:1000}}});
  const external:string[]=[],errors:string[]=[],steps:{name:string;milliseconds:number}[]=[];
- const started=Date.now();const mark=(name:string)=>steps.push({name,milliseconds:Date.now()-started});
+ const started=Date.now();const mark=(name:string)=>{const step={name,milliseconds:Date.now()-started};steps.push(step);console.log(JSON.stringify(step));};
  await context.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():(external.push(r.request().url()),r.abort()));
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));const video=page.video()!;
  const ready=()=>page.waitForFunction(()=>!document.querySelector<HTMLButtonElement>('#export')!.disabled,undefined,{timeout:120_000});
