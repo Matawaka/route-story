@@ -3,7 +3,7 @@ import {mkdirSync,readFileSync,writeFileSync,renameSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {validateVideo} from '../../scripts/validate-video.mjs';
 
-test('touch editor: scene navigation, rapid choices, keyboard, projects and real portrait MP4',async({browser})=>{
+test('touch editor: proportional timeline, frame steps, scene navigation, projects and real portrait MP4',async({browser})=>{
   test.skip(process.env.MOBILE_EDITOR_ACCEPTANCE!=='1','Opt-in synthetic Furka mobile editor acceptance');
   test.setTimeout(360_000);
   const dir='artifacts/mobile-editor';mkdirSync(dir,{recursive:true});
@@ -17,6 +17,8 @@ test('touch editor: scene navigation, rapid choices, keyboard, projects and real
   };
   const optionsReady=()=>expect(page.locator('#shot-note')).not.toContainText('Подбираем',{timeout:120_000});
   const selected=page.locator('.scene-card[aria-pressed="true"]');
+  const montageScrub=page.locator('#montage-scrub');
+  const timelineFrames=()=>page.locator('.timeline-segment').evaluateAll(bands=>bands.map(band=>Number((band as HTMLElement).dataset.frames)));
   const visibleCard=async()=>expect.poll(()=>selected.evaluate(button=>{
     const card=button.getBoundingClientRect(),strip=document.querySelector('#scene-strip')!.getBoundingClientRect();
     return card.left>=strip.left-1&&card.right<=strip.right+1;
@@ -28,6 +30,8 @@ test('touch editor: scene navigation, rapid choices, keyboard, projects and real
     await page.locator('#quality').selectOption('compatibility');await expect(page.locator('#export')).toBeEnabled();
     await page.locator('#edit-story').tap();await ready();
     await expect(page.locator('.scene-card')).toHaveCount(5);
+    await expect(page.locator('.timeline-segment')).toHaveCount(5);
+    const originalFrames=await timelineFrames();expect(originalFrames.reduce((a,b)=>a+b,0)).toBe(480);
     await expect(page.locator('#scene-position')).toContainText('Сцена 2 из 5');await visibleCard();
     await page.locator('#next-scene').scrollIntoViewIfNeeded();
     const before=await page.evaluate(()=>scrollY);await page.locator('#next-scene').tap();
@@ -48,8 +52,15 @@ test('touch editor: scene navigation, rapid choices, keyboard, projects and real
     await page.locator('#play').tap();await expect(page.locator('#scene-duration')).toHaveValue('7');
     await page.locator('#apply-scene-duration').tap();await ready();
     const edited=await page.locator('.scene-card').allTextContents();
+    const editedFrames=await timelineFrames();expect(editedFrames).not.toEqual(originalFrames);expect(editedFrames[2]).toBe(168);
+    // The visible bands represent real duration, including short intro/outro.
+    const bands=await page.locator('.timeline-segment').evaluateAll(bands=>bands.map(band=>({width:band.getBoundingClientRect().width,frames:Number((band as HTMLElement).dataset.frames)})));
+    const totalWidth=bands.reduce((sum,band)=>sum+band.width,0);
+    for(const band of bands)expect(band.width/totalWidth).toBeCloseTo(band.frames/480,2);
     await page.locator('#undo-edit').tap();await ready();expect(await page.locator('.scene-card').allTextContents()).not.toEqual(edited);
+    expect(await timelineFrames()).toEqual(originalFrames);
     await page.locator('#redo-edit').tap();await ready();expect(await page.locator('.scene-card').allTextContents()).toEqual(edited);await visibleCard();
+    expect(await timelineFrames()).toEqual(editedFrames);
 
     await page.locator('#play').tap();await expect(page.locator('body')).toHaveAttribute('data-state','PLAYING');
     await page.locator('#next-scene').tap();await expect(page.locator('body')).toHaveAttribute('data-state','PAUSED');
@@ -64,7 +75,7 @@ test('touch editor: scene navigation, rapid choices, keyboard, projects and real
     for(const size of [{width:320,height:740},{width:390,height:844},{width:428,height:926},{width:844,height:390}]){
       await page.setViewportSize(size);viewports.push(size);
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-      for(const id of ['previous-scene','next-scene','play','scrub','scene-scrub','show-scene-frame','scene-duration','apply-scene-duration','save-project']){
+      for(const id of ['previous-scene','next-scene','play','scrub','montage-scrub','previous-frame','next-frame','scene-scrub','show-scene-frame','scene-duration','apply-scene-duration','save-project']){
         expect((await page.locator('#'+id).boundingBox())!.height).toBeGreaterThanOrEqual(44);
       }
       for(const id of ['scene-shot','scene-duration','ratio']){
@@ -77,17 +88,47 @@ test('touch editor: scene navigation, rapid choices, keyboard, projects and real
     await page.locator('#back-to-preview').tap();await expect(page.locator('#preview-title')).toBeInViewport();
     await page.locator('#previous-scene').tap();await optionsReady();await visibleCard();
     const sceneScrub=page.locator('#scene-scrub');
+    await montageScrub.focus();await montageScrub.press('Home');
+    await expect(page.locator('#scene-position')).toContainText('Сцена 1 из 5');
+    await expect(page.locator('#previous-frame')).toBeDisabled();expect(Number(await page.locator('#scrub').inputValue())).toBe(0);
+    await montageScrub.press('End');await expect(montageScrub).toHaveValue('479');
+    await expect(page.locator('#scene-position')).toContainText('Сцена 5 из 5');await expect(page.locator('#next-frame')).toBeDisabled();
+    expect(Number(await page.locator('#scrub').inputValue())).toBeCloseTo(479/24,10);
+    // Real touch on the full timeline selects a frame inside the middle scene
+    // and pauses replay, without a vertical page jump or a mocked clock.
+    await page.locator('#scrub').fill('0');
+    await page.locator('#play').tap();await expect(page.locator('body')).toHaveAttribute('data-state','PLAYING');
+    await montageScrub.scrollIntoViewIfNeeded();const timelineY=await page.evaluate(()=>scrollY),timelineBox=(await montageScrub.boundingBox())!;
+    await montageScrub.tap({position:{x:timelineBox.width/2,y:22}});
+    await expect(page.locator('body')).toHaveAttribute('data-state','PAUSED');
+    await expect(page.locator('#scene-position')).toContainText('Сцена 3 из 5');await visibleCard();
+    expect(Math.abs(await page.evaluate(()=>scrollY)-timelineY)).toBeLessThanOrEqual(1);
+    const touchedFrame=Number(await montageScrub.inputValue());expect(touchedFrame).toBeGreaterThan(220);expect(touchedFrame).toBeLessThan(260);
+    expect(Number(await page.locator('#scrub').inputValue())).toBeCloseTo(touchedFrame/24,10);
+    await expect(page.locator('.timeline-segment[data-selected="true"]')).toHaveCount(1);
+    const selectedId=await selected.getAttribute('data-scene');
+    await expect(page.locator('.timeline-segment[data-selected="true"]')).toHaveAttribute('data-scene',selectedId!);
+    await optionsReady();
     await sceneScrub.fill('0');const startTime=Number(await page.locator('#scrub').inputValue());
     await sceneScrub.fill('13');const frameTime=Number(await page.locator('#scrub').inputValue());
     expect(frameTime).toBeCloseTo(startTime+13/24,10);
     await expect(page.locator('#scene-frame-note')).toContainText('Кадр 14 из 168');
+    await expect(montageScrub).toHaveValue(String(Math.round(startTime*24)+13));
     const scenePixels=await page.locator('#preview').evaluate((canvas:HTMLCanvasElement)=>canvas.toDataURL());
+    await page.locator('#next-frame').tap();await expect(sceneScrub).toHaveValue('14');
+    expect(Number(await page.locator('#scrub').inputValue())).toBeCloseTo(frameTime+1/24,10);
+    await page.locator('#previous-frame').tap();await expect(sceneScrub).toHaveValue('13');
+    expect(await page.locator('#preview').evaluate((canvas:HTMLCanvasElement)=>canvas.toDataURL())).toBe(scenePixels);
     await page.locator('#scrub').fill('0');await expect(page.locator('#scene-frame-note')).toContainText('другая сцена');
     await page.locator('#scrub').fill(String(frameTime));
     expect(await page.locator('#preview').evaluate((canvas:HTMLCanvasElement)=>canvas.toDataURL())).toBe(scenePixels);
     await sceneScrub.focus();await sceneScrub.press('End');await expect(sceneScrub).toHaveValue('167');
+    await expect(page.locator('#next-frame')).toBeDisabled();
+    await page.locator('#previous-frame').tap();await expect(sceneScrub).toHaveValue('166');
+    await sceneScrub.focus();await sceneScrub.press('End');
     expect(Number(await page.locator('#scrub').inputValue())).toBeCloseTo(startTime+167/24,10);
     await sceneScrub.press('Home');await expect(sceneScrub).toHaveValue('0');
+    await expect(page.locator('#previous-frame')).toBeDisabled();
     expect(Number(await page.locator('#scrub').inputValue())).toBeCloseTo(startTime,10);
     await sceneScrub.fill('13');await page.locator('#show-scene-frame').tap();
     await expect(page.locator('#preview')).toBeInViewport();
@@ -117,6 +158,7 @@ test('touch editor: scene navigation, rapid choices, keyboard, projects and real
     const download=page.waitForEvent('download',{timeout:180_000});await page.locator('#export').tap();
     await expect(page.locator('#next-scene')).toBeDisabled();await expect(page.locator('#previous-scene')).toBeDisabled();
     await expect(sceneScrub).toBeDisabled();await expect(page.locator('#show-scene-frame')).toBeDisabled();
+    await expect(montageScrub).toBeDisabled();await expect(page.locator('#previous-frame')).toBeDisabled();await expect(page.locator('#next-frame')).toBeDisabled();
     const file=dir+'/edited-portrait-20s.mp4';await(await download).saveAs(file);await ready();
     videoReport={...validateVideo(file,360,640,20),sha256:createHash('sha256').update(readFileSync(file)).digest('hex')};
     await page.reload();await page.locator('#welcome-close').click();await expect(page.locator('#export')).toBeEnabled({timeout:120_000});
@@ -124,12 +166,14 @@ test('touch editor: scene navigation, rapid choices, keyboard, projects and real
     expect(await page.locator('.scene-card').allTextContents()).toEqual(portraitCards);await page.locator('#scrub').fill('5');
     expect(await page.locator('#preview').evaluate((canvas:HTMLCanvasElement)=>canvas.toDataURL())).toBe(pixels);
     await visibleCard();await expect(sceneScrub).toBeEnabled();
+    expect(await timelineFrames()).toEqual(project.montage.scenes.map((scene:{frames:number})=>scene.frames));
+    await expect(montageScrub).toHaveValue('120');
     await expect(page.locator('#return-to-editor')).toBeVisible();await page.locator('#collapse-storyboard').tap();
     await expect(page.locator('#return-to-editor')).toBeHidden();
     expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);
     expect(external).toEqual([]);expect(errors).toEqual([]);passed=true;
   }finally{
     await context.close();renameSync(await recording.path(),dir+'/interface.webm');
-    writeFileSync(dir+'/acceptance.json',JSON.stringify({status:passed?'PASS':'FAILED',sourceCommit:process.env.BUILD_COMMIT,browser:browser.version(),syntheticOnly:true,device:'Touch/mobile viewport emulation; no physical phone tested',viewports,external,errors,export:videoReport},null,2));
+    writeFileSync(dir+'/acceptance.json',JSON.stringify({status:passed?'PASS':'FAILED',sourceCommit:process.env.BUILD_COMMIT,browser:browser.version(),syntheticOnly:true,device:'Touch/mobile viewport emulation; no physical phone tested',checks:['proportional timeline and Undo/Redo/project restoration','touch timeline seek pauses replay without vertical jump','frame step buttons: exact 1/24s, pixel reversal and scene bounds','existing navigation, rapid choices, both aspects, project and H.264 export'],viewports,external,errors,export:videoReport},null,2));
   }
 });

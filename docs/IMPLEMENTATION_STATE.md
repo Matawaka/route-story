@@ -1,5 +1,13 @@
 # Implementation state
 
+## Mobile proportional timeline / frame buttons continuation — 2026-10-16
+
+Owner requested Continue on chosen phone-editor work. PR34 OPEN/ready/unmerged HEADcb1b78713f1e7b3554b40d17f49f3b709a0e988c reconciled; exact-head routine38869133327/job116868810113 and mobile38869133342/job116868809930 both SUCCESS,319unit/28files+TypeScript/build+72browserPASS/42opt-in skips+3mobile tests. Public1.7source9ef/mainf3e unchanged. Local directory is a verified source snapshot, not a git checkout; connector ref remains authoritative.
+
+New bounded UI-only native range shows proportional scene bands (at most existing24scenes), selected scene and actual frame/time; touch/keyboard seeks exact frame, selects corresponding scene and pauses replay without vertical jump. Separate44px previous/next frame buttons advance1/24s within selected scene only. UndoRedo/project restore rebuild bands; all new inputs lock during preparation/export. Shared clock/canvas/renderer/exporter/model/GPX/privacy/dependencies/resource/package caps remain unchanged. No frame-sequence cache or extra GPU context.
+
+Extended existing MOBILE_EDITOR_ACCEPTANCE scenario proves real touch selection, frame-step pixels/reversal/bounds, proportional widths after duration edits and UndoRedo/project reload, viewport targets and export locks. Commands: node --check src/storyboard-editor.ts and node --check tests/e2e/mobile-editor.spec.ts PASS syntax only. No local dependency install/browser runtime available; exact-source TypeScript/unit/browser/MP4/package and visual checks PENDING CI. Prior accepted media/results below do not prove new code. Synthetic Furka only; physical phones/nativepicker/newFullHD4K NOTTESTED. No merge/deployment/Release/tag/protected-settings authorization inferred.
+
 ## Mobile scene frames / preview accepted — 2026-10-16 07:36 UTC
 
 PR34/codex/mobile-storyboard-mvp18 exact application headc792b3c53b35ff39451c305f83d9b32cb51376e2: routine38867414596/job116863333734 SUCCESS319unit/28files+TypeScript/build+72browserPASS/42opt-in skips/audit0; mobile38867414616/job116863333830 SUCCESS3tests/4.6min. Exact1/24s scene seeks and global-seek pixels PASS; native Home/End stay in frames0..N-1, actual scene-only playback pauses on final valid frame, preview/return visibility and export scene-input lock PASS. Existing touch/navigation/UndoRedo/project/oneGPU/source/private/safety checks retained. No new runtime edit after this accepted head; current follow-up is docs/evidence only.
