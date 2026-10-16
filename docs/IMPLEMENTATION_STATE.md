@@ -1,5 +1,13 @@
 # Implementation state
 
+## MVP1.7 accepted and merged — 2026-10-16 04:18 UTC
+
+Owner explicitly authorized merging and public1.7 after completed work. PR32 merged as58aadbdf2f4f01bcc717e886b702dbd4ba41163e, PR31 merged to main9efbc360b50e293d09cc8d2ce7fb34b89a171950. Both merge trees exactly equal reviewed6e713beace41b2943ba7cf7cc64b21f1c7e54375; earlier0f runtime app code unchanged in acceptance-only followup. All seven acceptance38846070655 jobs SUCCESS and regression38846070644 SUCCESS. Exact main-push38849322196 SUCCESS319unit/28files+TS/build+72browserPASS/41opt-in skips. Actual10s edited FullHD/4K BOTHaspects/pass pointercancel/retry/exactpixels/oneGPU/project reload; source/private/safety/dependencies/caps preserved.
+
+Production package incl manifest5079557/6085086/8556918B within5/6/9MiB;44combined file hashes, CSP/provenance/licences PASS. Existing release smoke real built storyboard UI PASS. Full actual344.6s UI recording, continuous17.894s GIF,3desktop/1mobileviewport screenshots and2edited20s/480frame H264 MP4. Local independent FFmpeg8 re-decode of four0f highres and two6e production outputs PASS; actual CI SHA256s verified. Exact reports/media/download links in MVP17_EVIDENCE.json. Earlier timeout failures preserved; final global recording budget600s only, no per-export/cancel/proof/frame/safety weakening.
+
+Public publication not yet claimed at this checkpoint. GitHub connector has no workflow_dispatch; bounded CLI network request hung and was aborted, do not repeat. Owner asked asynchronously to Run existing Pages workflow on main9ef with all4flags true and personally Review deployments, then wait real returned HTTPS acceptance. Main stays frozen until publication. No Pages/settings/Release/tag change. Physical devices/native picker/long editedHD/4K/4K60/music NOT TESTED. This separate documentation handover does not alter application or trigger a deployment.
+
 ## MVP1.7 application accepted / publication preparation — 2026-10-16
 
 Application runtime0f544f083fa63688312c00b54e46b7f843981259: exactCI38844686969 SUCCESS319unit/28files+TS/build+72browserPASS/41opt-in skips. Edited real10s/240frame FullHD BOTH aspects and4K BOTH aspects PASS in38844686984; real pointer cancel/retry, exact same-size preview/preencode/reverse seek, oneGPU, project reload, external/errors0. Locally re-decoded FullHD and4K with systemFFmpeg8 against original CI file hashes. Old4K failures remain historical, not silently deleted.
