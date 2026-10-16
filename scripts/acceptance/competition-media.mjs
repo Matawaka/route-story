@@ -1,0 +1,18 @@
+import {spawnSync} from 'node:child_process';
+import {readFileSync,writeFileSync} from 'node:fs';
+import ffmpeg from 'ffmpeg-static';
+import ffprobe from '@ffprobe-installer/ffprobe';
+const dir='artifacts/competition';
+const check=(exe,args)=>{const r=spawnSync(exe,args,{encoding:'utf8',maxBuffer:8*1024*1024});if(r.error||r.status!==0||r.stderr.trim())throw Error(r.error?.message||r.stderr);return r.stdout;};
+const source=dir+'/interface.webm',report=JSON.parse(readFileSync(dir+'/acceptance.json','utf8'));
+if(report.status!=='PASS')throw Error('No passed recording');
+const meta=JSON.parse(check(ffprobe.path,['-v','error','-show_format','-show_streams','-of','json',source]));
+const duration=Number(meta.format.duration);
+check(ffmpeg,['-v','error','-i',source,'-vf','scale=960:-2,fps=12','-c:v','libx264','-preset','fast','-crf','26','-pix_fmt','yuv420p','-movflags','+faststart','-an','-y',dir+'/interface.mp4']);
+const start=Math.max(0,(report.steps.find(x=>x.name==='open storyboard editor')?.milliseconds??0)/1000-1);
+const end=(report.steps.find(x=>x.name==='export actual edited landscape MP4')?.milliseconds??(start+15)*1000)/1000;
+const seconds=Math.min(20,Math.max(3,end-start));
+check(ffmpeg,['-v','error','-ss',String(start),'-t',String(seconds),'-i',source,'-filter_complex','fps=6,scale=720:-1:flags=lanczos,split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer','-an','-y',dir+'/editor-recording.gif']);
+check(ffmpeg,['-v','error','-i',dir+'/interface.mp4','-map','0:v:0','-f','null','-']);
+writeFileSync(dir+'/recording.json',JSON.stringify({source:'interface.webm',sourceDurationSeconds:duration,mp4:'interface.mp4',gif:'editor-recording.gif',gifStartSeconds:start,gifDurationSeconds:seconds,method:'Transcoded actual browser recording; GIF is one contiguous excerpt, no drawn frames',sourceCommit:report.sourceHead},null,2));
+console.log(JSON.stringify({recordingSeconds:duration,gifStart:start,gifSeconds:seconds}));

@@ -1,0 +1,336 @@
+{
+  "updatedAt": "2026-10-15T19:38:03Z",
+  "application": {
+    "repository": "Matawaka/route-story",
+    "branch": "codex/interactive-storyboard-mvp17",
+    "pullRequest": 31,
+    "head": "d1b75ca2e5997bf2647b86983f653fa5f8c535f8",
+    "state": "open draft, unmerged",
+    "productionFilesModifiedInEvidenceBranch": false
+  },
+  "evidence": {
+    "pullRequest": 32,
+    "branch": "codex/competition-evidence-20261015",
+    "testedHead": "8a824cede9d4b65a30790719db92693cf3033d3c",
+    "ciMergeCheckout": "bd40e6ba50fda38e5fd56b248be754a0dc3ca771",
+    "routineRun": 38791344637,
+    "routineStatus": "success",
+    "unitTests": 319,
+    "unitFiles": 28,
+    "typeScriptBuild": "PASS",
+    "browserPass": 72,
+    "browserSkipped": 40,
+    "competitionRun": 38791344649,
+    "interfaceJob": 116616394436,
+    "interfaceStatus": "success",
+    "specificBrowserTests": 3
+  },
+  "media": {
+    "juryZip": "https://github.com/Matawaka/route-story/actions/runs/38791344649/artifacts/12000553386",
+    "juryZipBytes": 12935469,
+    "juryZipSha256": "81b868ed0ddba36c0044243319ff7e34a443145101ecdeddf9987cb5706266ac",
+    "expiresAt": "2026-10-29T19:16:37Z",
+    "fullRecordingArtifact": "https://github.com/Matawaka/route-story/actions/runs/38791344649/artifacts/11999864361",
+    "fullRecordingSeconds": 333.04,
+    "gifSeconds": 18.24,
+    "gifMethod": "One contiguous excerpt of genuine Playwright browser video, no generated or drawn UI frames",
+    "primaryScreenshots": [
+      "01-route-replay.png",
+      "02-storyboard-landscape.png",
+      "03-storyboard-portrait.png"
+    ],
+    "additionalScreenshot": "04-storyboard-mobile.png",
+    "projects": [
+      "synthetic-furka.rstory.json"
+    ],
+    "exports": [
+      {
+        "file": "edited-landscape-20s.mp4",
+        "width": 640,
+        "height": 360,
+        "seconds": 20,
+        "codec": "h264",
+        "fps": 24,
+        "decodedFrames": 480,
+        "distinctFrames": 480,
+        "frameTimestampsVerified": true,
+        "bytes": 3750774,
+        "sha256": "fe7b95f19ea9c0dbd6421eceedf708584a8da209b11a9e435b334717d4feda7c",
+        "status": "PASS"
+      },
+      {
+        "file": "edited-portrait-20s.mp4",
+        "width": 360,
+        "height": 640,
+        "seconds": 20,
+        "codec": "h264",
+        "fps": 24,
+        "decodedFrames": 480,
+        "distinctFrames": 480,
+        "frameTimestampsVerified": true,
+        "bytes": 3746816,
+        "sha256": "1fd9f36d9938a85383455404e864ff95b4f2efb64f22e9b52e82e7b3cb40fe3a",
+        "status": "PASS"
+      }
+    ]
+  },
+  "public": {
+    "url": "https://matawaka.github.io/route-story/",
+    "sourceCommit": "4dd38163ec2c898db14d35fc516129b9fd4be456",
+    "status": "VERIFIED HTTPS",
+    "job": 116616394570,
+    "run": 38791344649,
+    "manifestHashes": 45,
+    "packageBytes": 8509623,
+    "externalRequests": [],
+    "consoleErrors": [],
+    "failedResponses": [],
+    "artifact": "https://github.com/Matawaka/route-story/actions/runs/38791344649/artifacts/12001015068",
+    "storyboardPublished": false
+  },
+  "fullhd": {
+    "status": "PASS",
+    "scope": "10s automatic terrain/director A/B, both aspects; does not certify edited storyboard FullHD",
+    "run": 38791344649,
+    "job": 116616394149,
+    "mediaArtifact": "https://github.com/Matawaka/route-story/actions/runs/38791344649/artifacts/12000308254",
+    "reportsArtifact": "https://github.com/Matawaka/route-story/actions/runs/38791344649/artifacts/12001315330",
+    "files": 4,
+    "framesPerFile": 240,
+    "fps": 24,
+    "codec": "h264",
+    "exactPreviewPreencodePixels": true,
+    "sourceIdentityPairsEqual": true,
+    "cancelRetry": "PASS",
+    "baselineTerrainLandscapeOutsideReferenceSafeAreaPoses": 9,
+    "directorOutsideReferenceSafeAreaPoses": 0,
+    "directorOccludedPoses": 0,
+    "directorUncoveredPoses": 0,
+    "earlierDetailedCases": [
+      {
+        "file": "artifacts/high-resolution/competition-furka-fullhd/terrain-landscape-10s.mp4",
+        "width": 1920,
+        "height": 1080,
+        "duration": 10,
+        "decodedFrames": 240,
+        "codec": "h264",
+        "bytes": 12338390,
+        "sha256": "da258f8e4a4f38a60721a6e25dd8721b0faa3165d983c0cb8e9416bacc26d4e9",
+        "exactSameResolutionPixels": true,
+        "cameraAndTimelineEquivalent": true,
+        "externalRequestsDuringExport": 0,
+        "mode": "terrain",
+        "markerOutside": 9,
+        "occluded": 0,
+        "uncovered": 0,
+        "minClearance": 507,
+        "maxAngularSpeed": 575.4789797965905
+      },
+      {
+        "file": "artifacts/high-resolution/competition-furka-fullhd/director-landscape-10s.mp4",
+        "width": 1920,
+        "height": 1080,
+        "duration": 10,
+        "decodedFrames": 240,
+        "codec": "h264",
+        "bytes": 12339658,
+        "sha256": "508c9e1385d60a25a93129cdf3746ee142de84b5fe801e8a3c5b81564a6fe549",
+        "exactSameResolutionPixels": true,
+        "cameraAndTimelineEquivalent": true,
+        "externalRequestsDuringExport": 0,
+        "mode": "director",
+        "markerOutside": 0,
+        "occluded": 0,
+        "uncovered": 0,
+        "minClearance": 615.9060169304412,
+        "maxAngularSpeed": 17.45719638749597
+      },
+      {
+        "file": "artifacts/high-resolution/competition-furka-fullhd/terrain-portrait-10s.mp4",
+        "width": 1080,
+        "height": 1920,
+        "duration": 10,
+        "decodedFrames": 240,
+        "codec": "h264",
+        "bytes": 12351028,
+        "sha256": "af2cc226996d479badea55004e8e16831a660d76d9cb23f5bfdbf2f1a895997e",
+        "exactSameResolutionPixels": true,
+        "cameraAndTimelineEquivalent": true,
+        "externalRequestsDuringExport": 0,
+        "mode": "terrain",
+        "markerOutside": 0,
+        "occluded": 0,
+        "uncovered": 0,
+        "minClearance": 507,
+        "maxAngularSpeed": 575.4789797965905
+      },
+      {
+        "file": "artifacts/high-resolution/competition-furka-fullhd/director-portrait-10s.mp4",
+        "width": 1080,
+        "height": 1920,
+        "duration": 10,
+        "decodedFrames": 240,
+        "codec": "h264",
+        "bytes": 12345250,
+        "sha256": "8a7ffe18e7ab67b51f003e509426786bc7063c8aaccb0869c5b974bfdb924892",
+        "exactSameResolutionPixels": true,
+        "cameraAndTimelineEquivalent": true,
+        "externalRequestsDuringExport": 0,
+        "mode": "director",
+        "markerOutside": 0,
+        "occluded": 0,
+        "uncovered": 0,
+        "minClearance": 688.6884225238832,
+        "maxAngularSpeed": 30.82592006383493
+      }
+    ]
+  },
+  "ultra": {
+    "status": "PARTIAL — exports validated; cancel/retry NOT PASSED",
+    "scope": "10s automatic terrain/director A/B, both aspects; does not certify edited storyboard 4K",
+    "run": 38791344649,
+    "job": 116616394459,
+    "jobConclusion": "cancelled",
+    "jobBudgetMinutes": 20,
+    "mediaArtifact": "https://github.com/Matawaka/route-story/actions/runs/38791344649/artifacts/12000164831",
+    "reportsArtifact": "https://github.com/Matawaka/route-story/actions/runs/38791344649/artifacts/12001656406",
+    "validatedFiles": 4,
+    "framesPerFile": 240,
+    "codec": "h264",
+    "landscape": [
+      3840,
+      2160
+    ],
+    "portrait": [
+      2160,
+      3840
+    ],
+    "earlierFailure": {
+      "run": 38789679716,
+      "job": 116610688990,
+      "reason": "locator('#cancel').click timed out during click dispatch after 30000ms; no successful retry proof",
+      "reportsArtifact": "https://github.com/Matawaka/route-story/actions/runs/38789679716/artifacts/12000875006"
+    },
+    "earlierDetailedCases": [
+      {
+        "file": "artifacts/high-resolution/competition-furka-ultra/terrain-landscape-10s.mp4",
+        "width": 3840,
+        "height": 2160,
+        "duration": 10,
+        "decodedFrames": 240,
+        "codec": "h264",
+        "bytes": 30697666,
+        "sha256": "369f3d4b432b11e83f60f54cef90b9c6cd5aaa80b870dd7a6f9c86eea72762c0",
+        "exactSameResolutionPixels": true,
+        "cameraAndTimelineEquivalent": true,
+        "externalRequestsDuringExport": 0,
+        "mode": "terrain",
+        "markerOutside": 9,
+        "occluded": 0,
+        "uncovered": 0,
+        "minClearance": 507,
+        "maxAngularSpeed": 575.4789797965905
+      },
+      {
+        "file": "artifacts/high-resolution/competition-furka-ultra/director-landscape-10s.mp4",
+        "width": 3840,
+        "height": 2160,
+        "duration": 10,
+        "decodedFrames": 240,
+        "codec": "h264",
+        "bytes": 30787205,
+        "sha256": "9e23aacb850ede2fc2e22a772c53023ece53bb8c2284709e7836932a27a5b3ab",
+        "exactSameResolutionPixels": true,
+        "cameraAndTimelineEquivalent": true,
+        "externalRequestsDuringExport": 0,
+        "mode": "director",
+        "markerOutside": 0,
+        "occluded": 0,
+        "uncovered": 0,
+        "minClearance": 615.9060169304412,
+        "maxAngularSpeed": 17.45719638749597
+      },
+      {
+        "file": "artifacts/high-resolution/competition-furka-ultra/terrain-portrait-10s.mp4",
+        "width": 2160,
+        "height": 3840,
+        "duration": 10,
+        "decodedFrames": 240,
+        "codec": "h264",
+        "bytes": 30795024,
+        "sha256": "d17892efd669ab596a4284451405251d2018d5045ac8f56ea2de9a01d01e507f",
+        "exactSameResolutionPixels": true,
+        "cameraAndTimelineEquivalent": true,
+        "externalRequestsDuringExport": 0,
+        "mode": "terrain",
+        "markerOutside": 0,
+        "occluded": 0,
+        "uncovered": 0,
+        "minClearance": 507,
+        "maxAngularSpeed": 575.4789797965905
+      },
+      {
+        "file": "artifacts/high-resolution/competition-furka-ultra/director-portrait-10s.mp4",
+        "width": 2160,
+        "height": 3840,
+        "duration": 10,
+        "decodedFrames": 240,
+        "codec": "h264",
+        "bytes": 30870635,
+        "sha256": "d357a3b9fecaa44bd2bd48015fcfadfe584fadc014321cbb6e1d9115488001c3",
+        "exactSameResolutionPixels": true,
+        "cameraAndTimelineEquivalent": true,
+        "externalRequestsDuringExport": 0,
+        "mode": "director",
+        "markerOutside": 0,
+        "occluded": 0,
+        "uncovered": 0,
+        "minClearance": 688.6884225238832,
+        "maxAngularSpeed": 30.82592006383493
+      }
+    ]
+  },
+  "localIndependentDecoding": {
+    "method": "FFmpeg/ffprobe 8; same frame, container, timestamp and changing-image assertions as existing validator; ffprobe8 duration_time replaces old pkt_duration_time",
+    "originalCI": {
+      "files": 16,
+      "frames": 2928,
+      "run": 38586972334
+    },
+    "public": {
+      "files": 3,
+      "frames": 720
+    },
+    "edited": {
+      "files": 2,
+      "frames": 960
+    },
+    "totalFiles": 21,
+    "totalFrames": 4608
+  },
+  "notVerified": [
+    "physical Mac/Android/iOS/ordinary laptops/Safari",
+    "FullHD/4K MP4 after user storyboard editing",
+    "4K60 real native save-picker UI",
+    "all longer montage/export combinations",
+    "native/GPU/encoder memory peaks and leak certification"
+  ],
+  "unfinishedFeatures": [
+    "Music remains a separate optional phase, no audio claim"
+  ],
+  "privacy": {
+    "syntheticRoutesOnly": true,
+    "privateGpxOrVideosUploaded": false,
+    "projectContainsCoordinates": false,
+    "projectContainsRouteUrls": false
+  },
+  "actionsNotTaken": [
+    "merge PR #31 or PR #32",
+    "new GitHub Pages deployment",
+    "Release or tags",
+    "protected settings changes",
+    "contest form submission"
+  ],
+  "mediaCopyInGit": "Not created; canonical downloadable Actions artifacts are available until 29 October 2026. Actions download requires GitHub login.",
+  "nextStep": "Submit the competition entry with the validated media ZIP and PR #31 link, explicitly identifying storyboard as PR-only."
+}

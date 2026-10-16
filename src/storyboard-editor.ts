@@ -23,6 +23,8 @@ export class StoryboardEditor {
   private digest?:string;
   private history?:MontageHistory;
   private selected='';
+  private durationScene='';
+  private durationFrames?:number;
   private op?:AbortController;
   private pending?:StoryProject;
   private thumbnails:string[]=[];
@@ -57,7 +59,7 @@ export class StoryboardEditor {
   }
   projectForRoute(digest:string):StoryProject|undefined{return this.pending?.gpxSha256===digest?this.pending:undefined;}
   resetRoute():void{this.detach();this.history=undefined;this.active=false;this.expanded=false;this.conflict=false;this.selected='';this.ui();}
-  detach():void{this.op?.abort();this.op=undefined;this.preparing=false;this.renderer=undefined;this.thumbnails=[];this.alternatives.clear();el('scene-strip').replaceChildren();this.ui();}
+  detach():void{this.op?.abort();this.op=undefined;this.preparing=false;this.renderer=undefined;this.durationScene='';this.durationFrames=undefined;this.thumbnails=[];this.alternatives.clear();el('scene-strip').replaceChildren();this.ui();}
   async bind(renderer:TerrainRenderer|undefined,digest:string|undefined):Promise<void>{
     this.renderer=renderer;this.digest=digest;
     if(!renderer){this.active=false;this.expanded=false;this.ui();return;}
@@ -141,7 +143,11 @@ export class StoryboardEditor {
     for(const id of ['automatic-story','open-project','save-project','reset-montage','apply-highlight','apply-scene-duration','preview-scene','reset-scene'])el<HTMLButtonElement>(id).disabled=blocked||!this.model&&['save-project','reset-montage','apply-highlight','apply-scene-duration','preview-scene','reset-scene'].includes(id);
     el<HTMLButtonElement>('undo-edit').disabled=blocked||!this.history?.canUndo;el<HTMLButtonElement>('redo-edit').disabled=blocked||!this.history?.canRedo;
     el<HTMLFieldSetElement>('scene-settings').disabled=blocked;for(const input of el('storyboard').querySelectorAll<HTMLInputElement>('input'))input.disabled=blocked;
-    const scene=this.model?.scenes.find(s=>s.id===this.selected);if(scene){el('selected-scene-name').textContent=this.sceneName(scene.id);el<HTMLInputElement>('scene-duration').value=(scene.frames/FPS).toFixed(2);}
+    const scene=this.model?.scenes.find(s=>s.id===this.selected);if(scene){el('selected-scene-name').textContent=this.sceneName(scene.id);
+      // Playback/probe/alternative completion may refresh UI while the user is
+      // typing. Replace the draft only on selection or committed-time changes.
+      if(this.durationScene!==scene.id||this.durationFrames!==scene.frames){el<HTMLInputElement>('scene-duration').value=(scene.frames/FPS).toFixed(2);this.durationScene=scene.id;this.durationFrames=scene.frames;}
+    }
     for(const button of el('scene-strip').querySelectorAll<HTMLButtonElement>('button')){button.disabled=blocked;button.setAttribute('aria-pressed',String(button.dataset.scene===this.selected));}
   }
   private save():void{if(!this.model||!this.digest||this.externalBusy)return;try{const text=saveProject(this.hooks.settings(),this.model,this.digest),url=URL.createObjectURL(new Blob([text],{type:'application/json'})),link=document.createElement('a');link.href=url;link.download='route-story.rstory.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);this.message('Проект сохранён без GPX и координат. При открытии потребуется исходный GPX; свои картинки не вложены.');}catch(error){this.message((error as Error).message,true);}}
