@@ -1,0 +1,231 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-10-16T11:22:40.984653+00:00",
+  "pr": 35,
+  "branch": "codex/mobile-duration-controls",
+  "testedHead": "50b35e28de5f5b6f304cb1c1ce4b443bfc0930b1",
+  "runtimeIntroducedAt": "31f5d482dc9b2112060e194b7bb7986e4e1ecab3",
+  "baseMain": "d91361816396905e44fff8bcbe7ac058b304fee3",
+  "publicSource": "d91361816396905e44fff8bcbe7ac058b304fee3",
+  "newDeployment": false,
+  "mobileCi": {
+    "run": 38892414471,
+    "job": 116944835109,
+    "status": "SUCCESS",
+    "passed": 3
+  },
+  "routineCi": {
+    "run": 38892414602,
+    "job": 116944836214,
+    "status": "FAILED",
+    "unitPassed": 319,
+    "unitFiles": 28,
+    "typescript": "PASS",
+    "build": "PASS",
+    "browserPassed": 71,
+    "browserOptInSkipped": 42,
+    "failure": "Unchanged rider.spec.ts:67 dynamic import of /src/terrain-renderer.ts failed to fetch from local Vite server; no application/assertion change made"
+  },
+  "priorApplicationRoutineCi": {
+    "run": 38891389279,
+    "job": 116941473155,
+    "source": "31f5d482dc9b2112060e194b7bb7986e4e1ecab3",
+    "status": "SUCCESS",
+    "unitPassed": 319,
+    "unitFiles": 28,
+    "typescript": "PASS",
+    "build": "PASS",
+    "browserPassed": 72,
+    "browserOptInSkipped": 42,
+    "auditVulnerabilities": 0
+  },
+  "touchUi": {
+    "status": "PASS",
+    "sourceCommit": "50b35e28de5f5b6f304cb1c1ce4b443bfc0930b1",
+    "browser": "154.0.4258.62",
+    "syntheticOnly": true,
+    "device": "Touch/mobile viewport emulation; no physical phone tested",
+    "checks": [
+      "duration +/-1s from fractional draft with exact UndoRedo and fixed total frames",
+      "invalid/blank/no-op duration input and valid one-frame minimum",
+      "intro3s limit and single-replay restriction",
+      "duration actions locked during export",
+      "proportional timeline and Undo/Redo/project restoration",
+      "touch timeline seek pauses replay without vertical jump",
+      "frame step buttons: exact 1/24s, pixel reversal and scene bounds",
+      "existing navigation, rapid choices, both aspects, project and H.264 export"
+    ],
+    "viewports": [
+      {
+        "width": 320,
+        "height": 740
+      },
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 428,
+        "height": 926
+      },
+      {
+        "width": 844,
+        "height": 390
+      }
+    ],
+    "external": [],
+    "errors": [],
+    "export": {
+      "file": "artifacts/mobile-editor/edited-portrait-20s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 360,
+      "height": 640,
+      "duration": 20,
+      "decodedFrames": 480,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 480,
+      "firstFrameHash": "e34900da346c6dd32b57816378a88b8e",
+      "lastFrameHash": "aab84f22629bb1f520c10205bf5c746b",
+      "bytes": 3746816,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sha256": "aae7dc4389a67612a777ebe3a5810674f1ccd8fcf0653b212cda668f02c59c1f"
+    }
+  },
+  "packages": {
+    "status": "PASS",
+    "version": "1.7.0",
+    "sourceCommit": "50b35e28de5f5b6f304cb1c1ce4b443bfc0930b1",
+    "packages": [
+      {
+        "mode": "baseline",
+        "completeBytes": 5093590,
+        "limitBytes": 5242880,
+        "files": 22
+      },
+      {
+        "mode": "sogne",
+        "completeBytes": 6099119,
+        "limitBytes": 6291456,
+        "files": 25
+      },
+      {
+        "mode": "combined",
+        "completeBytes": 8570951,
+        "limitBytes": 9437184,
+        "files": 44
+      }
+    ],
+    "publicDeployment": false
+  },
+  "independentValidation": {
+    "sourceHead": "50b35e28de5f5b6f304cb1c1ce4b443bfc0930b1",
+    "ciRun": 38892414471,
+    "artifact": 12042980452,
+    "revalidatedAt": "2026-10-16T11:21:11.788877+00:00",
+    "method": "System FFmpeg/ffprobe 8 independent decoding; same acceptance assertions as existing validator. ffprobe8 duration_time replaces old pkt_duration_time. Existing validator runs unchanged in CI. No application rerun here.",
+    "rows": [
+      {
+        "file": "mobile-editor/edited-portrait-20s.mp4",
+        "width": 360,
+        "height": 640,
+        "seconds": 20,
+        "codec": "h264",
+        "fps": 24,
+        "decodedFrames": 480,
+        "distinctFrames": 480,
+        "frameTimestampsVerified": true,
+        "bytes": 3746816,
+        "sha256": "aae7dc4389a67612a777ebe3a5810674f1ccd8fcf0653b212cda668f02c59c1f",
+        "status": "PASS"
+      },
+      {
+        "file": "montage-ci/storyboard-10s.mp4",
+        "width": 640,
+        "height": 360,
+        "seconds": 10,
+        "codec": "h264",
+        "fps": 24,
+        "decodedFrames": 240,
+        "distinctFrames": 240,
+        "frameTimestampsVerified": true,
+        "bytes": 942307,
+        "sha256": "27ec8beb43ad45282003ae0dfe57dd2f8acf544f65ca80acae199e42cb7122f5",
+        "status": "PASS"
+      }
+    ],
+    "runtimeHead": "31f5d482dc9b2112060e194b7bb7986e4e1ecab3",
+    "pr": 35,
+    "physicalDevices": "NOT TESTED"
+  },
+  "uiClip": {
+    "sourceHead": "50b35e28de5f5b6f304cb1c1ce4b443bfc0930b1",
+    "runtimeHead": "31f5d482dc9b2112060e194b7bb7986e4e1ecab3",
+    "sourceRecordingArtifact": 12042244787,
+    "sourceFile": "interface.webm",
+    "sourceSha256": "bd4adac995d6911dffe95078917f9def4d0ea61f04473575ee558383203eac8e",
+    "sourceDurationSeconds": 201.28,
+    "trimStartSeconds": 15,
+    "durationSeconds": 28,
+    "method": "Contiguous15–43s excerpt of actual UI recording; trim and H264 transcode only, no drawn UI",
+    "width": 390,
+    "height": 844,
+    "fps": 15,
+    "decodedFrames": 420,
+    "bytes": 350348,
+    "sha256": "2ad2a06dd15cde277bbec5132a8cf1d9c3d61edebc8a61b4884883c4932d1471",
+    "independentDecode": "PASS",
+    "physicalDevices": "NOT TESTED"
+  },
+  "artifacts": [
+    {
+      "id": 12042980452,
+      "run": 38892414471,
+      "name": "mobile-editor-evidence",
+      "bytes": 5521548,
+      "sha256": "fb11fa76499ede253311a4de3d8eb1aa4b082999d2e7faac36ee4c56559b3c90"
+    },
+    {
+      "id": 12042244787,
+      "run": 38892414471,
+      "name": "mobile-editor-real-recording",
+      "bytes": 14433890,
+      "sha256": "5b67e71dcd021616275ed675b726dfa5bfa57ccf1207268a1705edb96587e3d1"
+    },
+    {
+      "id": 12042726538,
+      "run": 38892414471,
+      "name": "mobile-editor-candidate-bundle",
+      "bytes": 4809524,
+      "sha256": "161964558dba3176f2fa93948c9904a8f1e2769c91d77f577ee1e85bd196805c"
+    }
+  ],
+  "artifactExpires": "2026-10-30; GitHub login required",
+  "screenshots": "3 actual unaltered browser PNG; visually inspected",
+  "syntheticOnly": true,
+  "notTested": [
+    "physical iOS/Android/Mac",
+    "native mobile keyboard/save picker/rotation",
+    "aggregate native/GPU memory",
+    "new edited FullHD/4K scenarios"
+  ],
+  "mergePublication": "PR35 open for review; not merged/deployed; no Release/tag/protected setting change",
+  "finalHeadChecks": "Check the current PR35 Checks and PR description; the evidence below is immutable provenance for50b35e2. Documentation-only follow-up reruns both workflows.",
+  "historicalFailures": [
+    {
+      "run": 38891388550,
+      "source": "31f5d482dc9b2112060e194b7bb7986e4e1ecab3",
+      "cause": "Old unified project test raced File.text()/model preparation with5s assertion",
+      "resolvedBy": "50b35e28de5f5b6f304cb1c1ce4b443bfc0930b1; mobile38892414471 SUCCESS3tests, same90s total test budget/exactpixel assertions"
+    },
+    {
+      "run": 38892414602,
+      "source": "50b35e28de5f5b6f304cb1c1ce4b443bfc0930b1",
+      "cause": "Unchanged rider.spec.ts:67 dynamic import of /src/terrain-renderer.ts failed to fetch from local Vite server; no application/assertion change made",
+      "resolution": "No skip/retry inside test/assertion changes; full current-head CI must pass before handover"
+    }
+  ]
+}
