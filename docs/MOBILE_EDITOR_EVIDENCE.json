@@ -1,0 +1,182 @@
+{
+  "schema": 1,
+  "testedApplicationHead": "bec207af3f589172e793a739a47a74704c4af8d1",
+  "baseMain": "f3e26b3a733a62ef9565dda264fbaeae203a3ddd",
+  "branch": "codex/mobile-storyboard-mvp18",
+  "pr": 34,
+  "publicVersion": "1.7.0",
+  "publishedSource": "9efbc360b50e293d09cc8d2ce7fb34b89a171950",
+  "newPublicDeployment": false,
+  "routineCi": {
+    "run": 38856813073,
+    "job": 116830022927,
+    "status": "SUCCESS",
+    "unitPassed": 319,
+    "unitFiles": 28,
+    "typescript": "PASS",
+    "build": "PASS",
+    "browserPassed": 72,
+    "browserOptInSkipped": 42,
+    "auditVulnerabilities": 0
+  },
+  "mobileCi": {
+    "run": 38856813178,
+    "job": 116830023220,
+    "status": "SUCCESS",
+    "passed": 3
+  },
+  "touchUi": {
+    "status": "PASS",
+    "sourceCommit": "bec207af3f589172e793a739a47a74704c4af8d1",
+    "browser": "154.0.4258.62",
+    "syntheticOnly": true,
+    "device": "Touch/mobile viewport emulation; no physical phone tested",
+    "viewports": [
+      {
+        "width": 320,
+        "height": 740
+      },
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 428,
+        "height": 926
+      },
+      {
+        "width": 844,
+        "height": 390
+      }
+    ],
+    "external": [],
+    "errors": [],
+    "export": {
+      "file": "artifacts/mobile-editor/edited-portrait-20s.mp4",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "Constrained Baseline",
+      "width": 360,
+      "height": 640,
+      "duration": 20,
+      "decodedFrames": 480,
+      "fps": "24/1",
+      "frameTimestampsVerified": true,
+      "distinctFrames": 480,
+      "firstFrameHash": "e34900da346c6dd32b57816378a88b8e",
+      "lastFrameHash": "aab84f22629bb1f520c10205bf5c746b",
+      "bytes": 3746816,
+      "validator": "Independent FFmpeg + ffprobe",
+      "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+      "sha256": "b27241b7a68f3b72c558d53b3239076d2a18a08020a32e539ef70986585406a0"
+    }
+  },
+  "packages": {
+    "status": "PASS",
+    "version": "1.7.0",
+    "sourceCommit": "bec207af3f589172e793a739a47a74704c4af8d1",
+    "packages": [
+      {
+        "mode": "baseline",
+        "completeBytes": 5083482,
+        "limitBytes": 5242880,
+        "files": 22
+      },
+      {
+        "mode": "sogne",
+        "completeBytes": 6089011,
+        "limitBytes": 6291456,
+        "files": 25
+      },
+      {
+        "mode": "combined",
+        "completeBytes": 8560843,
+        "limitBytes": 9437184,
+        "files": 44
+      }
+    ],
+    "publicDeployment": false
+  },
+  "independentDecode": {
+    "sourceHead": "bec207af3f589172e793a739a47a74704c4af8d1",
+    "ciRun": 38856813178,
+    "artifact": 12026904380,
+    "revalidatedAt": "2026-10-16T05:45:49.792667+00:00",
+    "method": "System FFmpeg/ffprobe 8 independent decoding; same acceptance assertions as existing validator. ffprobe8 duration_time replaces old pkt_duration_time. Existing validator runs unchanged in CI. No application rerun here.",
+    "rows": [
+      {
+        "file": "mobile-editor/edited-portrait-20s.mp4",
+        "width": 360,
+        "height": 640,
+        "seconds": 20,
+        "codec": "h264",
+        "fps": 24,
+        "decodedFrames": 480,
+        "distinctFrames": 480,
+        "frameTimestampsVerified": true,
+        "bytes": 3746816,
+        "sha256": "b27241b7a68f3b72c558d53b3239076d2a18a08020a32e539ef70986585406a0",
+        "status": "PASS"
+      },
+      {
+        "file": "montage-ci/storyboard-10s.mp4",
+        "width": 640,
+        "height": 360,
+        "seconds": 10,
+        "codec": "h264",
+        "fps": 24,
+        "decodedFrames": 240,
+        "distinctFrames": 240,
+        "frameTimestampsVerified": true,
+        "bytes": 942307,
+        "sha256": "9472283079dd550f18e76d2335ffe3e346d1927dab9c2f98c10103cb61e64325",
+        "status": "PASS"
+      }
+    ],
+    "pr": 34,
+    "physicalDevices": "NOT TESTED"
+  },
+  "recording": {
+    "file": "interface.webm",
+    "durationSeconds": 184.36,
+    "method": "Actual Playwright recording of the application UI; never generated artwork",
+    "sha256": "86dde8895934cefa89a8821e035f9bf02fbbdbb6449e784f05d79b49f2e49109"
+  },
+  "artifacts": {
+    "evidence": {
+      "id": 12026904380,
+      "bytes": 5262566,
+      "sha256": "d302d520238f8d9feeb157562cefb449f256ca6163ec2633659c75627c815681"
+    },
+    "realRecording": {
+      "id": 12027308228,
+      "bytes": 10915722,
+      "sha256": "a7937b039f2adec7cf6cc0129e4607b9b98efcf88b8560fe1a66039e03175c0e"
+    },
+    "candidateBundle": {
+      "id": 12027193820,
+      "bytes": 4807282
+    },
+    "loginRequired": true,
+    "expires": "2026-10-30"
+  },
+  "notTested": [
+    "physical iOS/Android/macOS",
+    "native mobile keyboard and OS save picker",
+    "physical orientation changes",
+    "new FullHD/4K runs",
+    "aggregate native/GPU memory"
+  ],
+  "unchanged": [
+    "renderer",
+    "exporter",
+    "camera proof thresholds and budgets",
+    "montage model and project schema",
+    "GPX",
+    "dependencies",
+    "source assets",
+    "5/6/9MiB package limits",
+    "protected Pages workflow"
+  ],
+  "recordedAt": "2026-10-16T05:49:52Z"
+}

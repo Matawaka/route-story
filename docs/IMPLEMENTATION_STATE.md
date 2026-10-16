@@ -1,5 +1,13 @@
 # Implementation state
 
+## Mobile storyboard candidate accepted — 2026-10-16 05:49 UTC
+
+PR34/codex/mobile-storyboard-mvp18 application headbec207af3f589172e793a739a47a74704c4af8d1 passed exact-source routine38856813073/job116830022927:319unit/28files,TypeScript/build,72browserPASS/42explicitopt-in skips,audit0. Mobile38856813178/job116830023220 SUCCESS,3PASS/4.5min including existing2storyboard tests and new real touch UI acceptance. No new runtime edits after that head; this follow-up changes documentation/evidence only. Owner selected mobile editor development, not a new merge/publication. Mainf3e26b3/public1.7.0source9ef unchanged; PR34 remains isolated for review.
+
+Real syntheticFurka20s480frame360x640H26424FPS independently decoded in CI; downloaded fileSHA256b27241b7a68f3b72c558d53b3239076d2a18a08020a32e539ef70986585406a0 matched. Local FFmpeg8 independently re-decoded portrait20s+existingstoryboard10s=720frames with dimensions/H264/everyPTS/distinct frames PASS. Mobile320/390/428 and844x390touch viewport layout/44px targets/16px fields/roving keyboard/visible selection/no vertical jump/A→B→A unique choices/pause-on-select/UndoRedo/draft preservation/aspect change/project reload exactpixels/export navigation lock/storage/errors/external0 PASS. Real screenshots inspected; actual browser recording184.36s, no generated UI.
+
+Existing packager baseline/Sogne/combined complete sizes5083482/6089011/8560843B within5/6/9MiB,22/25/44files; no source/dependency/camera safety/resource-cap/protectedworkflow changes. Evidence artifact12026904380=5262566B SHA256d302d520238f8d9feeb157562cefb449f256ca6163ec2633659c75627c815681; recording12027308228=10915722B; candidatebundle12027193820=4807282B; all expire30Oct/login required. Sources/commands/results/downloads in MOBILE_EDITOR.md and MOBILE_EDITOR_EVIDENCE.json. Physical iOS/Android/mobile keyboard/nativepicker/nativeGPUmemory/newFullHD4K remain NOTTESTED, no claim of new publicHTTPS acceptance.
+
 ## Mobile storyboard candidate — 2026-10-16
 
 Owner submitted the competition archive and explicitly chose continuing with a phone-friendly editor, scenes/timeline/controls. Base mainf3e26b3a733a62ef9565dda264fbaeae203a3ddd/mainCI38852391675 SUCCESS; published1.7.0 source9efbc360 remains unchanged. New short-lived branchcodex/mobile-storyboard-mvp18, no new merge/deployment/tag/Release authorization inferred. Source snapshot reconciled by Git blob SHA: all runtime/tests/config matched main; four historical text files refreshed; absent historical docs images and unshipped20mcomparisonJPEG are preserved in remote base tree, never deleted.
