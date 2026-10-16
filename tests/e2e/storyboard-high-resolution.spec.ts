@@ -36,6 +36,9 @@ test('MVP1.7 edited high-resolution UI: cancel, retry, exact frames and project'
   await page.locator('#undo-edit').click();await ready();expect(await page.locator('.scene-card').allTextContents()).toEqual(originalCards);
   await page.locator('#redo-edit').click();await ready();expect(await page.locator('.scene-card').allTextContents()).toEqual(cards);
   await page.locator('#quality').selectOption(quality);await ready();
+  // 10s 4K permits the existing bounded memory path. A native OS save dialog
+  // cannot be accepted in headless CI; real file streaming has separate tests.
+  await page.locator('#direct-file').setChecked(false);
   await page.locator('#scrub').fill('5');
   // Observe the existing resident renderer, without changing draw/encode pixels.
   await page.evaluate(async()=>{

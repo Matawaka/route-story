@@ -14,7 +14,7 @@ try{
   run('node_modules/vite/bin/vite.js',['build'],env);
   const args=mode==='baseline'?[]:mode==='sogne'?['--imagery-candidate']:['--imagery-candidate','--swiss-release','--automatic-geography-candidate'];
   run('scripts/package-release.mjs',args,env);
-  const manifest=JSON.parse(readFileSync('dist/release.json'));assert.equal(manifest.version,'1.7.0-rc.1');
+  const manifest=JSON.parse(readFileSync('dist/release.json'));assert.equal(manifest.version,'1.7.0');
   report.packages.push({mode,totalBytes:manifest.totalBytes,manifestBytes:readFileSync('dist/release.json').length,files:manifest.files.length,limitBytes:manifest.packageLimitBytes??5*1024*1024});
  }
  run('scripts/acceptance/release.mjs',['--smoke'],{ACCEPTANCE_DIR:dir});
