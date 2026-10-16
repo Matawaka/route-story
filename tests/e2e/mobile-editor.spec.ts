@@ -136,12 +136,24 @@ test('touch editor: proportional timeline, frame steps, scene navigation, projec
     await page.screenshot({path:dir+'/03-mobile-preview.png'});
     await page.locator('#return-to-editor').tap();await expect(page.locator('#storyboard-title')).toBeInViewport();
     await expect(sceneScrub).toHaveValue('13');
+    // Record the real transition before tapping: software rendering can finish
+    // the seven-second episode before the next remote locator read arrives.
+    await page.evaluate(()=>{
+      const body=document.body;delete body.dataset.acceptanceReplayStarted;
+      const observer=new MutationObserver(records=>{
+        if(body.dataset.state==='PLAYING'||records.some(record=>record.oldValue==='PLAYING')){
+          body.dataset.acceptanceReplayStarted='true';observer.disconnect();
+        }
+      });
+      observer.observe(body,{attributes:true,attributeFilter:['data-state'],attributeOldValue:true});
+    });
     await page.locator('#preview-scene').tap();await expect(page.locator('#preview')).toBeInViewport();
-    await expect(page.locator('body')).toHaveAttribute('data-state','PLAYING');
+    await expect(page.locator('body')).toHaveAttribute('data-acceptance-replay-started','true');
     await expect(page.locator('body')).toHaveAttribute('data-state','PAUSED',{timeout:20_000});
     await expect(sceneScrub).toHaveValue('167');
     expect(Number(await page.locator('#scrub').inputValue())).toBeCloseTo(startTime+167/24,10);
     await expect(page.locator('#scene-frame-note')).not.toContainText('другая сцена');
+    await page.evaluate(()=>{delete document.body.dataset.acceptanceReplayStarted;});
     await page.locator('#return-to-editor').tap();
     await page.locator('#storyboard').evaluate(node=>node.scrollIntoView({block:'start'}));
     await page.screenshot({path:dir+'/01-mobile-storyboard.png'});

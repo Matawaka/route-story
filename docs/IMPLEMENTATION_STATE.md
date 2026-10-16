@@ -1,5 +1,11 @@
 # Implementation state
 
+## Mobile timeline acceptance observation fix — 2026-10-16
+
+Application candidateee19658f2beef26cff1ad71a316a408f34276459 mobile38875648829/job116889943369 FAILED at the existing post-tap PLAYING sample after new timeline/frame/bounds/UndoRedo checks passed. Actual80.2s browser recording12035785594 shows selected7s episode playing then reaching its correct last frame; asynchronous remote assertion arrived after playback completed on the software-rendered runner. Evidence12035102622 retained, no20sMP4/package acceptance claimed for failed run. Routine38875648800 pending at checkpoint.
+
+Acceptance now attaches a MutationObserver before the real tap and proves the actual PLAYING transition, including oldValue if the same batch already sees PAUSED. Existing actual-pause/final-frame/time/current-scene/pixel/export assertions and timeouts remain unchanged; no renderer/clock mocking or retry-only success. Improve both frame/time note colors for phone readability. node --check tests/e2e/mobile-editor.spec.ts PASS syntax only; exact new-source CI/media PENDING. Public/main/architecture/resources remain unchanged; no new merge/deploy authorization.
+
 ## Mobile proportional timeline / frame buttons continuation — 2026-10-16
 
 Owner requested Continue on chosen phone-editor work. PR34 OPEN/ready/unmerged HEADcb1b78713f1e7b3554b40d17f49f3b709a0e988c reconciled; exact-head routine38869133327/job116868810113 and mobile38869133342/job116868809930 both SUCCESS,319unit/28files+TypeScript/build+72browserPASS/42opt-in skips+3mobile tests. Public1.7source9ef/mainf3e unchanged. Local directory is a verified source snapshot, not a git checkout; connector ref remains authoritative.
