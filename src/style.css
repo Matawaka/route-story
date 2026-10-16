@@ -127,8 +127,12 @@ body[data-view="video"][data-settings="open"] .controls { display:block; padding
 .scene-seek { grid-column:1/-1; }
 #scene-scrub { display:block; height:44px; padding:0; border:0; background:transparent; accent-color:#5d8650; }
 #scene-frame-note { margin:4px 0 0; font-size:12px; color:#596b54; font-variant-numeric:tabular-nums; }
-.frame-actions { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px; }
-.frame-actions .text-button { min-height:44px; padding:10px; border:1px solid #c7d3bd; border-radius:8px; background:#fffdf5; text-align:center; }
+.frame-actions,.duration-actions { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px; }
+.frame-actions .text-button,.duration-actions .text-button { min-height:44px; padding:10px; border:1px solid #c7d3bd; border-radius:8px; background:#fffdf5; text-align:center; }
+.duration-actions { margin-top:8px; }
+#scene-duration-note { margin:8px 0 0; font-size:12px; color:#596b54; }
+#scene-duration-note.error { color:#a0452d; }
+#scene-duration[aria-invalid="true"] { border-color:#a0452d; }
 .highlight-controls { margin-top:16px; font-size:12px; }
 .highlight-controls input { max-width:140px; margin-bottom:10px; }
 body[data-view="video"] .storyboard:not([hidden]) { max-width:950px; margin:12px auto; }

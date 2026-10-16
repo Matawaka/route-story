@@ -44,7 +44,10 @@ export class StoryboardEditor {
     el('automatic-story').addEventListener('click',()=>this.automatic());
     el('collapse-storyboard').addEventListener('click',()=>{this.expanded=false;this.ui();});
     el('cancel-montage').addEventListener('click',()=>this.cancel());
-    el('apply-scene-duration').addEventListener('click',()=>this.change(()=>editDuration(this.model!,this.selected,Math.round(Number(el<HTMLInputElement>('scene-duration').value)*FPS))));
+    el('apply-scene-duration').addEventListener('click',()=>this.applyDuration());
+    el('decrease-scene-duration').addEventListener('click',()=>this.applyDuration(-FPS));
+    el('increase-scene-duration').addEventListener('click',()=>this.applyDuration(FPS));
+    el('scene-duration').addEventListener('input',()=>this.durationUi());
     el<HTMLSelectElement>('scene-shot').addEventListener('change',()=>{const shot=el<HTMLSelectElement>('scene-shot').value as EditShot;this.change(()=>editShot(this.model!,this.selected,this.hooks.settings().aspectRatio,shot),this.alternatives.get(shot),true);});
     el('reset-scene').addEventListener('click',()=>this.change(()=>editShot(this.model!,this.selected,this.hooks.settings().aspectRatio,'auto')));
     el('reset-montage').addEventListener('click',()=>this.change(()=>automaticMontage(this.renderer!.timeline)));
@@ -87,6 +90,36 @@ export class StoryboardEditor {
   }
   private message(text:string,error=false):void{const node=el('montage-status');node.hidden=!text;node.textContent=text;node.classList.toggle('error',error);}
   private playback():MontagePlayback|undefined{return this.renderer?.montageSnapshot?.playback;}
+  private durationTarget(delta=0):{model?:Montage;error?:string}{
+    const model=this.model,scene=model?.scenes.find(s=>s.id===this.selected);
+    if(!model||!scene)return{error:'Выберите сцену.'};
+    const text=el<HTMLInputElement>('scene-duration').value.trim(),value=Number(text);
+    if(!text||!Number.isFinite(value))return{error:'Введите продолжительность в секундах.'};
+    if(!delta&&value<.04)return{error:'Минимум один кадр — 0,04 с.'};
+    const frames=Math.round(value*FPS)+delta;
+    // Reapplying the same duration must not redistribute other scenes by a
+    // rounding frame or add a history entry. The model owns all other bounds.
+    if(frames===scene.frames)return{model};
+    try{return{model:editDuration(model,scene.id,frames)};}
+    catch(error){return{error:error instanceof Error?error.message:'Не удалось изменить время сцены.'};}
+  }
+  private applyDuration(delta=0):void{
+    if(this.externalBusy||this.busy)return;
+    const target=this.durationTarget(delta);
+    if(target.model&&target.model!==this.model)this.change(()=>target.model!);
+    else if(target.error)this.message(target.error,true);
+  }
+  private durationUi():void{
+    const model=this.model,scene=model?.scenes.find(s=>s.id===this.selected),blocked=this.externalBusy||this.busy||!scene;
+    const target=this.durationTarget(),input=el<HTMLInputElement>('scene-duration'),note=el('scene-duration-note');
+    input.setAttribute('aria-invalid',String(!!scene&&!!target.error));
+    el<HTMLButtonElement>('apply-scene-duration').disabled=blocked||!target.model||target.model===model;
+    el<HTMLButtonElement>('decrease-scene-duration').disabled=blocked||!this.durationTarget(-FPS).model;
+    el<HTMLButtonElement>('increase-scene-duration').disabled=blocked||!this.durationTarget(FPS).model;
+    const onlyReplay=scene?.phase==='ROUTE_REPLAY'&&model!.scenes.filter(s=>s.phase==='ROUTE_REPLAY').length===1;
+    const text=!scene?'Выберите сцену.':target.error?target.error:onlyReplay?'Одна сцена маршрута: её время меняется длительностью ролика или временем обзора и финала.':`${scene.phase==='ROUTE_REPLAY'?'':'Обзор и финал — до 3 с. '}Всего ${model!.duration} с. ±1 с применяется сразу; время остальных сцен маршрута перераспределяется.`;
+    if(note.textContent!==text)note.textContent=text;note.classList.toggle('error',!!scene&&!!target.error);
+  }
   private begin():AbortController{this.op?.abort();this.choiceOp?.abort();const op=new AbortController();this.op=op;this.preparing=true;this.hooks.stop();this.message('Проверяем ракурсы и непрерывные переходы…');this.ui();this.hooks.stateChanged();return op;}
   cancel():void{this.op?.abort();this.op=undefined;this.choiceOp?.abort();this.choiceOp=undefined;this.preparing=false;this.message('Подготовка монтажа отменена. Предыдущая история сохранена.');this.ui();this.hooks.stateChanged();}
   private async open():Promise<void>{
@@ -229,6 +262,7 @@ export class StoryboardEditor {
       // typing. Replace the draft only on selection or committed-time changes.
       if(this.durationScene!==scene.id||this.durationFrames!==scene.frames){el<HTMLInputElement>('scene-duration').value=(scene.frames/FPS).toFixed(2);this.durationScene=scene.id;this.durationFrames=scene.frames;}
     }
+    this.durationUi();
     const scenes=this.playback()?.scenes??[],index=scenes.findIndex(scene=>scene.id===this.selected),interval=scenes[index];
     el<HTMLInputElement>('scene-scrub').disabled=blocked||!interval;this.syncSceneTime(this.hooks.time());
     el<HTMLInputElement>('montage-scrub').disabled=blocked||!scenes.length;this.syncMontageTime(this.hooks.time());

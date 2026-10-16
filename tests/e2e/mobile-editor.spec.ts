@@ -3,7 +3,7 @@ import {mkdirSync,readFileSync,writeFileSync,renameSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {validateVideo} from '../../scripts/validate-video.mjs';
 
-test('touch editor: proportional timeline, frame steps, scene navigation, projects and real portrait MP4',async({browser})=>{
+test('touch editor: duration controls, timeline, frame steps, projects and real portrait MP4',async({browser})=>{
   test.skip(process.env.MOBILE_EDITOR_ACCEPTANCE!=='1','Opt-in synthetic Furka mobile editor acceptance');
   test.setTimeout(360_000);
   const dir='artifacts/mobile-editor';mkdirSync(dir,{recursive:true});
@@ -62,6 +62,31 @@ test('touch editor: proportional timeline, frame steps, scene navigation, projec
     await page.locator('#redo-edit').tap();await ready();expect(await page.locator('.scene-card').allTextContents()).toEqual(edited);await visibleCard();
     expect(await timelineFrames()).toEqual(editedFrames);
 
+    const duration=page.locator('#scene-duration'),shorter=page.locator('#decrease-scene-duration'),longer=page.locator('#increase-scene-duration'),applyDuration=page.locator('#apply-scene-duration');
+    await duration.fill('7.001');await expect(applyDuration).toBeDisabled();
+    expect(await duration.evaluate((input:HTMLInputElement)=>input.validity.valid)).toBe(true);
+    expect(await timelineFrames()).toEqual(editedFrames);
+    await duration.fill('');await expect(duration).toHaveAttribute('aria-invalid','true');
+    await expect(applyDuration).toBeDisabled();await expect(shorter).toBeDisabled();await expect(longer).toBeDisabled();
+    await duration.fill('100');await expect(duration).toHaveAttribute('aria-invalid','true');
+    await expect(applyDuration).toBeDisabled();await expect(shorter).toBeDisabled();await expect(longer).toBeDisabled();
+    expect(await timelineFrames()).toEqual(editedFrames);
+    // Quick controls use the visible fractional draft and apply one real
+    // history transaction through the existing validated montage operation.
+    await duration.fill('7.5');await longer.tap();await ready();await expect(duration).toHaveValue('8.50');
+    expect((await timelineFrames())[2]).toBe(204);expect((await timelineFrames()).reduce((a,b)=>a+b,0)).toBe(480);
+    await expect(page.locator('#scene-duration-note')).toContainText('перераспределяется');
+    await page.locator('#undo-edit').tap();await ready();expect(await timelineFrames()).toEqual(editedFrames);
+    await page.locator('#redo-edit').tap();await ready();await expect(duration).toHaveValue('8.50');
+    await shorter.tap();await ready();await expect(duration).toHaveValue('7.50');expect((await timelineFrames())[2]).toBe(180);
+    await page.locator('#undo-edit').tap();await ready();await expect(duration).toHaveValue('8.50');
+    await page.locator('#undo-edit').tap();await ready();expect(await timelineFrames()).toEqual(editedFrames);
+    await duration.fill('0.04');await applyDuration.tap();await ready();
+    await expect(duration).toHaveValue('0.04');await expect(duration).toHaveAttribute('aria-invalid','false');
+    expect(await duration.evaluate((input:HTMLInputElement)=>input.validity.valid)).toBe(true);
+    expect((await timelineFrames())[2]).toBe(1);await expect(shorter).toBeDisabled();
+    await page.locator('#undo-edit').tap();await ready();expect(await timelineFrames()).toEqual(editedFrames);await expect(duration).toHaveValue('7.00');
+
     await page.locator('#play').tap();await expect(page.locator('body')).toHaveAttribute('data-state','PLAYING');
     await page.locator('#next-scene').tap();await expect(page.locator('body')).toHaveAttribute('data-state','PAUSED');
     await page.locator('#next-scene').tap();await expect(page.locator('#scene-position')).toContainText('Сцена 5 из 5');
@@ -69,13 +94,17 @@ test('touch editor: proportional timeline, frame steps, scene navigation, projec
     expect(await page.locator('#scene-strip').evaluate(strip=>strip.scrollLeft)).toBeGreaterThan(0);
     await page.setViewportSize({width:1280,height:900});await selected.focus();await selected.press('Home');
     await expect(page.locator('#scene-position')).toContainText('Сцена 1 из 5');await expect(page.locator('#previous-scene')).toBeDisabled();
+    await duration.fill('2');await longer.tap();await ready();await expect(duration).toHaveValue('3.00');
+    await expect(longer).toBeDisabled();await expect(page.locator('#scene-duration-note')).toContainText('до 3 с');
+    expect((await timelineFrames()).reduce((a,b)=>a+b,0)).toBe(480);
+    await page.locator('#undo-edit').tap();await ready();expect(await timelineFrames()).toEqual(editedFrames);
     await selected.press('End');await expect(page.locator('#scene-position')).toContainText('Сцена 5 из 5');
     await selected.press('ArrowLeft');await expect(page.locator('#scene-position')).toContainText('Сцена 4 из 5');
     await expect(page.locator('.scene-card[tabindex="0"]')).toHaveCount(1);await expect(selected).toBeFocused();
     for(const size of [{width:320,height:740},{width:390,height:844},{width:428,height:926},{width:844,height:390}]){
       await page.setViewportSize(size);viewports.push(size);
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-      for(const id of ['previous-scene','next-scene','play','scrub','montage-scrub','previous-frame','next-frame','scene-scrub','show-scene-frame','scene-duration','apply-scene-duration','save-project']){
+      for(const id of ['previous-scene','next-scene','play','scrub','montage-scrub','previous-frame','next-frame','scene-scrub','show-scene-frame','scene-duration','decrease-scene-duration','increase-scene-duration','apply-scene-duration','save-project']){
         expect((await page.locator('#'+id).boundingBox())!.height).toBeGreaterThanOrEqual(44);
       }
       for(const id of ['scene-shot','scene-duration','ratio']){
@@ -171,6 +200,7 @@ test('touch editor: proportional timeline, frame steps, scene navigation, projec
     await expect(page.locator('#next-scene')).toBeDisabled();await expect(page.locator('#previous-scene')).toBeDisabled();
     await expect(sceneScrub).toBeDisabled();await expect(page.locator('#show-scene-frame')).toBeDisabled();
     await expect(montageScrub).toBeDisabled();await expect(page.locator('#previous-frame')).toBeDisabled();await expect(page.locator('#next-frame')).toBeDisabled();
+    await expect(shorter).toBeDisabled();await expect(longer).toBeDisabled();await expect(applyDuration).toBeDisabled();
     const file=dir+'/edited-portrait-20s.mp4';await(await download).saveAs(file);await ready();
     videoReport={...validateVideo(file,360,640,20),sha256:createHash('sha256').update(readFileSync(file)).digest('hex')};
     await page.reload();await page.locator('#welcome-close').click();await expect(page.locator('#export')).toBeEnabled({timeout:120_000});
@@ -182,10 +212,17 @@ test('touch editor: proportional timeline, frame steps, scene navigation, projec
     await expect(montageScrub).toHaveValue('120');
     await expect(page.locator('#return-to-editor')).toBeVisible();await page.locator('#collapse-storyboard').tap();
     await expect(page.locator('#return-to-editor')).toBeHidden();
+    // The10s automatic story has one replay scene. Its time cannot be taken
+    // from another replay; explain the model restriction and disable nudges.
+    await page.locator('#duration').selectOption('10');await ready();await expect(page.locator('.scene-card')).toHaveCount(3);
+    await page.locator('.scene-card').nth(1).tap();
+    await expect(page.locator('#scene-duration-note')).toContainText('Одна сцена маршрута');
+    await expect(shorter).toBeDisabled();await expect(longer).toBeDisabled();await expect(applyDuration).toBeDisabled();
+    expect((await timelineFrames()).reduce((a,b)=>a+b,0)).toBe(240);
     expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);
     expect(external).toEqual([]);expect(errors).toEqual([]);passed=true;
   }finally{
     await context.close();renameSync(await recording.path(),dir+'/interface.webm');
-    writeFileSync(dir+'/acceptance.json',JSON.stringify({status:passed?'PASS':'FAILED',sourceCommit:process.env.BUILD_COMMIT,browser:browser.version(),syntheticOnly:true,device:'Touch/mobile viewport emulation; no physical phone tested',checks:['proportional timeline and Undo/Redo/project restoration','touch timeline seek pauses replay without vertical jump','frame step buttons: exact 1/24s, pixel reversal and scene bounds','existing navigation, rapid choices, both aspects, project and H.264 export'],viewports,external,errors,export:videoReport},null,2));
+    writeFileSync(dir+'/acceptance.json',JSON.stringify({status:passed?'PASS':'FAILED',sourceCommit:process.env.BUILD_COMMIT,browser:browser.version(),syntheticOnly:true,device:'Touch/mobile viewport emulation; no physical phone tested',checks:['duration +/-1s from fractional draft with exact UndoRedo and fixed total frames','invalid/blank/no-op duration input and valid one-frame minimum','intro3s limit and single-replay restriction','duration actions locked during export','proportional timeline and Undo/Redo/project restoration','touch timeline seek pauses replay without vertical jump','frame step buttons: exact 1/24s, pixel reversal and scene bounds','existing navigation, rapid choices, both aspects, project and H.264 export'],viewports,external,errors,export:videoReport},null,2));
   }
 });

@@ -1,3 +1,19 @@
+# Current continuation checkpoint — 2026-10-16 10:40 UTC
+
+## Mobile duration controls — new isolated candidate, acceptance PENDING
+
+Owner asked Continue after accepted/published phone editor. Rechecked authoritative GitHub main d91361816396905e44fff8bcbe7ac058b304fee3/tree27fb8e68de373f7f777348347bf28147f3e6c0cc. Local /workspace/route-story-duration is an isolated source snapshot, not a git checkout; remote base tree preserves absent historical binary assets. Planned branch codex/mobile-duration-controls. No new merge/deploy/tag/Release permission inferred.
+
+UI-only +/-1s controls use visible fractional draft and unchanged editDuration/history/camera proof. Validate before enabling; reject blank/nonfinite/out-of-budget/minimum input, prevent same-frame reapply redistribution/history; native0.04/stepany represents one24fps frame. Explain fixed total,3sintro/outro and single-replay restriction; lock during preparation/export. Existing mobile acceptance extended with real touch/draft/bounds/UndoRedo/project/pixel/aspects/20sMP4 checks and original recording/screens. No model/schema/renderer/exporter/GPX/dependency/geography/cap/protected-workflow change. Syntax-only node --check on editor and mobile test PASS; new exact-source TypeScript/unit/build/browser/H264/package PENDING CI. Physical devices/nativepicker/newFullHD4K NOTTESTED. See MOBILE_DURATION_CONTROLS.md.
+
+## Published mobile editor — 2026-10-16 10:12:55 UTC
+
+PR34 merged and mobile editor LIVE at https://matawaka.github.io/route-story/ . Exact deployed/main source d91361816396905e44fff8bcbe7ac058b304fee3; merge tree27fb8e68de373f7f777348347bf28147f3e6c0cc equals reviewed0bcc documentation head, application unchanged from accepted0e86cc9899b6159281d5800aa884a4de9e9d0d14. Owner explicitly approved review/merge and personally dispatched/approved protected github-pages with all4flags; approval API verified. No Release/tag/protected-settings change.
+
+Main-push38881838497/job116910175817 SUCCESS:319unit/28files+TypeScript/build+72browserPASS/42explicitopt-in skips/audit0. Pages38884280567 build116918147788/deploy116918387259/HTTPS116919098172 ALLSUCCESS. Actual anonymous publicHTTPS source/version/hash verification:44files,8558133B payload+7671Bmanifest=8565804B complete within9MiB. Real editor16:9/9:16,shot/time,UndoRedo,draft,exact reverse/project reload PASS; storage/private/external/errors0; consentdecline/cancel/recovery PASS. Seven actual10s240frame H264 videos independently decoded,1680frames total (smoke filenames20s/30s are historical, actual durations10s). Downloaded evidence12038864391=29068352B SHA25613518451350ad64ab711f19fa22d31151be9bfba719386c36386c84e1c52294e,expires23Oct/login. Complete proofs and reusable commands persisted outside source in /workspace/route-story-evidence/MOBILE_PUBLICATION_STATE.json and JOURNAL.md to avoid publication commit loops.
+
+Compact published media /workspace/route-story-evidence/RouteStory-1.7-published-media.zip=6124724B SHA256b90f4d9fda0f430f135366994ec1b088343ac6272a49beb1ef129c74df0a203b:3actualpublicscreens+acceptededited20sportraitMP4+matchingproject+28sactualUIclip+preciseprovenance/reports. Physical Mac/iOS/Android/nativekeyboard/picker/rotation/nativeGPUmemory,liveproviderpreparation,newFullHD4K NOTTESTED; optionalmusic unfinished. Historical checkpoints below retain their original dates/status and are superseded for publication by this checkpoint.
+
 # Implementation state
 
 ## Mobile proportional timeline / frame buttons accepted — 2026-10-16 09:02 UTC
