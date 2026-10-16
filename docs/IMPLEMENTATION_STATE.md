@@ -1,5 +1,13 @@
 # Implementation state
 
+## MVP1.7 completion candidate — 2026-10-16
+
+Owner requested finishing version1.7 with editor. Original PR31 remains OPEN/DRAFT at d1b75ca2e5997bf2647b86983f653fa5f8c535f8; production main/public unchanged4dd38163ec2c898db14d35fc516129b9fd4be456. Work is isolated in existing stacked PR32/codex/competition-evidence-20261015 from8f73ff8d09bbde3a9721824bdcd2f8e11fae97d0. No merge/deployment/tag/Release or protected-settings permission inferred. Read AGENTS/state and confirmed current GitHub refs; local source is a verified snapshot, not a live clone. Local sockets/npm network are denied, so exact-source runtime checks execute in existing Windows/Edge Actions.
+
+Package/lockfile1.7.0-rc.1, truthful footer/welcome/README and docs/MVP17.md. Exporter now yields input after every >720p frame and checks abort immediately after drawing before encoder admission; unchanged old low-resolution cadence/limits/config/geometry/continuous safety. New opt-in edited FullHD/4K UI proof split by aspect: real shot/timing/UndoRedo/project, pointer cancel after progress, 10s retry/decode/exact equal-size pixels/reverse seek/oneGPU/reload. Production candidate proof builds baseline/Sogne/combined with existing packager/CSP/hash/5/6/9MiB bounds, existing release smoke and real recorded competition UI on built /route-story/; no new dependencies or public resources.
+
+Local script syntax/YAML/version-lock consistency PASS. Unit/TS/build/browser/high-res/production on this changed source PENDING until exact-head CI. Prior competition results retain original provenance, never count as new-source success. Physical devices/native picker/long editedHD/4K/4K60/music remain unfinished. Get actual head from GitHub and append real results after CI.
+
 ## MVP1.7 competition synthetic evidence — 2026-10-15
 
 Owner deadline16October2026. Remote PR31 head d1b75ca2e5997bf2647b86983f653fa5f8c535f8 rechecked unchanged/open/draft/unmerged. Isolated draftPR32 codex/competition-evidence-20261015; production src/dependencies/resource/safety limits unchanged. Tested evidence head8a824cede9d4b65a30790719db92693cf3033d3c, CI merge bd40e6ba50fda38e5fd56b248be754a0dc3ca771. RoutineCI38791344637 SUCCESS: clean npmci/audit0,319units/28files,TypeScript/build,72browserPASS/40explicitSKIP. Initial harness server lifetime/10s-final-scene selection/async project-read observation errors corrected only in evidence tests; assertions preserved.
@@ -685,3 +693,4 @@ Measured on Windows_NT 10.0.26200 x64, Microsoft Edge 154.0.4258.62, capability-
 Owner encountered blocked `C:\Program Files\nodejs\npm.ps1` under the system execution policy. README and external-test launch commands now explicitly use `npm.cmd`/`npx.cmd` for Windows PowerShell; Linux/macOS still use the unsuffixed commands. No system policy was changed.
 
 Baseline HEAD before this documentation fix: 7382a5bbd2dcabedf65de466212afbc9fa88de36. Validation: separate `powershell.exe -NoProfile -ExecutionPolicy Restricted -Command 'npm.cmd --version; npm.cmd run build; exit $LASTEXITCODE'` passed (npm 11.17.0, TypeScript/Vite build). `npm.cmd run preview -- --port 4173 --strictPort` started successfully; HTTP GET http://127.0.0.1:4173/ returned 200 with Route Story content. The user-facing local preview remains running for this follow-up. `git diff --check` passed. No application-code changes; the existing acceptance suite remains applicable.
+

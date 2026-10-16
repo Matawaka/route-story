@@ -7,16 +7,17 @@ test('competition: real UI route style replay editor projects and H264 in both a
  test.skip(process.env.COMPETITION_DEMO!=='1','Synthetic competition recording is opt-in');
  test.setTimeout(420_000);
  const dir='artifacts/competition';mkdirSync(dir,{recursive:true});
+ const base=process.env.MVP17_PRODUCTION_URL??'http://127.0.0.1:4173/';
  const context=await browser.newContext({viewport:{width:1440,height:1000},recordVideo:{dir,size:{width:1440,height:1000}}});
  const external:string[]=[],errors:string[]=[],steps:{name:string;milliseconds:number}[]=[];
  const started=Date.now();const mark=(name:string)=>steps.push({name,milliseconds:Date.now()-started});
- await context.route('**/*',r=>new URL(r.request().url()).origin==='http://127.0.0.1:4173'?r.continue():(external.push(r.request().url()),r.abort()));
+ await context.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():(external.push(r.request().url()),r.abort()));
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));const video=page.video()!;
  const ready=()=>page.waitForFunction(()=>!document.querySelector<HTMLButtonElement>('#export')!.disabled,undefined,{timeout:120_000});
  const stop=async()=>{if(await page.locator('body').getAttribute('data-state')==='PLAYING')await page.locator('#play').click();};
  const reports:any[]=[];let passed=false;
  try{
-  await page.goto('http://127.0.0.1:4173/');await page.locator('#welcome-close').click();await ready();await stop();
+  await page.goto(base);await page.locator('#welcome-close').click();await ready();await stop();
   mark('select synthetic Furka route');await page.locator('#route-choice').selectOption('furka');await ready();await stop();
   await page.locator('#duration').selectOption('20');await ready();await page.locator('#quality').selectOption('compatibility');await ready();
   mark('choose Atlas style');await page.locator('[data-style="night"]').click();await ready();await page.locator('[data-style="atlas"]').click();await ready();
@@ -54,6 +55,7 @@ test('competition: real UI route style replay editor projects and H264 in both a
   expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);expect(external).toEqual([]);expect(errors).toEqual([]);passed=true;
  }finally{
   await context.close();renameSync(await video.path(),dir+'/interface.webm');
-  writeFileSync(dir+'/acceptance.json',JSON.stringify({status:passed?'PASS':'FAILED',sourceHead:'d1b75ca2e5997bf2647b86983f653fa5f8c535f8',evidenceHead:process.env.GITHUB_SHA??'local',browser:browser.version(),syntheticOnly:true,recording:'Real Playwright recording of the application UI; never generated artwork',external,errors,steps,exports:reports,physicalDevices:'NOT TESTED'},null,2));
+  writeFileSync(dir+'/acceptance.json',JSON.stringify({status:passed?'PASS':'FAILED',sourceHead:process.env.BUILD_COMMIT??process.env.GITHUB_SHA??'local',evidenceHead:process.env.GITHUB_SHA??'local',browser:browser.version(),syntheticOnly:true,recording:'Real Playwright recording of the application UI; never generated artwork',external,errors,steps,exports:reports,physicalDevices:'NOT TESTED'},null,2));
  }
 });
+

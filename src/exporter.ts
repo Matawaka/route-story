@@ -88,9 +88,11 @@ async function encodeVideo(options:ExportOptions,writable?:VideoFileWriter):Prom
       // A renderer readiness barrier may complete asynchronously. Never capture
       // a partially loaded scene; still retain only the current frame.
       await options.draw(canvas, frame / fps);
+      signal?.throwIfAborted();
       await source.add(frame / fps, 1 / fps);
-      // Let input and cancellation events run even on fast software encoders.
-      if (frame % 8 === 0) await new Promise(resolve => setTimeout(resolve, 0));
+      // A high-resolution readback can be slow under software graphics. Give
+      // real pointer/keyboard cancellation a turn after every such frame.
+      if (width * height > 1280 * 720 || frame % 8 === 0) await new Promise(resolve => setTimeout(resolve, 0));
     }
     signal?.throwIfAborted();
     source.close();
