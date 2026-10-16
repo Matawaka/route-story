@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "recordedAt": "2026-10-16T07:36:35Z",
-  "testedApplicationHead": "c792b3c53b35ff39451c305f83d9b32cb51376e2",
+  "recordedAt": "2026-10-16T09:02:42.913749+00:00",
+  "testedApplicationHead": "0e86cc9899b6159281d5800aa884a4de9e9d0d14",
   "baseMain": "f3e26b3a733a62ef9565dda264fbaeae203a3ddd",
   "branch": "codex/mobile-storyboard-mvp18",
   "pr": 34,
@@ -9,8 +9,8 @@
   "publishedSource": "9efbc360b50e293d09cc8d2ce7fb34b89a171950",
   "newPublicDeployment": false,
   "routineCi": {
-    "run": 38867414596,
-    "job": 116863333734,
+    "run": 38876557998,
+    "job": 116892900312,
     "status": "SUCCESS",
     "unitPassed": 319,
     "unitFiles": 28,
@@ -21,12 +21,17 @@
     "auditVulnerabilities": 0
   },
   "mobileCi": {
-    "run": 38867414616,
-    "job": 116863333830,
+    "run": 38876558008,
+    "job": 116892900415,
     "status": "SUCCESS",
     "passed": 3
   },
   "verifiedInteractions": [
+    "proportional timeline band widths equal scene durations",
+    "timeline weights follow duration edits, Undo/Redo and project reload",
+    "real touch timeline seek selects containing scene and pauses without vertical jump",
+    "timeline Home/End bound to actual video frames0..N-1",
+    "frame step buttons seek1/24s, reverse exact pixels and stop at scene bounds",
     "scene/global exact pixels at one frame timestamp",
     "native global range preserves1/24s timestamps",
     "Home/End bound scene scrub to frames0..N-1",
@@ -42,10 +47,16 @@
   ],
   "touchUi": {
     "status": "PASS",
-    "sourceCommit": "c792b3c53b35ff39451c305f83d9b32cb51376e2",
+    "sourceCommit": "0e86cc9899b6159281d5800aa884a4de9e9d0d14",
     "browser": "154.0.4258.62",
     "syntheticOnly": true,
     "device": "Touch/mobile viewport emulation; no physical phone tested",
+    "checks": [
+      "proportional timeline and Undo/Redo/project restoration",
+      "touch timeline seek pauses replay without vertical jump",
+      "frame step buttons: exact 1/24s, pixel reversal and scene bounds",
+      "existing navigation, rapid choices, both aspects, project and H.264 export"
+    ],
     "viewports": [
       {
         "width": 320,
@@ -83,29 +94,29 @@
       "bytes": 3746816,
       "validator": "Independent FFmpeg + ffprobe",
       "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
-      "sha256": "a36f9bd1b64f6ecd5e4a747576203c94e9615b6a41ae6b1198601019260d6aee"
+      "sha256": "6831ab99fb39b05ebae19346c629e3daa46cae9b2911af64fa855827762454c8"
     }
   },
   "packages": {
     "status": "PASS",
     "version": "1.7.0",
-    "sourceCommit": "c792b3c53b35ff39451c305f83d9b32cb51376e2",
+    "sourceCommit": "0e86cc9899b6159281d5800aa884a4de9e9d0d14",
     "packages": [
       {
         "mode": "baseline",
-        "completeBytes": 5085799,
+        "completeBytes": 5090716,
         "limitBytes": 5242880,
         "files": 22
       },
       {
         "mode": "sogne",
-        "completeBytes": 6091328,
+        "completeBytes": 6096245,
         "limitBytes": 6291456,
         "files": 25
       },
       {
         "mode": "combined",
-        "completeBytes": 8563160,
+        "completeBytes": 8568077,
         "limitBytes": 9437184,
         "files": 44
       }
@@ -113,10 +124,10 @@
     "publicDeployment": false
   },
   "independentDecode": {
-    "sourceHead": "c792b3c53b35ff39451c305f83d9b32cb51376e2",
-    "ciRun": 38867414616,
-    "artifact": 12031853178,
-    "revalidatedAt": "2026-10-16T07:35:31.713755+00:00",
+    "sourceHead": "0e86cc9899b6159281d5800aa884a4de9e9d0d14",
+    "ciRun": 38876558008,
+    "artifact": 12035966418,
+    "revalidatedAt": "2026-10-16T08:58:08.420103+00:00",
     "method": "System FFmpeg/ffprobe 8 independent decoding; same acceptance assertions as existing validator. ffprobe8 duration_time replaces old pkt_duration_time. Existing validator runs unchanged in CI. No application rerun here.",
     "rows": [
       {
@@ -130,7 +141,7 @@
         "distinctFrames": 480,
         "frameTimestampsVerified": true,
         "bytes": 3746816,
-        "sha256": "a36f9bd1b64f6ecd5e4a747576203c94e9615b6a41ae6b1198601019260d6aee",
+        "sha256": "6831ab99fb39b05ebae19346c629e3daa46cae9b2911af64fa855827762454c8",
         "status": "PASS"
       },
       {
@@ -144,7 +155,7 @@
         "distinctFrames": 240,
         "frameTimestampsVerified": true,
         "bytes": 942307,
-        "sha256": "2963bd4b94a1cc6fbfba81c2c0bf85e40c4be0996639c3132831344a880371a7",
+        "sha256": "a240a968d4d85d5894e5310be6c4fa7b1122e574f5f0e6425e7ebc241faa6019",
         "status": "PASS"
       }
     ],
@@ -153,34 +164,35 @@
   },
   "recording": {
     "file": "interface.webm",
-    "durationSeconds": 190.36,
-    "method": "Actual Playwright recording of application UI; never generated artwork",
-    "sha256": "36250c27554efb5ffc037e603ea30a2105745c4484d294266fade4a49294ae10"
+    "durationSeconds": 152.52,
+    "sha256": "c2f001abf66733aa7a9ffd4e3cc50d94900dbbe2c849175fc1d0e599793d85ee",
+    "method": "Actual Playwright recording of the application UI"
   },
   "artifacts": {
     "evidence": {
-      "id": 12031853178,
-      "bytes": 5526042,
-      "sha256": "ae4d6507f8cbd588f85fcabbb75860deddb4f03264dd13f10234d0d36389bd40"
+      "id": 12035966418,
+      "bytes": 5533478,
+      "sha256": "9b05658cf8d7638a001831b82e2e85b924383a540986aa129245d6b3e2b37c18"
     },
     "realRecording": {
-      "id": 12031753488,
-      "bytes": 13261674,
-      "sha256": "8baad54d696b194f3d7a456d41f6d35294ccc158dbda90b8b4b1b0e4f8244fe8"
+      "id": 12035552319,
+      "bytes": 11718669,
+      "sha256": "0f8ec2716adf4780ea1d5c1cd8fe736f01a4804df4891e3c243d6bfb903b6e18"
     },
     "candidateBundle": {
-      "id": 12032241184,
-      "bytes": 4807911
+      "id": 12036285621,
+      "bytes": 4808864,
+      "sha256": "406c1fc76704dac8270443774b74280e13df0a61c17665956babd7a7c89534d0"
     },
     "loginRequired": true,
     "expires": "2026-10-30"
   },
   "previousAcceptedCandidate": {
-    "applicationHead": "bec207af3f589172e793a739a47a74704c4af8d1",
-    "lastHead": "9d42b1836ea0d2bfd8877117572cf349abba44ae",
-    "routineRun": 38857937172,
-    "mobileRun": 38857937157,
-    "evidence": 12026904380
+    "applicationHead": "c792b3c53b35ff39451c305f83d9b32cb51376e2",
+    "lastHead": "cb1b78713f1e7b3554b40d17f49f3b709a0e988c",
+    "routineRun": 38869133327,
+    "mobileRun": 38869133342,
+    "evidence": 12031853178
   },
   "notTested": [
     "physical iOS/Android/macOS",
@@ -199,5 +211,29 @@
     "source assets",
     "5/6/9MiB package limits",
     "protected Pages workflow"
-  ]
+  ],
+  "shortUiRecording": {
+    "sourceHead": "0e86cc9899b6159281d5800aa884a4de9e9d0d14",
+    "sourceRecordingArtifact": 12035552319,
+    "sourceFile": "interface.webm",
+    "sourceSha256": "c2f001abf66733aa7a9ffd4e3cc50d94900dbbe2c849175fc1d0e599793d85ee",
+    "trimStartSeconds": 35,
+    "durationSeconds": 28,
+    "method": "Contiguous excerpt of actual UI recording; only trim and H.264 transcoding, no drawn/synthetic UI",
+    "width": 390,
+    "height": 844,
+    "fps": 15,
+    "decodedFrames": 420,
+    "bytes": 470263,
+    "sha256": "43baabc8c126bf623947ff726d9cff4a1b5d3284bc8d49ddcddd25bb810e7223"
+  },
+  "supersededFailedAttempt": {
+    "head": "ee19658f2beef26cff1ad71a316a408f34276459",
+    "mobileRun": 38875648829,
+    "job": 116889943369,
+    "status": "FAILED",
+    "evidence": 12035102622,
+    "realRecording": 12035785594,
+    "reason": "Post-tap PLAYING sample arrived after episode ended; actual recording confirmed playback. Before-tap observer now witnesses actual transition. Exact pause/end/time/pixels/export assertions and timeouts retained."
+  }
 }

@@ -1,5 +1,13 @@
 # Implementation state
 
+## Mobile proportional timeline / frame buttons accepted — 2026-10-16 09:02 UTC
+
+PR34/codex/mobile-storyboard-mvp18 exact application head0e86cc9899b6159281d5800aa884a4de9e9d0d14: routine38876557998/job116892900312 SUCCESS319unit/28files+TypeScript/build+72browserPASS/42opt-in skips/audit0; mobile38876558008/job116892900415 SUCCESS3tests/3.6min and existing baseline/Sogne/combined packager PASS. New native proportional timeline selects actual scene/frame on touch and pauses without vertical jump; duration widths/UndoRedo/project restore,44px targets,HomeEnd,exact1/24s frame buttons/pixel reversal/scene bounds/export locks PASS. Actual before-tap PLAYING witness and unchanged final paused/frame/time checks PASS, superseding failed38875648829 observation checkpoint below. No runtime edits after accepted0e86; current followup is docs/evidence only.
+
+Three actual mobile screenshots inspected. True portrait20s360x640H26424FPS480frames SHA2566831ab99fb39b05ebae19346c629e3daa46cae9b2911af64fa855827762454c8 matches downloaded file; local FFmpeg8 fully re-decoded both MP4=720frames/everyPTS/dimensions/H264/distinctframes PASS. Actual browser recording152.52s; contiguous35–63s excerpt28s390x84415FPS420decodedframes470263B SHA25643baabc8c126bf623947ff726d9cff4a1b5d3284bc8d49ddcddd25bb810e7223, trim/transcode only. Full recording12035552319=11718669B; compact screenshots/MP4/project/reports12035966418=5533478B SHA2569b05658cf8d7638a001831b82e2e85b924383a540986aa129245d6b3e2b37c18; bundle12036285621=4808864B. Login required/expires30Oct. Complete packages5090716/6096245/8568077B within5/6/9MiB,22/25/44files. Commands and detailed provenance in MOBILE_EDITOR.md/MOBILE_EDITOR_EVIDENCE.json.
+
+Public1.7source9ef/mainf3e remain unchanged. No new merge/deploy/Release/tag/protected-settings permission inferred. Physical iOS/Android/mobilekeyboard/nativepicker/physicalrotation/nativeGPUmemory/newFullHD4K remain NOTTESTED. New code and reviewable media ready in isolated PR34; only final docs-head CI remains after this checkpoint. Historical failures/PENDING entries retained and superseded by the exact results above.
+
 ## Mobile timeline acceptance observation fix — 2026-10-16
 
 Application candidateee19658f2beef26cff1ad71a316a408f34276459 mobile38875648829/job116889943369 FAILED at the existing post-tap PLAYING sample after new timeline/frame/bounds/UndoRedo checks passed. Actual80.2s browser recording12035785594 shows selected7s episode playing then reaching its correct last frame; asynchronous remote assertion arrived after playback completed on the software-rendered runner. Evidence12035102622 retained, no20sMP4/package acceptance claimed for failed run. Routine38875648800 pending at checkpoint.
