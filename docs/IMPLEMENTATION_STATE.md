@@ -1,5 +1,15 @@
 # Implementation state
 
+## MVP1.7 published / real HTTPS accepted — 2026-10-16 04:35 UTC
+
+Owner-authorized version1.7.0 is LIVE at https://matawaka.github.io/route-story/ . Exact deployed source9efbc360b50e293d09cc8d2ce7fb34b89a171950, main-pushCI38849322196 SUCCESS; app/tree equals reviewed6e713beace41b2943ba7cf7cc64b21f1c7e54375. Main HEAD may advance by this documentation-only PR33; deployed source remains9ef. PR31/32 features are public, none remain PR-only.
+
+Existing protected Pages38850162841 build/deploy/https-acceptance ALL SUCCESS, completed04:35:23UTC. Matawaka personally dispatched all4approved flags and approved github-pages environment (approvals API verified); duplicate38850218012 cancelled before deployment. No changed Pages workflow/protection, Release or tag. Actual Windows Edge154.0.4258.62 anonymous HTTPS verified1.7.0/source9ef,44file hashes,8546978B payload+7671B manifest=8554649B within9MiB. Real storyboard bothaspects PASS: shot/time,UndoRedo,draft preservation,exactreverse/project reload. Existing HTTPS helpers independently decoded7real10s/240frame H264 MP4 for2D/Sogne/Furka; no unexpected requests/errors/persistent user data. HTTPS editor helper does not re-encode montage; full recorded built1.7 and highres acceptance prove edited outputs separately.
+
+HTTPS evidence artifact12025910474,29039899B,SHA2563b05f51531d87b02ba109e1467b8b49e03d1dcc923281b0d39ec4458e1d4a082 downloaded and all3primary reports inspected locally; expires23Oct. Production jury artifact12023467459 remains the compact13MB actual screenshots/GIF/2edited20sMP4/project bundle until30Oct. Full recording344.6s12024115247. Final sources/tests/media/limits in MVP17_EVIDENCE.json; updated ready-to-send Russian entry in COMPETITION_SUBMISSION_RU.txt. All demo routes synthetic.
+
+Remaining NOT TESTED: physical Mac/iOS/Android/ordinary laptops,native OS save picker,edited20/30/60sFullHD/4K/4K60,aggregate native/GPU memory; optional music unfinished. Current bounded HTTPS smoke verifies automatic-geography consent/decline, not live provider preparation. No further app edits or deployment needed for this handover. Next owner action: submit entry with publicsite and media before deadline. Historical pending/failure checkpoints below are retained, superseded by this final result.
+
 ## MVP1.7 accepted and merged — 2026-10-16 04:18 UTC
 
 Owner explicitly authorized merging and public1.7 after completed work. PR32 merged as58aadbdf2f4f01bcc717e886b702dbd4ba41163e, PR31 merged to main9efbc360b50e293d09cc8d2ce7fb34b89a171950. Both merge trees exactly equal reviewed6e713beace41b2943ba7cf7cc64b21f1c7e54375; earlier0f runtime app code unchanged in acceptance-only followup. All seven acceptance38846070655 jobs SUCCESS and regression38846070644 SUCCESS. Exact main-push38849322196 SUCCESS319unit/28files+TS/build+72browserPASS/41opt-in skips. Actual10s edited FullHD/4K BOTHaspects/pass pointercancel/retry/exactpixels/oneGPU/project reload; source/private/safety/dependencies/caps preserved.

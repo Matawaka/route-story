@@ -2,7 +2,7 @@
 
 **MVP 1.7 — интерактивный монтаж.** Локальное приложение превращает GPX в видео: маршрут → стиль → replay → редактор → H.264 MP4. Русский интерфейс, Vite/TypeScript, Canvas 2D и один существующий WebGL2-контекст для 3D. GPX не отправляется на сервер и не сохраняется в браузерном хранилище.
 
-[Публичный сайт](https://matawaka.github.io/route-story/) · [версия и SHA последней публикации](https://matawaka.github.io/route-story/release.json). **1.7.0 реализована и слита** через [PR #31](https://github.com/Matawaka/route-story/pull/31) и [PR #32](https://github.com/Matawaka/route-story/pull/32). Проверенный main — `9efbc360b50e293d09cc8d2ce7fb34b89a171950`; [его CI прошёл](https://github.com/Matawaka/route-story/actions/runs/38849322196). Публичный сайт обновляется отдельно через защищённый ручной Pages workflow; его фактический `version`/`sourceCommit` указаны в `release.json`. [Итог приёмки и медиа](docs/MVP17_EVIDENCE.json).
+[Публичный сайт](https://matawaka.github.io/route-story/) · [версия и SHA публикации](https://matawaka.github.io/route-story/release.json). **1.7.0 с редактором опубликована 16 октября** после слияния [PR #31](https://github.com/Matawaka/route-story/pull/31) и [PR #32](https://github.com/Matawaka/route-story/pull/32). Опубликован проверенный main `9efbc360b50e293d09cc8d2ce7fb34b89a171950`: [main CI](https://github.com/Matawaka/route-story/actions/runs/38849322196) и [защищённая публикация с настоящей HTTPS-приёмкой](https://github.com/Matawaka/route-story/actions/runs/38850162841) SUCCESS. [Итог приёмки и медиа](docs/MVP17_EVIDENCE.json).
 
 В доступной 3D-сцене нажмите **«Настроить историю»**. Карточки показывают настоящие кадры; можно выбрать проверенный ракурс для каждого формата, изменить время эпизода, подробнее показать участок, просмотреть одну сцену, отменить или повторить правку. Весь исходный маршрут и разрывы сохраняются. Время анимации является художественным, а не записанной скоростью поездки.
 
@@ -12,16 +12,16 @@
 
 Подготовленные локальные фото/DEM доступны для Согне и Фурки. Экспериментальный автоматический поиск Sentinel/Copernicus требует согласия на передачу округлённой области, сохраняет GPX локально и не обещает мирового детального покрытия. Источники и подписи сохраняются в видео. Лимиты пакетов, ресурсов и непрерывные проверки камеры не изменены.
 
-[Работа с редактором и приёмка 1.7](docs/MVP17.md) · [проверенные конкурсные медиа](docs/COMPETITION_CHECKPOINT_2026-10-15.md) · [ограничения Full HD/4K](docs/HIGH_RESOLUTION_EXPORT.md) · [источники и лицензии](THIRD_PARTY_NOTICES.md).
+[Работа с редактором и приёмка 1.7](docs/MVP17.md) · [конкурсные медиа 1.7](https://github.com/Matawaka/route-story/actions/runs/38846070655/artifacts/12023467459) · [текст заявки](docs/COMPETITION_SUBMISSION_RU.txt) · [ограничения Full HD/4K](docs/HIGH_RESOLUTION_EXPORT.md) · [источники и лицензии](THIRD_PARTY_NOTICES.md).
 
 ## Локальный запуск
 
-Для подготовки кандидата MVP 1.7 из чистого checkout:
+Для локальной сборки MVP 1.7 из чистого checkout:
 
 ```powershell
 git clone https://github.com/Matawaka/route-story.git
 cd route-story
-git switch codex/competition-evidence-20261015
+git switch main
 npm.cmd ci
 npm.cmd run build
 npm.cmd run preview
@@ -32,13 +32,13 @@ npm.cmd run preview
 ```sh
 git clone https://github.com/Matawaka/route-story.git
 cd route-story
-git switch codex/competition-evidence-20261015
+git switch main
 npm ci
 npm run build
 npm run preview
 ```
 
-Для публичного MVP 1.6 выберите `git switch main`; для архивного выпуска — `git switch --detach v1.0.0`. Для полного кандидата с локальной Фуркой и Согне перед сборкой задайте `BUILD_SWISS_PACK=1` и `BUILD_IMAGERY_PACK=1` (в PowerShell: `$env:BUILD_SWISS_PACK='1'`, `$env:BUILD_IMAGERY_PACK='1'`). Автоматическая география включается отдельно через `BUILD_AUTO_GEOGRAPHY=1` и требует согласия в интерфейсе. Команды Linux/macOS приведены для воспроизводимости сборки. Для запуска нужен браузер с Canvas 2D, File/Blob и XML DOM; для экспорта дополнительно WebCodecs H.264. Общий минимальный объём RAM для всех устройств не установлен.
+Для точного опубликованного исходника выберите `git switch --detach 9efbc360b50e293d09cc8d2ce7fb34b89a171950`; для архивного выпуска — `git switch --detach v1.0.0`. Для полного пакета с локальной Фуркой и Согне перед сборкой задайте `BUILD_SWISS_PACK=1` и `BUILD_IMAGERY_PACK=1` (в PowerShell: `$env:BUILD_SWISS_PACK='1'`, `$env:BUILD_IMAGERY_PACK='1'`). Автоматическая география включается отдельно через `BUILD_AUTO_GEOGRAPHY=1` и требует согласия в интерфейсе. Команды Linux/macOS приведены для воспроизводимости сборки. Для запуска нужен браузер с Canvas 2D, File/Blob и XML DOM; для экспорта дополнительно WebCodecs H.264. Общий минимальный объём RAM для всех устройств не установлен.
 
 Откройте адрес localhost, напечатанный Vite (обычно http://127.0.0.1:4173). Для разработки в PowerShell: `npm.cmd run dev`. Требуется Node.js 22.12+; проверено на Node 24.19.0. Экспорт требует HTTPS или localhost и WebCodecs H.264; поддержка проверяется на выбранных размерах. Новый кандидат проверен на Windows10.0.26200/Edge155.0.4283.45, включая 20/30s720p с моноколесом. Прежние автоматизированные браузерные результаты сохранены в [COMPATIBILITY](docs/COMPATIBILITY.md) и [SUPPORTED_PLATFORMS](docs/SUPPORTED_PLATFORMS.md); Playwright WebKit на Windows поддерживает предпросмотр, но не MP4. Владелец ранее сообщил об успешных проверках принятого DEM-режима на Xiaomi14/Pad2/MacBookM2 в Chrome/Brave/Safari, без версий и точных пар устройств/браузеров. Это не новая приёмка фото-динамики/маркеров на физических устройствах и не доказательство универсальной мобильной поддержки. Новый native/GPU-memory замер отсутствует.
 
