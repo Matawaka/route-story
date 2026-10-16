@@ -1,5 +1,17 @@
 # Implementation state
 
+## MVP1.7 competition synthetic evidence — 2026-10-15
+
+Owner deadline16October2026. Remote PR31 head d1b75ca2e5997bf2647b86983f653fa5f8c535f8 rechecked unchanged/open/draft/unmerged. Isolated draftPR32 codex/competition-evidence-20261015; production src/dependencies/resource/safety limits unchanged. Tested evidence head8a824cede9d4b65a30790719db92693cf3033d3c, CI merge bd40e6ba50fda38e5fd56b248be754a0dc3ca771. RoutineCI38791344637 SUCCESS: clean npmci/audit0,319units/28files,TypeScript/build,72browserPASS/40explicitSKIP. Initial harness server lifetime/10s-final-scene selection/async project-read observation errors corrected only in evidence tests; assertions preserved.
+
+Competition run38791344649 real-interface job116616394436 SUCCESS: existing2storyboard tests+new full UI chain,3PASS. SyntheticFurka/style/replay/editor/certifiedshot/time/UndoRedo/save-reopen/exactpixels/16:9/9:16/mobileviewport. Actual2x20s360pH264/24FPS/480frames; real333.04s Playwright recording,18.24s contiguousGIF,3primaryPNG+mobile. Jury artifact12000553386=12,935,469B, SHA25681b868ed0ddba36c0044243319ff7e34a443145101ecdeddf9987cb5706266ac; Actions download requireslogin, expires29Oct2026. Full recording11999864361. No drawn UI/private routes. Permanent binary copy inGit NOT CREATED.
+
+Fresh publicHTTPS job116616394570 VERIFIED: source4dd38163ec2c898db14d35fc516129b9fd4be456,45hashes/8,509,623B,actualsynthetic360p/720pMP4/seek/cancel/privacy/unsupported-codecpreview. Storyboard PR-only. FullHD job116616394149 SUCCESS:10sbothaspects terrain/directorA/B+cancel/retry/240frames/PTS/exactpreencode/sourceidentity. NOT editedFullHD acceptance. Four4K10sMP4s independently240frame-decoded, but4Kcancel/retry NOT PASSED: earlier38789679716/116610688990 #cancel click timed out30s; latest116616394459 cancelled20minbudget. Do not claim full4K acceptance. Director safearea/occluded/uncovered0; oldterrainlandscape9/241poses outside reference safearea. No newcontinuousnative2mLOS claim.
+
+Additional local FFmpeg/ffprobe8 decode21MP4/4608frames (16originalCI+3public+2edited); duration_time field noted. Localbrowser/npm blocked by socket sandbox; realUI was Windows/Edge154.0.4258.62 CI. Physicaldevices/Safari,editedFullHD/4K,4K60/nativepicker,alllongermontagecombinations,native/GPU memorypeaks NOT TESTED; music unfinished. Synthetic-only instruction excludes private fixtures. No merge/Pages/Release/tag/protected-setting action.
+
+Exact commands/media/links/status: COMPETITION_CHECKPOINT_2026-10-15.md, COMPETITION_EVIDENCE_2026-10-15.json, ready text COMPETITION_SUBMISSION_RU.txt. This followup is docs/evidence-only; currentHEAD via git/API remains authoritative. One next owner step: submit contest entry with validated media and PR31 link before16October; no publication authorization inferred.
+
 ## MVP1.7 storyboard — working editor checkpoint — 2026-10-14
 
 Reconciled actual production main4dd38163ec2c898db14d35fc516129b9fd4be456, exact mainCI38559460254/Pages38560776521 SUCCESS. New branchcodex/interactive-storyboard-mvp17 starts directly from thatmain; unrelated handoverPR30/e6fe8fc and other open docsPRs are NOT absorbed. Three owner-rootMP4s remain untouched/untracked. No merge/tag/Release/deploy/workflow/resource-cap authorization forMVP1.7 inferred.
