@@ -1,5 +1,13 @@
 # Implementation state
 
+## Mobile scene frames / preview accepted — 2026-10-16 07:36 UTC
+
+PR34/codex/mobile-storyboard-mvp18 exact application headc792b3c53b35ff39451c305f83d9b32cb51376e2: routine38867414596/job116863333734 SUCCESS319unit/28files+TypeScript/build+72browserPASS/42opt-in skips/audit0; mobile38867414616/job116863333830 SUCCESS3tests/4.6min. Exact1/24s scene seeks and global-seek pixels PASS; native Home/End stay in frames0..N-1, actual scene-only playback pauses on final valid frame, preview/return visibility and export scene-input lock PASS. Existing touch/navigation/UndoRedo/project/oneGPU/source/private/safety checks retained. No new runtime edit after this accepted head; current follow-up is docs/evidence only.
+
+Actual portrait20s360x640H26424FPS/480decodedframes SHA256a36f9bd1b64f6ecd5e4a747576203c94e9615b6a41ae6b1198601019260d6aee matches downloaded MP4. Local FFmpeg8 re-decoded that file and corestoryboard10s=720frames/everyPTS/dimensions/distinctframes PASS. Three true mobile screenshots inspected,190.36s actual browser recording. New evidence12031853178=5526042B SHA256ae4d6507f8cbd588f85fcabbb75860deddb4f03264dd13f10234d0d36389bd40; recording12031753488=13261674B; candidatebundle12032241184=4807911B; login/expires30Oct. Existing packager complete baseline/Sogne/combined5085799/6091328/8563160B within5/6/9MiB,22/25/44hashes. Full details/commands in MOBILE_EDITOR.md and MOBILE_EDITOR_EVIDENCE.json.
+
+No new merge/deploy/tag/Release/protectedsettings permission inferred from Continue. Public1.7source9ef/mainf3e unchanged by this work. Physical iOS/Android/nativekeyboard/picker/physicalrotation/nativeGPUmemory/newFullHD4K NOTTESTED. No pending application fix; next step is review of isolated PR34 with real media. Historical PENDING checkpoints below are superseded by these exact results.
+
 ## Mobile scene scrubbing / preview continuation — 2026-10-16
 
 Owner asked to continue the chosen phone-editor work. PR34 HEAD9d42b1836ea0d2bfd8877117572cf349abba44ae reconciled OPEN/ready/unmerged; both latest exact-head runs38857937157 mobile and38857937172 routine SUCCESS. Mainf3e26b3/public9ef unchanged. Continue on the same isolated branch, no merge/publication permission inferred.

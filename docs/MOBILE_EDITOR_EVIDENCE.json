@@ -1,6 +1,7 @@
 {
-  "schema": 1,
-  "testedApplicationHead": "bec207af3f589172e793a739a47a74704c4af8d1",
+  "schema": 2,
+  "recordedAt": "2026-10-16T07:36:35Z",
+  "testedApplicationHead": "c792b3c53b35ff39451c305f83d9b32cb51376e2",
   "baseMain": "f3e26b3a733a62ef9565dda264fbaeae203a3ddd",
   "branch": "codex/mobile-storyboard-mvp18",
   "pr": 34,
@@ -8,8 +9,8 @@
   "publishedSource": "9efbc360b50e293d09cc8d2ce7fb34b89a171950",
   "newPublicDeployment": false,
   "routineCi": {
-    "run": 38856813073,
-    "job": 116830022927,
+    "run": 38867414596,
+    "job": 116863333734,
     "status": "SUCCESS",
     "unitPassed": 319,
     "unitFiles": 28,
@@ -20,14 +21,28 @@
     "auditVulnerabilities": 0
   },
   "mobileCi": {
-    "run": 38856813178,
-    "job": 116830023220,
+    "run": 38867414616,
+    "job": 116863333830,
     "status": "SUCCESS",
     "passed": 3
   },
+  "verifiedInteractions": [
+    "scene/global exact pixels at one frame timestamp",
+    "native global range preserves1/24s timestamps",
+    "Home/End bound scene scrub to frames0..N-1",
+    "scene-only playback stops at final valid frame",
+    "explicit preview navigation and return to editor",
+    "card selection does not scroll page vertically",
+    "Undo/Redo and draft preservation",
+    "rapid A-B-A choices without duplicate options",
+    "both aspects and project fresh reload exact pixels",
+    "44px targets and16px inputs in320/390/428/844x390 touch viewports",
+    "navigation/scene scrub blocked during export",
+    "real20s portrait H264 MP4 independent full decode"
+  ],
   "touchUi": {
     "status": "PASS",
-    "sourceCommit": "bec207af3f589172e793a739a47a74704c4af8d1",
+    "sourceCommit": "c792b3c53b35ff39451c305f83d9b32cb51376e2",
     "browser": "154.0.4258.62",
     "syntheticOnly": true,
     "device": "Touch/mobile viewport emulation; no physical phone tested",
@@ -68,29 +83,29 @@
       "bytes": 3746816,
       "validator": "Independent FFmpeg + ffprobe",
       "ffmpegVersion": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
-      "sha256": "b27241b7a68f3b72c558d53b3239076d2a18a08020a32e539ef70986585406a0"
+      "sha256": "a36f9bd1b64f6ecd5e4a747576203c94e9615b6a41ae6b1198601019260d6aee"
     }
   },
   "packages": {
     "status": "PASS",
     "version": "1.7.0",
-    "sourceCommit": "bec207af3f589172e793a739a47a74704c4af8d1",
+    "sourceCommit": "c792b3c53b35ff39451c305f83d9b32cb51376e2",
     "packages": [
       {
         "mode": "baseline",
-        "completeBytes": 5083482,
+        "completeBytes": 5085799,
         "limitBytes": 5242880,
         "files": 22
       },
       {
         "mode": "sogne",
-        "completeBytes": 6089011,
+        "completeBytes": 6091328,
         "limitBytes": 6291456,
         "files": 25
       },
       {
         "mode": "combined",
-        "completeBytes": 8560843,
+        "completeBytes": 8563160,
         "limitBytes": 9437184,
         "files": 44
       }
@@ -98,10 +113,10 @@
     "publicDeployment": false
   },
   "independentDecode": {
-    "sourceHead": "bec207af3f589172e793a739a47a74704c4af8d1",
-    "ciRun": 38856813178,
-    "artifact": 12026904380,
-    "revalidatedAt": "2026-10-16T05:45:49.792667+00:00",
+    "sourceHead": "c792b3c53b35ff39451c305f83d9b32cb51376e2",
+    "ciRun": 38867414616,
+    "artifact": 12031853178,
+    "revalidatedAt": "2026-10-16T07:35:31.713755+00:00",
     "method": "System FFmpeg/ffprobe 8 independent decoding; same acceptance assertions as existing validator. ffprobe8 duration_time replaces old pkt_duration_time. Existing validator runs unchanged in CI. No application rerun here.",
     "rows": [
       {
@@ -115,7 +130,7 @@
         "distinctFrames": 480,
         "frameTimestampsVerified": true,
         "bytes": 3746816,
-        "sha256": "b27241b7a68f3b72c558d53b3239076d2a18a08020a32e539ef70986585406a0",
+        "sha256": "a36f9bd1b64f6ecd5e4a747576203c94e9615b6a41ae6b1198601019260d6aee",
         "status": "PASS"
       },
       {
@@ -129,7 +144,7 @@
         "distinctFrames": 240,
         "frameTimestampsVerified": true,
         "bytes": 942307,
-        "sha256": "9472283079dd550f18e76d2335ffe3e346d1927dab9c2f98c10103cb61e64325",
+        "sha256": "2963bd4b94a1cc6fbfba81c2c0bf85e40c4be0996639c3132831344a880371a7",
         "status": "PASS"
       }
     ],
@@ -138,27 +153,34 @@
   },
   "recording": {
     "file": "interface.webm",
-    "durationSeconds": 184.36,
-    "method": "Actual Playwright recording of the application UI; never generated artwork",
-    "sha256": "86dde8895934cefa89a8821e035f9bf02fbbdbb6449e784f05d79b49f2e49109"
+    "durationSeconds": 190.36,
+    "method": "Actual Playwright recording of application UI; never generated artwork",
+    "sha256": "36250c27554efb5ffc037e603ea30a2105745c4484d294266fade4a49294ae10"
   },
   "artifacts": {
     "evidence": {
-      "id": 12026904380,
-      "bytes": 5262566,
-      "sha256": "d302d520238f8d9feeb157562cefb449f256ca6163ec2633659c75627c815681"
+      "id": 12031853178,
+      "bytes": 5526042,
+      "sha256": "ae4d6507f8cbd588f85fcabbb75860deddb4f03264dd13f10234d0d36389bd40"
     },
     "realRecording": {
-      "id": 12027308228,
-      "bytes": 10915722,
-      "sha256": "a7937b039f2adec7cf6cc0129e4607b9b98efcf88b8560fe1a66039e03175c0e"
+      "id": 12031753488,
+      "bytes": 13261674,
+      "sha256": "8baad54d696b194f3d7a456d41f6d35294ccc158dbda90b8b4b1b0e4f8244fe8"
     },
     "candidateBundle": {
-      "id": 12027193820,
-      "bytes": 4807282
+      "id": 12032241184,
+      "bytes": 4807911
     },
     "loginRequired": true,
     "expires": "2026-10-30"
+  },
+  "previousAcceptedCandidate": {
+    "applicationHead": "bec207af3f589172e793a739a47a74704c4af8d1",
+    "lastHead": "9d42b1836ea0d2bfd8877117572cf349abba44ae",
+    "routineRun": 38857937172,
+    "mobileRun": 38857937157,
+    "evidence": 12026904380
   },
   "notTested": [
     "physical iOS/Android/macOS",
@@ -177,6 +199,5 @@
     "source assets",
     "5/6/9MiB package limits",
     "protected Pages workflow"
-  ],
-  "recordedAt": "2026-10-16T05:49:52Z"
+  ]
 }
