@@ -29,7 +29,7 @@ test('MVP1.7 edited high-resolution UI: cancel, retry, exact frames and project'
   await expect(page.locator('#scene-shot')).toBeEnabled({timeout:120_000});
   const shot=await page.locator('#scene-shot option').nth(1).getAttribute('value');expect(shot).toBeTruthy();
   await page.locator('#scene-shot').selectOption(shot!);await ready();
-  await page.locator('.scene-card').nth(0).click();await page.locator('#scene-duration').fill('2');
+  await page.locator('.scene-card').nth(0).click();await page.locator('#scene-duration').fill('3');
   const originalCards=await page.locator('.scene-card').allTextContents();await page.locator('#apply-scene-duration').click();await ready();
   const cards=await page.locator('.scene-card').allTextContents();expect(cards).not.toEqual(originalCards);
   await page.locator('#undo-edit').click();await ready();expect(await page.locator('.scene-card').allTextContents()).toEqual(originalCards);
