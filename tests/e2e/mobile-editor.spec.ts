@@ -66,6 +66,13 @@ test('touch editor: duration controls, timeline, frame steps, projects and real 
     await duration.fill('7.001');await expect(applyDuration).toBeDisabled();
     expect(await duration.evaluate((input:HTMLInputElement)=>input.validity.valid)).toBe(true);
     expect(await timelineFrames()).toEqual(editedFrames);
+    // Returning a draft to an already committed frame updates the field,
+    // while leaving the model and the exact previous Undo step untouched.
+    await duration.fill('6');await longer.tap();await expect(duration).toHaveValue('7.00');
+    await duration.fill('8');await shorter.tap();await expect(duration).toHaveValue('7.00');
+    expect(await timelineFrames()).toEqual(editedFrames);await expect(page.locator('#redo-edit')).toBeDisabled();
+    await page.locator('#undo-edit').tap();await ready();expect(await timelineFrames()).toEqual(originalFrames);
+    await page.locator('#redo-edit').tap();await ready();expect(await timelineFrames()).toEqual(editedFrames);
     await duration.fill('');await expect(duration).toHaveAttribute('aria-invalid','true');
     await expect(applyDuration).toBeDisabled();await expect(shorter).toBeDisabled();await expect(longer).toBeDisabled();
     await duration.fill('100');await expect(duration).toHaveAttribute('aria-invalid','true');
@@ -223,6 +230,6 @@ test('touch editor: duration controls, timeline, frame steps, projects and real 
     expect(external).toEqual([]);expect(errors).toEqual([]);passed=true;
   }finally{
     await context.close();renameSync(await recording.path(),dir+'/interface.webm');
-    writeFileSync(dir+'/acceptance.json',JSON.stringify({status:passed?'PASS':'FAILED',sourceCommit:process.env.BUILD_COMMIT,browser:browser.version(),syntheticOnly:true,device:'Touch/mobile viewport emulation; no physical phone tested',checks:['duration +/-1s from fractional draft with exact UndoRedo and fixed total frames','invalid/blank/no-op duration input and valid one-frame minimum','intro3s limit and single-replay restriction','duration actions locked during export','proportional timeline and Undo/Redo/project restoration','touch timeline seek pauses replay without vertical jump','frame step buttons: exact 1/24s, pixel reversal and scene bounds','existing navigation, rapid choices, both aspects, project and H.264 export'],viewports,external,errors,export:videoReport},null,2));
+    writeFileSync(dir+'/acceptance.json',JSON.stringify({status:passed?'PASS':'FAILED',sourceCommit:process.env.BUILD_COMMIT,browser:browser.version(),syntheticOnly:true,device:'Touch/mobile viewport emulation; no physical phone tested',checks:['duration +/-1s from fractional draft with exact UndoRedo and fixed total frames','invalid/blank/no-op input, return-to-committed draft without history and one-frame minimum','intro3s limit and single-replay restriction','duration actions locked during export','proportional timeline and Undo/Redo/project restoration','touch timeline seek pauses replay without vertical jump','frame step buttons: exact 1/24s, pixel reversal and scene bounds','existing navigation, rapid choices, both aspects, project and H.264 export'],viewports,external,errors,export:videoReport},null,2));
   }
 });

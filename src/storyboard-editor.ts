@@ -107,7 +107,11 @@ export class StoryboardEditor {
     if(this.externalBusy||this.busy)return;
     const target=this.durationTarget(delta);
     if(target.model&&target.model!==this.model)this.change(()=>target.model!);
-    else if(target.error)this.message(target.error,true);
+    else if(target.model){
+      // A nudge may return a draft to the committed frame. Show that result
+      // without rerendering or adding an otherwise empty Undo transaction.
+      el<HTMLInputElement>('scene-duration').value=(target.model.scenes.find(s=>s.id===this.selected)!.frames/FPS).toFixed(2);this.durationUi();
+    }else if(target.error)this.message(target.error,true);
   }
   private durationUi():void{
     const model=this.model,scene=model?.scenes.find(s=>s.id===this.selected),blocked=this.externalBusy||this.busy||!scene;
