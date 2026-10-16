@@ -1,3 +1,9 @@
+## Duration acceptance race diagnosed — 2026-10-16 11:14 UTC
+
+Application31f5d482dc9b2112060e194b7bb7986e4e1ecab3/mobile38891388550/job116941470897:2PASS/1FAILED. New touch duration scenario PASS including all +/-1s/draft/minimum/bounds/UndoRedo/project/pixel/aspects checks, true20s480frame portraitMP4. Existing core10sMP4 test PASS. Failure was old unified project-reload test observing export-enabled before asyncFile.text starts; subsequent5s assertion saw LOADINGautomatic then preparing. Downloaded original evidence12041653334=5046284B SHA25613e9e67aba01b5550a27a8c507b5ca6a43568ed3e8f3ed14b3b16fe29815e0c8; reports/error-context confirm race. No full acceptance/package success claimed.
+
+Acceptance-only fix waits actual edited model after setInputFiles before export readiness, uses existing90s readiness bound, keeps overall90s test budget and exactscene/pixel assertions. No app changes after31f5d48. Full exact-head CI/media/package PENDING; publicd913 unchanged.
+
 # Current continuation checkpoint — 2026-10-16 10:40 UTC
 
 ## Mobile duration controls — new isolated candidate, acceptance PENDING
