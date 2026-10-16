@@ -30,6 +30,7 @@ test('MVP1.7 edited high-resolution UI: cancel, retry, exact frames and project'
   const shot=await page.locator('#scene-shot option').nth(1).getAttribute('value');expect(shot).toBeTruthy();
   await page.locator('#scene-shot').selectOption(shot!);await ready();
   await page.locator('.scene-card').nth(0).click();await page.locator('#scene-duration').fill('3');
+  await page.locator('#play').click();await page.locator('#play').click();await expect(page.locator('#scene-duration')).toHaveValue('3');
   const originalCards=await page.locator('.scene-card').allTextContents();await page.locator('#apply-scene-duration').click();await ready();
   const cards=await page.locator('.scene-card').allTextContents();expect(cards).not.toEqual(originalCards);
   await page.locator('#undo-edit').click();await ready();expect(await page.locator('.scene-card').allTextContents()).toEqual(originalCards);
@@ -71,6 +72,6 @@ test('MVP1.7 edited high-resolution UI: cancel, retry, exact frames and project'
   await page.screenshot({path:dir+'/storyboard.png',fullPage:true});
   expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);expect(errors).toEqual([]);expect(external).toEqual([]);
   report.exactPreviewEncoderAndReverseSeek=true;report.oneGpu=true;report.projectReopen=true;report.status='PASS';
- }catch(error){report.status='FAILED';report.error=String(error);throw error;}
+ }catch(error){report.status='FAILED';report.error=String(error);report.ui=await page.evaluate(()=>({state:document.body.dataset.state,montage:document.body.dataset.montage,status:document.querySelector('#status')?.textContent,editor:document.querySelector('#montage-status')?.textContent,duration:(document.querySelector('#scene-duration') as HTMLInputElement)?.value,cards:Array.from(document.querySelectorAll('.scene-card')).map(c=>c.textContent)})).catch(()=>null);throw error;}
  finally{report.errors=errors;report.external=external;writeFileSync(dir+'/acceptance.json',JSON.stringify(report,null,2));}
 });
