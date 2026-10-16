@@ -107,6 +107,9 @@ body[data-view="video"][data-settings="open"] .controls { display:block; padding
 .scene-settings label,.highlight-controls label { display:block; font-size:11px; margin:0 0 7px; color:#596b54; }
 .scene-settings input,.highlight-controls input { width:100%; max-width:100%; min-width:0; border:1px solid #ccd6c2; border-radius:6px; padding:10px; background:#fffdf5; font-size:13px; }
 .scene-tools { display:flex; gap:18px; grid-column:1/-1; flex-wrap:wrap; }
+.scene-seek { grid-column:1/-1; }
+#scene-scrub { display:block; height:44px; padding:0; border:0; background:transparent; accent-color:#5d8650; }
+#scene-frame-note { margin:4px 0 0; font-variant-numeric:tabular-nums; }
 .highlight-controls { margin-top:16px; font-size:12px; }
 .highlight-controls input { max-width:140px; margin-bottom:10px; }
 body[data-view="video"] .storyboard:not([hidden]) { max-width:950px; margin:12px auto; }

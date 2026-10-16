@@ -64,7 +64,7 @@ test('touch editor: scene navigation, rapid choices, keyboard, projects and real
     for(const size of [{width:320,height:740},{width:390,height:844},{width:428,height:926},{width:844,height:390}]){
       await page.setViewportSize(size);viewports.push(size);
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-      for(const id of ['previous-scene','next-scene','play','scrub','scene-duration','apply-scene-duration','save-project']){
+      for(const id of ['previous-scene','next-scene','play','scrub','scene-scrub','show-scene-frame','scene-duration','apply-scene-duration','save-project']){
         expect((await page.locator('#'+id).boundingBox())!.height).toBeGreaterThanOrEqual(44);
       }
       for(const id of ['scene-shot','scene-duration','ratio']){
@@ -76,6 +76,28 @@ test('touch editor: scene navigation, rapid choices, keyboard, projects and real
     await page.locator('#ratio').selectOption('portrait');await ready();
     await page.locator('#back-to-preview').tap();await expect(page.locator('#preview-title')).toBeInViewport();
     await page.locator('#previous-scene').tap();await optionsReady();await visibleCard();
+    const sceneScrub=page.locator('#scene-scrub');
+    await sceneScrub.fill('0');const startTime=Number(await page.locator('#scrub').inputValue());
+    await sceneScrub.fill('13');const frameTime=Number(await page.locator('#scrub').inputValue());
+    expect(frameTime).toBeCloseTo(startTime+13/24,10);
+    await expect(page.locator('#scene-frame-note')).toContainText('Кадр 14 из 168');
+    const scenePixels=await page.locator('#preview').evaluate((canvas:HTMLCanvasElement)=>canvas.toDataURL());
+    await page.locator('#scrub').fill('0');await expect(page.locator('#scene-frame-note')).toContainText('другая сцена');
+    await page.locator('#scrub').fill(String(frameTime));
+    expect(await page.locator('#preview').evaluate((canvas:HTMLCanvasElement)=>canvas.toDataURL())).toBe(scenePixels);
+    await sceneScrub.focus();await sceneScrub.press('End');await expect(sceneScrub).toHaveValue('167');
+    expect(Number(await page.locator('#scrub').inputValue())).toBeCloseTo(startTime+167/24,10);
+    await sceneScrub.press('Home');await expect(sceneScrub).toHaveValue('0');
+    expect(Number(await page.locator('#scrub').inputValue())).toBeCloseTo(startTime,10);
+    await sceneScrub.fill('13');await page.locator('#show-scene-frame').tap();
+    await expect(page.locator('#preview')).toBeInViewport();
+    expect(Number(await page.locator('#scrub').inputValue())).toBeCloseTo(frameTime,10);
+    await page.screenshot({path:dir+'/03-mobile-preview.png'});
+    await page.locator('#return-to-editor').tap();await expect(page.locator('#storyboard-title')).toBeInViewport();
+    await expect(sceneScrub).toHaveValue('13');
+    await page.locator('#preview-scene').tap();await expect(page.locator('#preview')).toBeInViewport();
+    await expect(page.locator('body')).toHaveAttribute('data-state','PLAYING');await page.locator('#play').tap();
+    await page.locator('#return-to-editor').tap();
     await page.locator('#storyboard').evaluate(node=>node.scrollIntoView({block:'start'}));
     await page.screenshot({path:dir+'/01-mobile-storyboard.png'});
     await page.locator('#scene-settings').scrollIntoViewIfNeeded();await page.screenshot({path:dir+'/02-mobile-controls.png'});
@@ -90,13 +112,17 @@ test('touch editor: scene navigation, rapid choices, keyboard, projects and real
     expect(await page.locator('#preview').evaluate((canvas:HTMLCanvasElement)=>canvas.toDataURL())).toBe(pixels);
     const download=page.waitForEvent('download',{timeout:180_000});await page.locator('#export').tap();
     await expect(page.locator('#next-scene')).toBeDisabled();await expect(page.locator('#previous-scene')).toBeDisabled();
+    await expect(sceneScrub).toBeDisabled();await expect(page.locator('#show-scene-frame')).toBeDisabled();
     const file=dir+'/edited-portrait-20s.mp4';await(await download).saveAs(file);await ready();
     videoReport={...validateVideo(file,360,640,20),sha256:createHash('sha256').update(readFileSync(file)).digest('hex')};
     await page.reload();await page.locator('#welcome-close').click();await expect(page.locator('#export')).toBeEnabled({timeout:120_000});
     await page.locator('#project-file').setInputFiles(projectPath);await ready();await expect(page.locator('.scene-card')).toHaveCount(5);
     expect(await page.locator('.scene-card').allTextContents()).toEqual(portraitCards);await page.locator('#scrub').fill('5');
     expect(await page.locator('#preview').evaluate((canvas:HTMLCanvasElement)=>canvas.toDataURL())).toBe(pixels);
-    await visibleCard();expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);
+    await visibleCard();await expect(sceneScrub).toBeEnabled();
+    await expect(page.locator('#return-to-editor')).toBeVisible();await page.locator('#collapse-storyboard').tap();
+    await expect(page.locator('#return-to-editor')).toBeHidden();
+    expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);
     expect(external).toEqual([]);expect(errors).toEqual([]);passed=true;
   }finally{
     await context.close();renameSync(await recording.path(),dir+'/interface.webm');

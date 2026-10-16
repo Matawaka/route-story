@@ -49,7 +49,9 @@ export class StoryboardEditor {
     el('reset-scene').addEventListener('click',()=>this.change(()=>editShot(this.model!,this.selected,this.hooks.settings().aspectRatio,'auto')));
     el('reset-montage').addEventListener('click',()=>this.change(()=>automaticMontage(this.renderer!.timeline)));
     el('apply-highlight').addEventListener('click',()=>this.change(()=>highlightRoute(this.model!,this.renderer!.timeline,Number(el<HTMLInputElement>('highlight-start').value)/100,Number(el<HTMLInputElement>('highlight-end').value)/100)));
-    el('preview-scene').addEventListener('click',()=>{const scene=this.playback()?.scenes.find(s=>s.id===this.selected);if(scene)this.hooks.playScene(scene.startFrame/FPS,scene.endFrame/FPS);});
+    el('preview-scene').addEventListener('click',()=>{const scene=this.playback()?.scenes.find(s=>s.id===this.selected);if(scene&&!this.externalBusy&&!this.busy){this.hooks.playScene(scene.startFrame/FPS,scene.endFrame/FPS);this.revealPreview();}});
+    el('scene-scrub').addEventListener('input',()=>this.seekSceneFrame());
+    el('show-scene-frame').addEventListener('click',()=>{if(this.seekSceneFrame())this.revealPreview();});
     el('undo-edit').addEventListener('click',()=>void this.historyMove('undo'));
     el('redo-edit').addEventListener('click',()=>void this.historyMove('redo'));
     el('previous-scene').addEventListener('click',()=>this.moveScene(-1));
@@ -108,6 +110,31 @@ export class StoryboardEditor {
     this.hooks.stop();this.selected=id;this.hooks.seek(scene.startFrame/FPS);this.ui();
     void this.choices(this.op??new AbortController());
   }
+  private seekSceneFrame():boolean{
+    if(this.externalBusy||this.busy)return false;
+    const scene=this.playback()?.scenes.find(scene=>scene.id===this.selected),value=Number(el<HTMLInputElement>('scene-scrub').value);
+    if(!scene||!Number.isFinite(value))return false;
+    const frame=Math.max(0,Math.min(scene.frames-1,Math.round(value)));
+    this.hooks.stop();this.hooks.seek((scene.startFrame+frame)/FPS);return true;
+  }
+  private revealPreview():void{
+    // This is an explicit preview action. Card selection still leaves the page
+    // in place; desktop retains the existing side-by-side workflow.
+    if(!el('return-to-editor').getClientRects().length)return;
+    el('story-preview').scrollIntoView({block:'start',behavior:'instant'});
+    el('play').focus({preventScroll:true});
+  }
+  private syncSceneTime(time:number):void{
+    if(!this.expanded)return;
+    const playback=this.playback(),scene=playback?.scenes.find(scene=>scene.id===this.selected),input=el<HTMLInputElement>('scene-scrub'),note=el('scene-frame-note');
+    if(!scene){input.max='0';input.value='0';input.removeAttribute('aria-valuetext');note.textContent='Выберите сцену.';return;}
+    const maximum=Math.max(0,scene.frames-1),frame=Math.max(0,Math.min(maximum,Math.floor(time*FPS+1e-6)-scene.startFrame));
+    const max=String(maximum),value=String(frame);if(input.max!==max)input.max=max;if(input.value!==value)input.value=value;
+    const description=`Кадр ${frame+1} из ${scene.frames} · ${seconds(scene.startFrame+frame)} с видео`;
+    if(input.getAttribute('aria-valuetext')!==description)input.setAttribute('aria-valuetext',description);
+    const text=playback!.sceneAt(time).id===scene.id?description:`Сейчас в кадре другая сцена. ${description}`;
+    if(note.textContent!==text)note.textContent=text;
+  }
   private async apply(model:Montage,record:boolean,ready?:PreparedMontage,historyAction?:'undo'|'redo'):Promise<boolean>{
     const renderer=this.renderer;if(!renderer||!this.history)return false;const op=this.begin(),start=performance.now(),previous=renderer.montageSnapshot,oldSelection=this.selected;let prepared:PreparedMontage|undefined,committed=false;
     try{
@@ -161,11 +188,12 @@ export class StoryboardEditor {
       el('shot-note').textContent=this.alternatives.size<2?'Другие ракурсы этого эпизода не прошли проверку или не меняют кадр. Сохранён безопасный вариант.':`Доступны только проверенные варианты. ${aspect==='portrait'?'Композиция для 9:16 подготовлена отдельно.':'Ракурсы вертикальной версии можно выбрать отдельно.'}`;
     }finally{parent.signal.removeEventListener('abort',abort);if(this.choiceOp===op)this.choiceOp=undefined;}
   }
-  sync(time:number):void{const scene=this.playback()?.sceneAt(time);for(const card of el('scene-strip').querySelectorAll<HTMLElement>('[data-scene]'))card.dataset.playing=String(card.dataset.scene===scene?.id);}
+  sync(time:number):void{const scene=this.playback()?.sceneAt(time);for(const card of el('scene-strip').querySelectorAll<HTMLElement>('[data-scene]'))card.dataset.playing=String(card.dataset.scene===scene?.id);this.syncSceneTime(time);}
   private ui():void{
     const blocked=this.externalBusy||this.busy;el<HTMLButtonElement>('edit-story').disabled=!this.renderer||this.externalBusy;el('edit-story').setAttribute('aria-pressed',String(this.active));el('automatic-story').setAttribute('aria-pressed',String(!this.active));el('storyboard').hidden=!this.expanded;el('cancel-montage').hidden=!this.busy;
+    el('return-to-editor').hidden=!this.expanded;
     document.body.dataset.montage=this.preparing?'preparing':this.active&&this.renderer?.montageSnapshot?'edited':'automatic';el('montage-format').textContent=this.hooks.settings().aspectRatio==='portrait'?'9:16 · отдельные ракурсы':'16:9 · отдельные ракурсы';
-    for(const id of ['automatic-story','open-project','save-project','reset-montage','apply-highlight','apply-scene-duration','preview-scene','reset-scene'])el<HTMLButtonElement>(id).disabled=blocked||!this.model&&['save-project','reset-montage','apply-highlight','apply-scene-duration','preview-scene','reset-scene'].includes(id);
+    for(const id of ['automatic-story','open-project','save-project','reset-montage','apply-highlight','apply-scene-duration','preview-scene','show-scene-frame','reset-scene'])el<HTMLButtonElement>(id).disabled=blocked||!this.model&&['save-project','reset-montage','apply-highlight','apply-scene-duration','preview-scene','show-scene-frame','reset-scene'].includes(id);
     el<HTMLButtonElement>('undo-edit').disabled=blocked||!this.history?.canUndo;el<HTMLButtonElement>('redo-edit').disabled=blocked||!this.history?.canRedo;
     el<HTMLFieldSetElement>('scene-settings').disabled=blocked;for(const input of el('storyboard').querySelectorAll<HTMLInputElement>('input'))input.disabled=blocked;
     const scene=this.model?.scenes.find(s=>s.id===this.selected);if(scene){el('selected-scene-name').textContent=this.sceneName(scene.id);
@@ -174,6 +202,7 @@ export class StoryboardEditor {
       if(this.durationScene!==scene.id||this.durationFrames!==scene.frames){el<HTMLInputElement>('scene-duration').value=(scene.frames/FPS).toFixed(2);this.durationScene=scene.id;this.durationFrames=scene.frames;}
     }
     const scenes=this.playback()?.scenes??[],index=scenes.findIndex(scene=>scene.id===this.selected),interval=scenes[index];
+    el<HTMLInputElement>('scene-scrub').disabled=blocked||!interval;this.syncSceneTime(this.hooks.time());
     el<HTMLButtonElement>('previous-scene').disabled=blocked||index<=0;
     el<HTMLButtonElement>('next-scene').disabled=blocked||index<0||index>=scenes.length-1;
     const position=interval?`Сцена ${index+1} из ${scenes.length} · ${seconds(interval.startFrame)}–${seconds(interval.endFrame)} с`:'Выберите сцену';

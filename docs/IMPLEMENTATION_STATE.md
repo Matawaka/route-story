@@ -1,5 +1,11 @@
 # Implementation state
 
+## Mobile scene scrubbing / preview continuation — 2026-10-16
+
+Owner asked to continue the chosen phone-editor work. PR34 HEAD9d42b1836ea0d2bfd8877117572cf349abba44ae reconciled OPEN/ready/unmerged; both latest exact-head runs38857937157 mobile and38857937172 routine SUCCESS. Mainf3e26b3/public9ef unchanged. Continue on the same isolated branch, no merge/publication permission inferred.
+
+Adds selected-scene frame slider, frame/time description and native Home/End bounds; explicit show-frame/play-scene actions reveal the existing preview on mobile, with a return-to-editor link only while expanded. Card selection still never moves the page vertically. Main preview range step=any prevents native0.01s quantization of24FPS programmatic frame times; renderer/clock/exporter/model remain shared and unchanged. New touch test compares scene/global seek pixels and exact1/24 timestamps, checks preview/return visibility, scene bounds and export locks. Local Node syntax PASS; new exact-source type/unit/browser/MP4/package CI PENDING. Historical accepted evidence below is retained; physical phones/nativepicker remain NOTTESTED. No new dependencies/geography/resource limits/protectedworkflow changes.
+
 ## Mobile storyboard candidate accepted — 2026-10-16 05:49 UTC
 
 PR34/codex/mobile-storyboard-mvp18 application headbec207af3f589172e793a739a47a74704c4af8d1 passed exact-source routine38856813073/job116830022927:319unit/28files,TypeScript/build,72browserPASS/42explicitopt-in skips,audit0. Mobile38856813178/job116830023220 SUCCESS,3PASS/4.5min including existing2storyboard tests and new real touch UI acceptance. No new runtime edits after that head; this follow-up changes documentation/evidence only. Owner selected mobile editor development, not a new merge/publication. Mainf3e26b3/public1.7.0source9ef unchanged; PR34 remains isolated for review.
