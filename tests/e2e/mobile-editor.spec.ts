@@ -96,7 +96,11 @@ test('touch editor: scene navigation, rapid choices, keyboard, projects and real
     await page.locator('#return-to-editor').tap();await expect(page.locator('#storyboard-title')).toBeInViewport();
     await expect(sceneScrub).toHaveValue('13');
     await page.locator('#preview-scene').tap();await expect(page.locator('#preview')).toBeInViewport();
-    await expect(page.locator('body')).toHaveAttribute('data-state','PLAYING');await page.locator('#play').tap();
+    await expect(page.locator('body')).toHaveAttribute('data-state','PLAYING');
+    await expect(page.locator('body')).toHaveAttribute('data-state','PAUSED',{timeout:20_000});
+    await expect(sceneScrub).toHaveValue('167');
+    expect(Number(await page.locator('#scrub').inputValue())).toBeCloseTo(startTime+167/24,10);
+    await expect(page.locator('#scene-frame-note')).not.toContainText('другая сцена');
     await page.locator('#return-to-editor').tap();
     await page.locator('#storyboard').evaluate(node=>node.scrollIntoView({block:'start'}));
     await page.screenshot({path:dir+'/01-mobile-storyboard.png'});

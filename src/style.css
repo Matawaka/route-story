@@ -109,7 +109,7 @@ body[data-view="video"][data-settings="open"] .controls { display:block; padding
 .scene-tools { display:flex; gap:18px; grid-column:1/-1; flex-wrap:wrap; }
 .scene-seek { grid-column:1/-1; }
 #scene-scrub { display:block; height:44px; padding:0; border:0; background:transparent; accent-color:#5d8650; }
-#scene-frame-note { margin:4px 0 0; font-variant-numeric:tabular-nums; }
+#scene-frame-note { margin:4px 0 0; font-size:12px; font-variant-numeric:tabular-nums; }
 .highlight-controls { margin-top:16px; font-size:12px; }
 .highlight-controls input { max-width:140px; margin-bottom:10px; }
 body[data-view="video"] .storyboard:not([hidden]) { max-width:950px; margin:12px auto; }

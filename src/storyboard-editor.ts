@@ -49,7 +49,7 @@ export class StoryboardEditor {
     el('reset-scene').addEventListener('click',()=>this.change(()=>editShot(this.model!,this.selected,this.hooks.settings().aspectRatio,'auto')));
     el('reset-montage').addEventListener('click',()=>this.change(()=>automaticMontage(this.renderer!.timeline)));
     el('apply-highlight').addEventListener('click',()=>this.change(()=>highlightRoute(this.model!,this.renderer!.timeline,Number(el<HTMLInputElement>('highlight-start').value)/100,Number(el<HTMLInputElement>('highlight-end').value)/100)));
-    el('preview-scene').addEventListener('click',()=>{const scene=this.playback()?.scenes.find(s=>s.id===this.selected);if(scene&&!this.externalBusy&&!this.busy){this.hooks.playScene(scene.startFrame/FPS,scene.endFrame/FPS);this.revealPreview();}});
+    el('preview-scene').addEventListener('click',()=>{const scene=this.playback()?.scenes.find(s=>s.id===this.selected);if(scene&&!this.externalBusy&&!this.busy){this.hooks.playScene(scene.startFrame/FPS,(scene.endFrame-1)/FPS);this.revealPreview();}});
     el('scene-scrub').addEventListener('input',()=>this.seekSceneFrame());
     el('show-scene-frame').addEventListener('click',()=>{if(this.seekSceneFrame())this.revealPreview();});
     el('undo-edit').addEventListener('click',()=>void this.historyMove('undo'));
